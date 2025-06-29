@@ -2,12 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import TeamMember from '../components/TeamMember.astro';
 
+// Placeholder team data - to be replaced with actual team information
 const team = [
   {
     name: "Alex Morgan",
     position: "Founder & Creative Director",
     image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    bio: "Alex founded Flame Studio with a vision to blend artistry and technology in creating digital experiences that resonate and inspire."
+    bio: "Alex founded Creative Bandit with a vision to blend artistry and technology in creating digital experiences that resonate and inspire."
   },
   {
     name: "Jamie Rivera",
@@ -31,52 +32,79 @@ const team = [
 
 const values = [
   {
-    title: "Excellence",
-    description: "We strive for excellence in everything we do, from design and development to client communication and support."
+    title: "Innovation",
+    description: "We stay ahead of digital trends, constantly exploring new technologies and creative approaches to deliver cutting-edge solutions that set our clients apart."
   },
   {
-    title: "Innovation",
-    description: "We embrace new technologies and creative approaches to push boundaries and deliver forward-thinking solutions."
+    title: "Authenticity",
+    description: "We believe in creating genuine brand experiences that reflect your unique identity and resonate authentically with your target audience."
+  },
+  {
+    title: "Excellence",
+    description: "We strive for excellence in every pixel, every line of code, and every client interaction, ensuring the highest quality in all our deliverables."
   },
   {
     title: "Collaboration",
-    description: "We believe in the power of collaboration—both within our team and with our clients—to achieve the best results."
+    description: "We work as true partners with our clients, fostering open communication and collaborative relationships throughout every project."
   },
   {
-    title: "Integrity",
-    description: "We operate with honesty, transparency, and ethical practices in all our business relationships and decisions."
+    title: "Impact",
+    description: "We focus on creating digital solutions that drive real business results and make a meaningful impact on our clients' success."
   },
   {
-    title: "Client Focus",
-    description: "We prioritize our clients' needs and goals, working as an extension of their team to ensure their success."
-  },
-  {
-    title: "Adaptability",
-    description: "We remain flexible and responsive to changing technologies, market trends, and client requirements."
+    title: "Creativity",
+    description: "We approach every challenge with creative thinking, finding unique solutions that capture attention and inspire action in the digital space."
   }
 ];
 
 const stats = [
-  { value: "10+", label: "Years Experience" },
-  { value: "200+", label: "Projects Completed" },
-  { value: "50+", label: "Happy Clients" },
-  { value: "15+", label: "Industry Awards" }
+  { value: "8+", label: "Years Experience" },
+  { value: "150+", label: "Projects Completed" },
+  { value: "40+", label: "Happy Clients" },
+  { value: "10+", label: "Industry Awards" }
+];
+
+const approach = [
+  {
+    step: "01",
+    title: "Discovery & Strategy",
+    description: "We start by diving deep into your business goals, target audience, and market landscape to develop a comprehensive digital strategy."
+  },
+  {
+    step: "02", 
+    title: "Design & Development",
+    description: "Our creative team crafts compelling visual experiences while our developers build robust, scalable solutions using the latest technologies."
+  },
+  {
+    step: "03",
+    title: "Testing & Optimization",
+    description: "We rigorously test every aspect of your digital solution, optimizing for performance, usability, and conversion across all devices."
+  },
+  {
+    step: "04",
+    title: "Launch & Growth",
+    description: "We support your launch and provide ongoing optimization to ensure your digital presence continues to evolve and grow with your business."
+  }
 ];
 ---
 
-<Layout title="About Us" description="Learn about Flame Studio, our team, values, and what drives us to create exceptional digital experiences">
+<Layout title="About Us" description="Learn about Creative Bandit, our innovative approach to digital experiences, and what drives us to create exceptional solutions that make an impact">
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">
-      <div class="max-w-3xl">
+      <div class="max-w-4xl">
         <div class="mb-6 flex items-center">
           <span class="flame-dot"></span>
           <span class="uppercase tracking-wider text-light-300">Our Story</span>
         </div>
-        <h1 class="mb-6">Igniting Digital <span class="gradient-text">Experiences</span> Since 2013</h1>
+        <h1 class="mb-6">Where Creative <span class="gradient-text">Vision</span> Meets Digital Innovation</h1>
         <p class="text-xl text-light-300 mb-8">
-          We're a team of designers, developers, and digital strategists passionate about creating memorable digital experiences that drive real business results.
+          Creative Bandit is more than a digital agency—we're your strategic partner in creating bold, impactful digital experiences that break through the noise and drive real results for your business.
         </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/contact" class="btn-primary">Start Your Project</a>
+          <a href="/work" class="btn-secondary">See Our Work</a>
+        </div>
       </div>
     </div>
     
@@ -86,20 +114,20 @@ const stats = [
   </section>
   
   <!-- About Us Section -->
-  <section class="py-16">
+  <section class="py-20">
     <div class="container mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
           <div class="relative">
             <div class="aspect-w-4 aspect-h-3">
               <img
                 src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                alt="Our team collaborating"
+                alt="Creative team collaborating on digital innovation"
                 class="rounded-lg object-cover w-full h-full"
               />
             </div>
-            <div class="absolute -bottom-6 -right-6 bg-dark-100 p-4 rounded-lg shadow-lg">
-              <div class="grid grid-cols-2 gap-4">
+            <div class="absolute -bottom-6 -right-6 bg-dark-100 p-6 rounded-lg shadow-xl">
+              <div class="grid grid-cols-2 gap-6">
                 {stats.slice(0, 2).map(stat => (
                   <div class="text-center">
                     <p class="text-2xl font-bold gradient-text">{stat.value}</p>
@@ -122,31 +150,64 @@ const stats = [
             <span class="flame-dot"></span>
             <span class="uppercase tracking-wider text-light-300">Who We Are</span>
           </div>
-          <h2 class="mb-6">Crafting Digital <span class="gradient-text">Excellence</span></h2>
+          <h2 class="mb-6">Pioneering Digital <span class="gradient-text">Transformation</span></h2>
           <p class="mb-6 text-light-300">
-            Flame Studio was founded in 2013 with a simple mission: to create digital experiences that stand out in a crowded online world. What began as a small design studio has evolved into a full-service digital agency with a reputation for excellence.
+            Creative Bandit was born from the belief that every business deserves a digital presence that truly reflects their vision and drives meaningful growth. We're a collective of creative rebels who challenge conventional thinking to deliver extraordinary digital experiences.
           </p>
           <p class="mb-6 text-light-300">
-            We combine strategic thinking, creative design, and technical expertise to deliver solutions that not only look beautiful but also perform exceptionally well. Our work spans across industries, from startups to established enterprises, each with unique challenges and goals.
+            Our multidisciplinary approach combines strategic insight, cutting-edge design, advanced development, and AI integration to create solutions that don't just meet expectations—they exceed them. We work with forward-thinking businesses who understand that exceptional digital experiences are key to long-term success.
           </p>
-          <p class="text-light-300">
-            What sets us apart is our commitment to treating each project as a partnership. We dive deep into understanding your business, audiences, and objectives to create digital solutions that truly represent your brand and drive measurable results.
+          <p class="mb-6 text-light-300">
+            What makes us different is our commitment to being true partners in your journey. We don't just deliver projects; we invest in your success, bringing fresh perspectives and innovative solutions that help your business thrive in an ever-evolving digital landscape.
           </p>
+          <div class="bg-dark-200 p-6 rounded-lg">
+            <p class="text-blazingEmber font-semibold mb-2">Our Mission</p>
+            <p class="text-light-300">To empower businesses with digital solutions that are not just functional and beautiful, but transformative—creating lasting impact in their markets and meaningful connections with their audiences.</p>
+          </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Approach Section -->
+  <section class="section bg-dark-200">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Our Process</span>
+        </div>
+        <h2 class="mb-6">How We Create <span class="gradient-text">Digital Magic</span></h2>
+        <p class="text-light-300">Our proven methodology ensures every project delivers exceptional results through strategic planning, creative excellence, and technical precision.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {approach.map(step => (
+          <div class="relative">
+            <div class="card h-full">
+              <div class="text-4xl font-bold gradient-text mb-4">{step.step}</div>
+              <h3 class="text-xl font-bold mb-3">{step.title}</h3>
+              <p class="text-light-300">{step.description}</p>
+            </div>
+            {step.step !== "04" && (
+              <div class="hidden lg:block absolute top-8 -right-4 w-8 h-0.5 bg-gradient-to-r from-blazingEmber to-magentaFlame"></div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   </section>
   
   <!-- Our Values Section -->
-  <section class="section bg-dark-200">
+  <section class="section">
     <div class="container mx-auto">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
           <span class="uppercase tracking-wider text-light-300">Our Core Values</span>
         </div>
-        <h2 class="mb-6">The Principles That <span class="gradient-text">Guide</span> Us</h2>
-        <p class="text-light-300">These fundamental values shape our culture, drive our decisions, and define how we work with our clients and each other.</p>
+        <h2 class="mb-6">The Principles That <span class="gradient-text">Drive</span> Us</h2>
+        <p class="text-light-300">These fundamental values shape our culture, guide our decisions, and define how we approach every client relationship and project.</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -159,41 +220,90 @@ const stats = [
       </div>
     </div>
   </section>
-  
-  <!-- Team Section -->
-  <section class="section">
+
+  <!-- What Sets Us Apart Section -->
+  <section class="section bg-dark-200">
     <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Our Team</span>
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-16">
+          <div class="mb-4 flex items-center justify-center">
+            <span class="flame-dot"></span>
+            <span class="uppercase tracking-wider text-light-300">Why Choose Us</span>
+          </div>
+          <h2 class="mb-6">What Sets Creative Bandit <span class="gradient-text">Apart</span></h2>
         </div>
-        <h2 class="mb-6">Meet The <span class="gradient-text">Talent</span> Behind Our Work</h2>
-        <p class="text-light-300">Our diverse team of passionate experts brings creativity, technical skill, and strategic thinking to every project.</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {team.map(member => (
-          <TeamMember 
-            name={member.name} 
-            position={member.position} 
-            image={member.image} 
-            bio={member.bio} 
-          />
-        ))}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div class="space-y-8">
+            <div>
+              <h3 class="text-xl font-bold mb-3">AI-Powered Innovation</h3>
+              <p class="text-light-300">We integrate cutting-edge AI technologies to enhance user experiences, automate processes, and provide intelligent solutions that keep you ahead of the competition.</p>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-3">Full-Stack Expertise</h3>
+              <p class="text-light-300">From initial strategy and design to development, deployment, and ongoing optimization—we handle every aspect of your digital journey with expertise and care.</p>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-3">Performance-Driven Design</h3>
+              <p class="text-light-300">Beautiful designs that convert. We create visually stunning experiences that are optimized for performance, accessibility, and user engagement across all devices.</p>
+            </div>
+          </div>
+          
+          <div class="space-y-8">
+            <div>
+              <h3 class="text-xl font-bold mb-3">Agile & Transparent</h3>
+              <p class="text-light-300">Our agile methodology ensures rapid iteration and continuous improvement, while our transparent communication keeps you informed every step of the way.</p>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-3">Scalable Solutions</h3>
+              <p class="text-light-300">We build with growth in mind, creating flexible, scalable solutions that evolve with your business and adapt to changing market demands.</p>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-3">Ongoing Partnership</h3>
+              <p class="text-light-300">Our relationship doesn't end at launch. We provide ongoing support, optimization, and strategic guidance to ensure your digital presence continues to deliver results.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
   
+  <!-- Team Section -->
+  {team.length > 0 && (
+    <section class="section">
+      <div class="container mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <div class="mb-4 flex items-center justify-center">
+            <span class="flame-dot"></span>
+            <span class="uppercase tracking-wider text-light-300">Our Team</span>
+          </div>
+          <h2 class="mb-6">Meet The <span class="gradient-text">Creative Minds</span> Behind Our Work</h2>
+          <p class="text-light-300">Our diverse team of passionate experts brings creativity, technical skill, and strategic thinking to every project.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {team.map(member => (
+            <TeamMember 
+              name={member.name} 
+              position={member.position} 
+              image={member.image} 
+              bio={member.bio} 
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+  
   <!-- CTA Section -->
   <section class="py-24 bg-dark-200 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
-      <div class="max-w-3xl mx-auto text-center">
-        <h2 class="mb-6">Ready to <span class="gradient-text">Collaborate</span> With Us?</h2>
-        <p class="text-light-300 text-lg mb-8">Let's work together to bring your digital vision to life with our passion for excellence and innovation.</p>
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="mb-6">Ready to Transform Your <span class="gradient-text">Digital Presence</span>?</h2>
+        <p class="text-light-300 text-lg mb-8">Let's collaborate to create something extraordinary. Whether you're launching a new venture or evolving an existing brand, we're here to make your digital vision a reality.</p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a href="/contact" class="btn-primary">Get In Touch</a>
-          <a href="/work" class="btn-secondary">See Our Work</a>
+          <a href="/contact" class="btn-primary">Start Your Project</a>
+          <a href="/work" class="btn-secondary">View Our Portfolio</a>
         </div>
       </div>
     </div>
