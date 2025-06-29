@@ -1,12 +1,9 @@
 import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
+import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 
 export default defineConfig({
-  integrations: [mdx()],
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  integrations: [tailwind(), mdx()],
   markdown: {
     shikiConfig: {
       theme: 'dracula',

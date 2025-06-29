@@ -6,9 +6,16 @@ import '../styles/global.css';
 export interface Props {
   title: string;
   description?: string;
+  keywords?: string;
+  ogImage?: string;
 }
 
-const { title, description = "Creative Bandit - Web Development and Design" } = Astro.props;
+const { 
+  title, 
+  description = "Creative Bandit - Leading digital agency specializing in custom web development, mobile app development, UI/UX design, and AI integration. Transform your business with award-winning digital solutions.", 
+  keywords = "web development, digital agency, custom software development, mobile app development, UI/UX design, AI integration, responsive web design, e-commerce development, digital transformation",
+  ogImage = "/favicon.svg"
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -18,11 +25,71 @@ const { title, description = "Creative Bandit - Web Development and Design" } = 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+    
+    <!-- SEO Meta Tags -->
     <title>{title} | Creative Bandit</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Creative Bandit" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={Astro.url} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={`${title} | Creative Bandit`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Creative Bandit" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={`${title} | Creative Bandit`} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+    
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#ff1c1c" />
+    <meta name="msapplication-TileColor" content="#ff1c1c" />
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Creative Bandit",
+      "description": "Leading digital agency specializing in custom web development, mobile app development, UI/UX design, and AI integration.",
+      "url": "https://creativebandit.com",
+      "logo": "https://creativebandit.com/favicon.svg",
+      "foundingDate": "2014",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Global",
+        "addressCountry": "Worldwide"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "url": "https://creativebandit.com/contact"
+      },
+      "sameAs": [],
+      "services": [
+        "Web Development",
+        "Mobile App Development", 
+        "UI/UX Design",
+        "AI Integration",
+        "Custom Software Development",
+        "E-commerce Development",
+        "Digital Transformation"
+      ]
+    }
+    </script>
   </head>
   <body class="bg-charcoal text-light-100 flex flex-col min-h-screen">
     <div class="flame-gradient"></div>

@@ -81,7 +81,11 @@ const testimonials = [
 ];
 ---
 
-<Layout title="Home">
+<Layout 
+  title="Professional Web Development & Digital Agency Services" 
+  description="Creative Bandit is a leading digital agency specializing in custom web development, mobile app development, UI/UX design, and AI integration. We transform businesses with innovative digital solutions that drive measurable growth and competitive advantage."
+  keywords="web development agency, custom software development, mobile app development, UI UX design, AI integration, digital transformation, responsive web design, e-commerce development, full stack development, React development, Node.js development"
+>
   <Hero />
   
   <!-- Services Section -->
@@ -113,16 +117,206 @@ const testimonials = [
     </div>
   </section>
   
-  <!-- Process Section -->
+  <!-- About Us Section -->
   <section class="section relative">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <div class="mb-6 flex items-center">
+            <span class="flame-dot"></span>
+            <span class="uppercase tracking-wider text-light-300">About Creative Bandit</span>
+          </div>
+          <h2 class="mb-6">Leading <span class="gradient-text">Digital Agency</span> Transforming Businesses</h2>
+          <p class="text-light-300 mb-6">
+            Creative Bandit is a premier digital agency specializing in cutting-edge web development, innovative UI/UX design, and advanced AI integration solutions. With over a decade of experience in digital transformation, we help businesses of all sizes establish powerful online presences that drive measurable results.
+          </p>
+          <p class="text-light-300 mb-8">
+            Our team of expert developers, designers, and digital strategists combines technical excellence with creative vision to deliver custom software solutions that exceed expectations. From responsive web design to complex enterprise applications, we leverage the latest technologies to create digital experiences that engage users and accelerate business growth.
+          </p>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <h4 class="font-bold text-lg mb-2 text-blazingEmber">Custom Development</h4>
+              <p class="text-light-300 text-sm">Tailored solutions built from the ground up using modern frameworks and best practices.</p>
+            </div>
+            <div>
+              <h4 class="font-bold text-lg mb-2 text-blazingEmber">Performance Focused</h4>
+              <p class="text-light-300 text-sm">Optimized code and architecture ensuring fast load times and superior user experience.</p>
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
+            <h3 class="text-xl font-bold mb-6">Why Choose Creative Bandit?</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start">
+                <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span class="text-light-300">Full-stack development expertise across all modern technologies</span>
+              </li>
+              <li class="flex items-start">
+                <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span class="text-light-300">Data-driven approach to design and development decisions</span>
+              </li>
+              <li class="flex items-start">
+                <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span class="text-light-300">Agile development methodology for faster project delivery</span>
+              </li>
+              <li class="flex items-start">
+                <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span class="text-light-300">24/7 technical support and ongoing maintenance services</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries Section -->
+  <section class="section bg-dark-200">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Industries We Serve</span>
+        </div>
+        <h2 class="mb-6">Expertise Across <span class="gradient-text">Multiple</span> Industries</h2>
+        <p class="text-light-300">Our digital agency has successfully delivered custom software solutions and web development projects across diverse industries, understanding unique business challenges and regulatory requirements.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
+          <h3 class="text-lg font-bold mb-3 text-blazingEmber">E-commerce & Retail</h3>
+          <p class="text-light-300 text-sm mb-4">Custom e-commerce platforms, inventory management systems, and customer relationship management solutions that boost online sales and streamline operations.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Shopify Plus</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">WooCommerce</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Magento</span>
+          </div>
+        </div>
+        
+        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
+          <h3 class="text-lg font-bold mb-3 text-blazingEmber">Healthcare & Medical</h3>
+          <p class="text-light-300 text-sm mb-4">HIPAA-compliant patient portals, telemedicine platforms, and healthcare management systems designed for medical professionals and institutions.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">HIPAA Compliance</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">EMR Integration</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Telehealth</span>
+          </div>
+        </div>
+        
+        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
+          <h3 class="text-lg font-bold mb-3 text-blazingEmber">Financial Services</h3>
+          <p class="text-light-300 text-sm mb-4">Secure financial applications, trading platforms, and fintech solutions with advanced encryption and compliance with industry regulations.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">PCI DSS</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Blockchain</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Banking APIs</span>
+          </div>
+        </div>
+        
+        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
+          <h3 class="text-lg font-bold mb-3 text-blazingEmber">Education & EdTech</h3>
+          <p class="text-light-300 text-sm mb-4">Learning management systems, educational apps, and digital classroom solutions that enhance the learning experience for students and educators.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">LMS</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Interactive Learning</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Assessment Tools</span>
+          </div>
+        </div>
+        
+        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
+          <h3 class="text-lg font-bold mb-3 text-blazingEmber">SaaS & Technology</h3>
+          <p class="text-light-300 text-sm mb-4">Scalable software-as-a-service platforms, API development, and cloud-based solutions that support rapid growth and global expansion.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Cloud Architecture</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">API Development</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Microservices</span>
+          </div>
+        </div>
+        
+        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
+          <h3 class="text-lg font-bold mb-3 text-blazingEmber">Manufacturing & Logistics</h3>
+          <p class="text-light-300 text-sm mb-4">Supply chain management systems, IoT integration, and industrial automation solutions that optimize operations and reduce costs.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">IoT Integration</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Supply Chain</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Automation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technologies Section -->
+  <section class="section">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Our Technology Stack</span>
+        </div>
+        <h2 class="mb-6">Cutting-Edge <span class="gradient-text">Technologies</span> & Frameworks</h2>
+        <p class="text-light-300">We leverage the latest web development technologies and frameworks to build scalable, secure, and high-performance applications that meet modern business requirements.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center">
+          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Frontend Development</h3>
+          <div class="space-y-2">
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">React & Next.js</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Vue.js & Nuxt.js</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Angular & TypeScript</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Svelte & SvelteKit</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Astro & Static Sites</div>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Backend Development</h3>
+          <div class="space-y-2">
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Node.js & Express</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Python & Django</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">PHP & Laravel</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Ruby on Rails</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Go & Microservices</div>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Mobile Development</h3>
+          <div class="space-y-2">
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">React Native</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Flutter & Dart</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Native iOS (Swift)</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Native Android (Kotlin)</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Progressive Web Apps</div>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <h3 class="text-lg font-bold mb-4 text-blazingEmber">AI & Cloud</h3>
+          <div class="space-y-2">
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">OpenAI & ChatGPT</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">TensorFlow & PyTorch</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">AWS & Azure</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Google Cloud Platform</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Docker & Kubernetes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="section bg-dark-200 relative">
     <div class="container mx-auto">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
           <span class="uppercase tracking-wider text-light-300">How We Work</span>
         </div>
-        <h2 class="mb-6">Our <span class="gradient-text">Creative</span> Process</h2>
-        <p class="text-light-300">We follow a structured yet flexible approach to ensure every project meets and exceeds expectations, delivering maximum value for our clients.</p>
+        <h2 class="mb-6">Our Proven <span class="gradient-text">Development</span> Process</h2>
+        <p class="text-light-300">We follow an agile development methodology and structured approach to ensure every custom software project meets and exceeds expectations, delivering maximum value and ROI for our clients.</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -161,16 +355,118 @@ const testimonials = [
     </div>
   </section>
   
+  <!-- Results Section -->
+  <section class="section">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Measurable Results</span>
+        </div>
+        <h2 class="mb-6">Digital Solutions That Drive <span class="gradient-text">Business Growth</span></h2>
+        <p class="text-light-300">Our custom web development and digital transformation services deliver tangible business outcomes. From increased conversion rates to streamlined operations, we focus on results that matter to your bottom line.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold gradient-text mb-2">150%</h3>
+          <p class="text-light-300">Average increase in conversion rates after website optimization</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold gradient-text mb-2">$2.5M</h3>
+          <p class="text-light-300">Additional revenue generated for clients through digital transformation</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold gradient-text mb-2">65%</h3>
+          <p class="text-light-300">Faster page load times achieved through performance optimization</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold gradient-text mb-2">99.9%</h3>
+          <p class="text-light-300">Uptime reliability across all hosted applications and websites</p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
+          <h3 class="text-xl font-bold mb-6 text-blazingEmber">Enhanced User Experience</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Mobile-first responsive design ensuring optimal viewing on all devices</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Intuitive navigation and user interface design reducing bounce rates</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Accessibility compliance (WCAG 2.1) expanding audience reach</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Search engine optimization (SEO) increasing organic traffic</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
+          <h3 class="text-xl font-bold mb-6 text-blazingEmber">Operational Efficiency</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Automated workflows reducing manual tasks and human error</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Real-time analytics and reporting for data-driven decisions</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Scalable architecture supporting business growth</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Integration with existing systems and third-party services</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  
   <!-- Projects Section -->
   <section class="section bg-dark-200">
     <div class="container mx-auto">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Our Work</span>
+          <span class="uppercase tracking-wider text-light-300">Portfolio Showcase</span>
         </div>
-        <h2 class="mb-6">Recent <span class="gradient-text">Projects</span></h2>
-        <p class="text-light-300">Explore our portfolio of carefully crafted digital experiences that have helped businesses achieve their goals and stand out in their industries.</p>
+        <h2 class="mb-6">Award-Winning <span class="gradient-text">Web Development</span> Projects</h2>
+        <p class="text-light-300">Explore our portfolio of carefully crafted digital experiences that showcase our expertise in custom web development, mobile app development, and AI integration. Each project demonstrates our commitment to delivering innovative solutions that drive business success.</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
@@ -218,12 +514,63 @@ const testimonials = [
   <!-- CTA Section -->
   <section class="py-24 bg-dark-200 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
-      <div class="max-w-3xl mx-auto text-center">
-        <h2 class="mb-6">Ready to <span class="gradient-text">Ignite</span> Your Digital Presence?</h2>
-        <p class="text-light-300 text-lg mb-8">Let's collaborate to create something extraordinary that drives real results for your business.</p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a href="/contact" class="btn-primary">Start a Project</a>
-          <a href="/services" class="btn-secondary">Explore Services</a>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="mb-6 flex items-center">
+            <span class="flame-dot"></span>
+            <span class="uppercase tracking-wider text-light-300">Get Started Today</span>
+          </div>
+          <h2 class="mb-6">Ready to Transform Your Business with <span class="gradient-text">Custom Digital Solutions</span>?</h2>
+          <p class="text-light-300 text-lg mb-8">
+            Partner with Creative Bandit, the leading digital agency specializing in web development, mobile app development, and AI integration. Our expert team is ready to help you build powerful digital experiences that drive measurable business growth and competitive advantage.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div class="flex items-center">
+              <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
+              <span class="text-light-300">Free initial consultation</span>
+            </div>
+            <div class="flex items-center">
+              <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
+              <span class="text-light-300">Custom project roadmap</span>
+            </div>
+            <div class="flex items-center">
+              <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
+              <span class="text-light-300">Transparent pricing</span>
+            </div>
+            <div class="flex items-center">
+              <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
+              <span class="text-light-300">24/7 ongoing support</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-4">
+            <a href="/contact" class="btn-primary">Start Your Project</a>
+            <a href="/services" class="btn-secondary">View All Services</a>
+          </div>
+        </div>
+        
+        <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
+          <h3 class="text-xl font-bold mb-6">What You Get With Creative Bandit</h3>
+          <div class="space-y-6">
+            <div class="border-l-4 border-blazingEmber pl-4">
+              <h4 class="font-bold text-lg mb-2">Expert Development Team</h4>
+              <p class="text-light-300 text-sm">Certified developers and designers with 10+ years of experience in modern web technologies and frameworks.</p>
+            </div>
+            
+            <div class="border-l-4 border-blazingEmber pl-4">
+              <h4 class="font-bold text-lg mb-2">Proven Track Record</h4>
+              <p class="text-light-300 text-sm">200+ successful projects delivered across multiple industries with measurable ROI and business impact.</p>
+            </div>
+            
+            <div class="border-l-4 border-blazingEmber pl-4">
+              <h4 class="font-bold text-lg mb-2">Future-Proof Solutions</h4>
+              <p class="text-light-300 text-sm">Scalable architecture and cutting-edge technologies ensuring your digital solutions grow with your business.</p>
+            </div>
+            
+            <div class="border-l-4 border-blazingEmber pl-4">
+              <h4 class="font-bold text-lg mb-2">End-to-End Service</h4>
+              <p class="text-light-300 text-sm">From initial strategy to deployment and ongoing maintenance, we handle every aspect of your digital transformation.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
