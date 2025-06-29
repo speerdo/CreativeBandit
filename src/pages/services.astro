@@ -86,11 +86,11 @@ const services = [
   </section>
   
   <!-- Service Details -->
-  {services.map((service) => (
+  {services.map((service, index) => (
     <section id={service.id} class="py-24 relative even:bg-dark-200">
       <div class="container mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div class="order-2 lg:order-1">
+          <div class={`${index % 2 === 0 ? 'order-2 lg:order-1' : 'order-2 lg:order-2'}`}>
             <div class="mb-4 flex items-center">
               <span class="flame-dot"></span>
               <span class="uppercase tracking-wider text-light-300">
@@ -323,7 +323,7 @@ const services = [
             <a href="/contact" class="btn-primary">Discuss Your Project</a>
           </div>
           
-          <div class="order-1 lg:order-2">
+          <div class={`${index % 2 === 0 ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}>
             <img 
               src={service.id === 'web-development' ? 'https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
                   service.id === 'design' ? 'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
