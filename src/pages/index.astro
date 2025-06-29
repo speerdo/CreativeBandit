@@ -1,0 +1,235 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+
+const services = [
+  {
+    title: 'Web Development',
+    description: 'We create fast, responsive, and user-friendly websites optimized for performance and SEO.',
+    icon: 'web',
+    link: '/services#web-development'
+  },
+  {
+    title: 'UI/UX Design',
+    description: 'Beautiful, intuitive interfaces that deliver exceptional user experiences and drive engagement.',
+    icon: 'design',
+    link: '/services#design'
+  },
+  {
+    title: 'AI Integration',
+    description: 'Harness the power of AI to automate tasks, enhance functionality, and provide smarter experiences.',
+    icon: 'ai',
+    link: '/services#ai-integration'
+  },
+  {
+    title: 'App Development',
+    description: 'Native and cross-platform mobile applications that extend your digital presence beyond the web.',
+    icon: 'app',
+    link: '/services#app-development'
+  }
+];
+
+const projects = [
+  {
+    title: 'Nebula Insights Dashboard',
+    category: 'Web App',
+    image: 'https://images.pexels.com/photos/8106498/pexels-photo-8106498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/nebula'
+  },
+  {
+    title: 'Ember E-commerce Platform',
+    category: 'E-commerce',
+    image: 'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/ember'
+  },
+  {
+    title: 'Vitality Fitness App',
+    category: 'Mobile App',
+    image: 'https://images.pexels.com/photos/5702281/pexels-photo-5702281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/vitality'
+  },
+  {
+    title: 'Spectrum Design System',
+    category: 'UI/UX Design',
+    image: 'https://images.pexels.com/photos/5473302/pexels-photo-5473302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/spectrum'
+  }
+];
+
+const testimonials = [
+  {
+    quote: "Flame Studio transformed our outdated website into a modern, high-performing platform that's generated a 40% increase in leads. Their team truly understands how to balance aesthetics with functionality.",
+    author: "Sarah Johnson",
+    position: "Marketing Director",
+    company: "TechNova"
+  },
+  {
+    quote: "Working with Flame Studio was a game-changer for our startup. Their AI integration expertise helped us implement features we thought were years away from being possible.",
+    author: "Michael Chen",
+    position: "Founder & CEO",
+    company: "Quantum AI"
+  },
+  {
+    quote: "The attention to detail and creative direction from Flame Studio elevated our brand identity across all digital touchpoints. They didn't just deliver a website, they delivered an experience.",
+    author: "Emily Rodriguez",
+    position: "Creative Director",
+    company: "Artisan Collective"
+  }
+];
+---
+
+<Layout title="Home">
+  <Hero />
+  
+  <!-- Services Section -->
+  <section class="section bg-dark-200">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Our Services</span>
+        </div>
+        <h2 class="mb-6">Services That <span class="gradient-text">Ignite</span> Success</h2>
+        <p class="text-light-300">We offer a comprehensive range of digital services to help businesses thrive in the digital landscape, from stunning design to cutting-edge development and AI integration.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {services.map(service => (
+          <ServiceCard 
+            title={service.title} 
+            description={service.description} 
+            icon={service.icon} 
+            link={service.link} 
+          />
+        ))}
+      </div>
+      
+      <div class="mt-12 text-center">
+        <a href="/services" class="btn-secondary">View All Services</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Process Section -->
+  <section class="section relative">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">How We Work</span>
+        </div>
+        <h2 class="mb-6">Our <span class="gradient-text">Creative</span> Process</h2>
+        <p class="text-light-300">We follow a structured yet flexible approach to ensure every project meets and exceeds expectations, delivering maximum value for our clients.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="relative">
+          <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
+            <span class="font-bold">01</span>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Discovery</h3>
+          <p class="text-light-300">We start by understanding your business, goals, and challenges to align our strategy with your vision.</p>
+        </div>
+        
+        <div class="relative">
+          <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
+            <span class="font-bold">02</span>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Strategy</h3>
+          <p class="text-light-300">Based on discovery insights, we craft a strategic roadmap to guide the design and development process.</p>
+        </div>
+        
+        <div class="relative">
+          <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
+            <span class="font-bold">03</span>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Creation</h3>
+          <p class="text-light-300">Our designers and developers bring your project to life with meticulous attention to detail and quality.</p>
+        </div>
+        
+        <div class="relative">
+          <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
+            <span class="font-bold">04</span>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Optimization</h3>
+          <p class="text-light-300">We refine and iterate based on testing and feedback to ensure the final product exceeds expectations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Projects Section -->
+  <section class="section bg-dark-200">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Our Work</span>
+        </div>
+        <h2 class="mb-6">Recent <span class="gradient-text">Projects</span></h2>
+        <p class="text-light-300">Explore our portfolio of carefully crafted digital experiences that have helped businesses achieve their goals and stand out in their industries.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        {projects.map(project => (
+          <ProjectCard 
+            title={project.title} 
+            category={project.category} 
+            image={project.image} 
+            link={project.link} 
+          />
+        ))}
+      </div>
+      
+      <div class="mt-12 text-center">
+        <a href="/work" class="btn-secondary">View Full Portfolio</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Testimonials Section -->
+  <section class="section">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Client Success</span>
+        </div>
+        <h2 class="mb-6">What Our <span class="gradient-text">Clients</span> Say</h2>
+        <p class="text-light-300">Don't just take our word for it. Here's what our clients have to say about working with Flame Studio.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {testimonials.map(testimonial => (
+          <TestimonialCard 
+            quote={testimonial.quote} 
+            author={testimonial.author} 
+            position={testimonial.position} 
+            company={testimonial.company} 
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="py-24 bg-dark-200 relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="mb-6">Ready to <span class="gradient-text">Ignite</span> Your Digital Presence?</h2>
+        <p class="text-light-300 text-lg mb-8">Let's collaborate to create something extraordinary that drives real results for your business.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="btn-primary">Start a Project</a>
+          <a href="/services" class="btn-secondary">Explore Services</a>
+        </div>
+      </div>
+    </div>
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-blazingEmber/5 blur-3xl rounded-full"></div>
+      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-magentaFlame/5 blur-3xl rounded-full"></div>
+    </div>
+  </section>
+</Layout>

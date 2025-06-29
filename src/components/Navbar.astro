@@ -1,0 +1,56 @@
+---
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/services", label: "Services" },
+  { href: "/work", label: "Our Work" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed w-full top-0 z-50 transition-all duration-300 bg-charcoal/90 backdrop-blur-md">
+  <div class="container mx-auto py-4">
+    <nav class="flex items-center justify-between">
+      <a href="/" class="flex items-center">
+        <span class="text-xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-blazingEmber to-flameTip">CREATIVE</span>
+        <span class="text-xl font-heading font-normal text-light-100">BANDIT</span>
+      </a>
+      
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center space-x-1">
+        {navItems.map(item => (
+          <a 
+            href={item.href} 
+            class={`nav-link ${currentPath === item.href ? 'nav-link-active' : ''}`}
+          >
+            {item.label}
+          </a>
+        ))}
+        <a href="/contact" class="ml-4 btn-primary">Get Started</a>
+      </div>
+      
+      <!-- Mobile Nav Toggle -->
+      <button id="navToggle" class="md:hidden flex items-center px-3 py-2 border rounded text-light-300 border-light-300 hover:text-blazingEmber hover:border-blazingEmber transition-colors duration-300">
+        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <title>Menu</title>
+          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+        </svg>
+      </button>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="navMenu" class="hidden md:hidden flex-col py-4 mt-2 space-y-2">
+      {navItems.map(item => (
+        <a 
+          href={item.href} 
+          class={`block px-4 py-2 transition-colors duration-300 hover:bg-dark-100 hover:text-blazingEmber ${currentPath === item.href ? 'text-blazingEmber' : 'text-light-100'}`}
+        >
+          {item.label}
+        </a>
+      ))}
+      <a href="/contact" class="block mt-4 text-center btn-primary">Get Started</a>
+    </div>
+  </div>
+</header>
+<div class="h-16"></div> <!-- Spacer for fixed header -->

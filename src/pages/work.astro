@@ -1,0 +1,285 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const categories = [
+  { id: 'all', name: 'All' },
+  { id: 'web', name: 'Web Development' },
+  { id: 'design', name: 'UI/UX Design' },
+  { id: 'app', name: 'Mobile Apps' },
+  { id: 'ecommerce', name: 'E-commerce' },
+  { id: 'ai', name: 'AI Integration' }
+];
+
+const projects = [
+  {
+    title: 'Nebula Insights Dashboard',
+    category: 'web',
+    categoryName: 'Web App',
+    image: 'https://images.pexels.com/photos/8106498/pexels-photo-8106498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/nebula',
+    client: 'DataViz Corp'
+  },
+  {
+    title: 'Ember E-commerce Platform',
+    category: 'ecommerce',
+    categoryName: 'E-commerce',
+    image: 'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/ember',
+    client: 'Fashion Collective'
+  },
+  {
+    title: 'Vitality Fitness App',
+    category: 'app',
+    categoryName: 'Mobile App',
+    image: 'https://images.pexels.com/photos/5702281/pexels-photo-5702281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/vitality',
+    client: 'Vitality Fitness'
+  },
+  {
+    title: 'Spectrum Design System',
+    category: 'design',
+    categoryName: 'UI/UX Design',
+    image: 'https://images.pexels.com/photos/5473302/pexels-photo-5473302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/spectrum',
+    client: 'Tech Innovations'
+  },
+  {
+    title: 'Quantum AI Assistant',
+    category: 'ai',
+    categoryName: 'AI Integration',
+    image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/quantum',
+    client: 'Future Labs'
+  },
+  {
+    title: 'Artisan Portfolio Website',
+    category: 'web',
+    categoryName: 'Web Development',
+    image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/artisan',
+    client: 'Artisan Collective'
+  },
+  {
+    title: 'Eco Store Platform',
+    category: 'ecommerce',
+    categoryName: 'E-commerce',
+    image: 'https://images.pexels.com/photos/5709661/pexels-photo-5709661.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/eco-store',
+    client: 'GreenLife Market'
+  },
+  {
+    title: 'Traveler Mobile App',
+    category: 'app',
+    categoryName: 'Mobile App',
+    image: 'https://images.pexels.com/photos/5082579/pexels-photo-5082579.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work/traveler',
+    client: 'Global Journeys'
+  }
+];
+---
+
+<Layout title="Our Work" description="Explore our portfolio of web development, design, and digital projects for clients across various industries">
+  <!-- Hero Section -->
+  <section class="section pt-24 relative">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <div class="mb-6 flex items-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Our Portfolio</span>
+        </div>
+        <h1 class="mb-6">Our <span class="gradient-text">Creative</span> Work</h1>
+        <p class="text-xl text-light-300 mb-8">
+          Browse our portfolio of successful projects across web development, design, mobile apps, and AI integration.
+        </p>
+      </div>
+    </div>
+    
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blazingEmber/10 to-transparent opacity-30"></div>
+    </div>
+  </section>
+  
+  <!-- Portfolio Filter and Grid -->
+  <section class="pb-24">
+    <div class="container mx-auto">
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap justify-center mb-12 gap-2">
+        {categories.map(category => (
+          <button 
+            data-filter={category.id} 
+            class="px-6 py-2 rounded-full bg-dark-100 hover:bg-blazingEmber/10 transition-colors duration-300 focus:outline-none filter-btn"
+            class:list={[{ 'bg-blazingEmber/10 text-blazingEmber': category.id === 'all' }]}
+          >
+            {category.name}
+          </button>
+        ))}
+      </div>
+      
+      <!-- Portfolio Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
+        {projects.map(project => (
+          <div class="project-item" data-category={project.category}>
+            <ProjectCard 
+              title={project.title} 
+              category={project.categoryName} 
+              image={project.image} 
+              link={project.link} 
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Case Studies Section -->
+  <section class="section bg-dark-200">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Featured Projects</span>
+        </div>
+        <h2 class="mb-6">Case <span class="gradient-text">Studies</span></h2>
+        <p class="text-light-300">Dive deeper into selected projects and discover the challenges, solutions, and results we delivered for our clients.</p>
+      </div>
+      
+      <!-- Featured Case Study -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+          <img 
+            src="https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+            alt="Quantum AI Assistant Case Study" 
+            class="rounded-lg w-full h-auto"
+          />
+        </div>
+        
+        <div>
+          <div class="mb-4 flex items-center">
+            <span class="flame-dot"></span>
+            <span class="uppercase tracking-wider text-light-300">Case Study</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-3">Quantum AI Assistant</h3>
+          <p class="text-light-300 mb-6">
+            We developed an AI-powered virtual assistant for Future Labs that increased customer support efficiency by 78% and reduced response times by 65%.
+          </p>
+          
+          <div class="grid grid-cols-2 gap-6 mb-6">
+            <div>
+              <h4 class="text-sm text-light-300 mb-1">Client</h4>
+              <p>Future Labs</p>
+            </div>
+            <div>
+              <h4 class="text-sm text-light-300 mb-1">Category</h4>
+              <p>AI Integration</p>
+            </div>
+            <div>
+              <h4 class="text-sm text-light-300 mb-1">Timeline</h4>
+              <p>4 Months</p>
+            </div>
+            <div>
+              <h4 class="text-sm text-light-300 mb-1">Services</h4>
+              <p>AI, Development, UX Design</p>
+            </div>
+          </div>
+          
+          <a href="/work/quantum" class="btn-primary">View Case Study</a>
+        </div>
+      </div>
+      
+      <!-- Other Case Studies -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card">
+          <h3 class="text-xl font-bold mb-3">Ember E-commerce Platform</h3>
+          <p class="text-light-300 mb-4">A custom e-commerce solution that increased conversions by 45% and improved average order value by 30%.</p>
+          <a href="/work/ember" class="text-blazingEmber inline-flex items-center font-medium hover:text-coreFire transition-colors duration-300">
+            Read Case Study
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </div>
+        
+        <div class="card">
+          <h3 class="text-xl font-bold mb-3">Vitality Fitness App</h3>
+          <p class="text-light-300 mb-4">A mobile fitness application that increased user engagement by 65% and retention rates by 40%.</p>
+          <a href="/work/vitality" class="text-blazingEmber inline-flex items-center font-medium hover:text-coreFire transition-colors duration-300">
+            Read Case Study
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </div>
+        
+        <div class="card">
+          <h3 class="text-xl font-bold mb-3">Nebula Insights Dashboard</h3>
+          <p class="text-light-300 mb-4">A data visualization platform that improved decision-making efficiency by 53% and reduced reporting time by 70%.</p>
+          <a href="/work/nebula" class="text-blazingEmber inline-flex items-center font-medium hover:text-coreFire transition-colors duration-300">
+            Read Case Study
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="py-24 relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="mb-6">Ready to <span class="gradient-text">Start</span> Your Project?</h2>
+        <p class="text-light-300 text-lg mb-8">Let's collaborate to create a digital solution that meets your business goals and exceeds your expectations.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="btn-primary">Contact Us</a>
+          <a href="/services" class="btn-secondary">Explore Services</a>
+        </div>
+      </div>
+    </div>
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-blazingEmber/5 blur-3xl rounded-full"></div>
+      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-magentaFlame/5 blur-3xl rounded-full"></div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectItems = document.querySelectorAll('.project-item');
+    
+    // Initialize - show all projects
+    showProjects('all');
+    
+    // Add click event to filter buttons
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-blazingEmber/10', 'text-blazingEmber');
+        });
+        
+        // Add active class to clicked button
+        btn.classList.add('bg-blazingEmber/10', 'text-blazingEmber');
+        
+        // Get filter value
+        const filterValue = btn.getAttribute('data-filter');
+        showProjects(filterValue);
+      });
+    });
+    
+    // Show/hide projects based on filter
+    function showProjects(category) {
+      projectItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        
+        if (category === 'all' || category === itemCategory) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  });
+</script>

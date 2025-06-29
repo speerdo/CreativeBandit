@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-charcoal text-light-100 relative overflow-x-hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold leading-tight;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+  
+  p {
+    @apply leading-relaxed;
+  }
+}
+
+@layer components {
+  .container {
+    @apply px-4 md:px-8 mx-auto max-w-7xl;
+  }
+  
+  .btn {
+    @apply inline-block px-6 py-3 font-medium rounded-md transition-all duration-300 text-center;
+  }
+  
+  .btn-primary {
+    @apply btn bg-blazingEmber text-white hover:bg-blazingEmber/90;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-transparent border-2 border-blazingEmber text-white hover:bg-blazingEmber/10;
+  }
+  
+  .nav-link {
+    @apply relative px-4 py-2 font-medium transition-colors duration-300 hover:text-blazingEmber;
+  }
+  
+  .nav-link-active {
+    @apply text-blazingEmber;
+  }
+  
+  .flame-gradient {
+    @apply fixed top-0 left-0 w-full h-full opacity-20 -z-10 pointer-events-none;
+    background: radial-gradient(
+      circle at 50% 0%, 
+      rgba(255, 28, 28, 0.15) 0%, 
+      rgba(255, 106, 0, 0.1) 30%, 
+      rgba(161, 0, 255, 0.05) 60%, 
+      rgba(13, 13, 13, 0) 100%
+    );
+  }
+  
+  .section {
+    @apply py-16 md:py-24;
+  }
+  
+  .card {
+    @apply bg-dark-100 rounded-lg p-6 transition-all duration-300 border border-dark-100 hover:border-blazingEmber/30;
+  }
+  
+  .gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-blazingEmber to-magentaFlame;
+  }
+  
+  .service-card {
+    @apply card relative overflow-hidden;
+  }
+  
+  .service-card::before {
+    content: '';
+    @apply absolute top-0 left-0 w-0 h-1 bg-gradient-to-r from-blazingEmber to-coreFire transition-all duration-500;
+  }
+  
+  .service-card:hover::before {
+    @apply w-full;
+  }
+  
+  .project-card {
+    @apply relative overflow-hidden rounded-lg;
+  }
+  
+  .project-card img {
+    @apply transition-all duration-500;
+  }
+  
+  .project-card:hover img {
+    @apply scale-105;
+  }
+  
+  .project-card .overlay {
+    @apply absolute inset-0 bg-charcoal/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6;
+  }
+  
+  .project-card:hover .overlay {
+    @apply opacity-100;
+  }
+  
+  .flame-dot {
+    @apply w-2 h-2 rounded-full inline-block mr-2 bg-blazingEmber animate-pulse;
+  }
+}

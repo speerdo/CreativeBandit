@@ -1,0 +1,400 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+
+const services = [
+  {
+    title: 'Web Development',
+    description: 'We create fast, responsive, and user-friendly websites optimized for performance and SEO.',
+    icon: 'web',
+    link: '#web-development',
+    id: 'web-development'
+  },
+  {
+    title: 'UI/UX Design',
+    description: 'Beautiful, intuitive interfaces that deliver exceptional user experiences and drive engagement.',
+    icon: 'design',
+    link: '#design',
+    id: 'design'
+  },
+  {
+    title: 'AI Integration',
+    description: 'Harness the power of AI to automate tasks, enhance functionality, and provide smarter experiences.',
+    icon: 'ai',
+    link: '#ai-integration',
+    id: 'ai-integration'
+  },
+  {
+    title: 'App Development',
+    description: 'Native and cross-platform mobile applications that extend your digital presence beyond the web.',
+    icon: 'app',
+    link: '#app-development',
+    id: 'app-development'
+  },
+  {
+    title: 'E-commerce Solutions',
+    description: 'Custom online stores and shopping experiences that convert visitors into customers.',
+    icon: 'ecommerce',
+    link: '#ecommerce',
+    id: 'ecommerce'
+  },
+  {
+    title: 'Digital Strategy',
+    description: 'Strategic guidance to help you navigate the digital landscape and achieve your business goals.',
+    icon: 'web',
+    link: '#digital-strategy',
+    id: 'digital-strategy'
+  }
+];
+---
+
+<Layout title="Services" description="Explore our comprehensive range of digital services including web development, UI/UX design, AI integration, and more">
+  <!-- Hero Section -->
+  <section class="section pt-24 relative">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <div class="mb-6 flex items-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">What We Do</span>
+        </div>
+        <h1 class="mb-6">Services That <span class="gradient-text">Power</span> Digital Success</h1>
+        <p class="text-xl text-light-300 mb-8">
+          From concept to launch and beyond, we offer a complete suite of digital services to help your business thrive in the digital landscape.
+        </p>
+      </div>
+    </div>
+    
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blazingEmber/10 to-transparent opacity-30"></div>
+    </div>
+  </section>
+  
+  <!-- Services Overview -->
+  <section class="py-16">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {services.map(service => (
+          <ServiceCard 
+            title={service.title}
+            description={service.description}
+            icon={service.icon}
+            link={service.link}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Service Details -->
+  {services.map((service) => (
+    <section id={service.id} class="py-24 relative even:bg-dark-200">
+      <div class="container mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div class="order-2 lg:order-1">
+            <div class="mb-4 flex items-center">
+              <span class="flame-dot"></span>
+              <span class="uppercase tracking-wider text-light-300">
+                {service.id === 'web-development' ? 'Expert Web Development' : 
+                 service.id === 'design' ? 'Strategic UI/UX Design' : 
+                 service.id === 'ai-integration' ? 'Advanced AI Solutions' : 
+                 service.id === 'app-development' ? 'Mobile App Excellence' : 
+                 service.id === 'ecommerce' ? 'E-commerce Expertise' : 
+                 'Strategic Guidance'}
+              </span>
+            </div>
+            <h2 class="mb-6">{service.title}</h2>
+            <p class="mb-6 text-light-300">
+              {service.id === 'web-development' ? 
+                'We build high-performance websites and web applications that deliver exceptional user experiences across all devices. Our development team combines technical expertise with creative problem-solving to create solutions that are not only visually impressive but also functionally robust.' :
+              service.id === 'design' ? 
+                'Great design goes beyond aesthetics—it&apos;s about creating intuitive, enjoyable experiences that solve real user problems. Our design process is research-driven and user-centered, ensuring that every element serves a purpose and contributes to the overall user experience.' :
+              service.id === 'ai-integration' ? 
+                'Integrate cutting-edge AI technology into your digital products to enhance functionality, automate processes, and deliver more personalized user experiences. We specialize in practical AI applications that provide real business value and competitive advantage.' :
+              service.id === 'app-development' ? 
+                'Extend your digital presence with custom mobile applications that engage users on their preferred devices. Whether you need a native iOS/Android app or a cross-platform solution, we deliver high-quality mobile experiences that users love.' :
+              service.id === 'ecommerce' ? 
+                'Create seamless shopping experiences that convert browsers into buyers. From custom storefronts to inventory management and payment processing, we build e-commerce solutions that scale with your business and drive sales.' :
+                'Navigate the complex digital landscape with strategic guidance tailored to your business goals. We help you identify opportunities, overcome challenges, and develop a roadmap for digital success.'}
+            </p>
+            
+            <h3 class="text-xl font-bold mb-4">What we offer:</h3>
+            <ul class="space-y-2 mb-8">
+              {service.id === 'web-development' ? (
+                <>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Custom website development</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Web application development</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Responsive design implementation</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Performance optimization</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>SEO-friendly architecture</span>
+                  </li>
+                </>
+              ) : service.id === 'design' ? (
+                <>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>UX research and user testing</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Wireframing and prototyping</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Visual design and branding</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Interaction design</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>User interface design systems</span>
+                  </li>
+                </>
+              ) : service.id === 'ai-integration' ? (
+                <>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>AI-powered chatbots and assistants</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Natural language processing</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Personalization engines</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Machine learning models</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Automated content generation</span>
+                  </li>
+                </>
+              ) : service.id === 'app-development' ? (
+                <>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Native iOS app development</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Native Android app development</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Cross-platform app development</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>App store optimization</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>App maintenance and updates</span>
+                  </li>
+                </>
+              ) : service.id === 'ecommerce' ? (
+                <>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Custom e-commerce development</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Platform migration and integration</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Payment gateway integration</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Inventory management systems</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Conversion rate optimization</span>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Digital transformation consultation</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Technology stack assessment</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Digital marketing strategy</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Business process optimization</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Performance analytics and reporting</span>
+                  </li>
+                </>
+              )}
+            </ul>
+            
+            <a href="/contact" class="btn-primary">Discuss Your Project</a>
+          </div>
+          
+          <div class="order-1 lg:order-2">
+            <img 
+              src={service.id === 'web-development' ? 'https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
+                  service.id === 'design' ? 'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
+                  service.id === 'ai-integration' ? 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
+                  service.id === 'app-development' ? 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
+                  service.id === 'ecommerce' ? 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
+                  'https://images.pexels.com/photos/3182781/pexels-photo-3182781.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'}
+              alt={service.title}
+              class="rounded-lg w-full h-auto shadow-xl"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+  
+  <!-- CTA Section -->
+  <section class="py-24 bg-dark-200 relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="mb-6">Ready to <span class="gradient-text">Transform</span> Your Digital Presence?</h2>
+        <p class="text-light-300 text-lg mb-8">Contact us today to discuss your project and discover how our services can help you achieve your digital goals.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="btn-primary">Get In Touch</a>
+          <a href="/work" class="btn-secondary">View Our Work</a>
+        </div>
+      </div>
+    </div>
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-blazingEmber/5 blur-3xl rounded-full"></div>
+      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-magentaFlame/5 blur-3xl rounded-full"></div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectItems = document.querySelectorAll('.project-item');
+    
+    // Initialize - show all projects
+    showProjects('all');
+    
+    // Add click event to filter buttons
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-blazingEmber/10', 'text-blazingEmber');
+        });
+        
+        // Add active class to clicked button
+        btn.classList.add('bg-blazingEmber/10', 'text-blazingEmber');
+        
+        // Get filter value
+        const filterValue = btn.getAttribute('data-filter');
+        showProjects(filterValue);
+      });
+    });
+    
+    // Show/hide projects based on filter
+    function showProjects(category) {
+      projectItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        
+        if (category === 'all' || category === itemCategory) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  });
+</script>

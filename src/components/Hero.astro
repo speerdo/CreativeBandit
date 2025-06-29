@@ -1,0 +1,157 @@
+---
+import { Image } from 'astro:assets';
+---
+
+<section class="relative min-h-[90vh] flex items-center">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl relative z-10">
+      <div class="mb-6 flex items-center">
+        <span class="flame-dot"></span>
+        <span class="uppercase tracking-wider text-light-300">Igniting Digital Experiences</span>
+      </div>
+      <h1 class="mb-6">
+        We Create <span class="gradient-text">Blazing</span> Digital Experiences
+      </h1>
+      <p class="text-xl text-light-300 mb-8 max-w-2xl">
+        Award-winning web design & development studio creating stunning digital experiences that drive results and ignite your brand's potential.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="/contact" class="btn-primary">Let's Work Together</a>
+        <a href="/work" class="btn-secondary">View Our Work</a>
+      </div>
+      
+      <div class="mt-12 lg:mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <p class="text-3xl font-bold gradient-text mb-1">10+</p>
+          <p class="text-light-300 text-sm">Years Experience</p>
+        </div>
+        <div class="text-center">
+          <p class="text-3xl font-bold gradient-text mb-1">200+</p>
+          <p class="text-light-300 text-sm">Projects Completed</p>
+        </div>
+        <div class="text-center">
+          <p class="text-3xl font-bold gradient-text mb-1">50+</p>
+          <p class="text-light-300 text-sm">Happy Clients</p>
+        </div>
+        <div class="text-center">
+          <p class="text-3xl font-bold gradient-text mb-1">15+</p>
+          <p class="text-light-300 text-sm">Industry Awards</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <canvas id="heroCanvas" class="absolute top-0 right-0 w-full h-full -z-10"></canvas>
+</section>
+
+<script>
+  import * as THREE from 'three';
+
+  // Initialize scene
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector('#heroCanvas'),
+    alpha: true,
+    antialias: true
+  });
+
+  // Set renderer size and pixel ratio
+  const updateSize = () => {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+  };
+
+  // Create particles
+  const particlesCount = 1000;
+  const positions = new Float32Array(particlesCount * 3);
+  const colors = new Float32Array(particlesCount * 3);
+
+  // Color palette
+  const palette = [
+    new THREE.Color('#FF1C1C'), // blazingEmber
+    new THREE.Color('#FF6A00'), // coreFire
+    new THREE.Color('#FFD700'), // flameTip
+    new THREE.Color('#A100FF')  // magentaFlame
+  ];
+
+  // Set random positions and colors
+  for (let i = 0; i < particlesCount; i++) {
+    // Position
+    positions[i * 3] = (Math.random() - 0.5) * 10;     // x
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // y
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z
+
+    // Color
+    const color = palette[Math.floor(Math.random() * palette.length)];
+    colors[i * 3] = color.r;
+    colors[i * 3 + 1] = color.g;
+    colors[i * 3 + 2] = color.b;
+  }
+
+  // Create particle geometry
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  // Create particle material
+  const material = new THREE.PointsMaterial({
+    size: 0.05,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending
+  });
+
+  // Create particle system
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+
+  // Position camera
+  camera.position.z = 5;
+
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+    updateSize();
+
+    // Rotate particles
+    particles.rotation.x += 0.0005;
+    particles.rotation.y += 0.001;
+
+    // Update particle positions with wave effect
+    const positions = particles.geometry.attributes.position.array;
+    const time = Date.now() * 0.001;
+
+    for (let i = 0; i < particlesCount; i++) {
+      const ix = i * 3;
+      const iy = i * 3 + 1;
+      const iz = i * 3 + 2;
+
+      // Create wave effect
+      positions[iy] = Math.sin(time + positions[ix]) * 0.3;
+      positions[iz] += Math.cos(time + positions[ix]) * 0.002;
+
+      // Reset particles that move too far
+      if (Math.abs(positions[iz]) > 5) {
+        positions[iz] = (Math.random() - 0.5) * 10;
+      }
+    }
+    particles.geometry.attributes.position.needsUpdate = true;
+
+    renderer.render(scene, camera);
+  }
+
+  // Handle window resize
+  window.addEventListener('resize', updateSize);
+
+  // Start animation
+  animate();
+</script>
