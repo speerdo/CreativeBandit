@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+#bolt
+.bolt/
+
 # dependencies
 node_modules/
 
