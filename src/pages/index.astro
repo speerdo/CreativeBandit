@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import AnimatedStats from '../components/AnimatedStats';
 
 const services = [
   {
@@ -57,38 +58,15 @@ const projects = [
     link: 'https://edreports.org'
   }
 ];
-
-const experienceHighlights = [
-  {
-    achievement: "Led Eli Lilly pharmaceutical web application team through Next.js migration and React design system transition, with adoption by 15+ engineers.",
-    category: "Enterprise Development"
-  },
-  {
-    achievement: "Built HIPAA-compliant remote therapeutic monitoring system for Medicare providers, automating compliance reporting and reducing manual data entry.",
-    category: "Healthcare Tech"
-  },
-  {
-    achievement: "Achieved 8.08% affiliate conversion rate (4x industry average) through intelligent content optimization and SEO automation.",
-    category: "E-commerce"
-  },
-  {
-    achievement: "Pioneered AI-assisted development workflows reducing debugging time by 20%, subsequently adopted across engineering teams.",
-    category: "AI Integration"
-  },
-  {
-    achievement: "Migrated EdReports K-12 platform to Nuxt.js, improving page load times by 40% and developer productivity by 30%.",
-    category: "Performance"
-  }
-];
 ---
 
-<Layout 
-  title="AI Automation & Full-Stack Development" 
+<Layout
+  title="AI Automation & Full-Stack Development"
   description="AI automation specialist and full-stack developer building intelligent systems that reduce manual work by 60-90%. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis, serving clients nationwide."
   keywords="AI automation consultant, full-stack developer, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer"
 >
   <Hero />
-  
+
   <!-- Services Section -->
   <section class="section bg-dark-200">
     <div class="container mx-auto">
@@ -100,27 +78,27 @@ const experienceHighlights = [
         <h2 class="mb-6">Services That <span class="gradient-text">Ignite</span> Success</h2>
         <p class="text-light-300">We offer a comprehensive range of digital services to help businesses thrive in the digital landscape, from stunning design to cutting-edge development and AI integration.</p>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {services.map(service => (
-          <ServiceCard 
-            title={service.title} 
-            description={service.description} 
-            icon={service.icon} 
-            link={service.link} 
+          <ServiceCard
+            title={service.title}
+            description={service.description}
+            icon={service.icon}
+            link={service.link}
           />
         ))}
       </div>
-      
+
       <div class="mt-12 text-center">
         <a href="/services" class="btn-secondary">View All Services</a>
       </div>
     </div>
   </section>
-  
+
   <!-- About Us Section -->
-  <section class="section relative">
-    <div class="container mx-auto">
+  <section class="section relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
           <div class="mb-6 flex items-center">
@@ -136,25 +114,25 @@ const experienceHighlights = [
           </p>
           <div class="grid grid-cols-2 gap-6">
             <div>
-              <h4 class="font-bold text-lg mb-2 text-blazingEmber">AI Automation</h4>
+              <h4 class="font-bold text-lg mb-2 text-flameTip">AI Automation</h4>
               <p class="text-light-300 text-sm">Intelligent systems using GPT, Claude, and Gemini APIs to eliminate manual work and improve accuracy.</p>
             </div>
             <div>
-              <h4 class="font-bold text-lg mb-2 text-blazingEmber">Full-Stack Development</h4>
+              <h4 class="font-bold text-lg mb-2 text-coreFire">Full-Stack Development</h4>
               <p class="text-light-300 text-sm">Modern React/Vue/TypeScript frontends with Node.js backends, deployed on Vercel and AWS.</p>
             </div>
           </div>
         </div>
         <div class="relative">
-          <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
+          <div class="about-card-glow rounded-lg p-8 border border-coreFire/20 bg-dark-100/80 backdrop-blur-sm">
             <h3 class="text-xl font-bold mb-6">Why Choose Creative Bandit?</h3>
             <ul class="space-y-4">
               <li class="flex items-start">
-                <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
                 <span class="text-light-300">8+ years building production applications for Fortune 500 companies (Eli Lilly, Salesforce) and startups</span>
               </li>
               <li class="flex items-start">
-                <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span class="w-2 h-2 bg-coreFire rounded-full mt-2 mr-3 flex-shrink-0"></span>
                 <span class="text-light-300">AI automation specialist reducing manual work by 60-90% through intelligent system design</span>
               </li>
               <li class="flex items-start">
@@ -162,7 +140,7 @@ const experienceHighlights = [
                 <span class="text-light-300">Proven track record: 100% accuracy AI verification, 8.08% affiliate conversion (4x industry average)</span>
               </li>
               <li class="flex items-start">
-                <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span class="w-2 h-2 bg-magentaFlame rounded-full mt-2 mr-3 flex-shrink-0"></span>
                 <span class="text-light-300">Full-stack expertise from React/Vue/TypeScript frontend to Node.js/Python backend to AI API integration</span>
               </li>
             </ul>
@@ -170,175 +148,13 @@ const experienceHighlights = [
         </div>
       </div>
     </div>
+    <!-- Subtle background accents -->
+    <div class="absolute top-1/2 right-0 w-96 h-96 bg-coreFire/5 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2"></div>
   </section>
 
-  <!-- Industries Section -->
-  <section class="section bg-dark-200">
-    <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Industries I Serve</span>
-        </div>
-        <h2 class="mb-6">Real Experience Across <span class="gradient-text">Key</span> Industries</h2>
-        <p class="text-light-300">Hands-on project experience building production applications with measurable business impact across healthcare, education, e-commerce, and SaaS.</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
-          <h3 class="text-lg font-bold mb-3 text-blazingEmber">Healthcare & Medical</h3>
-          <p class="text-light-300 text-sm mb-4">Built HIPAA-compliant remote therapeutic monitoring system for Medicare billing compliance and led pharmaceutical web application development at Eli Lilly. Expertise in patient data security, healthcare workflows, and regulatory requirements.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">HIPAA Compliance</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Secure APIs</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Healthcare Data</span>
-          </div>
-        </div>
-        
-        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
-          <h3 class="text-lg font-bold mb-3 text-blazingEmber">Education & EdTech</h3>
-          <p class="text-light-300 text-sm mb-4">Migrated EdReports (K-12 curriculum review platform) from legacy Java/Vue to modern Nuxt.js, improving page load times by 40% and developer productivity by 30%. Experience building educational platforms serving thousands nationwide.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Vue.js/Nuxt.js</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Learning Platforms</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Content Management</span>
-          </div>
-        </div>
-        
-        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
-          <h3 class="text-lg font-bold mb-3 text-blazingEmber">E-commerce & Retail</h3>
-          <p class="text-light-300 text-sm mb-4">Developed automated affiliate marketing systems achieving 8.08% conversion rates (4x industry average) and built nationwide directory platforms processing 1,000+ monthly transactions with intelligent SEO automation.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Affiliate APIs</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Payment Processing</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">SEO Automation</span>
-          </div>
-        </div>
-        
-        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
-          <h3 class="text-lg font-bold mb-3 text-blazingEmber">SaaS & Technology</h3>
-          <p class="text-light-300 text-sm mb-4">Full-stack applications for Salesforce platform serving thousands of users, with expertise in API integration, automated accessibility testing, and building scalable component libraries adopted across engineering teams.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">React</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">API Architecture</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Component Systems</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Technologies Section -->
-  <section class="section">
-    <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Technology Stack</span>
-        </div>
-        <h2 class="mb-6">Modern <span class="gradient-text">Technologies</span> I Work With</h2>
-        <p class="text-light-300">Production-tested technologies for building scalable, maintainable applications. Focus on tools that deliver real business value.</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="text-center">
-          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Frontend</h3>
-          <div class="space-y-2">
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">React & Next.js</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Vue.js & Nuxt.js</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">TypeScript</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Astro & Static Sites</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Tailwind CSS</div>
-          </div>
-        </div>
-        
-        <div class="text-center">
-          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Backend</h3>
-          <div class="space-y-2">
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Node.js & Express</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Python</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Supabase</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Xano</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">PostgreSQL</div>
-          </div>
-        </div>
-        
-        <div class="text-center">
-          <h3 class="text-lg font-bold mb-4 text-blazingEmber">AI & APIs</h3>
-          <div class="space-y-2">
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">OpenAI GPT</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Anthropic Claude</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Google Gemini</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Google APIs</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">REST & GraphQL</div>
-          </div>
-        </div>
-        
-        <div class="text-center">
-          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Cloud & Deploy</h3>
-          <div class="space-y-2">
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Vercel</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">AWS</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">GitHub Actions</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">CI/CD Pipelines</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Analytics</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Process Section -->
-  <section class="section bg-dark-200 relative">
-    <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">How I Work</span>
-        </div>
-        <h2 class="mb-6">A Proven <span class="gradient-text">Development</span> Process</h2>
-        <p class="text-light-300">Async-first, remote collaboration focused on clear communication and measurable outcomes. Every project follows a structured approach designed for efficiency.</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="relative">
-          <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
-            <span class="font-bold">01</span>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Discovery</h3>
-          <p class="text-light-300">Understand your business challenges, manual bottlenecks, and automation opportunities through focused consultation.</p>
-        </div>
-        
-        <div class="relative">
-          <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
-            <span class="font-bold">02</span>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Architecture</h3>
-          <p class="text-light-300">Design intelligent systems using modern frameworks and AI APIs for maximum impact and scalability.</p>
-        </div>
-        
-        <div class="relative">
-          <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
-            <span class="font-bold">03</span>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Development</h3>
-          <p class="text-light-300">Build scalable solutions with clean code, automated testing, and performance optimization from day one.</p>
-        </div>
-        
-        <div class="relative">
-          <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
-            <span class="font-bold">04</span>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Launch & Optimize</h3>
-          <p class="text-light-300">Deploy to production, monitor results, and iterate based on real-world data and user feedback.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  
   <!-- Results Section -->
-  <section class="section">
-    <div class="container mx-auto">
+  <section class="section relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
@@ -347,97 +163,64 @@ const experienceHighlights = [
         <h2 class="mb-6">Measurable <span class="gradient-text">Business Impact</span></h2>
         <p class="text-light-300">Concrete outcomes from real projects. Every metric represents actual production results, not projections.</p>
       </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-        <div class="text-center">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
-            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold gradient-text mb-2">8.08%</h3>
-          <p class="text-light-300">Affiliate conversion rate (4x industry average of 1-3%)</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
-            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold gradient-text mb-2">100%</h3>
-          <p class="text-light-300">AI verification accuracy with Gemini-powered venue validation</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
-            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold gradient-text mb-2">40%</h3>
-          <p class="text-light-300">Page load time improvement on EdReports platform migration</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
-            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold gradient-text mb-2">90%</h3>
-          <p class="text-light-300">Reduction in manual review time through automation</p>
-        </div>
+
+      <div class="mb-16">
+        <AnimatedStats client:visible />
       </div>
-      
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
-          <h3 class="text-xl font-bold mb-6 text-blazingEmber">AI & Automation Wins</h3>
+        <div class="rounded-xl p-8 border border-flameTip/20 bg-gradient-to-br from-dark-100 to-dark-200">
+          <h3 class="text-xl font-bold mb-6 text-flameTip">AI & Automation Wins</h3>
           <ul class="space-y-4">
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-light-300">DowntownDry: 100% accuracy venue verification using Gemini AI + Google APIs</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-light-300">RecycleOldTech: 1,000+ monthly referrals through automated content pipeline</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-light-300">IndiAide: HIPAA-compliant automation for Medicare RTM billing compliance</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-light-300">AI-assisted development workflows reducing debugging time by 20%</span>
             </li>
           </ul>
         </div>
-        
-        <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
-          <h3 class="text-xl font-bold mb-6 text-blazingEmber">Enterprise Achievements</h3>
+
+        <div class="rounded-xl p-8 border border-magentaFlame/20 bg-gradient-to-br from-dark-100 to-dark-200">
+          <h3 class="text-xl font-bold mb-6 text-magentaFlame">Enterprise Achievements</h3>
           <ul class="space-y-4">
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-magentaFlame rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-light-300">Eli Lilly: Led Next.js migration and React design system transition</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-magentaFlame rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-light-300">Salesforce: API integration layer reducing manual data entry by 60%</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-magentaFlame rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-light-300">EdReports: 30% increase in developer productivity post-migration</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-magentaFlame rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-light-300">Design system adoption across 15+ engineers on pharmaceutical applications</span>
             </li>
           </ul>
         </div>
       </div>
     </div>
+    <!-- Background gradient mesh -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-flameTip/5 blur-3xl rounded-full"></div>
+      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-magentaFlame/5 blur-3xl rounded-full"></div>
+    </div>
   </section>
-  
+
   <!-- Projects Section -->
   <section class="section bg-dark-200">
     <div class="container mx-auto">
@@ -449,49 +232,26 @@ const experienceHighlights = [
         <h2 class="mb-6">Real <span class="gradient-text">Projects</span> With Real Results</h2>
         <p class="text-light-300">A selection of production applications showcasing AI automation, full-stack development, and measurable business outcomes.</p>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
         {projects.map(project => (
-          <ProjectCard 
-            title={project.title} 
-            category={project.category} 
-            image={project.image} 
-            link={project.link} 
+          <ProjectCard
+            title={project.title}
+            category={project.category}
+            image={project.image}
+            link={project.link}
           />
         ))}
       </div>
-      
+
       <div class="mt-12 text-center">
         <a href="/work" class="btn-secondary">View Full Portfolio</a>
       </div>
     </div>
   </section>
-  
-  <!-- Experience Highlights Section -->
-  <section class="section">
-    <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Track Record</span>
-        </div>
-        <h2 class="mb-6">Experience <span class="gradient-text">Highlights</span></h2>
-        <p class="text-light-300">Notable achievements from 8+ years building production applications for enterprise clients and startups.</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {experienceHighlights.map(highlight => (
-          <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded mb-4 inline-block">{highlight.category}</span>
-            <p class="text-light-300">{highlight.achievement}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-  
+
   <!-- CTA Section -->
-  <section class="py-24 bg-dark-200 relative overflow-hidden">
+  <section class="py-24 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
@@ -505,11 +265,11 @@ const experienceHighlights = [
           </p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             <div class="flex items-center">
-              <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
+              <span class="w-3 h-3 bg-flameTip rounded-full mr-3"></span>
               <span class="text-light-300">Free 30-minute consultation</span>
             </div>
             <div class="flex items-center">
-              <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
+              <span class="w-3 h-3 bg-coreFire rounded-full mr-3"></span>
               <span class="text-light-300">Concrete project proposal</span>
             </div>
             <div class="flex items-center">
@@ -517,7 +277,7 @@ const experienceHighlights = [
               <span class="text-light-300">Transparent pricing</span>
             </div>
             <div class="flex items-center">
-              <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
+              <span class="w-3 h-3 bg-magentaFlame rounded-full mr-3"></span>
               <span class="text-light-300">Modern, scalable tech stack</span>
             </div>
           </div>
@@ -526,26 +286,26 @@ const experienceHighlights = [
             <a href="/services" class="btn-secondary">View Services</a>
           </div>
         </div>
-        
-        <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
+
+        <div class="rounded-xl p-8 border border-coreFire/20 bg-dark-100/80 backdrop-blur-sm">
           <h3 class="text-xl font-bold mb-6">What You Get With Creative Bandit</h3>
           <div class="space-y-6">
-            <div class="border-l-4 border-blazingEmber pl-4">
+            <div class="border-l-4 border-flameTip pl-4">
               <h4 class="font-bold text-lg mb-2">Enterprise Experience</h4>
               <p class="text-light-300 text-sm">8+ years building production applications for Fortune 500 companies including Eli Lilly and Salesforce.</p>
             </div>
-            
-            <div class="border-l-4 border-blazingEmber pl-4">
+
+            <div class="border-l-4 border-coreFire pl-4">
               <h4 class="font-bold text-lg mb-2">AI Automation Expertise</h4>
               <p class="text-light-300 text-sm">Proven results with OpenAI, Anthropic, and Google Gemini APIs. 100% accuracy verification, 90% time savings.</p>
             </div>
-            
+
             <div class="border-l-4 border-blazingEmber pl-4">
               <h4 class="font-bold text-lg mb-2">Full-Stack Capability</h4>
-              <p class="text-light-300 text-sm">React, Vue.js, TypeScript, Node.js, Python—complete solutions from frontend to backend to deployment.</p>
+              <p class="text-light-300 text-sm">React, Vue.js, TypeScript, Node.js, Python — complete solutions from frontend to backend to deployment.</p>
             </div>
-            
-            <div class="border-l-4 border-blazingEmber pl-4">
+
+            <div class="border-l-4 border-magentaFlame pl-4">
               <h4 class="font-bold text-lg mb-2">Remote-First Collaboration</h4>
               <p class="text-light-300 text-sm">Async-first workflow with clear communication. Based in Indianapolis, serving clients nationwide.</p>
             </div>
@@ -553,9 +313,11 @@ const experienceHighlights = [
         </div>
       </div>
     </div>
-    <div class="absolute top-0 right-0 w-full h-full -z-10">
+    <!-- Background gradient effects -->
+    <div class="absolute inset-0 -z-10">
       <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-blazingEmber/5 blur-3xl rounded-full"></div>
       <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-magentaFlame/5 blur-3xl rounded-full"></div>
+      <div class="absolute top-1/2 left-1/2 w-1/4 h-1/3 bg-coreFire/3 blur-3xl rounded-full -translate-x-1/2 -translate-y-1/2"></div>
     </div>
   </section>
 </Layout>
