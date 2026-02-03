@@ -91,7 +91,7 @@ const projects = [
       </div>
 
       <div class="mt-12 text-center">
-        <a href="/services" class="btn-secondary">View All Services</a>
+        <a href="/services" class="btn-secondary">Explore All Services</a>
       </div>
     </div>
   </section>
@@ -165,7 +165,7 @@ const projects = [
       </div>
 
       <div class="mb-16">
-        <AnimatedStats client:visible />
+        <AnimatedStats client:only="react" />
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -221,6 +221,34 @@ const projects = [
     </div>
   </section>
 
+  <!-- Lead Magnet Section -->
+  <section class="py-16 md:py-20 bg-dark-200 relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="rounded-2xl p-8 md:p-12 border border-coreFire/20 bg-gradient-to-br from-dark-100/90 to-charcoal/90 backdrop-blur-sm">
+          <span class="inline-block text-xs uppercase tracking-wider text-coreFire bg-coreFire/10 px-3 py-1 rounded-full mb-6">Free Resource</span>
+          <h2 class="mb-4 text-2xl md:text-3xl">Is Your Business Ready for <span class="gradient-text">AI Automation</span>?</h2>
+          <p class="text-light-300 mb-8 max-w-xl mx-auto">Get our free 15-point checklist to evaluate where AI can save your business the most time and money — based on real results from our client projects.</p>
+
+          <!-- Replace action URL with your Kit form action -->
+          <form action="YOUR_KIT_FORM_URL" method="POST" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              name="email_address"
+              placeholder="Enter your email"
+              required
+              class="flex-1 px-4 py-3 bg-dark-300 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-coreFire/50 placeholder:text-light-300/40"
+            />
+            <input type="hidden" name="tags" value="lead-magnet-checklist" />
+            <button type="submit" class="btn-primary whitespace-nowrap">Get the Free Checklist</button>
+          </form>
+          <p class="text-light-300/50 text-xs mt-3">No spam. Unsubscribe anytime.</p>
+        </div>
+      </div>
+    </div>
+    <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-coreFire/5 blur-3xl rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+  </section>
+
   <!-- Projects Section -->
   <section class="section bg-dark-200">
     <div class="container mx-auto">
@@ -245,7 +273,7 @@ const projects = [
       </div>
 
       <div class="mt-12 text-center">
-        <a href="/work" class="btn-secondary">View Full Portfolio</a>
+        <a href="/work" class="btn-secondary">See More Projects</a>
       </div>
     </div>
   </section>
@@ -282,8 +310,8 @@ const projects = [
             </div>
           </div>
           <div class="flex flex-wrap gap-4">
-            <a href="/contact" class="btn-primary">Start Your Project</a>
-            <a href="/services" class="btn-secondary">View Services</a>
+            <a href="/contact" class="btn-primary">Book My Free Consultation</a>
+            <a href="/services" class="btn-secondary">Explore Services</a>
           </div>
         </div>
 

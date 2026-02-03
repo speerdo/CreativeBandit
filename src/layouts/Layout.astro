@@ -1,6 +1,7 @@
 ---
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import ExitPopup from '../components/ExitPopup';
 import '../styles/global.css';
 
 export interface Props {
@@ -106,6 +107,7 @@ const {
       <slot />
     </main>
     <Footer />
+    <ExitPopup client:only="react" />
 
     <script>
       // Navigation mobile menu toggle

@@ -22,6 +22,29 @@ const social = [
 ---
 
 <footer class="bg-dark-200 border-t border-dark-100">
+  <!-- Newsletter signup banner -->
+  <div class="border-b border-dark-100">
+    <div class="container mx-auto py-12">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="text-center lg:text-left max-w-lg">
+          <h3 class="text-xl font-bold mb-2">Get AI & Automation Insights</h3>
+          <p class="text-light-300 text-sm">Practical tips on AI automation, web development, and growing your business with technology. No spam, unsubscribe anytime.</p>
+        </div>
+        <!-- Replace the form action URL with your Kit (ConvertKit) form action URL -->
+        <form action="YOUR_KIT_FORM_URL" method="POST" class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+          <input
+            type="email"
+            name="email_address"
+            placeholder="Enter your email"
+            required
+            class="px-4 py-3 bg-dark-300 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50 w-full sm:w-72 placeholder:text-light-300/40"
+          />
+          <button type="submit" class="btn-primary whitespace-nowrap">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="container mx-auto pt-12 pb-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div>
@@ -44,7 +67,7 @@ const social = [
           ))}
         </div>
       </div>
-      
+
       <div>
         <h4 class="text-lg font-bold mb-4">Services</h4>
         <ul class="space-y-2">
@@ -57,7 +80,7 @@ const social = [
           ))}
         </ul>
       </div>
-      
+
       <div>
         <h4 class="text-lg font-bold mb-4">Company</h4>
         <ul class="space-y-2">
@@ -70,7 +93,7 @@ const social = [
           ))}
         </ul>
       </div>
-      
+
       <div>
         <h4 class="text-lg font-bold mb-4">Contact</h4>
         <address class="not-italic text-light-300">
@@ -84,9 +107,9 @@ const social = [
         </address>
       </div>
     </div>
-    
+
     <div class="border-t border-dark-100 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-      <p class="text-light-300 text-sm">© {currentYear} Creative Bandit, LLC. All rights reserved.</p>
+      <p class="text-light-300 text-sm">&copy; {currentYear} Creative Bandit, LLC. All rights reserved.</p>
       <div class="mt-4 md:mt-0">
         <ul class="flex space-x-6 text-sm">
           <li><a href="/privacy" class="text-light-300 hover:text-blazingEmber transition-colors duration-300">Privacy Policy</a></li>

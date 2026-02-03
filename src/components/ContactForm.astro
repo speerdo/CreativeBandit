@@ -1,55 +1,48 @@
 ---
 ---
 
-<form class="bg-dark-100 p-8 rounded-lg border border-dark-100 hover:border-blazingEmber/30 transition-all duration-500">
-  <h2 class="text-2xl font-bold mb-6">Get In Touch</h2>
-  
+<form action="https://api.web3forms.com/submit" method="POST" class="bg-dark-100 p-8 rounded-lg border border-dark-100 hover:border-blazingEmber/30 transition-all duration-500">
+  <!-- Replace YOUR_ACCESS_KEY with your Web3Forms access key from https://web3forms.com -->
+  <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY">
+  <input type="hidden" name="subject" value="New Lead from CreativeBandit.studio">
+  <input type="hidden" name="redirect" value="https://creativebandit.studio/thank-you">
+  <input type="hidden" name="from_name" value="Creative Bandit Website">
+  <!-- Honeypot spam protection -->
+  <input type="checkbox" name="botcheck" class="hidden" style="display:none">
+
+  <h2 class="text-2xl font-bold mb-2">Start Your Project</h2>
+  <p class="text-light-300 text-sm mb-6">Tell us about your project and we'll respond within 24 hours with a free consultation.</p>
+
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
     <div>
-      <label for="first-name" class="block text-sm font-medium text-light-300 mb-1">First Name</label>
-      <input type="text" id="first-name" name="first-name" class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50">
+      <label for="name" class="block text-sm font-medium text-light-300 mb-1">Name <span class="text-blazingEmber">*</span></label>
+      <input type="text" id="name" name="name" required class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50">
     </div>
-    
+
     <div>
-      <label for="last-name" class="block text-sm font-medium text-light-300 mb-1">Last Name</label>
-      <input type="text" id="last-name" name="last-name" class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50">
+      <label for="email" class="block text-sm font-medium text-light-300 mb-1">Email <span class="text-blazingEmber">*</span></label>
+      <input type="email" id="email" name="email" required class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50">
     </div>
   </div>
-  
+
   <div class="mb-6">
-    <label for="email" class="block text-sm font-medium text-light-300 mb-1">Email Address</label>
-    <input type="email" id="email" name="email" class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50">
-  </div>
-  
-  <div class="mb-6">
-    <label for="company" class="block text-sm font-medium text-light-300 mb-1">Company Name</label>
-    <input type="text" id="company" name="company" class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50">
-  </div>
-  
-  <div class="mb-6">
-    <label for="service" class="block text-sm font-medium text-light-300 mb-1">What service are you interested in?</label>
+    <label for="service" class="block text-sm font-medium text-light-300 mb-1">What are you looking for?</label>
     <select id="service" name="service" class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50">
       <option value="">Select a service</option>
-      <option value="web-development">Web Development</option>
-      <option value="design">UI/UX Design</option>
-      <option value="ai-integration">AI Integration</option>
-      <option value="app-development">App Development</option>
-      <option value="ecommerce">E-commerce</option>
-      <option value="other">Other</option>
+      <option value="ai-automation">AI Automation</option>
+      <option value="web-development">New Website or Web App</option>
+      <option value="ecommerce">E-commerce Solution</option>
+      <option value="redesign">Website Redesign</option>
+      <option value="consultation">Free Consultation</option>
+      <option value="other">Something Else</option>
     </select>
   </div>
-  
+
   <div class="mb-6">
-    <label for="message" class="block text-sm font-medium text-light-300 mb-1">Your Message</label>
-    <textarea id="message" name="message" rows="5" class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50"></textarea>
+    <label for="message" class="block text-sm font-medium text-light-300 mb-1">Tell us about your project</label>
+    <textarea id="message" name="message" rows="4" placeholder="What challenges are you facing? What would success look like?" class="w-full px-4 py-2 bg-dark-200 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-blazingEmber/50 placeholder:text-light-300/40"></textarea>
   </div>
-  
-  <div class="mb-6">
-    <label class="flex items-start">
-      <input type="checkbox" class="mt-1 mr-2">
-      <span class="text-sm text-light-300">I consent to Creative Bandit processing my data and contacting me in accordance with their <a href="/privacy" class="text-blazingEmber hover:underline">Privacy Policy</a>.</span>
-    </label>
-  </div>
-  
-  <button type="submit" class="w-full btn-primary">Send Message</button>
+
+  <button type="submit" class="w-full btn-primary text-lg py-4">Get My Free Consultation</button>
+  <p class="text-light-300/60 text-xs mt-3 text-center">No commitment required. We'll respond within 24 hours.</p>
 </form>
