@@ -2,33 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import TeamMember from '../components/TeamMember.astro';
 
-// Placeholder team data - to be replaced with actual team information
-const team = [
-  {
-    name: "Alex Morgan",
-    position: "Founder & Creative Director",
-    image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    bio: "Alex founded Creative Bandit with a vision to blend artistry and technology in creating digital experiences that resonate and inspire."
-  },
-  {
-    name: "Jamie Rivera",
-    position: "Lead UX Designer",
-    image: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    bio: "Jamie brings over a decade of design experience, focusing on creating intuitive and engaging user experiences across digital platforms."
-  },
-  {
-    name: "Noah Chen",
-    position: "Tech Lead",
-    image: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", 
-    bio: "Noah leads our development team, ensuring every project we deliver is built with clean, maintainable code and cutting-edge technology."
-  },
-  {
-    name: "Olivia Taylor",
-    position: "AI Integration Specialist",
-    image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    bio: "Olivia specializes in integrating AI solutions that enhance functionality and provide more intelligent user experiences."
-  }
-];
+// Solo operation - no team section needed
+const team = [];
 
 const values = [
   {
@@ -57,11 +32,19 @@ const values = [
   }
 ];
 
+// Calculate years of experience (started October 2017)
+const startDate = new Date(2017, 9); // October 2017
+const now = new Date();
+let yearsExperience = now.getFullYear() - startDate.getFullYear();
+if (now.getMonth() < 9) {
+  yearsExperience -= 1;
+}
+
 const stats = [
-  { value: "8+", label: "Years Experience" },
-  { value: "150+", label: "Projects Completed" },
-  { value: "40+", label: "Happy Clients" },
-  { value: "10+", label: "Industry Awards" }
+  { value: `${yearsExperience}+`, label: "Years Experience" },
+  { value: "20+", label: "Projects Completed" },
+  { value: "10+", label: "Clients Served" },
+  { value: "4x", label: "Industry Conversion Avg" }
 ];
 
 const approach = [
@@ -88,22 +71,22 @@ const approach = [
 ];
 ---
 
-<Layout title="About Us" description="Learn about Creative Bandit, our innovative approach to digital experiences, and what drives us to create exceptional solutions that make an impact">
+<Layout title="About" description="AI automation specialist and full-stack developer with 8+ years building production applications for Fortune 500 companies and startups. Based in Indianapolis, serving clients nationwide.">
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">
       <div class="max-w-4xl">
         <div class="mb-6 flex items-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Our Story</span>
+          <span class="uppercase tracking-wider text-light-300">About Creative Bandit</span>
         </div>
-        <h1 class="mb-6">Where Creative <span class="gradient-text">Vision</span> Meets Digital Innovation</h1>
+        <h1 class="mb-6">Building <span class="gradient-text">Intelligent</span> Systems That Deliver Results</h1>
         <p class="text-xl text-light-300 mb-8">
-          Creative Bandit is more than a digital agency—we're your strategic partner in creating bold, impactful digital experiences that break through the noise and drive real results for your business.
+          I'm Adam Speer, founder of Creative Bandit. I specialize in AI-powered automation and full-stack development that reduces manual work by 60-90% and delivers measurable business impact.
         </p>
         <div class="flex flex-wrap gap-4">
           <a href="/contact" class="btn-primary">Start Your Project</a>
-          <a href="/work" class="btn-secondary">See Our Work</a>
+          <a href="/work" class="btn-secondary">See My Work</a>
         </div>
       </div>
     </div>
@@ -150,19 +133,19 @@ const approach = [
             <span class="flame-dot"></span>
             <span class="uppercase tracking-wider text-light-300">Who We Are</span>
           </div>
-          <h2 class="mb-6">Pioneering Digital <span class="gradient-text">Transformation</span></h2>
+          <h2 class="mb-6">From Enterprise to <span class="gradient-text">AI Automation</span></h2>
           <p class="mb-6 text-light-300">
-            Creative Bandit was born from the belief that every business deserves a digital presence that truly reflects their vision and drives meaningful growth. We're a collective of creative rebels who challenge conventional thinking to deliver extraordinary digital experiences.
+            With 8+ years of full-stack development experience, I've built production applications for Fortune 500 companies including Eli Lilly and Salesforce, as well as mission-driven startups in healthcare and education. My background spans pharmaceutical web applications, HIPAA-compliant healthcare systems, and scalable SaaS platforms serving thousands of users.
           </p>
           <p class="mb-6 text-light-300">
-            Our multidisciplinary approach combines strategic insight, cutting-edge design, advanced development, and AI integration to create solutions that don't just meet expectations—they exceed them. We work with forward-thinking businesses who understand that exceptional digital experiences are key to long-term success.
+            Today, I focus on AI-powered automation systems using OpenAI, Anthropic, and Google Gemini APIs. Recent projects include AI verification systems achieving 100% accuracy, automated marketing pipelines processing 1,000+ monthly transactions, and healthcare compliance automation for Medicare billing.
           </p>
           <p class="mb-6 text-light-300">
-            What makes us different is our commitment to being true partners in your journey. We don't just deliver projects; we invest in your success, bringing fresh perspectives and innovative solutions that help your business thrive in an ever-evolving digital landscape.
+            Beyond client work, I build and operate my own web properties including DowntownDry (a nationwide alcohol-free venue directory) and RecycleOldTech.com (an electronics recycling directory with automated affiliate systems achieving 8.08% conversion—4x industry average).
           </p>
           <div class="bg-dark-200 p-6 rounded-lg">
-            <p class="text-blazingEmber font-semibold mb-2">Our Mission</p>
-            <p class="text-light-300">To empower businesses with digital solutions that are not just functional and beautiful, but transformative—creating lasting impact in their markets and meaningful connections with their audiences.</p>
+            <p class="text-blazingEmber font-semibold mb-2">My Focus</p>
+            <p class="text-light-300">Building intelligent systems that eliminate manual work and deliver measurable business impact—whether that's automating hours of repetitive tasks, increasing conversion rates, or building platforms that scale to serve millions of users.</p>
           </div>
         </div>
       </div>
@@ -228,7 +211,7 @@ const approach = [
         <div class="text-center mb-16">
           <div class="mb-4 flex items-center justify-center">
             <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-light-300">Why Choose Us</span>
+            <span class="uppercase tracking-wider text-light-300">Why Work With Me</span>
           </div>
           <h2 class="mb-6">What Sets Creative Bandit <span class="gradient-text">Apart</span></h2>
         </div>
@@ -236,31 +219,31 @@ const approach = [
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div class="space-y-8">
             <div>
-              <h3 class="text-xl font-bold mb-3">AI-Powered Innovation</h3>
-              <p class="text-light-300">We integrate cutting-edge AI technologies to enhance user experiences, automate processes, and provide intelligent solutions that keep you ahead of the competition.</p>
+              <h3 class="text-xl font-bold mb-3">AI Automation Expertise</h3>
+              <p class="text-light-300">Production-tested experience with OpenAI GPT, Anthropic Claude, and Google Gemini APIs. Building intelligent systems that achieve 100% verification accuracy and reduce manual work by 90%.</p>
             </div>
             <div>
-              <h3 class="text-xl font-bold mb-3">Full-Stack Expertise</h3>
-              <p class="text-light-300">From initial strategy and design to development, deployment, and ongoing optimization—we handle every aspect of your digital journey with expertise and care.</p>
+              <h3 class="text-xl font-bold mb-3">Enterprise Background</h3>
+              <p class="text-light-300">8+ years building applications for Fortune 500 companies (Eli Lilly, Salesforce) with expertise in design systems, accessibility testing, and scalable architecture.</p>
             </div>
             <div>
-              <h3 class="text-xl font-bold mb-3">Performance-Driven Design</h3>
-              <p class="text-light-300">Beautiful designs that convert. We create visually stunning experiences that are optimized for performance, accessibility, and user engagement across all devices.</p>
+              <h3 class="text-xl font-bold mb-3">Full-Stack Capability</h3>
+              <p class="text-light-300">Complete solutions from React/Vue.js frontend to Node.js/Python backend, deployed on Vercel and AWS. No handoffs, no coordination overhead.</p>
             </div>
           </div>
           
           <div class="space-y-8">
             <div>
-              <h3 class="text-xl font-bold mb-3">Agile & Transparent</h3>
-              <p class="text-light-300">Our agile methodology ensures rapid iteration and continuous improvement, while our transparent communication keeps you informed every step of the way.</p>
+              <h3 class="text-xl font-bold mb-3">Proven Results</h3>
+              <p class="text-light-300">8.08% affiliate conversion (4x industry average), 40% page load improvement, 100% AI verification accuracy. Real metrics from real projects.</p>
             </div>
             <div>
-              <h3 class="text-xl font-bold mb-3">Scalable Solutions</h3>
-              <p class="text-light-300">We build with growth in mind, creating flexible, scalable solutions that evolve with your business and adapt to changing market demands.</p>
+              <h3 class="text-xl font-bold mb-3">Healthcare Compliance</h3>
+              <p class="text-light-300">HIPAA-compliant system development experience with secure patient data management, Medicare billing automation, and regulatory compliance.</p>
             </div>
             <div>
-              <h3 class="text-xl font-bold mb-3">Ongoing Partnership</h3>
-              <p class="text-light-300">Our relationship doesn't end at launch. We provide ongoing support, optimization, and strategic guidance to ensure your digital presence continues to deliver results.</p>
+              <h3 class="text-xl font-bold mb-3">Async-First Collaboration</h3>
+              <p class="text-light-300">Remote-first workflow with clear communication and flexible scheduling. Based in Indianapolis, serving clients nationwide with responses within 24 hours.</p>
             </div>
           </div>
         </div>

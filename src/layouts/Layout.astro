@@ -12,8 +12,8 @@ export interface Props {
 
 const { 
   title, 
-  description = "Creative Bandit - Leading digital agency specializing in custom web development, mobile app development, UI/UX design, and AI integration. Transform your business with award-winning digital solutions.", 
-  keywords = "web development, digital agency, custom software development, mobile app development, UI/UX design, AI integration, responsive web design, e-commerce development, digital transformation",
+  description = "AI automation specialist and full-stack developer building intelligent systems that reduce manual work by 60-90%. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis.", 
+  keywords = "AI automation consultant, full-stack developer, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer, web development",
   ogImage = "/favicon.svg"
 } = Astro.props;
 ---
@@ -64,29 +64,37 @@ const {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Creative Bandit",
-      "description": "Leading digital agency specializing in custom web development, mobile app development, UI/UX design, and AI integration.",
-      "url": "https://creativebandit.com",
-      "logo": "https://creativebandit.com/favicon.svg",
-      "foundingDate": "2014",
+      "description": "AI automation specialist and full-stack developer building intelligent systems that reduce manual work by 60-90%.",
+      "url": "https://creativebandit.studio",
+      "logo": "https://creativebandit.studio/favicon.svg",
+      "foundingDate": "2026",
+      "founder": {
+        "@type": "Person",
+        "name": "Adam Speer"
+      },
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Global",
-        "addressCountry": "Worldwide"
+        "addressLocality": "Indianapolis",
+        "addressRegion": "IN",
+        "addressCountry": "US"
       },
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "Customer Service",
-        "url": "https://creativebandit.com/contact"
+        "email": "hello@creativebandit.studio",
+        "telephone": "+1-317-660-5295",
+        "url": "https://creativebandit.studio/contact"
       },
-      "sameAs": [],
+      "sameAs": [
+        "https://github.com/speerdo"
+      ],
       "services": [
+        "AI Automation",
         "Web Development",
-        "Mobile App Development", 
-        "UI/UX Design",
-        "AI Integration",
-        "Custom Software Development",
+        "Full-Stack Development",
+        "Healthcare Technology",
         "E-commerce Development",
-        "Digital Transformation"
+        "Workflow Automation"
       ]
     }
     </script>

@@ -5,21 +5,19 @@ const services = [
   { name: "Web Development", href: "/services#web-development" },
   { name: "UI/UX Design", href: "/services#design" },
   { name: "AI Integration", href: "/services#ai-integration" },
-  { name: "App Development", href: "/services#app-development" },
+  { name: "E-commerce Solutions", href: "/services#ecommerce" },
 ];
 
 const company = [
-  { name: "About Us", href: "/about" },
-  { name: "Our Work", href: "/work" },
+  { name: "About", href: "/about" },
+  { name: "Work", href: "/work" },
+  { name: "Services", href: "/services" },
   { name: "Contact", href: "/contact" },
-  { name: "Careers", href: "/careers" },
 ];
 
 const social = [
-  { name: "Twitter", href: "https://twitter.com", icon: "twitter" },
-  { name: "Instagram", href: "https://instagram.com", icon: "instagram" },
-  { name: "LinkedIn", href: "https://linkedin.com", icon: "linkedin" },
-  { name: "GitHub", href: "https://github.com", icon: "github" },
+  { name: "GitHub", href: "https://github.com/speerdo", icon: "github" },
+  { name: "LinkedIn", href: "#", icon: "linkedin" },
 ];
 ---
 
@@ -31,7 +29,7 @@ const social = [
           <span class="text-xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-blazingEmber to-flameTip">CREATIVE</span>
           <span class="text-xl font-heading font-normal text-light-100">BANDIT</span>
         </a>
-        <p class="text-light-300 mb-4">Crafting digital experiences with innovative design and development solutions.</p>
+        <p class="text-light-300 mb-4">Building intelligent systems that eliminate manual work and deliver measurable business impact.</p>
         <div class="flex space-x-4">
           {social.map(item => (
             <a href={item.href} class="text-light-300 hover:text-blazingEmber transition-colors duration-300" aria-label={`Follow us on ${item.name}`} target="_blank" rel="noopener">
@@ -74,16 +72,14 @@ const social = [
       </div>
       
       <div>
-        <h4 class="text-lg font-bold mb-4">Contact Us</h4>
+        <h4 class="text-lg font-bold mb-4">Contact</h4>
         <address class="not-italic text-light-300">
-          <p class="mb-2">123 Design Street</p>
-          <p class="mb-2">San Francisco, CA 94103</p>
-          <p class="mb-4">United States</p>
+          <p class="mb-4">Indianapolis, IN (Remote-first)</p>
           <p class="mb-2">
             <a href="mailto:hello@creativebandit.studio" class="hover:text-blazingEmber transition-colors duration-300">hello@creativebandit.studio</a>
           </p>
           <p>
-            <a href="tel:+15551234567" class="hover:text-blazingEmber transition-colors duration-300">+1 (555) 123-4567</a>
+            <a href="tel:+13176605295" class="hover:text-blazingEmber transition-colors duration-300">(317) 660-5295</a>
           </p>
         </address>
       </div>

@@ -3,88 +3,89 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import TestimonialCard from '../components/TestimonialCard.astro';
 
 const services = [
   {
     title: 'Web Development',
-    description: 'We create fast, responsive, and user-friendly websites optimized for performance and SEO.',
+    description: 'Modern, performant web applications built with React, Vue.js, and TypeScript. Optimized for speed, SEO, and exceptional user experience.',
     icon: 'web',
     link: '/services#web-development'
   },
   {
-    title: 'UI/UX Design',
-    description: 'Beautiful, intuitive interfaces that deliver exceptional user experiences and drive engagement.',
-    icon: 'design',
-    link: '/services#design'
-  },
-  {
-    title: 'AI Integration',
-    description: 'Harness the power of AI to automate tasks, enhance functionality, and provide smarter experiences.',
+    title: 'AI Automation',
+    description: 'Intelligent automation systems using OpenAI, Anthropic, and Google Gemini APIs to reduce manual work by 60-90% and improve accuracy.',
     icon: 'ai',
     link: '/services#ai-integration'
   },
   {
-    title: 'App Development',
-    description: 'Native and cross-platform mobile applications that extend your digital presence beyond the web.',
-    icon: 'app',
-    link: '/services#app-development'
+    title: 'UI/UX Design',
+    description: 'Clean, intuitive interfaces built for conversion. Data-driven design decisions that deliver measurable engagement improvements.',
+    icon: 'design',
+    link: '/services#design'
+  },
+  {
+    title: 'E-commerce Solutions',
+    description: 'Custom online stores with automated affiliate marketing, SEO optimization, and payment processing achieving 4x industry conversion rates.',
+    icon: 'ecommerce',
+    link: '/services#ecommerce'
   }
 ];
 
 const projects = [
   {
-    title: 'Nebula Insights Dashboard',
-    category: 'Web App',
-    image: 'https://images.pexels.com/photos/8106498/pexels-photo-8106498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/nebula'
-  },
-  {
-    title: 'Ember E-commerce Platform',
-    category: 'E-commerce',
+    title: 'RecycleOldTech.com',
+    category: 'E-commerce / SEO',
     image: 'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/ember'
+    link: 'https://recycleoldtech.com'
   },
   {
-    title: 'Vitality Fitness App',
-    category: 'Mobile App',
-    image: 'https://images.pexels.com/photos/5702281/pexels-photo-5702281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/vitality'
+    title: 'DowntownDry',
+    category: 'AI Integration',
+    image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: 'https://downtowndry.com'
   },
   {
-    title: 'Spectrum Design System',
-    category: 'UI/UX Design',
+    title: 'IndiAide RTM System',
+    category: 'Healthcare Tech',
+    image: 'https://images.pexels.com/photos/8106498/pexels-photo-8106498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '/work#indiaide'
+  },
+  {
+    title: 'EdReports Platform Migration',
+    category: 'Full-Stack Development',
     image: 'https://images.pexels.com/photos/5473302/pexels-photo-5473302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/spectrum'
+    link: 'https://edreports.org'
   }
 ];
 
-const testimonials = [
+const experienceHighlights = [
   {
-    quote: "Creative Bandit transformed our outdated website into a modern, high-performing platform that's generated a 40% increase in leads. Their team truly understands how to balance aesthetics with functionality.",
-    author: "Sarah Johnson",
-    position: "Marketing Director",
-    company: "TechNova"
+    achievement: "Led Eli Lilly pharmaceutical web application team through Next.js migration and React design system transition, with adoption by 15+ engineers.",
+    category: "Enterprise Development"
   },
   {
-    quote: "Working with Creative Bandit was a game-changer for our startup. Their AI integration expertise helped us implement features we thought were years away from being possible.",
-    author: "Michael Chen",
-    position: "Founder & CEO",
-    company: "Quantum AI"
+    achievement: "Built HIPAA-compliant remote therapeutic monitoring system for Medicare providers, automating compliance reporting and reducing manual data entry.",
+    category: "Healthcare Tech"
   },
   {
-    quote: "The attention to detail and creative direction from Creative Bandit elevated our brand identity across all digital touchpoints. They didn't just deliver a website, they delivered an experience.",
-    author: "Emily Rodriguez",
-    position: "Creative Director",
-    company: "Artisan Collective"
+    achievement: "Achieved 8.08% affiliate conversion rate (4x industry average) through intelligent content optimization and SEO automation.",
+    category: "E-commerce"
+  },
+  {
+    achievement: "Pioneered AI-assisted development workflows reducing debugging time by 20%, subsequently adopted across engineering teams.",
+    category: "AI Integration"
+  },
+  {
+    achievement: "Migrated EdReports K-12 platform to Nuxt.js, improving page load times by 40% and developer productivity by 30%.",
+    category: "Performance"
   }
 ];
 ---
 
 <Layout 
-  title="Professional Web Development & Digital Agency Services" 
-  description="Creative Bandit is a leading digital agency specializing in custom web development, mobile app development, UI/UX design, and AI integration. We transform businesses with innovative digital solutions that drive measurable growth and competitive advantage."
-  keywords="web development agency, custom software development, mobile app development, UI UX design, AI integration, digital transformation, responsive web design, e-commerce development, full stack development, React development, Node.js development"
+  title="AI Automation & Full-Stack Development" 
+  description="AI automation specialist and full-stack developer building intelligent systems that reduce manual work by 60-90%. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis, serving clients nationwide."
+  keywords="AI automation consultant, full-stack developer, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer"
 >
   <Hero />
   
@@ -126,21 +127,21 @@ const testimonials = [
             <span class="flame-dot"></span>
             <span class="uppercase tracking-wider text-light-300">About Creative Bandit</span>
           </div>
-          <h2 class="mb-6">Leading <span class="gradient-text">Digital Agency</span> Transforming Businesses</h2>
+          <h2 class="mb-6">AI-Powered <span class="gradient-text">Automation</span> That Delivers Results</h2>
           <p class="text-light-300 mb-6">
-            Creative Bandit is a premier digital agency specializing in cutting-edge web development, innovative UI/UX design, and advanced AI integration solutions. With over a decade of experience in digital transformation, we help businesses of all sizes establish powerful online presences that drive measurable results.
+            I'm Adam Speer, founder of Creative Bandit. With 8+ years of full-stack development experience, I specialize in building AI-powered automation systems and modern web applications that solve real business problems. My background includes healthcare technology work at Eli Lilly, HIPAA-compliant systems for Medicare billing, and scalable platforms at Salesforce serving thousands of users.
           </p>
           <p class="text-light-300 mb-8">
-            Our team of expert developers, designers, and digital strategists combines technical excellence with creative vision to deliver custom software solutions that exceed expectations. From responsive web design to complex enterprise applications, we leverage the latest technologies to create digital experiences that engage users and accelerate business growth.
+            I work primarily with React, Vue.js, TypeScript, Node.js, and modern AI APIs (OpenAI, Anthropic, Google Gemini) to create intelligent systems that reduce manual work by 60-90%. Recent projects include AI-powered verification systems achieving 100% accuracy and automated marketing pipelines processing 1,000+ monthly transactions.
           </p>
           <div class="grid grid-cols-2 gap-6">
             <div>
-              <h4 class="font-bold text-lg mb-2 text-blazingEmber">Custom Development</h4>
-              <p class="text-light-300 text-sm">Tailored solutions built from the ground up using modern frameworks and best practices.</p>
+              <h4 class="font-bold text-lg mb-2 text-blazingEmber">AI Automation</h4>
+              <p class="text-light-300 text-sm">Intelligent systems using GPT, Claude, and Gemini APIs to eliminate manual work and improve accuracy.</p>
             </div>
             <div>
-              <h4 class="font-bold text-lg mb-2 text-blazingEmber">Performance Focused</h4>
-              <p class="text-light-300 text-sm">Optimized code and architecture ensuring fast load times and superior user experience.</p>
+              <h4 class="font-bold text-lg mb-2 text-blazingEmber">Full-Stack Development</h4>
+              <p class="text-light-300 text-sm">Modern React/Vue/TypeScript frontends with Node.js backends, deployed on Vercel and AWS.</p>
             </div>
           </div>
         </div>
@@ -150,19 +151,19 @@ const testimonials = [
             <ul class="space-y-4">
               <li class="flex items-start">
                 <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                <span class="text-light-300">Full-stack development expertise across all modern technologies</span>
+                <span class="text-light-300">8+ years building production applications for Fortune 500 companies (Eli Lilly, Salesforce) and startups</span>
               </li>
               <li class="flex items-start">
                 <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                <span class="text-light-300">Data-driven approach to design and development decisions</span>
+                <span class="text-light-300">AI automation specialist reducing manual work by 60-90% through intelligent system design</span>
               </li>
               <li class="flex items-start">
                 <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                <span class="text-light-300">Agile development methodology for faster project delivery</span>
+                <span class="text-light-300">Proven track record: 100% accuracy AI verification, 8.08% affiliate conversion (4x industry average)</span>
               </li>
               <li class="flex items-start">
                 <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                <span class="text-light-300">24/7 technical support and ongoing maintenance services</span>
+                <span class="text-light-300">Full-stack expertise from React/Vue/TypeScript frontend to Node.js/Python backend to AI API integration</span>
               </li>
             </ul>
           </div>
@@ -177,70 +178,50 @@ const testimonials = [
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Industries We Serve</span>
+          <span class="uppercase tracking-wider text-light-300">Industries I Serve</span>
         </div>
-        <h2 class="mb-6">Expertise Across <span class="gradient-text">Multiple</span> Industries</h2>
-        <p class="text-light-300">Our digital agency has successfully delivered custom software solutions and web development projects across diverse industries, understanding unique business challenges and regulatory requirements.</p>
+        <h2 class="mb-6">Real Experience Across <span class="gradient-text">Key</span> Industries</h2>
+        <p class="text-light-300">Hands-on project experience building production applications with measurable business impact across healthcare, education, e-commerce, and SaaS.</p>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
-          <h3 class="text-lg font-bold mb-3 text-blazingEmber">E-commerce & Retail</h3>
-          <p class="text-light-300 text-sm mb-4">Custom e-commerce platforms, inventory management systems, and customer relationship management solutions that boost online sales and streamline operations.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Shopify Plus</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">WooCommerce</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Magento</span>
-          </div>
-        </div>
-        
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
           <h3 class="text-lg font-bold mb-3 text-blazingEmber">Healthcare & Medical</h3>
-          <p class="text-light-300 text-sm mb-4">HIPAA-compliant patient portals, telemedicine platforms, and healthcare management systems designed for medical professionals and institutions.</p>
+          <p class="text-light-300 text-sm mb-4">Built HIPAA-compliant remote therapeutic monitoring system for Medicare billing compliance and led pharmaceutical web application development at Eli Lilly. Expertise in patient data security, healthcare workflows, and regulatory requirements.</p>
           <div class="flex flex-wrap gap-2">
             <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">HIPAA Compliance</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">EMR Integration</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Telehealth</span>
-          </div>
-        </div>
-        
-        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
-          <h3 class="text-lg font-bold mb-3 text-blazingEmber">Financial Services</h3>
-          <p class="text-light-300 text-sm mb-4">Secure financial applications, trading platforms, and fintech solutions with advanced encryption and compliance with industry regulations.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">PCI DSS</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Blockchain</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Banking APIs</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Secure APIs</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Healthcare Data</span>
           </div>
         </div>
         
         <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
           <h3 class="text-lg font-bold mb-3 text-blazingEmber">Education & EdTech</h3>
-          <p class="text-light-300 text-sm mb-4">Learning management systems, educational apps, and digital classroom solutions that enhance the learning experience for students and educators.</p>
+          <p class="text-light-300 text-sm mb-4">Migrated EdReports (K-12 curriculum review platform) from legacy Java/Vue to modern Nuxt.js, improving page load times by 40% and developer productivity by 30%. Experience building educational platforms serving thousands nationwide.</p>
           <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">LMS</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Interactive Learning</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Assessment Tools</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Vue.js/Nuxt.js</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Learning Platforms</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Content Management</span>
+          </div>
+        </div>
+        
+        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
+          <h3 class="text-lg font-bold mb-3 text-blazingEmber">E-commerce & Retail</h3>
+          <p class="text-light-300 text-sm mb-4">Developed automated affiliate marketing systems achieving 8.08% conversion rates (4x industry average) and built nationwide directory platforms processing 1,000+ monthly transactions with intelligent SEO automation.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Affiliate APIs</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Payment Processing</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">SEO Automation</span>
           </div>
         </div>
         
         <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
           <h3 class="text-lg font-bold mb-3 text-blazingEmber">SaaS & Technology</h3>
-          <p class="text-light-300 text-sm mb-4">Scalable software-as-a-service platforms, API development, and cloud-based solutions that support rapid growth and global expansion.</p>
+          <p class="text-light-300 text-sm mb-4">Full-stack applications for Salesforce platform serving thousands of users, with expertise in API integration, automated accessibility testing, and building scalable component libraries adopted across engineering teams.</p>
           <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Cloud Architecture</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">API Development</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Microservices</span>
-          </div>
-        </div>
-        
-        <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
-          <h3 class="text-lg font-bold mb-3 text-blazingEmber">Manufacturing & Logistics</h3>
-          <p class="text-light-300 text-sm mb-4">Supply chain management systems, IoT integration, and industrial automation solutions that optimize operations and reduce costs.</p>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">IoT Integration</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Supply Chain</span>
-            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Automation</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">React</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">API Architecture</span>
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded">Component Systems</span>
           </div>
         </div>
       </div>
@@ -253,54 +234,54 @@ const testimonials = [
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Our Technology Stack</span>
+          <span class="uppercase tracking-wider text-light-300">Technology Stack</span>
         </div>
-        <h2 class="mb-6">Cutting-Edge <span class="gradient-text">Technologies</span> & Frameworks</h2>
-        <p class="text-light-300">We leverage the latest web development technologies and frameworks to build scalable, secure, and high-performance applications that meet modern business requirements.</p>
+        <h2 class="mb-6">Modern <span class="gradient-text">Technologies</span> I Work With</h2>
+        <p class="text-light-300">Production-tested technologies for building scalable, maintainable applications. Focus on tools that deliver real business value.</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div class="text-center">
-          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Frontend Development</h3>
+          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Frontend</h3>
           <div class="space-y-2">
             <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">React & Next.js</div>
             <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Vue.js & Nuxt.js</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Angular & TypeScript</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Svelte & SvelteKit</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">TypeScript</div>
             <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Astro & Static Sites</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Tailwind CSS</div>
           </div>
         </div>
         
         <div class="text-center">
-          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Backend Development</h3>
+          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Backend</h3>
           <div class="space-y-2">
             <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Node.js & Express</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Python & Django</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">PHP & Laravel</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Ruby on Rails</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Go & Microservices</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Python</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Supabase</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Xano</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">PostgreSQL</div>
           </div>
         </div>
         
         <div class="text-center">
-          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Mobile Development</h3>
+          <h3 class="text-lg font-bold mb-4 text-blazingEmber">AI & APIs</h3>
           <div class="space-y-2">
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">React Native</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Flutter & Dart</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Native iOS (Swift)</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Native Android (Kotlin)</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Progressive Web Apps</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">OpenAI GPT</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Anthropic Claude</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Google Gemini</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Google APIs</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">REST & GraphQL</div>
           </div>
         </div>
         
         <div class="text-center">
-          <h3 class="text-lg font-bold mb-4 text-blazingEmber">AI & Cloud</h3>
+          <h3 class="text-lg font-bold mb-4 text-blazingEmber">Cloud & Deploy</h3>
           <div class="space-y-2">
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">OpenAI & ChatGPT</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">TensorFlow & PyTorch</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">AWS & Azure</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Google Cloud Platform</div>
-            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Docker & Kubernetes</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Vercel</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">AWS</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">GitHub Actions</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">CI/CD Pipelines</div>
+            <div class="bg-dark-100 rounded-lg py-2 px-4 text-light-300">Analytics</div>
           </div>
         </div>
       </div>
@@ -313,10 +294,10 @@ const testimonials = [
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">How We Work</span>
+          <span class="uppercase tracking-wider text-light-300">How I Work</span>
         </div>
-        <h2 class="mb-6">Our Proven <span class="gradient-text">Development</span> Process</h2>
-        <p class="text-light-300">We follow an agile development methodology and structured approach to ensure every custom software project meets and exceeds expectations, delivering maximum value and ROI for our clients.</p>
+        <h2 class="mb-6">A Proven <span class="gradient-text">Development</span> Process</h2>
+        <p class="text-light-300">Async-first, remote collaboration focused on clear communication and measurable outcomes. Every project follows a structured approach designed for efficiency.</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -325,31 +306,31 @@ const testimonials = [
             <span class="font-bold">01</span>
           </div>
           <h3 class="text-xl font-bold mb-3">Discovery</h3>
-          <p class="text-light-300">We start by understanding your business, goals, and challenges to align our strategy with your vision.</p>
+          <p class="text-light-300">Understand your business challenges, manual bottlenecks, and automation opportunities through focused consultation.</p>
         </div>
         
         <div class="relative">
           <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
             <span class="font-bold">02</span>
           </div>
-          <h3 class="text-xl font-bold mb-3">Strategy</h3>
-          <p class="text-light-300">Based on discovery insights, we craft a strategic roadmap to guide the design and development process.</p>
+          <h3 class="text-xl font-bold mb-3">Architecture</h3>
+          <p class="text-light-300">Design intelligent systems using modern frameworks and AI APIs for maximum impact and scalability.</p>
         </div>
         
         <div class="relative">
           <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
             <span class="font-bold">03</span>
           </div>
-          <h3 class="text-xl font-bold mb-3">Creation</h3>
-          <p class="text-light-300">Our designers and developers bring your project to life with meticulous attention to detail and quality.</p>
+          <h3 class="text-xl font-bold mb-3">Development</h3>
+          <p class="text-light-300">Build scalable solutions with clean code, automated testing, and performance optimization from day one.</p>
         </div>
         
         <div class="relative">
           <div class="w-12 h-12 bg-blazingEmber/10 rounded-full flex items-center justify-center text-blazingEmber mb-4">
             <span class="font-bold">04</span>
           </div>
-          <h3 class="text-xl font-bold mb-3">Optimization</h3>
-          <p class="text-light-300">We refine and iterate based on testing and feedback to ensure the final product exceeds expectations.</p>
+          <h3 class="text-xl font-bold mb-3">Launch & Optimize</h3>
+          <p class="text-light-300">Deploy to production, monitor results, and iterate based on real-world data and user feedback.</p>
         </div>
       </div>
     </div>
@@ -361,10 +342,10 @@ const testimonials = [
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Measurable Results</span>
+          <span class="uppercase tracking-wider text-light-300">Real Results</span>
         </div>
-        <h2 class="mb-6">Digital Solutions That Drive <span class="gradient-text">Business Growth</span></h2>
-        <p class="text-light-300">Our custom web development and digital transformation services deliver tangible business outcomes. From increased conversion rates to streamlined operations, we focus on results that matter to your bottom line.</p>
+        <h2 class="mb-6">Measurable <span class="gradient-text">Business Impact</span></h2>
+        <p class="text-light-300">Concrete outcomes from real projects. Every metric represents actual production results, not projections.</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
@@ -374,28 +355,8 @@ const testimonials = [
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
             </svg>
           </div>
-          <h3 class="text-2xl font-bold gradient-text mb-2">150%</h3>
-          <p class="text-light-300">Average increase in conversion rates after website optimization</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
-            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold gradient-text mb-2">$2.5M</h3>
-          <p class="text-light-300">Additional revenue generated for clients through digital transformation</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
-            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold gradient-text mb-2">65%</h3>
-          <p class="text-light-300">Faster page load times achieved through performance optimization</p>
+          <h3 class="text-2xl font-bold gradient-text mb-2">8.08%</h3>
+          <p class="text-light-300">Affiliate conversion rate (4x industry average of 1-3%)</p>
         </div>
         
         <div class="text-center">
@@ -404,52 +365,72 @@ const testimonials = [
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
           </div>
-          <h3 class="text-2xl font-bold gradient-text mb-2">99.9%</h3>
-          <p class="text-light-300">Uptime reliability across all hosted applications and websites</p>
+          <h3 class="text-2xl font-bold gradient-text mb-2">100%</h3>
+          <p class="text-light-300">AI verification accuracy with Gemini-powered venue validation</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold gradient-text mb-2">40%</h3>
+          <p class="text-light-300">Page load time improvement on EdReports platform migration</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 bg-blazingEmber/10 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8 text-blazingEmber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold gradient-text mb-2">90%</h3>
+          <p class="text-light-300">Reduction in manual review time through automation</p>
         </div>
       </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
-          <h3 class="text-xl font-bold mb-6 text-blazingEmber">Enhanced User Experience</h3>
+          <h3 class="text-xl font-bold mb-6 text-blazingEmber">AI & Automation Wins</h3>
           <ul class="space-y-4">
             <li class="flex items-start">
               <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-light-300">Mobile-first responsive design ensuring optimal viewing on all devices</span>
+              <span class="text-light-300">DowntownDry: 100% accuracy venue verification using Gemini AI + Google APIs</span>
             </li>
             <li class="flex items-start">
               <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-light-300">Intuitive navigation and user interface design reducing bounce rates</span>
+              <span class="text-light-300">RecycleOldTech: 1,000+ monthly referrals through automated content pipeline</span>
             </li>
             <li class="flex items-start">
               <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-light-300">Accessibility compliance (WCAG 2.1) expanding audience reach</span>
+              <span class="text-light-300">IndiAide: HIPAA-compliant automation for Medicare RTM billing compliance</span>
             </li>
             <li class="flex items-start">
               <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-light-300">Search engine optimization (SEO) increasing organic traffic</span>
+              <span class="text-light-300">AI-assisted development workflows reducing debugging time by 20%</span>
             </li>
           </ul>
         </div>
         
         <div class="bg-dark-100 rounded-lg p-8 border border-blazingEmber/20">
-          <h3 class="text-xl font-bold mb-6 text-blazingEmber">Operational Efficiency</h3>
+          <h3 class="text-xl font-bold mb-6 text-blazingEmber">Enterprise Achievements</h3>
           <ul class="space-y-4">
             <li class="flex items-start">
               <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-light-300">Automated workflows reducing manual tasks and human error</span>
+              <span class="text-light-300">Eli Lilly: Led Next.js migration and React design system transition</span>
             </li>
             <li class="flex items-start">
               <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-light-300">Real-time analytics and reporting for data-driven decisions</span>
+              <span class="text-light-300">Salesforce: API integration layer reducing manual data entry by 60%</span>
             </li>
             <li class="flex items-start">
               <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-light-300">Scalable architecture supporting business growth</span>
+              <span class="text-light-300">EdReports: 30% increase in developer productivity post-migration</span>
             </li>
             <li class="flex items-start">
               <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-light-300">Integration with existing systems and third-party services</span>
+              <span class="text-light-300">Design system adoption across 15+ engineers on pharmaceutical applications</span>
             </li>
           </ul>
         </div>
@@ -463,10 +444,10 @@ const testimonials = [
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Portfolio Showcase</span>
+          <span class="uppercase tracking-wider text-light-300">Featured Work</span>
         </div>
-        <h2 class="mb-6">Award-Winning <span class="gradient-text">Web Development</span> Projects</h2>
-        <p class="text-light-300">Explore our portfolio of carefully crafted digital experiences that showcase our expertise in custom web development, mobile app development, and AI integration. Each project demonstrates our commitment to delivering innovative solutions that drive business success.</p>
+        <h2 class="mb-6">Real <span class="gradient-text">Projects</span> With Real Results</h2>
+        <p class="text-light-300">A selection of production applications showcasing AI automation, full-stack development, and measurable business outcomes.</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
@@ -486,26 +467,24 @@ const testimonials = [
     </div>
   </section>
   
-  <!-- Testimonials Section -->
+  <!-- Experience Highlights Section -->
   <section class="section">
     <div class="container mx-auto">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Client Success</span>
+          <span class="uppercase tracking-wider text-light-300">Track Record</span>
         </div>
-        <h2 class="mb-6">What Our <span class="gradient-text">Clients</span> Say</h2>
-        <p class="text-light-300">Don't just take our word for it. Here's what our clients have to say about working with Creative Bandit.</p>
+        <h2 class="mb-6">Experience <span class="gradient-text">Highlights</span></h2>
+        <p class="text-light-300">Notable achievements from 8+ years building production applications for enterprise clients and startups.</p>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {testimonials.map(testimonial => (
-          <TestimonialCard 
-            quote={testimonial.quote} 
-            author={testimonial.author} 
-            position={testimonial.position} 
-            company={testimonial.company} 
-          />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {experienceHighlights.map(highlight => (
+          <div class="bg-dark-100 rounded-lg p-6 border border-dark-100 hover:border-blazingEmber/30 transition-all duration-300">
+            <span class="text-xs bg-blazingEmber/10 text-blazingEmber px-2 py-1 rounded mb-4 inline-block">{highlight.category}</span>
+            <p class="text-light-300">{highlight.achievement}</p>
+          </div>
         ))}
       </div>
     </div>
@@ -518,20 +497,20 @@ const testimonials = [
         <div>
           <div class="mb-6 flex items-center">
             <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-light-300">Get Started Today</span>
+            <span class="uppercase tracking-wider text-light-300">Get Started</span>
           </div>
-          <h2 class="mb-6">Ready to Transform Your Business with <span class="gradient-text">Custom Digital Solutions</span>?</h2>
+          <h2 class="mb-6">Ready to Build <span class="gradient-text">AI-Powered Solutions</span> That Eliminate Manual Work?</h2>
           <p class="text-light-300 text-lg mb-8">
-            Partner with Creative Bandit, the leading digital agency specializing in web development, mobile app development, and AI integration. Our expert team is ready to help you build powerful digital experiences that drive measurable business growth and competitive advantage.
+            Currently accepting select automation projects. Let's discuss how intelligent systems can reduce your manual work by 60-90% and deliver measurable business impact.
           </p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             <div class="flex items-center">
               <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
-              <span class="text-light-300">Free initial consultation</span>
+              <span class="text-light-300">Free 30-minute consultation</span>
             </div>
             <div class="flex items-center">
               <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
-              <span class="text-light-300">Custom project roadmap</span>
+              <span class="text-light-300">Concrete project proposal</span>
             </div>
             <div class="flex items-center">
               <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
@@ -539,12 +518,12 @@ const testimonials = [
             </div>
             <div class="flex items-center">
               <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
-              <span class="text-light-300">24/7 ongoing support</span>
+              <span class="text-light-300">Modern, scalable tech stack</span>
             </div>
           </div>
           <div class="flex flex-wrap gap-4">
             <a href="/contact" class="btn-primary">Start Your Project</a>
-            <a href="/services" class="btn-secondary">View All Services</a>
+            <a href="/services" class="btn-secondary">View Services</a>
           </div>
         </div>
         
@@ -552,23 +531,23 @@ const testimonials = [
           <h3 class="text-xl font-bold mb-6">What You Get With Creative Bandit</h3>
           <div class="space-y-6">
             <div class="border-l-4 border-blazingEmber pl-4">
-              <h4 class="font-bold text-lg mb-2">Expert Development Team</h4>
-              <p class="text-light-300 text-sm">Certified developers and designers with 10+ years of experience in modern web technologies and frameworks.</p>
+              <h4 class="font-bold text-lg mb-2">Enterprise Experience</h4>
+              <p class="text-light-300 text-sm">8+ years building production applications for Fortune 500 companies including Eli Lilly and Salesforce.</p>
             </div>
             
             <div class="border-l-4 border-blazingEmber pl-4">
-              <h4 class="font-bold text-lg mb-2">Proven Track Record</h4>
-              <p class="text-light-300 text-sm">200+ successful projects delivered across multiple industries with measurable ROI and business impact.</p>
+              <h4 class="font-bold text-lg mb-2">AI Automation Expertise</h4>
+              <p class="text-light-300 text-sm">Proven results with OpenAI, Anthropic, and Google Gemini APIs. 100% accuracy verification, 90% time savings.</p>
             </div>
             
             <div class="border-l-4 border-blazingEmber pl-4">
-              <h4 class="font-bold text-lg mb-2">Future-Proof Solutions</h4>
-              <p class="text-light-300 text-sm">Scalable architecture and cutting-edge technologies ensuring your digital solutions grow with your business.</p>
+              <h4 class="font-bold text-lg mb-2">Full-Stack Capability</h4>
+              <p class="text-light-300 text-sm">React, Vue.js, TypeScript, Node.js, Python—complete solutions from frontend to backend to deployment.</p>
             </div>
             
             <div class="border-l-4 border-blazingEmber pl-4">
-              <h4 class="font-bold text-lg mb-2">End-to-End Service</h4>
-              <p class="text-light-300 text-sm">From initial strategy to deployment and ongoing maintenance, we handle every aspect of your digital transformation.</p>
+              <h4 class="font-bold text-lg mb-2">Remote-First Collaboration</h4>
+              <p class="text-light-300 text-sm">Async-first workflow with clear communication. Based in Indianapolis, serving clients nationwide.</p>
             </div>
           </div>
         </div>

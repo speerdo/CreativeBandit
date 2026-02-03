@@ -4,77 +4,60 @@ import ProjectCard from '../components/ProjectCard.astro';
 
 const categories = [
   { id: 'all', name: 'All' },
+  { id: 'ai', name: 'AI Integration' },
   { id: 'web', name: 'Web Development' },
-  { id: 'design', name: 'UI/UX Design' },
-  { id: 'app', name: 'Mobile Apps' },
   { id: 'ecommerce', name: 'E-commerce' },
-  { id: 'ai', name: 'AI Integration' }
+  { id: 'healthcare', name: 'Healthcare' }
 ];
 
 const projects = [
   {
-    title: 'Nebula Insights Dashboard',
-    category: 'web',
-    categoryName: 'Web App',
-    image: 'https://images.pexels.com/photos/8106498/pexels-photo-8106498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/nebula',
-    client: 'DataViz Corp'
-  },
-  {
-    title: 'Ember E-commerce Platform',
+    title: 'RecycleOldTech.com',
     category: 'ecommerce',
-    categoryName: 'E-commerce',
+    categoryName: 'E-commerce / SEO',
     image: 'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/ember',
-    client: 'Fashion Collective'
+    link: 'https://recycleoldtech.com',
+    client: 'Personal Project'
   },
   {
-    title: 'Vitality Fitness App',
-    category: 'app',
-    categoryName: 'Mobile App',
-    image: 'https://images.pexels.com/photos/5702281/pexels-photo-5702281.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/vitality',
-    client: 'Vitality Fitness'
-  },
-  {
-    title: 'Spectrum Design System',
-    category: 'design',
-    categoryName: 'UI/UX Design',
-    image: 'https://images.pexels.com/photos/5473302/pexels-photo-5473302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/spectrum',
-    client: 'Tech Innovations'
-  },
-  {
-    title: 'Quantum AI Assistant',
+    title: 'DowntownDry',
     category: 'ai',
     categoryName: 'AI Integration',
     image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/quantum',
-    client: 'Future Labs'
+    link: 'https://downtowndry.com',
+    client: 'Personal Project'
   },
   {
-    title: 'Artisan Portfolio Website',
+    title: 'IndiAide RTM System',
+    category: 'healthcare',
+    categoryName: 'Healthcare Tech',
+    image: 'https://images.pexels.com/photos/8106498/pexels-photo-8106498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '#indiaide',
+    client: 'IndiAide (NDA)'
+  },
+  {
+    title: 'EdReports Platform Migration',
     category: 'web',
-    categoryName: 'Web Development',
+    categoryName: 'Full-Stack Development',
+    image: 'https://images.pexels.com/photos/5473302/pexels-photo-5473302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: 'https://edreports.org',
+    client: 'EdReports'
+  },
+  {
+    title: 'Eli Lilly Design System',
+    category: 'web',
+    categoryName: 'Enterprise Development',
     image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/artisan',
-    client: 'Artisan Collective'
+    link: '#eli-lilly',
+    client: 'Eli Lilly'
   },
   {
-    title: 'Eco Store Platform',
-    category: 'ecommerce',
-    categoryName: 'E-commerce',
+    title: 'Salesforce Platform',
+    category: 'web',
+    categoryName: 'SaaS Development',
     image: 'https://images.pexels.com/photos/5709661/pexels-photo-5709661.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/eco-store',
-    client: 'GreenLife Market'
-  },
-  {
-    title: 'Traveler Mobile App',
-    category: 'app',
-    categoryName: 'Mobile App',
-    image: 'https://images.pexels.com/photos/5082579/pexels-photo-5082579.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work/traveler',
-    client: 'Global Journeys'
+    link: '#salesforce',
+    client: 'Salesforce'
   }
 ];
 ---
@@ -88,9 +71,9 @@ const projects = [
           <span class="flame-dot"></span>
           <span class="uppercase tracking-wider text-light-300">Our Portfolio</span>
         </div>
-        <h1 class="mb-6">Our <span class="gradient-text">Creative</span> Work</h1>
+        <h1 class="mb-6">Real <span class="gradient-text">Projects</span>, Real Results</h1>
         <p class="text-xl text-light-300 mb-8">
-          Browse our portfolio of successful projects across web development, design, mobile apps, and AI integration.
+          Production applications showcasing AI automation, full-stack development, and measurable business outcomes across healthcare, e-commerce, and enterprise software.
         </p>
       </div>
     </div>
@@ -140,8 +123,8 @@ const projects = [
           <span class="flame-dot"></span>
           <span class="uppercase tracking-wider text-light-300">Featured Projects</span>
         </div>
-        <h2 class="mb-6">Case <span class="gradient-text">Studies</span></h2>
-        <p class="text-light-300">Dive deeper into selected projects and discover the challenges, solutions, and results we delivered for our clients.</p>
+        <h2 class="mb-6">Project <span class="gradient-text">Highlights</span></h2>
+        <p class="text-light-300">Detailed look at key projects showcasing AI automation, e-commerce optimization, and healthcare technology solutions.</p>
       </div>
       
       <!-- Featured Case Study -->
@@ -149,7 +132,7 @@ const projects = [
         <div>
           <img 
             src="https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-            alt="Quantum AI Assistant Case Study" 
+            alt="DowntownDry AI Verification System" 
             class="rounded-lg w-full h-auto"
           />
         </div>
@@ -157,65 +140,60 @@ const projects = [
         <div>
           <div class="mb-4 flex items-center">
             <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-light-300">Case Study</span>
+            <span class="uppercase tracking-wider text-light-300">Featured Project</span>
           </div>
-          <h3 class="text-2xl font-bold mb-3">Quantum AI Assistant</h3>
+          <h3 class="text-2xl font-bold mb-3">DowntownDry AI Verification</h3>
           <p class="text-light-300 mb-6">
-            We developed an AI-powered virtual assistant for Future Labs that increased customer support efficiency by 78% and reduced response times by 65%.
+            Nationwide alcohol-free venue directory with AI-powered verification using Google APIs and Gemini AI. Achieved 100% accuracy in venue validation while reducing manual review time by 90%.
           </p>
           
           <div class="grid grid-cols-2 gap-6 mb-6">
             <div>
-              <h4 class="text-sm text-light-300 mb-1">Client</h4>
-              <p>Future Labs</p>
+              <h4 class="text-sm text-light-300 mb-1">Type</h4>
+              <p>Personal Project</p>
             </div>
             <div>
               <h4 class="text-sm text-light-300 mb-1">Category</h4>
               <p>AI Integration</p>
             </div>
             <div>
-              <h4 class="text-sm text-light-300 mb-1">Timeline</h4>
-              <p>4 Months</p>
+              <h4 class="text-sm text-light-300 mb-1">Key Result</h4>
+              <p>100% Accuracy</p>
             </div>
             <div>
-              <h4 class="text-sm text-light-300 mb-1">Services</h4>
-              <p>AI, Development, UX Design</p>
+              <h4 class="text-sm text-light-300 mb-1">Tech Stack</h4>
+              <p>Astro, Gemini AI, Supabase</p>
             </div>
           </div>
           
-          <a href="/work/quantum" class="btn-primary">View Case Study</a>
+          <a href="https://downtowndry.com" target="_blank" rel="noopener" class="btn-primary">Visit Site</a>
         </div>
       </div>
       
       <!-- Other Case Studies -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="card">
-          <h3 class="text-xl font-bold mb-3">Ember E-commerce Platform</h3>
-          <p class="text-light-300 mb-4">A custom e-commerce solution that increased conversions by 45% and improved average order value by 30%.</p>
-          <a href="/work/ember" class="text-blazingEmber inline-flex items-center font-medium hover:text-coreFire transition-colors duration-300">
-            Read Case Study
+          <h3 class="text-xl font-bold mb-3">RecycleOldTech.com</h3>
+          <p class="text-light-300 mb-4">Electronics recycling directory achieving 8.08% affiliate conversion rate (4x industry average) with automated SEO pipeline processing 1,000+ monthly transactions.</p>
+          <a href="https://recycleoldtech.com" target="_blank" rel="noopener" class="text-blazingEmber inline-flex items-center font-medium hover:text-coreFire transition-colors duration-300">
+            Visit Site
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
             </svg>
           </a>
         </div>
         
-        <div class="card">
-          <h3 class="text-xl font-bold mb-3">Vitality Fitness App</h3>
-          <p class="text-light-300 mb-4">A mobile fitness application that increased user engagement by 65% and retention rates by 40%.</p>
-          <a href="/work/vitality" class="text-blazingEmber inline-flex items-center font-medium hover:text-coreFire transition-colors duration-300">
-            Read Case Study
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-            </svg>
-          </a>
+        <div class="card" id="indiaide">
+          <h3 class="text-xl font-bold mb-3">IndiAide RTM System</h3>
+          <p class="text-light-300 mb-4">HIPAA-compliant backend automation for Medicare Remote Therapeutic Monitoring billing. Secure patient data management with automated compliance reporting.</p>
+          <span class="text-light-300 text-sm">Healthcare compliance project (NDA)</span>
         </div>
         
         <div class="card">
-          <h3 class="text-xl font-bold mb-3">Nebula Insights Dashboard</h3>
-          <p class="text-light-300 mb-4">A data visualization platform that improved decision-making efficiency by 53% and reduced reporting time by 70%.</p>
-          <a href="/work/nebula" class="text-blazingEmber inline-flex items-center font-medium hover:text-coreFire transition-colors duration-300">
-            Read Case Study
+          <h3 class="text-xl font-bold mb-3">EdReports Platform</h3>
+          <p class="text-light-300 mb-4">K-12 curriculum review platform migration from Java/Vue to Nuxt.js. 40% faster page loads, 30% developer productivity improvement.</p>
+          <a href="https://edreports.org" target="_blank" rel="noopener" class="text-blazingEmber inline-flex items-center font-medium hover:text-coreFire transition-colors duration-300">
+            Visit Site
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
             </svg>
@@ -247,7 +225,7 @@ const projects = [
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const projectItems = document.querySelectorAll('.project-item');
+    const projectItems = document.querySelectorAll<HTMLElement>('.project-item');
     
     // Initialize - show all projects
     showProjects('all');
@@ -270,7 +248,7 @@ const projects = [
     });
     
     // Show/hide projects based on filter
-    function showProjects(category) {
+    function showProjects(category: string | null) {
       projectItems.forEach(item => {
         const itemCategory = item.getAttribute('data-category');
         
