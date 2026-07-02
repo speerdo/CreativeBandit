@@ -9,7 +9,7 @@ import AnimatedStats from '../components/AnimatedStats';
 const services = [
   {
     title: 'Web Development',
-    description: 'Modern, performant web applications built with React, Vue.js, and TypeScript. Optimized for speed, SEO, and exceptional user experience.',
+    description: 'Modern, performant web applications built with React, Vue.js, and TypeScript. Optimized for speed and SEO.',
     icon: 'web',
     link: '/services#web-development'
   },
@@ -20,8 +20,14 @@ const services = [
     link: '/services#ai-integration'
   },
   {
+    title: 'WordPress Development',
+    description: 'Custom WordPress builds, headless setups, and managed security and maintenance for agencies and business owners.',
+    icon: 'support',
+    link: '/services/wordpress'
+  },
+  {
     title: 'Design & Motion',
-    description: 'Brand and UI design plus motion design — explainer animations, product motion, and social/marketing motion. Led by Katlyn.',
+    description: 'Brand and UI design plus motion design: explainer animations, product motion, and social/marketing motion. Led by Katlyn.',
     icon: 'design',
     link: '/services#design'
   },
@@ -63,8 +69,8 @@ const projects = [
 
 <Layout
   title="AI Automation, Full-Stack Development & Design"
-  description="Creative Bandit is a two-person studio pairing AI automation and full-stack development with design and motion. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis, serving clients nationwide."
-  keywords="AI automation consultant, full-stack developer, design and motion studio, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer"
+  description="Creative Bandit is a two-person studio pairing AI automation and full-stack development with design and motion. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. WordPress development and managed care. Based in Indianapolis, serving clients nationwide."
+  keywords="AI automation consultant, full-stack developer, design and motion studio, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer, WordPress development, WordPress maintenance, headless WordPress"
 >
   <Hero />
 
@@ -76,11 +82,11 @@ const projects = [
           <span class="flame-dot"></span>
           <span class="uppercase tracking-wider text-light-300">Our Services</span>
         </div>
-        <h2 class="mb-6">Services That <span class="gradient-text">Ignite</span> Success</h2>
-        <p class="text-light-300">We offer a comprehensive range of digital services to help businesses thrive in the digital landscape, from stunning design to cutting-edge development and AI integration.</p>
+        <h2 class="mb-6">Services That <span class="gradient-text">Get Results</span></h2>
+        <p class="text-light-300">Web development, AI automation, WordPress, design and motion, and e-commerce under one roof. Built to reduce manual work and move real business metrics.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {services.map(service => (
           <ServiceCard
             title={service.title}
@@ -108,7 +114,7 @@ const projects = [
           </div>
           <h2 class="mb-6">Full-Stack Development + <span class="gradient-text">Design That Delivers Results</span></h2>
           <p class="text-light-300 mb-6">
-            We're Creative Bandit — a two-person studio pairing development with design. Adam brings 8+ years of full-stack and AI automation experience, including healthcare technology work at Eli Lilly, HIPAA-compliant systems for Medicare billing, and scalable platforms at Salesforce serving thousands of users. Katlyn leads design and motion, bringing brand and UI work to life with animation.
+            We're Creative Bandit, a two-person studio pairing development with design. Adam brings 8+ years of full-stack and AI automation experience, including healthcare technology work at Eli Lilly, HIPAA-compliant systems for Medicare billing, and platforms at Salesforce serving thousands of users. Katlyn leads design and motion, bringing brand and UI work to life with animation.
           </p>
           <p class="text-light-300 mb-8">
             Together we build intelligent systems and interfaces that reduce manual work by 60-90% while looking and moving the way a modern brand should. Recent projects include AI-powered verification systems achieving 100% accuracy and automated marketing pipelines processing 1,000+ monthly transactions.
@@ -146,7 +152,7 @@ const projects = [
               </li>
               <li class="flex items-start">
                 <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                <span class="text-light-300">In-house design and motion — brand, UI, and animation work without an external agency handoff</span>
+                <span class="text-light-300">In-house design and motion: brand, UI, and animation work without an external agency handoff</span>
               </li>
             </ul>
           </div>
@@ -297,7 +303,7 @@ const projects = [
           </div>
           <h2 class="mb-6">Ready to Build <span class="gradient-text">AI-Powered Solutions</span> That Eliminate Manual Work?</h2>
           <p class="text-light-300 text-lg mb-8">
-            Currently accepting select automation projects. Let's discuss how intelligent systems can reduce your manual work by 60-90% and deliver measurable business impact.
+            Currently accepting select automation projects. Tell us how intelligent systems can reduce your manual work by 60-90% and deliver measurable business impact.
           </p>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             <div class="flex items-center">
@@ -314,11 +320,11 @@ const projects = [
             </div>
             <div class="flex items-center">
               <span class="w-3 h-3 bg-magentaFlame rounded-full mr-3"></span>
-              <span class="text-light-300">Modern, scalable tech stack</span>
+              <span class="text-light-300">Modern, performant tech stack</span>
             </div>
           </div>
           <div class="flex flex-wrap gap-4">
-            <a href="/contact" class="btn-primary">Book My Free Consultation</a>
+            <a href="/contact" class="btn-primary">Book a Free Consultation</a>
             <a href="/services" class="btn-secondary">Explore Services</a>
           </div>
         </div>
@@ -338,12 +344,12 @@ const projects = [
 
             <div class="border-l-4 border-blazingEmber pl-4">
               <h4 class="font-bold text-lg mb-2">Full-Stack Capability</h4>
-              <p class="text-light-300 text-sm">React, Vue.js, TypeScript, Node.js, Python — complete solutions from frontend to backend to deployment.</p>
+              <p class="text-light-300 text-sm">React, Vue.js, TypeScript, Node.js, Python. Complete solutions from frontend to backend to deployment.</p>
             </div>
 
             <div class="border-l-4 border-flameTip pl-4">
               <h4 class="font-bold text-lg mb-2">Design & Motion In-House</h4>
-              <p class="text-light-300 text-sm">Brand, UI, and motion design led by Katlyn — no external agency handoff required.</p>
+              <p class="text-light-300 text-sm">Brand, UI, and motion design led by Katlyn. No external agency handoff required.</p>
             </div>
 
             <div class="border-l-4 border-magentaFlame pl-4">

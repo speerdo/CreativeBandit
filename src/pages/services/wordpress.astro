@@ -1,0 +1,177 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const included = [
+  {
+    title: 'Custom WordPress builds',
+    description: 'Custom themes, child themes, and plugin work tailored to your brand and content model instead of an off-the-shelf template.'
+  },
+  {
+    title: 'Headless WordPress',
+    description: 'WordPress as the content backend with a modern frontend (Astro, Next.js, or Nuxt) for faster pages, better SEO, and a cleaner editor experience.'
+  },
+  {
+    title: 'Migrations & rebuilds',
+    description: 'Move an existing site onto WordPress, or off WordPress onto a modern stack, without losing content, SEO equity, or traffic.'
+  },
+  {
+    title: 'Security, updates & maintenance',
+    description: 'Ongoing care plans covering core, theme, and plugin updates, security header audits, uptime monitoring, and backups. See Agent Ops for automated agency-grade monitoring.'
+  },
+  {
+    title: 'Performance & SEO',
+    description: 'Core Web Vitals tuning, caching strategy, image optimization, structured data, and SEO fundamentals so the site loads fast and ranks well.'
+  },
+  {
+    title: 'E-commerce & integrations',
+    description: 'WooCommerce setups, payment integration, and third-party API connections (CRM, email, affiliate, analytics) wired into WordPress.'
+  }
+];
+
+const pricingTiers = [
+  { name: 'Build / Rebuild', price: 'Project-scoped', description: 'Custom WordPress build or rebuild with theme work, content model, and launch.' },
+  { name: 'Headless Setup', price: 'Project-scoped', description: 'WordPress backend paired with a modern frontend framework for performance and editor experience.' },
+  { name: 'Care Plan', price: 'From $150/mo', description: 'Updates, security monitoring, backups, and small edits. Pairs with Agent Ops for agencies.' }
+];
+---
+
+<Layout title="WordPress Development" description="Custom WordPress builds, headless setups, migrations, and managed care plans from Creative Bandit. Indianapolis-based, serving clients nationwide.">
+  <!-- Hero Section -->
+  <section class="section pt-24 relative">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <div class="mb-6 flex items-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">WordPress Development & Care</span>
+        </div>
+        <h1 class="mb-6">Custom <span class="gradient-text">WordPress</span> Sites Built Right</h1>
+        <p class="text-xl text-light-300 mb-8">
+          WordPress powers a huge share of the web, which means most WordPress sites look and run the same. We build custom WordPress setups and headless configurations that load fast, stay secure, and fit your business instead of a generic template.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/contact" class="btn-primary">Start a WordPress Project</a>
+          <a href="/services" class="btn-secondary">Back to Services</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blazingEmber/10 to-transparent opacity-30"></div>
+    </div>
+  </section>
+
+  <!-- Why WordPress / Why Us -->
+  <section class="py-16 bg-dark-200">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="mb-4 flex items-center">
+            <span class="flame-dot"></span>
+            <span class="uppercase tracking-wider text-light-300">Why WordPress With Us</span>
+          </div>
+          <h2 class="mb-6">WordPress, <span class="gradient-text">Without the Bloat</span></h2>
+          <p class="text-light-300 mb-4">
+            Most WordPress projects fall into one of two traps: a bloated page-builder theme that loads dozens of scripts per page, or a hand-rolled setup that breaks the moment a non-developer tries to edit content.
+          </p>
+          <p class="text-light-300 mb-4">
+            We build around the middle ground: clean custom themes or a headless frontend paired with WordPress as a content backend, so editors get a familiar CMS and visitors get a fast, well-optimized site.
+          </p>
+          <p class="text-light-300">
+            For agencies managing many client sites, our Agent Ops product adds automated security, update, and uptime monitoring on top.
+          </p>
+        </div>
+
+        <div class="rounded-xl p-8 border border-coreFire/20 bg-dark-100/80 backdrop-blur-sm">
+          <h3 class="text-xl font-bold mb-6">What You Get</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Custom theme and plugin work, not a generic page-builder template</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-coreFire rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Headless options with Astro, Next.js, or Nuxt for performance and SEO</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-blazingEmber rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Care plans covering updates, security, backups, and small edits</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-magentaFlame rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">Migrations that preserve content, URLs, and search ranking</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-light-300">An editor experience non-developers can actually use</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's Included -->
+  <section class="py-16">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">What's Included</span>
+        </div>
+        <h2 class="mb-6">Full <span class="gradient-text">WordPress</span> Coverage</h2>
+        <p class="text-light-300">From a brand-new build to ongoing care, here's what a WordPress engagement covers.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {included.map(item => (
+          <div class="card">
+            <h3 class="text-xl font-bold mb-3">{item.title}</h3>
+            <p class="text-light-300">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section bg-dark-200">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Pricing</span>
+        </div>
+        <h2 class="mb-6">Typical <span class="gradient-text">Engagements</span></h2>
+        <p class="text-light-300">Every project is scoped individually. These starting points give you a sense of cost before we talk specifics.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {pricingTiers.map(tier => (
+          <div class="card text-center">
+            <h3 class="text-xl font-bold mb-2">{tier.name}</h3>
+            <p class="text-2xl font-bold gradient-text mb-4">{tier.price}</p>
+            <p class="text-light-300">{tier.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="mb-6">Need a <span class="gradient-text">WordPress</span> Site That Actually Performs?</h2>
+        <p class="text-light-300 text-lg mb-8">Tell us what you're working with. We'll scope the build, migration, or care plan and give you a clear timeline and price.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/contact" class="btn-primary">Start Your WordPress Project</a>
+          <a href="/services/agent-ops" class="btn-secondary">See Agent Ops for Agencies</a>
+        </div>
+      </div>
+    </div>
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-blazingEmber/5 blur-3xl rounded-full"></div>
+      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-magentaFlame/5 blur-3xl rounded-full"></div>
+    </div>
+  </section>
+</Layout>

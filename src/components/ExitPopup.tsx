@@ -94,10 +94,10 @@ export default function ExitPopup() {
           {!submitted ? (
             <>
               <h3 className="text-2xl font-bold mb-2 font-heading">
-                Before you go &mdash; grab your free checklist
+                Before you go, grab your free checklist
               </h3>
               <p className="text-gray-400 mb-6 text-sm leading-relaxed">
-                Get our <strong className="text-white">AI Automation Readiness Checklist</strong> &mdash;
+                Get our <strong className="text-white">AI Automation Readiness Checklist</strong>,
                 15 questions to evaluate where AI can save your business the most time and money.
               </p>
 
@@ -124,7 +124,7 @@ export default function ExitPopup() {
                     background: "linear-gradient(135deg, #ff6a00, #ff1c1c)",
                   }}
                 >
-                  Send Me the Free Checklist
+                  Send the Free Checklist
                 </button>
               </form>
 

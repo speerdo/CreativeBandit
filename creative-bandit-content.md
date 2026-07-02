@@ -77,11 +77,11 @@ Keep these or modify:
 Current placeholder text talks about "premier digital agency" and "decade of experience"
 
 **Your authentic version:**
-I'm Adam Speer, founder of Creative Bandit. With over 8 years of full-stack development experience, I specialize in building AI-powered automation systems and modern web applications that solve real business problems. My background includes healthcare technology work at Eli Lilly (leading frontend migrations for pharmaceutical applications), developing HIPAA-compliant systems for Medicare billing compliance, and building scalable platforms at Salesforce that served thousands of users.
+We're Creative Bandit, founded by Adam Speer. With over 8 years of full-stack development experience, we specialize in building AI-powered automation systems and modern web applications that solve real business problems. Our background includes healthcare technology work at Eli Lilly (leading frontend migrations for pharmaceutical applications), developing HIPAA-compliant systems for Medicare billing compliance, and building platforms at Salesforce that served thousands of users.
 
-I work primarily with React, Vue.js, TypeScript, Node.js, and modern AI APIs (OpenAI, Anthropic, Google Gemini) to create intelligent systems that reduce manual work by 60-90%. Recent projects include AI-powered verification systems achieving 100% accuracy, automated marketing pipelines processing 1,000+ monthly transactions, and healthcare compliance automation for remote therapeutic monitoring.
+We work primarily with React, Vue.js, TypeScript, Node.js, and modern AI APIs (OpenAI, Anthropic, Google Gemini) to create intelligent systems that reduce manual work by 60-90%. Recent projects include AI-powered verification systems achieving 100% accuracy, automated marketing pipelines processing 1,000+ monthly transactions, and healthcare compliance automation for remote therapeutic monitoring.
 
-Beyond client work, I build and operate my own web properties including DowntownDry (a nationwide alcohol-free venue directory) and RecycleOldTech.com (an electronics recycling directory with automated affiliate systems). I believe in creating solutions that deliver measurable business impact—whether that's eliminating hours of manual work, increasing conversion rates, or building platforms that scale to serve millions of users.
+Beyond client work, we build and operate our own web properties including DowntownDry (a nationwide alcohol-free venue directory) and RecycleOldTech.com (an electronics recycling directory with automated affiliate systems). We believe in creating solutions that deliver measurable business impact, whether that's eliminating hours of manual work, increasing conversion rates, or building platforms that scale to serve millions of users.
 
 ### Why Choose Creative Bandit?
 Current bullets:

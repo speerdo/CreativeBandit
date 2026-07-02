@@ -11,7 +11,7 @@ const pricingTiers = [
   {
     name: 'Automation Project',
     price: '$2,500–5,000',
-    description: 'A scoped automation build — a workflow, integration, or AI-powered pipeline that eliminates a specific manual bottleneck.'
+    description: 'A scoped automation build: a workflow, integration, or AI-powered pipeline that eliminates a specific manual bottleneck.'
   },
   {
     name: 'Full Application',
@@ -44,7 +44,7 @@ const services = [
   },
   {
     title: 'Design & Motion',
-    description: 'Brand and UI design plus motion design — explainer animations, product motion, and social/marketing motion. Led by Katlyn.',
+    description: 'Brand and UI design plus motion design: explainer animations, product motion, and social/marketing motion. Led by Katlyn.',
     icon: 'design',
     link: '#design',
     id: 'design'
@@ -69,14 +69,21 @@ const services = [
     icon: 'support',
     link: '/services/agent-ops',
     id: 'agent-ops'
+  },
+  {
+    title: 'WordPress Development',
+    description: 'Custom WordPress builds, headless setups, theme and plugin work, and managed care for agencies and business owners.',
+    icon: 'support',
+    link: '/services/wordpress',
+    id: 'wordpress'
   }
 ];
 
-// Agent Ops has its own dedicated page, so it's excluded from the on-page anchor sections below.
-const detailedServices = services.filter(service => service.id !== 'agent-ops');
+// Agent Ops and WordPress each have their own dedicated page, so they're excluded from the on-page anchor sections below.
+const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].includes(service.id));
 ---
 
-<Layout title="Services" description="AI automation, full-stack web development, design & motion, e-commerce solutions, and healthcare technology services from Creative Bandit's two-person studio.">
+<Layout title="Services" description="AI automation, full-stack web development, WordPress, design & motion, e-commerce solutions, and healthcare technology services from Creative Bandit's two-person studio.">
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">
@@ -87,7 +94,7 @@ const detailedServices = services.filter(service => service.id !== 'agent-ops');
         </div>
         <h1 class="mb-6">Services That <span class="gradient-text">Deliver</span> Results</h1>
         <p class="text-xl text-light-300 mb-8">
-          AI automation, full-stack development, and design &amp; motion — combined under one roof to deliver measurable business impact.
+          AI automation, full-stack development, WordPress, and design &amp; motion under one roof, built to deliver measurable business impact.
         </p>
       </div>
     </div>
@@ -133,16 +140,16 @@ const detailedServices = services.filter(service => service.id !== 'agent-ops');
             <h2 class="mb-6">{service.title}</h2>
             <p class="mb-6 text-light-300">
               {service.id === 'web-development' ? 
-                'We build high-performance websites and web applications that deliver exceptional user experiences across all devices. Our development team combines technical expertise with creative problem-solving to create solutions that are not only visually impressive but also functionally robust.' :
+                'We build fast, well-structured websites and web applications that work well across every device. Development pairs technical know-how with practical problem-solving so the result looks good and runs cleanly.' :
               service.id === 'design' ?
-                'Great design goes beyond aesthetics — it&apos;s about creating intuitive experiences and motion that helps a brand move. Katlyn leads brand, UI, and motion design, from static interfaces to explainer animations and social/marketing motion that brings products to life.' :
+                'Great design is more than aesthetics: it&apos;s about building intuitive experiences and motion that helps a brand move. Katlyn leads brand, UI, and motion design, from static interfaces to explainer animations and social/marketing motion that brings products to life.' :
               service.id === 'ai-integration' ? 
-                'Integrate cutting-edge AI technology into your digital products to enhance functionality, automate processes, and deliver more personalized user experiences. We specialize in practical AI applications that provide real business value and competitive advantage.' :
+                'We add AI to your digital products in ways that actually help: automating processes, improving functionality, and giving users more relevant experiences. We focus on practical AI applications that produce real business value.' :
               service.id === 'app-development' ? 
-                'Extend your digital presence with custom mobile applications that engage users on their preferred devices. Whether you need a native iOS/Android app or a cross-platform solution, we deliver high-quality mobile experiences that users love.' :
+                'Extend your reach with custom mobile applications that meet users on their preferred devices. Whether you need a native iOS/Android app or a cross-platform solution, we build mobile experiences users keep coming back to.' :
               service.id === 'ecommerce' ? 
-                'Create seamless shopping experiences that convert browsers into buyers. From custom storefronts to inventory management and payment processing, we build e-commerce solutions that scale with your business and drive sales.' :
-                'Navigate the complex digital landscape with strategic guidance tailored to your business goals. We help you identify opportunities, overcome challenges, and develop a roadmap for digital success.'}
+                'Build online stores that turn browsers into buyers. From custom storefronts to inventory management and payment processing, we build e-commerce setups that grow with your business and drive sales.' :
+                'Work through the digital landscape with strategic guidance tied to your business goals. We help you find opportunities, work around obstacles, and plan a path forward.'}
             </p>
             
             <h3 class="text-xl font-bold mb-4">What we offer:</h3>
@@ -210,7 +217,7 @@ const detailedServices = services.filter(service => service.id !== 'agent-ops');
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
-                    {/* TODO: confirm any additional services — illustration, design systems, video editing, etc. */}
+                    {/* TODO: confirm any additional services: illustration, design systems, video editing, etc. */}
                     <span>Design systems and UI component libraries</span>
                   </li>
                 </>
@@ -378,7 +385,7 @@ const detailedServices = services.filter(service => service.id !== 'agent-ops');
           <span class="uppercase tracking-wider text-light-300">Transparent Pricing</span>
         </div>
         <h2 class="mb-6">What Projects <span class="gradient-text">Typically Cost</span></h2>
-        <p class="text-light-300">Every project is scoped individually — these ranges give you a starting point before we talk specifics.</p>
+        <p class="text-light-300">Every project is scoped individually. These ranges give you a starting point before we talk specifics.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -397,8 +404,8 @@ const detailedServices = services.filter(service => service.id !== 'agent-ops');
   <section class="py-24 bg-dark-200 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="mb-6">Ready to <span class="gradient-text">Transform</span> Your Digital Presence?</h2>
-        <p class="text-light-300 text-lg mb-8">Contact us today to discuss your project and discover how our services can help you achieve your digital goals.</p>
+        <h2 class="mb-6">Ready to <span class="gradient-text">Get Started</span>?</h2>
+        <p class="text-light-300 text-lg mb-8">Tell us about your project and we'll walk through how these services fit your goals.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Get In Touch</a>
           <a href="/work" class="btn-secondary">View Our Work</a>
