@@ -1,0 +1,57 @@
+---
+// Calculate years of experience (started October 2017)
+const startDate = new Date(2017, 9); // October 2017
+const now = new Date();
+let yearsExperience = now.getFullYear() - startDate.getFullYear();
+// If we haven't reached October yet this year, subtract 1
+if (now.getMonth() < 9) {
+  yearsExperience -= 1;
+}
+---
+
+<section class="relative min-h-[90vh] flex items-center">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl relative z-10 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg shadow-2xl p-8 md:p-10 lg:p-12">
+      <div class="mb-6 flex items-center">
+        <span class="flame-dot"></span>
+        <span class="uppercase tracking-wider text-light-300">AI & Automation Engineering</span>
+      </div>
+      <h1 class="mb-6">
+        Building <span class="gradient-text">Intelligent</span> Systems That Work
+      </h1>
+      <p class="text-xl text-light-300 mb-8 max-w-2xl">
+        Full-stack developer specializing in AI-powered automation systems and modern web applications that reduce manual work by 60-90% and deliver measurable business impact.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="/contact" class="btn-primary">Start Your Project</a>
+        <a href="/work" class="btn-secondary">View Our Work</a>
+      </div>
+
+      <div class="mt-12 lg:mt-16 grid grid-cols-3 gap-8">
+        <div class="text-center">
+          <p class="text-3xl font-bold gradient-text mb-1">{yearsExperience}+</p>
+          <p class="text-light-300 text-sm">Years Experience</p>
+        </div>
+        <div class="text-center">
+          <p class="text-3xl font-bold gradient-text mb-1">20+</p>
+          <p class="text-light-300 text-sm">Projects Completed</p>
+        </div>
+        <div class="text-center">
+          <p class="text-3xl font-bold gradient-text mb-1">10+</p>
+          <p class="text-light-300 text-sm">Happy Clients</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="birdSwarmCanvas" class="absolute top-0 right-0 w-full h-full -z-10"></canvas>
+</section>
+
+<script>
+  import { initBirdSwarm } from '../lib/birdSwarm';
+
+  const canvas = document.querySelector('#birdSwarmCanvas');
+  if (canvas instanceof HTMLCanvasElement) {
+    initBirdSwarm(canvas);
+  }
+</script>
