@@ -11,10 +11,10 @@ export interface Props {
   ogImage?: string;
 }
 
-const { 
-  title, 
-  description = "AI automation specialist and full-stack developer building intelligent systems that reduce manual work by 60-90%. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis.", 
-  keywords = "AI automation consultant, full-stack developer, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer, web development",
+const {
+  title,
+  description = "Creative Bandit is a two-person studio pairing full-stack development and AI automation with design and motion. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis.",
+  keywords = "AI automation consultant, full-stack developer, design and motion studio, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer, web development",
   ogImage = "/favicon.svg"
 } = Astro.props;
 ---
@@ -65,14 +65,20 @@ const {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Creative Bandit",
-      "description": "AI automation specialist and full-stack developer building intelligent systems that reduce manual work by 60-90%.",
+      "description": "Two-person studio pairing full-stack development and AI automation with design and motion.",
       "url": "https://creativebandit.studio",
       "logo": "https://creativebandit.studio/favicon.svg",
       "foundingDate": "2026",
-      "founder": {
-        "@type": "Person",
-        "name": "Adam Speer"
-      },
+      "founder": [
+        {
+          "@type": "Person",
+          "name": "Adam Speer"
+        },
+        {
+          "@type": "Person",
+          "name": "Katlyn"
+        }
+      ],
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Indianapolis",

@@ -2,8 +2,24 @@
 import Layout from '../layouts/Layout.astro';
 import TeamMember from '../components/TeamMember.astro';
 
-// Solo operation - no team section needed
-const team = [];
+const team = [
+  {
+    name: "Adam Speer",
+    position: "Full-Stack Development & AI Automation",
+    // TODO: replace with real headshot
+    image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600",
+    bio: "8+ years building production applications for Fortune 500 companies and startups. Focused on AI-powered automation and full-stack systems that eliminate manual work and scale with the business."
+  },
+  {
+    // TODO: last name
+    name: "Katlyn",
+    position: "Design & Motion Lead",
+    // TODO: replace with real headshot
+    image: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=600",
+    // TODO: replace with real 2-3 sentence bio
+    bio: "[TODO: Katlyn's bio — background, design/motion focus, and what she brings to client work.]"
+  }
+];
 
 const values = [
   {
@@ -71,7 +87,7 @@ const approach = [
 ];
 ---
 
-<Layout title="About" description="AI automation specialist and full-stack developer with 8+ years building production applications for Fortune 500 companies and startups. Based in Indianapolis, serving clients nationwide.">
+<Layout title="About" description="Creative Bandit is a two-person studio pairing full-stack development and AI automation with design and motion. Based in Indianapolis, serving clients nationwide.">
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">
@@ -80,13 +96,13 @@ const approach = [
           <span class="flame-dot"></span>
           <span class="uppercase tracking-wider text-light-300">About Creative Bandit</span>
         </div>
-        <h1 class="mb-6">Building <span class="gradient-text">Intelligent</span> Systems That Deliver Results</h1>
+        <h1 class="mb-6">Full-Stack Development + <span class="gradient-text">Design That Moves</span></h1>
         <p class="text-xl text-light-300 mb-8">
-          I'm Adam Speer, founder of Creative Bandit. I specialize in AI-powered automation and full-stack development that reduces manual work by 60-90% and delivers measurable business impact.
+          We're Creative Bandit — Adam on development and AI automation, Katlyn on design and motion. Together we build digital products that work as good as they look, and deliver measurable business impact.
         </p>
         <div class="flex flex-wrap gap-4">
           <a href="/contact" class="btn-primary">Start Your Project</a>
-          <a href="/work" class="btn-secondary">See My Work</a>
+          <a href="/work" class="btn-secondary">See Our Work</a>
         </div>
       </div>
     </div>
@@ -131,7 +147,7 @@ const approach = [
         <div>
           <div class="mb-4 flex items-center">
             <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-light-300">Who We Are</span>
+            <span class="uppercase tracking-wider text-light-300">Adam's Story</span>
           </div>
           <h2 class="mb-6">From Enterprise to <span class="gradient-text">AI Automation</span></h2>
           <p class="mb-6 text-light-300">
@@ -211,7 +227,7 @@ const approach = [
         <div class="text-center mb-16">
           <div class="mb-4 flex items-center justify-center">
             <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-light-300">Why Work With Me</span>
+            <span class="uppercase tracking-wider text-light-300">Why Work With Us</span>
           </div>
           <h2 class="mb-6">What Sets Creative Bandit <span class="gradient-text">Apart</span></h2>
         </div>
@@ -258,13 +274,13 @@ const approach = [
         <div class="text-center max-w-3xl mx-auto mb-16">
           <div class="mb-4 flex items-center justify-center">
             <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-light-300">Our Team</span>
+            <span class="uppercase tracking-wider text-light-300">Who We Are</span>
           </div>
-          <h2 class="mb-6">Meet The <span class="gradient-text">Creative Minds</span> Behind Our Work</h2>
-          <p class="text-light-300">Our diverse team of passionate experts brings creativity, technical skill, and strategic thinking to every project.</p>
+          <h2 class="mb-6">Meet The <span class="gradient-text">Team</span></h2>
+          <p class="text-light-300">Two disciplines, one studio. Development and design working together from day one of every project.</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
           {team.map(member => (
             <TeamMember 
               name={member.name} 

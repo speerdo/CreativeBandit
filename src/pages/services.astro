@@ -2,6 +2,24 @@
 import Layout from '../layouts/Layout.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 
+const pricingTiers = [
+  {
+    name: 'Discovery / Audit',
+    price: '$500–750',
+    description: 'A focused audit of your current site, systems, or manual workflows, with a concrete plan for what to automate or build next.'
+  },
+  {
+    name: 'Automation Project',
+    price: '$2,500–5,000',
+    description: 'A scoped automation build — a workflow, integration, or AI-powered pipeline that eliminates a specific manual bottleneck.'
+  },
+  {
+    name: 'Full Application',
+    price: '$10k+',
+    description: 'End-to-end design and development of a full web application or platform, from architecture through launch.'
+  }
+];
+
 const services = [
   {
     title: 'AI Automation',
@@ -25,8 +43,8 @@ const services = [
     id: 'ecommerce'
   },
   {
-    title: 'UI/UX Design',
-    description: 'Clean, intuitive interfaces built for conversion. Data-driven design decisions that deliver measurable results.',
+    title: 'Design & Motion',
+    description: 'Brand and UI design plus motion design — explainer animations, product motion, and social/marketing motion. Led by Katlyn.',
     icon: 'design',
     link: '#design',
     id: 'design'
@@ -44,11 +62,21 @@ const services = [
     icon: 'web',
     link: '#automation',
     id: 'automation'
+  },
+  {
+    title: 'Agent Ops',
+    description: 'Automated security, maintenance, and compliance monitoring for WordPress agencies and their clients. Currently onboarding pilot agencies.',
+    icon: 'support',
+    link: '/services/agent-ops',
+    id: 'agent-ops'
   }
 ];
+
+// Agent Ops has its own dedicated page, so it's excluded from the on-page anchor sections below.
+const detailedServices = services.filter(service => service.id !== 'agent-ops');
 ---
 
-<Layout title="Services" description="AI automation, full-stack web development, e-commerce solutions, and healthcare technology services. Building intelligent systems that reduce manual work by 60-90%.">
+<Layout title="Services" description="AI automation, full-stack web development, design & motion, e-commerce solutions, and healthcare technology services from Creative Bandit's two-person studio.">
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">
@@ -59,7 +87,7 @@ const services = [
         </div>
         <h1 class="mb-6">Services That <span class="gradient-text">Deliver</span> Results</h1>
         <p class="text-xl text-light-300 mb-8">
-          AI automation, full-stack development, and e-commerce solutions designed to reduce manual work and deliver measurable business impact.
+          AI automation, full-stack development, and design &amp; motion — combined under one roof to deliver measurable business impact.
         </p>
       </div>
     </div>
@@ -86,7 +114,7 @@ const services = [
   </section>
   
   <!-- Service Details -->
-  {services.map((service, index) => (
+  {detailedServices.map((service, index) => (
     <section id={service.id} class="py-24 relative even:bg-dark-200">
       <div class="container mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -94,8 +122,8 @@ const services = [
             <div class="mb-4 flex items-center">
               <span class="flame-dot"></span>
               <span class="uppercase tracking-wider text-light-300">
-                {service.id === 'web-development' ? 'Expert Web Development' : 
-                 service.id === 'design' ? 'Strategic UI/UX Design' : 
+                {service.id === 'web-development' ? 'Expert Web Development' :
+                 service.id === 'design' ? 'Design & Motion, Led by Katlyn' :
                  service.id === 'ai-integration' ? 'Advanced AI Solutions' : 
                  service.id === 'app-development' ? 'Mobile App Excellence' : 
                  service.id === 'ecommerce' ? 'E-commerce Expertise' : 
@@ -106,8 +134,8 @@ const services = [
             <p class="mb-6 text-light-300">
               {service.id === 'web-development' ? 
                 'We build high-performance websites and web applications that deliver exceptional user experiences across all devices. Our development team combines technical expertise with creative problem-solving to create solutions that are not only visually impressive but also functionally robust.' :
-              service.id === 'design' ? 
-                'Great design goes beyond aesthetics—it&apos;s about creating intuitive, enjoyable experiences that solve real user problems. Our design process is research-driven and user-centered, ensuring that every element serves a purpose and contributes to the overall user experience.' :
+              service.id === 'design' ?
+                'Great design goes beyond aesthetics — it&apos;s about creating intuitive experiences and motion that helps a brand move. Katlyn leads brand, UI, and motion design, from static interfaces to explainer animations and social/marketing motion that brings products to life.' :
               service.id === 'ai-integration' ? 
                 'Integrate cutting-edge AI technology into your digital products to enhance functionality, automate processes, and deliver more personalized user experiences. We specialize in practical AI applications that provide real business value and competitive advantage.' :
               service.id === 'app-development' ? 
@@ -158,31 +186,32 @@ const services = [
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
-                    <span>UX research and user testing</span>
+                    <span>Brand and UI design</span>
                   </li>
                   <li class="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
-                    <span>Wireframing and prototyping</span>
+                    <span>Motion design &amp; explainer animations</span>
                   </li>
                   <li class="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
-                    <span>Visual design and branding</span>
+                    <span>Product motion &amp; UI animation</span>
                   </li>
                   <li class="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
-                    <span>Interaction design</span>
+                    <span>Social &amp; marketing motion content</span>
                   </li>
                   <li class="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
-                    <span>User interface design systems</span>
+                    {/* TODO: confirm any additional services — illustration, design systems, video editing, etc. */}
+                    <span>Design systems and UI component libraries</span>
                   </li>
                 </>
               ) : service.id === 'ai-integration' ? (
@@ -340,6 +369,30 @@ const services = [
     </section>
   ))}
   
+  <!-- Pricing Section -->
+  <section id="pricing" class="section">
+    <div class="container mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">Transparent Pricing</span>
+        </div>
+        <h2 class="mb-6">What Projects <span class="gradient-text">Typically Cost</span></h2>
+        <p class="text-light-300">Every project is scoped individually — these ranges give you a starting point before we talk specifics.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {pricingTiers.map(tier => (
+          <div class="card text-center">
+            <h3 class="text-xl font-bold mb-2">{tier.name}</h3>
+            <p class="text-2xl font-bold gradient-text mb-4">{tier.price}</p>
+            <p class="text-light-300">{tier.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section class="py-24 bg-dark-200 relative overflow-hidden">
     <div class="container mx-auto relative z-10">

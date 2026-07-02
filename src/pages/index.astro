@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
 import AnimatedStats from '../components/AnimatedStats';
 
 const services = [
@@ -19,8 +20,8 @@ const services = [
     link: '/services#ai-integration'
   },
   {
-    title: 'UI/UX Design',
-    description: 'Clean, intuitive interfaces built for conversion. Data-driven design decisions that deliver measurable engagement improvements.',
+    title: 'Design & Motion',
+    description: 'Brand and UI design plus motion design — explainer animations, product motion, and social/marketing motion. Led by Katlyn.',
     icon: 'design',
     link: '/services#design'
   },
@@ -61,9 +62,9 @@ const projects = [
 ---
 
 <Layout
-  title="AI Automation & Full-Stack Development"
-  description="AI automation specialist and full-stack developer building intelligent systems that reduce manual work by 60-90%. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis, serving clients nationwide."
-  keywords="AI automation consultant, full-stack developer, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer"
+  title="AI Automation, Full-Stack Development & Design"
+  description="Creative Bandit is a two-person studio pairing AI automation and full-stack development with design and motion. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis, serving clients nationwide."
+  keywords="AI automation consultant, full-stack developer, design and motion studio, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer"
 >
   <Hero />
 
@@ -105,12 +106,12 @@ const projects = [
             <span class="flame-dot"></span>
             <span class="uppercase tracking-wider text-light-300">About Creative Bandit</span>
           </div>
-          <h2 class="mb-6">AI-Powered <span class="gradient-text">Automation</span> That Delivers Results</h2>
+          <h2 class="mb-6">Full-Stack Development + <span class="gradient-text">Design That Delivers Results</span></h2>
           <p class="text-light-300 mb-6">
-            I'm Adam Speer, founder of Creative Bandit. With 8+ years of full-stack development experience, I specialize in building AI-powered automation systems and modern web applications that solve real business problems. My background includes healthcare technology work at Eli Lilly, HIPAA-compliant systems for Medicare billing, and scalable platforms at Salesforce serving thousands of users.
+            We're Creative Bandit — a two-person studio pairing development with design. Adam brings 8+ years of full-stack and AI automation experience, including healthcare technology work at Eli Lilly, HIPAA-compliant systems for Medicare billing, and scalable platforms at Salesforce serving thousands of users. Katlyn leads design and motion, bringing brand and UI work to life with animation.
           </p>
           <p class="text-light-300 mb-8">
-            I work primarily with React, Vue.js, TypeScript, Node.js, and modern AI APIs (OpenAI, Anthropic, Google Gemini) to create intelligent systems that reduce manual work by 60-90%. Recent projects include AI-powered verification systems achieving 100% accuracy and automated marketing pipelines processing 1,000+ monthly transactions.
+            Together we build intelligent systems and interfaces that reduce manual work by 60-90% while looking and moving the way a modern brand should. Recent projects include AI-powered verification systems achieving 100% accuracy and automated marketing pipelines processing 1,000+ monthly transactions.
           </p>
           <div class="grid grid-cols-2 gap-6">
             <div>
@@ -118,8 +119,8 @@ const projects = [
               <p class="text-light-300 text-sm">Intelligent systems using GPT, Claude, and Gemini APIs to eliminate manual work and improve accuracy.</p>
             </div>
             <div>
-              <h4 class="font-bold text-lg mb-2 text-coreFire">Full-Stack Development</h4>
-              <p class="text-light-300 text-sm">Modern React/Vue/TypeScript frontends with Node.js backends, deployed on Vercel and AWS.</p>
+              <h4 class="font-bold text-lg mb-2 text-coreFire">Design & Motion</h4>
+              <p class="text-light-300 text-sm">Brand, UI, and motion design that makes interfaces feel as good as they function.</p>
             </div>
           </div>
         </div>
@@ -142,6 +143,10 @@ const projects = [
               <li class="flex items-start">
                 <span class="w-2 h-2 bg-magentaFlame rounded-full mt-2 mr-3 flex-shrink-0"></span>
                 <span class="text-light-300">Full-stack expertise from React/Vue/TypeScript frontend to Node.js/Python backend to AI API integration</span>
+              </li>
+              <li class="flex items-start">
+                <span class="w-2 h-2 bg-flameTip rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                <span class="text-light-300">In-house design and motion — brand, UI, and animation work without an external agency handoff</span>
               </li>
             </ul>
           </div>
@@ -221,32 +226,35 @@ const projects = [
     </div>
   </section>
 
-  <!-- Lead Magnet Section -->
+  <!-- TODO: re-add lead-magnet checklist section once a real ConvertKit form + PDF exist -->
+
+  <!-- Testimonials Section -->
   <section class="py-16 md:py-20 bg-dark-200 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
-      <div class="max-w-3xl mx-auto text-center">
-        <div class="rounded-2xl p-8 md:p-12 border border-coreFire/20 bg-gradient-to-br from-dark-100/90 to-charcoal/90 backdrop-blur-sm">
-          <span class="inline-block text-xs uppercase tracking-wider text-coreFire bg-coreFire/10 px-3 py-1 rounded-full mb-6">Free Resource</span>
-          <h2 class="mb-4 text-2xl md:text-3xl">Is Your Business Ready for <span class="gradient-text">AI Automation</span>?</h2>
-          <p class="text-light-300 mb-8 max-w-xl mx-auto">Get our free 15-point checklist to evaluate where AI can save your business the most time and money — based on real results from our client projects.</p>
-
-          <!-- Replace action URL with your Kit form action -->
-          <form action="YOUR_KIT_FORM_URL" method="POST" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              name="email_address"
-              placeholder="Enter your email"
-              required
-              class="flex-1 px-4 py-3 bg-dark-300 border border-dark-100 rounded-md text-light-100 focus:outline-none focus:ring-2 focus:ring-coreFire/50 placeholder:text-light-300/40"
-            />
-            <input type="hidden" name="tags" value="lead-magnet-checklist" />
-            <button type="submit" class="btn-primary whitespace-nowrap">Get the Free Checklist</button>
-          </form>
-          <p class="text-light-300/50 text-xs mt-3">No spam. Unsubscribe anytime.</p>
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="mb-4 flex items-center justify-center">
+          <span class="flame-dot"></span>
+          <span class="uppercase tracking-wider text-light-300">What Clients Say</span>
         </div>
+        <h2 class="mb-6">Trusted By <span class="gradient-text">Real Clients</span></h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {/* TODO: replace with real client quotes */}
+        <TestimonialCard
+          quote="[TODO: gather a real client quote]"
+          author="[TODO: name]"
+          position="[TODO: title]"
+          company="[TODO: company]"
+        />
+        <TestimonialCard
+          quote="[TODO: gather a real client quote]"
+          author="[TODO: name]"
+          position="[TODO: title]"
+          company="[TODO: company]"
+        />
       </div>
     </div>
-    <div class="absolute top-1/2 left-1/2 w-96 h-96 bg-coreFire/5 blur-3xl rounded-full -translate-x-1/2 -translate-y-1/2"></div>
   </section>
 
   <!-- Projects Section -->
@@ -302,7 +310,7 @@ const projects = [
             </div>
             <div class="flex items-center">
               <span class="w-3 h-3 bg-blazingEmber rounded-full mr-3"></span>
-              <span class="text-light-300">Transparent pricing</span>
+              <span class="text-light-300"><a href="/services#pricing" class="hover:text-blazingEmber transition-colors duration-300">Transparent pricing</a></span>
             </div>
             <div class="flex items-center">
               <span class="w-3 h-3 bg-magentaFlame rounded-full mr-3"></span>
@@ -331,6 +339,11 @@ const projects = [
             <div class="border-l-4 border-blazingEmber pl-4">
               <h4 class="font-bold text-lg mb-2">Full-Stack Capability</h4>
               <p class="text-light-300 text-sm">React, Vue.js, TypeScript, Node.js, Python — complete solutions from frontend to backend to deployment.</p>
+            </div>
+
+            <div class="border-l-4 border-flameTip pl-4">
+              <h4 class="font-bold text-lg mb-2">Design & Motion In-House</h4>
+              <p class="text-light-300 text-sm">Brand, UI, and motion design led by Katlyn — no external agency handoff required.</p>
             </div>
 
             <div class="border-l-4 border-magentaFlame pl-4">

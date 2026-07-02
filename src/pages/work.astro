@@ -7,10 +7,32 @@ const categories = [
   { id: 'ai', name: 'AI Integration' },
   { id: 'web', name: 'Web Development' },
   { id: 'ecommerce', name: 'E-commerce' },
-  { id: 'healthcare', name: 'Healthcare' }
+  { id: 'healthcare', name: 'Healthcare' },
+  { id: 'design', name: 'Design' },
+  { id: 'motion', name: 'Motion' }
 ];
 
 const projects = [
+  {
+    title: 'yieldtofreedom.com',
+    category: 'web',
+    categoryName: 'Full-Stack Development / Fintech',
+    // TODO: replace with real screenshot
+    image: 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: 'https://yieldtofreedom.com',
+    // TODO: replace with real project description — Income-investing platform built with Astro 5, Neon, Vercel, and Drizzle.
+    client: 'Personal Project'
+  },
+  {
+    title: 'ebikelocal.com',
+    category: 'web',
+    categoryName: 'Directory / SEO',
+    // TODO: replace with real screenshot
+    image: 'https://images.pexels.com/photos/5083491/pexels-photo-5083491.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: 'https://ebikelocal.com',
+    // TODO: replace with real project description — Niche eBike shop directory built with Astro SSG, Neon, and Vercel, with Playwright scrapers powering data collection.
+    client: 'Personal Project'
+  },
   {
     title: 'RecycleOldTech.com',
     category: 'ecommerce',
@@ -58,11 +80,39 @@ const projects = [
     image: 'https://images.pexels.com/photos/5709661/pexels-photo-5709661.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     link: '#salesforce',
     client: 'Salesforce'
+  },
+  // TODO: Katlyn's design/motion projects — replace title/description/link/image with real work
+  {
+    title: '[TODO: Design Project 1]',
+    category: 'design',
+    categoryName: 'Brand / UI Design',
+    image: 'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '#',
+    // TODO: replace with real description, before/after, or video/GIF
+    client: '[TODO: client name]'
+  },
+  {
+    title: '[TODO: Design Project 2]',
+    category: 'design',
+    categoryName: 'Brand / UI Design',
+    image: 'https://images.pexels.com/photos/1779488/pexels-photo-1779488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '#',
+    // TODO: replace with real description, before/after, or video/GIF
+    client: '[TODO: client name]'
+  },
+  {
+    title: '[TODO: Motion Project 3]',
+    category: 'motion',
+    categoryName: 'Motion Design',
+    image: 'https://images.pexels.com/photos/1779489/pexels-photo-1779489.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    link: '#',
+    // TODO: replace with real description, before/after, or video/GIF
+    client: '[TODO: client name]'
   }
 ];
 ---
 
-<Layout title="Our Work" description="Explore our portfolio of web development, design, and digital projects for clients across various industries">
+<Layout title="Our Work" description="Explore Creative Bandit's portfolio of full-stack development, AI automation, and design & motion projects for clients across various industries">
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">
@@ -73,7 +123,7 @@ const projects = [
         </div>
         <h1 class="mb-6">Real <span class="gradient-text">Projects</span>, Real Results</h1>
         <p class="text-xl text-light-300 mb-8">
-          Production applications showcasing AI automation, full-stack development, and measurable business outcomes across healthcare, e-commerce, and enterprise software.
+          Production applications and design/motion work showcasing AI automation, full-stack development, and measurable business outcomes across healthcare, e-commerce, fintech, and enterprise software.
         </p>
       </div>
     </div>
