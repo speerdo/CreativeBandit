@@ -78,10 +78,37 @@ const stats = [
 </section>
 
 <script>
-  import { initBirdSwarm } from '../lib/birdSwarm';
-
+  /*
+   * The flock pulls in Three.js, which is ~490KB - a lot of JavaScript for a
+   * decorative background. So it is a dynamic import (Vite splits it into its
+   * own chunk, off the critical path) and it only loads when it will actually
+   * be seen and wanted:
+   *
+   *   - not at all under prefers-reduced-motion. birdSwarm.ts slows itself to
+   *     25%, but the honest answer for a purely decorative animation is to
+   *     skip it and skip the download with it.
+   *   - not on small viewports, where the payload costs the most and the
+   *     canvas is largely covered by the type anyway.
+   *   - otherwise, only once the hero is actually on screen.
+   *
+   * The hero still reads without it: ink fields, type, and mascot are all CSS
+   * and markup.
+   */
   const canvas = document.querySelector('#birdSwarmCanvas');
+
   if (canvas instanceof HTMLCanvasElement) {
-    initBirdSwarm(canvas);
+    const skip =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.matchMedia('(max-width: 767px)').matches;
+
+    if (!skip) {
+      const observer = new IntersectionObserver(async (entries, obs) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        obs.disconnect();
+        const { initBirdSwarm } = await import('../lib/birdSwarm');
+        initBirdSwarm(canvas);
+      });
+      observer.observe(canvas);
+    }
   }
 </script>

@@ -45,6 +45,16 @@ function useCountUp(
   useEffect(() => {
     if (!trigger) return;
 
+    // A number ticking up from zero is exactly the kind of motion the OS
+    // setting is asking us to skip. Jump straight to the final value.
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      setCurrent(end);
+      return;
+    }
+
     const startTime = performance.now();
 
     const animate = (now: number) => {

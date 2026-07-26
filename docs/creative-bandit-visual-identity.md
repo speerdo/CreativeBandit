@@ -1,7 +1,7 @@
 # Creative Bandit — Visual Identity Redesign
 
 **Branch:** `kat-design-updates`
-**Status:** Phases 0–2 landed; Phases 3–6 outstanding (see §7)
+**Status:** Phases 0–6 landed. Remaining work in §9.
 **Date:** 2026-07-26
 
 Aesthetic overhaul of creativebandit.studio. Site structure, routes, copy, and SEO stay as-is. What changes is the entire visual language: from generic dark-SaaS-with-neon-gradients to **digital space cowboy** — grainy photography, risograph print artifacts, gritty blurred gradients, and a bandit-cat mascot.
@@ -239,17 +239,31 @@ Two open items:
 - The OG image is type + gradient field only. The mascot inset would not composite — the local SVG rasteriser silently drops the inlined mascot group despite the file parsing clean. Needs a headless-browser export.
 - Per §5 the mascot was to carry `feTurbulence` grain internally. Left out: the page-level grain already covers it on-site, and an SVG filter is a liability at favicon sizes.
 
-**Phase 3 — Hero + navigation**
-Highest-visibility surface. Kill the glass card, recolor the flock, composite gradient field + mascot + grain.
+**Phase 3 — Hero + navigation** ✅ `b6fa969`
+Glass card removed, type sits directly on two ink fields, mascot composited into the right column, stats left-aligned with ink rules and mono labels.
 
-**Phase 4 — Components**
-Cards, team, testimonials, forms, footer. Mostly mechanical once Phase 1 utilities exist.
+Uncovered an inverted Tailwind layer order: `global.css` opened with `@import 'tailwindcss/...'`, which emitted this file's `@layer components` block **after** the utilities. Component classes therefore beat any utility override on the same element — `class="card p-8"` silently ignored the `p-8`, and the `z-index` in `.field` beat `-z-30`, which would have floated the blurred gradients on top of the birds. Measured in the built CSS: components at 33–36k, utilities at 12–17k. The `@tailwind` directive form restores the intended order.
 
-**Phase 5 — Page layouts**
-Per-page rhythm, grid-breaking, section variation. The pass that makes it feel designed rather than templated.
+**Phase 4 — Components** ✅ `e732e18`
+Cards, team, testimonials, form, footer, stats, exit popup.
 
-**Phase 6 — Polish**
-Reduced-motion audit, contrast audit, Lighthouse pass, cross-browser blend-mode check.
+Three bugs found:
+- `text-base` is ambiguous — `base` is both our near-black colour token and Tailwind's default font-size key, so `@apply` emitted **both**, silently overriding `.btn-primary`'s `text-sm`. Near-black type now sets its colour directly. **Worth remembering when adding any new component.**
+- A heading was using raw `ink-cold` (2.34:1) — the one colour §2 forbids for text. Arrived via the Phase 0 rename, since the old `magentaFlame` was light enough to get away with it.
+- The footer LinkedIn link and both TeamMember social links pointed at `#`. They now render only when given a real URL.
+
+**Phase 5 — Page layouts** ✅ `ef63ff3`
+29 eyebrows → `.label-tech`; 37 `.gradient-text` → `.plate-type`; 14 centred intros left-aligned; 18 blur blobs deleted; 22 round dots and 21 rounded corners squared off. Legacy aliases deleted; `.flame-gradient` renamed `.page-wash`.
+
+Also found: the work/blog filter buttons toggled active state by stacking `text-ink-hot` on top of `text-paper-mute` — two utilities for one property, resolved by stylesheet order rather than DOM order, which only worked because the idle state previously had no text colour. Replaced with a `.chip` component and an `is-active` class. `services.astro` carried a 39-line copy-pasted filter script with no matching elements; `index.astro` referenced an `.about-card-glow` class that was never defined.
+
+**Phase 6 — Polish** ✅
+- **The flock is now a dynamic import.** It pulls in Three.js at ~490KB — a lot of JavaScript for a decorative background. It now loads only on a real viewport, only without `prefers-reduced-motion`, and only once the hero is on screen. **Homepage eager JS: 491.4KB → 1.5KB.** The hero reads fine without it, since fields, type, and mascot are all CSS and markup.
+- Reduced motion: verified the CSS block reaches all 14 pages. `AnimatedStats` was counting numbers up from zero regardless of the setting — fixed to jump straight to the final value. `birdSwarm.ts` already self-throttled; it is now skipped entirely instead.
+- Contrast: 16 pairs audited across text, buttons, chips (including the tinted active background) and the bone slabs. All pass; worst case 5.10:1.
+- `grain-drift` deleted rather than left as unused config. `plate-jitter` is wired to the navbar mascot hover.
+
+Not done: a real Lighthouse run and the cross-browser blend-mode check, both of which need a browser.
 
 ---
 
@@ -277,13 +291,24 @@ The failure mode is applying all six texture layers everywhere and landing at il
 
 ---
 
-## 9. Open questions
+## 9. Open questions / follow-ups
 
-- [ ] Mascot name? "Bandit" is the obvious read but may be too on-the-nose against "Creative Bandit."
-- [ ] Do we keep the 3D flock long-term, or does the mascot make it redundant? Revisit after Phase 3 — two competing focal points is a real risk.
-- [ ] Stock photography: duotone the existing Pexels images, or commission/shoot real project screenshots? Duotone buys time either way.
-- [ ] Bone-paper *sections* (full inverted slabs) or bone only for small cards? Full inversion is stronger but a bigger layout lift.
-- [ ] Should mono technical labels carry real data (dates, project IDs, file specs) rather than decorative filler? Real data is more convincing and no harder.
+**Needs a browser (blocked while working headless):**
+- [ ] Lighthouse run on mobile; §8 sets the bar at ≥ 90.
+- [ ] Safari check on `mix-blend-mode: overlay` over a `position: fixed` layer — the global grain depends on it.
+- [ ] OG image: the mascot inset would not composite via the local SVG rasteriser despite the file parsing clean. The shipped image is type + gradient field only. Redo with a headless-browser export.
+
+**Design decisions still open:**
+- [ ] Mascot name. "Bandit" is the obvious read but may be too on-the-nose against "Creative Bandit".
+- [ ] The flock now only renders on desktop without reduced-motion. Given the mascot also lives in the hero, is the flock still earning its place at all?
+- [ ] Stock photography: duotone is carrying the Pexels placeholders convincingly, but real project screenshots would be better.
+- [ ] Bone-paper *sections* (full inverted slabs) or bone only for cards? Testimonials are the only inversion so far.
+- [ ] Should the mono labels carry real data (dates, project IDs) rather than section names?
+
+**Tech debt noticed in passing (out of scope for this redesign):**
+- [ ] `ExitPopup` and `AnimatedStats` are ~6KB of component code pulling a 182KB React runtime via `client:only`. Both are simple enough to be vanilla JS/Astro, which would drop React from the site entirely.
+- [ ] `og-image.png` is 337KB. Fine for a crawler-only asset, but a JPEG would be a fraction of that.
+- [ ] `blog/index.astro` still uses the deprecated `Astro.glob`, which warns on every build.
 
 ## 10. Not in scope
 

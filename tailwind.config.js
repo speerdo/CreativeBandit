@@ -37,9 +37,10 @@ export default {
         mono: ['Space Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       animation: {
-        // Print misfeed: plates jolt apart, then resettle.
+        // Print misfeed: plates jolt apart, then resettle. Stepped, not
+        // eased - smooth motion here reads as a wobble rather than a
+        // mechanical misfeed.
         'plate-jitter': 'plate-jitter 320ms steps(3, end) 1',
-        'grain-drift': 'grain-drift 8s steps(6, end) infinite',
       },
       keyframes: {
         'plate-jitter': {
@@ -47,15 +48,6 @@ export default {
           '33%': { transform: 'translate(-2px, 1px)' },
           '66%': { transform: 'translate(2px, -1px)' },
           '100%': { transform: 'translate(0, 0)' },
-        },
-        // Shifts the grain tile so the noise never sits perfectly static.
-        // Stepped, not smooth — continuous motion reads as a video artifact.
-        'grain-drift': {
-          '0%, 100%': { transform: 'translate(0, 0)' },
-          '20%': { transform: 'translate(-4px, 3px)' },
-          '40%': { transform: 'translate(3px, -4px)' },
-          '60%': { transform: 'translate(-3px, -2px)' },
-          '80%': { transform: 'translate(4px, 2px)' },
         },
       },
     },
