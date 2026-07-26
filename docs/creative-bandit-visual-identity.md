@@ -1,12 +1,12 @@
 # Creative Bandit — Visual Identity Redesign
 
 **Branch:** `kat-design-updates`
-**Status:** Planning — not yet implemented
+**Status:** Phases 0–2 landed; Phases 3–6 outstanding (see §7)
 **Date:** 2026-07-26
 
 Aesthetic overhaul of creativebandit.studio. Site structure, routes, copy, and SEO stay as-is. What changes is the entire visual language: from generic dark-SaaS-with-neon-gradients to **digital space cowboy** — grainy photography, risograph print artifacts, gritty blurred gradients, and a bandit-cat mascot.
 
-Reference assets live in `public/ref img/`:
+Reference assets live in `docs/refs/`:
 
 | File | What we're taking from it |
 | --- | --- |
@@ -218,14 +218,26 @@ Animation (all behind `prefers-reduced-motion`):
 
 Sized so each phase is independently reviewable and the site stays deployable throughout.
 
-**Phase 0 — Mechanical rename**
-Token rename via `sed`, zero visual change. Lands alone so later diffs are readable.
+**Phase 0 — Mechanical rename** ✅ `3cad1f6`
+Token rename via `sed`, zero visual change. Lands alone so later diffs are readable. Verified inert by diffing the set of colour values in the built CSS before and after — identical. Also removed two dead components (`Hero.astro`, `Welcome.astro`).
 
-**Phase 1 — Foundation**
-Tailwind tokens, fonts, `global.css` texture utilities, global grain overlay. Site will look *broken-ish* mid-phase (old components, new tokens) — expected.
+**Phase 1 — Foundation** ✅ `609995a`
+Tailwind tokens, fonts, `global.css` texture utilities, global grain overlay.
 
-**Phase 2 — Mascot**
-Build `bandit-cat.svg`, favicon, OG image. Standalone, reviewable in isolation.
+Deviation from the plan, deliberately: rather than deleting `.gradient-text` (46 uses) and `.flame-dot` (32 uses) and leaving every page broken until Phase 4/5, both were **redefined in place** to the new treatments. The whole site restyled in one commit with zero call-site churn, and stayed deployable. Migrating those call sites onto `.plate-type` / `.label-tech` moves to Phase 5.
+
+Two measured corrections to the plan's assumptions:
+- The grain tile is **13KB, not the 2–4KB estimated** in §4.1. Random noise is close to incompressible; a smaller tile would start to show a repeat. 13KB for one cached request is fine, but the estimate was wrong.
+- `grain-drift` is defined but **not applied**. Animating a full-viewport blended layer means repainting the blend every step — exactly the cost §8 says to avoid. Kept available for small opt-in surfaces.
+
+**Phase 2 — Mascot** ✅ `d6c5634`
+Built `bandit-cat.svg`, `bandit-cat-head.svg`, `favicon.svg`, OG image; mascot wired into the navbar.
+
+Learned by rasterising each build at its real size rather than trusting the markup: plate order has to be **by depth, not by ink** (grouping strictly by ink buried the bandana behind the head), a silhouette crease in the hat crown reads as a second pair of ears, and near-black whiskers are invisible where they cross the dark ground.
+
+Two open items:
+- The OG image is type + gradient field only. The mascot inset would not composite — the local SVG rasteriser silently drops the inlined mascot group despite the file parsing clean. Needs a headless-browser export.
+- Per §5 the mascot was to carry `feTurbulence` grain internally. Left out: the page-level grain already covers it on-site, and an SVG filter is a liability at favicon sizes.
 
 **Phase 3 — Hero + navigation**
 Highest-visibility surface. Kill the glass card, recolor the flock, composite gradient field + mascot + grain.
