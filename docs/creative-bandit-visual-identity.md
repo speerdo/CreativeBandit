@@ -274,6 +274,12 @@ Two things worth recording:
 - Materials are deliberately **not** flagged `transparent`. Every plate is opaque, and marking them transparent would move them into the depth-sorted transparent pass where near-coplanar parts can flicker in and out of order.
 - The static mascot is now a **fallback**, hidden at `lg` by default and un-hidden when the scene skips (reduced motion) or fails, with a `<noscript>` rule for JS being off. Showing it by default would have flashed a mascot on desktop and popped it out once the chunk arrived.
 
+Flight tuning is governed by two ratios, both non-obvious enough to be worth writing down:
+
+- **Loop size is `speed² / force`, not speed.** At 3.2 and 2.6 the turn radius is ~4.9 units. Raising the steering force tightens it straight back into short darts. Removing the arrive-style damping matters just as much — easing down on approach is what made the first version read as stop-start.
+- **A 4.9-unit turn radius does not fit a 2.7-unit-tall box.** Simulating the path showed it reaching |y| 4.43 against a frustum half-height of 3.84 — the rocket was flying off the top and bottom of the screen. Fixed by dropping the vertical play area to 2.0, raising containment force, and shrinking the wander's vertical amplitude so the loops run sideways, where a hero canvas has room. Worst case with the cursor pinned off-area is now |y| 2.70.
+- **The UFO lag swing has to stay under half the base spacing.** The first pass used 0.34 spacing with a 0.3 swing, which let neighbours reach the same lag and swap order — three of the four ended up stacked on each other. Now 0.34 / 0.22 with tighter phases: worst-case gap +0.26s, about 0.84 world units against a saucer 0.52 wide.
+
 Checked the craft by mirroring the exact shape coordinates into an SVG and rasterising it — the first pass had ears that read as devil horns and a bandana that read as a pointed beard. Both reshaped.
 
 

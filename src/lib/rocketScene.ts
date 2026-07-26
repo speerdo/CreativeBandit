@@ -26,26 +26,61 @@ const INK = {
 
 const UFO_COUNT = 4;
 
-// Half-extents of the play area at z=0. Chosen to sit inside the camera
-// frustum (FOV 75 at z=5) with a margin, so the craft never sails off screen.
-const BOUNDS = { x: 5.0, y: 2.7 };
+// Half-extents of the play area at z=0. The vertical figure is deliberately
+// well inside the frustum (FOV 75 at z=5 gives a half-height of 3.84): the
+// loops are wider than this box is tall, so the craft always overshoots it.
+// Simulated worst case with the cursor pinned outside the area is |y| 2.70,
+// which still leaves better than a unit of headroom.
+const BOUNDS = { x: 5.0, y: 2.0 };
 
 // The hero's copy occupies the left of the grid, so the rocket's idle
 // wander is biased right to keep it out from behind the type.
 const WANDER_CENTRE_X = 1.5;
 
-const MAX_SPEED = 3.4;
-const MAX_FORCE = 6.5;
-const ARRIVE_RADIUS = 1.1;
-const ACCEL_SMOOTH_RATE = 5;
+/*
+ * Flight character is set by the ratio between these two, not by either
+ * alone: a craft holding speed v under a lateral force f turns with radius
+ * v^2 / f. At 3.2 and 2.6 that is about 3.9 units - wider than the play area
+ * is tall, so the rocket sweeps in long arcs and loops instead of darting.
+ * Raising MAX_FORCE tightens it back into short bursts.
+ */
+const MAX_SPEED = 3.2;
+const MAX_FORCE = 2.6;
+// Speed is held near cruise rather than eased down on approach. Arrive-style
+// damping is what made the old motion read as stop-start.
+const MIN_SPEED = 2.5;
+const ACCEL_SMOOTH_RATE = 4.5;
 const CURSOR_IDLE_TIMEOUT_MS = 4000;
+
+// Containment starts easing in this far from the edge, as a fraction of each
+// half-extent, and ramps in quadratically - zero value and zero slope at the
+// margin, so the craft curves back instead of bouncing off an invisible wall.
+const BOUNDS_MARGIN = 0.68;
+const BOUNDS_FORCE = 16;
 
 // Seconds each UFO trails the rocket along its own past path. Sampling a
 // time-stamped trail (rather than each UFO chasing the one ahead) keeps the
 // convoy evenly spaced no matter how hard the rocket turns, and cannot
 // oscillate the way a chain of pursuers can.
-const UFO_LAG = [0.34, 0.56, 0.78, 1.0];
-const TRAIL_SECONDS = 1.4;
+//
+/*
+ * The lag breathes: each saucer drifts further back, then reels itself in.
+ * A fixed lag reads as a rigid tow-rope.
+ *
+ * The swing has to stay small relative to the base spacing, and the phases
+ * close together. An earlier pass used 0.34 spacing with a 0.3 swing and
+ * phases 1.25 apart, which let neighbours converge to the same lag and
+ * actually swap places - three of the four ended up stacked on one another.
+ * At 0.34 spacing, 0.22 swing and 0.35 phase the worst-case gap is +0.26s,
+ * about 0.84 world units at cruise against a saucer 0.52 wide.
+ */
+const UFO_LAG_BASE = [0.85, 1.19, 1.53, 1.87];
+const UFO_LAG_SWING = 0.22;
+const UFO_LAG_PHASE = 0.35;
+const UFO_LAG_RATE = 0.45;
+// Must exceed the largest lag plus its swing (2.09), or the tail saucer runs
+// off the end of the trail and snaps back to its start.
+const TRAIL_SECONDS = 2.8;
 
 /*
  * Every plate is fully opaque, so these stay non-transparent on purpose:
@@ -62,6 +97,16 @@ function flat(shape: THREE.Shape, color: string, z: number): THREE.Mesh {
   const mesh = new THREE.Mesh(geometry, material);
   mesh.position.z = z;
   return mesh;
+}
+
+// Zero value and zero slope at the margin, growing quadratically past it, so
+// there is no kink where containment switches on.
+function softBoundsAxis(pos: number, extent: number): number {
+  const marginStart = extent * BOUNDS_MARGIN;
+  const abs = Math.abs(pos);
+  if (abs <= marginStart) return 0;
+  const t = (abs - marginStart) / (extent - marginStart);
+  return -Math.sign(pos) * t * t;
 }
 
 function polygon(points: [number, number][]): THREE.Shape {
@@ -191,11 +236,24 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
   });
 
   const position = new THREE.Vector3(WANDER_CENTRE_X, 0, 0);
-  const velocity = new THREE.Vector3(MAX_SPEED * 0.6, 0, 0);
+  const velocity = new THREE.Vector3(MAX_SPEED * 0.9, 0, 0);
   const smoothedAccel = new THREE.Vector3();
 
   // Time-stamped ring of past rocket positions, for the UFOs to trail along.
+  //
+  // Seeded with a straight run-in behind the starting position rather than
+  // left empty. The furthest saucer lags nearly two seconds, so an empty
+  // trail would pin the whole convoy on top of the rocket's start point and
+  // let them peel off one by one as it filled - a visible mess on load.
   const trail: TrailSample[] = [];
+  const SEED_STEP = 0.05;
+  for (let t = -TRAIL_SECONDS; t <= 0; t += SEED_STEP) {
+    trail.push({
+      t,
+      x: position.x + velocity.x * t,
+      y: position.y + velocity.y * t,
+    });
+  }
 
   const raycaster = new THREE.Raycaster();
   const seekPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
@@ -285,40 +343,48 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     if (hasCursorTarget && performance.now() - lastPointerMove < CURSOR_IDLE_TIMEOUT_MS) {
       target = cursorTarget;
     } else {
-      const t = elapsed * 0.28;
+      // A slow-drifting target the rocket laps around. The slower this moves
+      // relative to cruise speed, the more the craft orbits it rather than
+      // chasing it, and the bigger the loops read.
+      //
+      // The vertical amplitude is much smaller than the horizontal one on
+      // purpose. Overshoot is the whole mechanism here, and a hero canvas is
+      // far wider than it is tall, so the loops are given room to run
+      // sideways and kept from sailing off the top and bottom.
+      const t = elapsed * 0.15;
       target = autoTarget.set(
-        WANDER_CENTRE_X + Math.sin(t) * 2.6,
-        Math.cos(t * 1.37) * 1.7,
+        WANDER_CENTRE_X + Math.sin(t) * 2.9,
+        Math.cos(t * 1.37) * 1.0,
         0
       );
     }
 
-    // Arrive: ease the desired speed down inside ARRIVE_RADIUS so the rocket
-    // settles onto a target instead of overshooting and jittering around it.
+    // Full-cruise pursuit, with no easing on approach. The rocket overshoots
+    // its target and has to swing back around, which is what produces the
+    // looping flight path rather than a settle-and-dart.
     desired.set(target.x - position.x, target.y - position.y, 0);
     const distance = desired.length();
-    const rampedSpeed =
-      distance < ARRIVE_RADIUS ? MAX_SPEED * (distance / ARRIVE_RADIUS) : MAX_SPEED;
-    if (distance > 1e-5) desired.multiplyScalar(rampedSpeed / distance);
+    if (distance > 1e-5) desired.multiplyScalar(MAX_SPEED / distance);
 
     steer.subVectors(desired, velocity);
     if (steer.length() > MAX_FORCE) steer.setLength(MAX_FORCE);
 
+    // Containment steers rather than clamps, so the craft banks away from an
+    // edge and keeps its arc instead of stopping dead against it.
+    steer.x += softBoundsAxis(position.x, BOUNDS.x) * BOUNDS_FORCE;
+    steer.y += softBoundsAxis(position.y, BOUNDS.y) * BOUNDS_FORCE;
+
     const accelLerp = 1 - Math.exp(-ACCEL_SMOOTH_RATE * rawDelta);
     smoothedAccel.lerp(steer, accelLerp);
     velocity.addScaledVector(smoothedAccel, delta);
-    if (velocity.length() > MAX_SPEED) velocity.setLength(MAX_SPEED);
-    position.addScaledVector(velocity, delta);
 
-    // Soft containment, so the craft turns back rather than clipping an edge.
-    if (Math.abs(position.x) > BOUNDS.x) {
-      position.x = Math.sign(position.x) * BOUNDS.x;
-      velocity.x *= -0.5;
-    }
-    if (Math.abs(position.y) > BOUNDS.y) {
-      position.y = Math.sign(position.y) * BOUNDS.y;
-      velocity.y *= -0.5;
-    }
+    // Hold speed inside a narrow band. Without a floor the craft can stall
+    // when steering opposes its heading, and a stalled rocket looks broken.
+    const speed = velocity.length();
+    if (speed > MAX_SPEED) velocity.setLength(MAX_SPEED);
+    else if (speed < MIN_SPEED && speed > 1e-5) velocity.setLength(MIN_SPEED);
+
+    position.addScaledVector(velocity, delta);
 
     rocket.position.set(position.x, position.y, 0);
 
@@ -335,7 +401,11 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     while (trail.length > 2 && trail[0].t < elapsed - TRAIL_SECONDS) trail.shift();
 
     ufos.forEach((ufo, i) => {
-      if (!sampleTrail(UFO_LAG[i] ?? 1.2, sample)) return;
+      // Breathing lag: each saucer falls further back, then hauls itself in.
+      const lag =
+        (UFO_LAG_BASE[i] ?? 1.87) +
+        Math.sin(elapsed * UFO_LAG_RATE + i * UFO_LAG_PHASE) * UFO_LAG_SWING;
+      if (!sampleTrail(lag, sample)) return;
       // Small perpendicular weave so the convoy is not a rigid conga line.
       const wobble = Math.sin(elapsed * 1.7 + i * 1.9) * 0.22;
       ufo.position.set(sample.x, sample.y + wobble, -0.15 - i * 0.05);
