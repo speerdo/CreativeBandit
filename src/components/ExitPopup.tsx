@@ -96,8 +96,8 @@ export default function ExitPopup() {
               <img
                 src="/mascot/bandit-cat-head.svg"
                 alt=""
-                width="72"
-                height="68"
+                width="77"
+                height="64"
                 className="mb-4 h-16 w-auto"
               />
               <h3 className="mb-2 font-display text-2xl font-extrabold uppercase leading-none" style={{ fontStretch: "125%" }}>
