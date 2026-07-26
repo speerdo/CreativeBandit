@@ -85,8 +85,15 @@
     @apply leading-relaxed;
   }
 
+  /*
+   * `text-base` would be ambiguous here: our near-black colour token is
+   * named `base`, but `base` is also Tailwind's default font-size key, so
+   * @apply emits BOTH the colour and font-size:1rem. Set the colour
+   * directly wherever near-black type is wanted.
+   */
   ::selection {
-    @apply bg-ink-hot text-base;
+    @apply bg-ink-hot;
+    color: theme('colors.base.DEFAULT');
   }
 
   :focus-visible {
@@ -300,7 +307,8 @@
   }
 
   .btn-primary {
-    @apply inline-block px-6 py-3 font-mono text-sm font-bold uppercase tracking-[0.12em] text-center transition-all duration-200 bg-ink-hot text-base border border-ink-hot;
+    @apply inline-block px-6 py-3 font-mono text-sm font-bold uppercase tracking-[0.12em] text-center transition-all duration-200 bg-ink-hot border border-ink-hot;
+    color: theme('colors.base.DEFAULT');
   }
 
   .btn-primary:hover {
@@ -380,6 +388,15 @@
   .project-card:hover img {
     @apply scale-105;
     filter: grayscale(0) contrast(1.05);
+  }
+
+  /* Lift the ink plate on hover so the image resolves to full colour. */
+  .project-card .duotone::after {
+    @apply transition-opacity duration-500;
+  }
+
+  .project-card:hover .duotone::after {
+    @apply opacity-0;
   }
 
   .project-card .overlay {
