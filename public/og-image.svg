@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+
+    <pattern id="bc-halftone" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.6" fill="#0B0B0C" opacity="0.5"/>
+    </pattern>
+    <!-- Keeps the cheek screens from spilling past the head silhouette. -->
+    <clipPath id="bc-head-clip">
+      <ellipse cx="200" cy="225" rx="96" ry="90"/>
+    </clipPath>
+  
+    <radialGradient id="fieldHot" cx="0.22" cy="0.35" r="0.62">
+      <stop offset="0%" stop-color="#FF4D14" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#E5195A" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#0B0B0C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fieldCold" cx="0.86" cy="0.78" r="0.55">
+      <stop offset="0%" stop-color="#1B27E8" stop-opacity="0.85"/>
+      <stop offset="55%" stop-color="#6E79FF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0B0B0C" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soften" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="55"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0B0B0C"/>
+  <g filter="url(#soften)">
+    <rect width="1200" height="630" fill="url(#fieldHot)"/>
+    <rect width="1200" height="630" fill="url(#fieldCold)"/>
+  </g>
+
+  <g transform="translate(768, 108) scale(1.05)">
+<!--
+    Plate order is by depth, not by ink, because the bandana has to sit over
+    the muzzle and the hat over the forehead. Each ink keeps a single shared
+    offset across all of its groups, so the misregistration stays consistent:
+      cold  translate(-3,  2)
+      hot   translate( 3, -1)
+      line  no offset (the key plate)
+  -->
+
+  
+
+  <!-- ========== COLD, behind the head: badge ring + kerchief tails ======= -->
+  <g transform="translate(-3, 2)">
+    <circle cx="200" cy="205" r="178" fill="none" stroke="#1B27E8" stroke-width="3" opacity="0.85"/>
+    <circle cx="200" cy="205" r="168" fill="none" stroke="#1B27E8" stroke-width="1" opacity="0.45"/>
+    <!-- Tails, pulled out to the left as if knotted tight -->
+    <path d="M 118 250 L 66 232 L 48 262 L 104 278 Z" fill="#1B27E8"/>
+    <path d="M 66 232 L 28 206 L 14 236 L 48 262 Z" fill="#1B27E8" opacity="0.85"/>
+  </g>
+
+  <!-- ========== PAPER: ears + head ======================================= -->
+  <g>
+    <path d="M 108 184 L 122 64 L 196 150 Z" fill="#EDE8DF"/>
+    <path d="M 292 184 L 278 64 L 204 150 Z" fill="#EDE8DF"/>
+    <path d="M 128 174 L 137 92 L 174 146 Z" fill="#E5195A" opacity="0.7"/>
+    <path d="M 272 174 L 263 92 L 226 146 Z" fill="#E5195A" opacity="0.7"/>
+
+    <ellipse cx="200" cy="225" rx="96" ry="90" fill="#EDE8DF"/>
+
+    <!-- Cheek screens only, not a full-face texture swatch -->
+    <g clip-path="url(#bc-head-clip)">
+      <ellipse cx="132" cy="248" rx="42" ry="34" fill="url(#bc-halftone)"/>
+      <ellipse cx="268" cy="248" rx="42" ry="34" fill="url(#bc-halftone)"/>
+    </g>
+  </g>
+
+  <!-- ========== LINE: eyes ============================================== -->
+  <g>
+    <path d="M 146 204 Q 168 184 190 204 Q 168 222 146 204 Z" fill="#0B0B0C"/>
+    <path d="M 210 204 Q 232 184 254 204 Q 232 222 210 204 Z" fill="#0B0B0C"/>
+    <circle cx="172" cy="199" r="2.8" fill="#EDE8DF"/>
+    <circle cx="236" cy="199" r="2.8" fill="#EDE8DF"/>
+  </g>
+
+  <!-- ========== COLD, over the muzzle: the bandana ====================== -->
+  <g transform="translate(-3, 2)">
+    <path d="M 106 236
+             Q 200 258 294 236
+             L 298 260
+             Q 252 332 200 340
+             Q 148 332 102 260
+             Z"
+          fill="#1B27E8"/>
+    <!-- Fold line, so the kerchief reads as cloth rather than a flat bib -->
+    <path d="M 130 258 Q 200 286 270 258" fill="none" stroke="#0B0B0C" stroke-width="2" opacity="0.35"/>
+  </g>
+
+  <!-- ========== HOT: the hat ============================================ -->
+  <g transform="translate(3, -1)">
+    <!-- Crown: a single smooth taper. A silhouette dent here reads as a
+         second pair of ears, so the crease is drawn as a line instead. -->
+    <path d="M 154 152
+             Q 150 92 176 78
+             Q 200 70 224 78
+             Q 250 92 246 152
+             Z"
+          fill="#FF4D14"/>
+    <path d="M 200 80 L 200 132" stroke="#0B0B0C" stroke-width="3" opacity="0.28" fill="none"/>
+    <!-- Brim, sitting low enough to overlap the forehead but clear the eyes -->
+    <ellipse cx="200" cy="152" rx="150" ry="30" fill="#FF4D14"/>
+    <!-- Brim underside, for a bit of form -->
+    <path d="M 50 152 Q 200 196 350 152 Q 200 172 50 152 Z" fill="#0B0B0C" opacity="0.22"/>
+  </g>
+
+  <!-- ========== LINE: hat band, buckle, whiskers ======================== -->
+  <g>
+    <rect x="156" y="130" width="92" height="16" fill="#0B0B0C" opacity="0.85"/>
+    <rect x="226" y="128" width="14" height="20" fill="#D9F24A"/>
+
+    <!-- Bone whiskers: they read against the dark ground, so they start at
+         the head edge and travel outward rather than crossing the face. -->
+    <g stroke="#EDE8DF" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.9">
+      <path d="M 112 254 Q 76 246 46 250"/>
+      <path d="M 110 270 Q 74 272 44 284"/>
+      <path d="M 288 254 Q 324 246 354 250"/>
+      <path d="M 290 270 Q 326 272 356 284"/>
+    </g>
+  </g>
+
+  
+  </g>
+
+  <text x="86" y="290" font-family="Archivo, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="104" font-weight="800" fill="#EDE8DF" letter-spacing="-3">CREATIVE</text>
+  <text x="86" y="390" font-family="Archivo, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="104" font-weight="800" fill="#FF4D14" letter-spacing="-3">BANDIT</text>
+  <text x="90" y="444" font-family="Space Mono, Menlo, monospace" font-size="21" fill="#D9F24A" letter-spacing="3">// DEV + AI AUTOMATION + DESIGN</text>
+
+  <g fill="none" stroke="#D9F24A" stroke-width="2" opacity="0.6">
+    <path d="M 40 76 L 40 40 L 76 40"/>
+    <path d="M 1124 40 L 1160 40 L 1160 76"/>
+    <path d="M 1160 554 L 1160 590 L 1124 590"/>
+    <path d="M 76 590 L 40 590 L 40 554"/>
+  </g>
+</svg>

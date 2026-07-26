@@ -15,8 +15,12 @@ const {
   title,
   description = "Creative Bandit is a two-person studio pairing full-stack development and AI automation with design and motion. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis.",
   keywords = "AI automation consultant, full-stack developer, design and motion studio, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer, web development, WordPress development, WordPress maintenance, headless WordPress",
-  ogImage = "/favicon.svg"
+  ogImage = "/og-image.png"
 } = Astro.props;
+
+// og:image must be absolute — relative paths are rejected by most social
+// platforms. Astro.site comes from astro.config.mjs.
+const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).href;
 ---
 
 <!DOCTYPE html>
@@ -40,7 +44,9 @@ const {
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={`${title} | Creative Bandit`} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Creative Bandit" />
     
     <!-- Twitter -->
@@ -48,7 +54,7 @@ const {
     <meta property="twitter:url" content={Astro.url} />
     <meta property="twitter:title" content={`${title} | Creative Bandit`} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={ogImage} />
+    <meta property="twitter:image" content={ogImageUrl} />
     
     <!-- Additional SEO -->
     <meta name="theme-color" content="#0B0B0C" />
@@ -69,7 +75,7 @@ const {
       "name": "Creative Bandit",
       "description": "Two-person studio pairing full-stack development and AI automation with design and motion.",
       "url": "https://creativebandit.studio",
-      "logo": "https://creativebandit.studio/favicon.svg",
+      "logo": "https://creativebandit.studio/mascot/bandit-cat.svg",
       "foundingDate": "2026",
       "founder": [
         {
