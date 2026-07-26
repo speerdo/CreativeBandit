@@ -3,8 +3,17 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const BIRD_COUNT = 138;
 
-// Same flame palette used by the previous particle animation.
-const PALETTE = ['#FF1C1C', '#FF6A00', '#FFD700', '#A100FF'].map((hex) => new THREE.Color(hex));
+// Risograph ink set (docs/creative-bandit-visual-identity.md §2). Two inks
+// plus bone, weighted so bone dominates and the inks read as accent plates —
+// an even four-way split is what made the old palette look like a neon
+// particle demo. The material is already flat/unlit with no additive
+// blending, so these render as solid ink rather than glow.
+const PALETTE = [
+  '#EDE8DF', // paper
+  '#EDE8DF', // paper (weighted)
+  '#FF4D14', // ink-hot
+  '#1B27E8', // ink-cold
+].map((hex) => new THREE.Color(hex));
 
 // Kept inside the camera frustum (FOV 75 at z=5 gives ~6.1 horizontal /
 // ~3.8 vertical half-extent at z=0) so the spread reads as "fills the

@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "grain": "node scripts/make-grain.mjs public/textures/grain.png"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",

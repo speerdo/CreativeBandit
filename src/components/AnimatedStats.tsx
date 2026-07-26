@@ -12,25 +12,25 @@ const stats: Stat[] = [
     value: 8.08,
     suffix: "%",
     label: "Affiliate conversion rate, 4x the industry average",
-    color: "#ffd700",
+    color: "#D9F24A",
   },
   {
     value: 100,
     suffix: "%",
     label: "AI verification accuracy with Gemini-powered validation",
-    color: "#ff6a00",
+    color: "#FF4D14",
   },
   {
     value: 40,
     suffix: "%",
     label: "Page load improvement on EdReports platform migration",
-    color: "#ff1c1c",
+    color: "#EDE8DF",
   },
   {
     value: 90,
     suffix: "%",
     label: "Reduction in manual review time through automation",
-    color: "#a100ff",
+    color: "#6E79FF",
   },
 ];
 

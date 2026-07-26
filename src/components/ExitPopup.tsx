@@ -65,9 +65,9 @@ export default function ExitPopup() {
 
       {/* Modal */}
       <div
-        className="relative w-full max-w-lg rounded-2xl border border-[#ff6a00]/30 overflow-hidden"
+        className="relative w-full max-w-lg border border-[#FF4D14]/40 overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)",
+          background: "linear-gradient(135deg, #17171A 0%, #0B0B0C 100%)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -86,7 +86,7 @@ export default function ExitPopup() {
         <div
           className="h-1 w-full"
           style={{
-            background: "linear-gradient(90deg, #ffd700, #ff6a00, #ff1c1c, #a100ff)",
+            background: "linear-gradient(90deg, #D9F24A 0%, #D9F24A 25%, #FF4D14 25%, #FF4D14 50%, #E5195A 50%, #E5195A 75%, #1B27E8 75%)",
           }}
         />
 
@@ -113,15 +113,15 @@ export default function ExitPopup() {
                   name="email_address"
                   placeholder="Enter your email"
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff6a00]/50"
-                  style={{ background: "#0d0d0d" }}
+                  className="w-full px-4 py-3 border border-[#B5AEA3]/40 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D9F24A]"
+                  style={{ background: "#0B0B0C" }}
                 />
                 <input type="hidden" name="tags" value="lead-magnet-checklist" />
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-lg font-semibold text-white transition-all hover:brightness-110"
+                  className="w-full py-3 font-mono text-sm font-bold uppercase tracking-[0.12em] text-[#0B0B0C] transition-all hover:brightness-110"
                   style={{
-                    background: "linear-gradient(135deg, #ff6a00, #ff1c1c)",
+                    background: "#FF4D14",
                   }}
                 >
                   Send the Free Checklist

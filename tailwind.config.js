@@ -4,48 +4,58 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Phase 0: names are final, values are still the old flame palette.
-        // Phase 1 swaps these to the risograph ink set — see
-        // docs/creative-bandit-visual-identity.md §2.
+        // Risograph ink set. Contrast ratios below are measured against
+        // base (#0B0B0C) — see docs/creative-bandit-visual-identity.md §2.
         base: {
-          DEFAULT: '#0d0d0d',
-          100: '#1a1a1a',
-          200: '#141414',
-          300: '#0d0d0d',
+          DEFAULT: '#0B0B0C',
+          100: '#17171A', // raised surface (cards)
+          200: '#111113', // alternating section band
+          300: '#0B0B0C',
         },
         paper: {
-          DEFAULT: '#ffffff',
-          dim: '#f5f5f5',
-          mute: '#e0e0e0',
+          DEFAULT: '#EDE8DF', // 16.0:1 — headings, any size
+          dim: '#D8D2C6', // 12.4:1 — secondary headings
+          mute: '#B5AEA3', //  8.9:1 — body copy
         },
-        'ink-hot': '#ff1c1c',
-        'ink-hot-alt': '#ff6a00',
-        'ink-acid': '#ffd700',
-        'ink-cold': '#a100ff',
+        'ink-hot': '#FF4D14', //  5.9:1 — passes AA for normal text
+        'ink-acid': '#D9F24A', // 15.6:1 — any size
+        'ink-pink': '#E5195A', //  4.3:1 — LARGE TEXT ONLY (>=24px / 19px bold)
+        // 2.3:1 against base. Never carries text. Plates and fills only.
+        'ink-cold': '#1B27E8',
+        // 5.4:1 — the text-safe tint of ink-cold. Use for blue type on dark.
+        'ink-cold-lift': '#6E79FF',
         success: '#10b981',
         warning: '#f59e0b',
         error: '#ef4444',
       },
       fontFamily: {
-        heading: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
+        // Archivo is variable on both weight and width, so one family covers
+        // expanded poster headlines and condensed technical labels.
+        display: ['Archivo', 'Archivo Expanded', 'system-ui', 'sans-serif'],
+        heading: ['Archivo', 'Archivo Expanded', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['Space Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       animation: {
-        flicker: 'flicker 3s ease-in-out infinite',
-        pulse: 'pulse 2s ease-in-out infinite',
-        float: 'float 6s ease-in-out infinite',
+        // Print misfeed: plates jolt apart, then resettle.
+        'plate-jitter': 'plate-jitter 320ms steps(3, end) 1',
+        'grain-drift': 'grain-drift 8s steps(6, end) infinite',
       },
       keyframes: {
-        flicker: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.8' },
+        'plate-jitter': {
+          '0%': { transform: 'translate(0, 0)' },
+          '33%': { transform: 'translate(-2px, 1px)' },
+          '66%': { transform: 'translate(2px, -1px)' },
+          '100%': { transform: 'translate(0, 0)' },
         },
-        pulse: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.9' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-20px)' },
+        // Shifts the grain tile so the noise never sits perfectly static.
+        // Stepped, not smooth — continuous motion reads as a video artifact.
+        'grain-drift': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '20%': { transform: 'translate(-4px, 3px)' },
+          '40%': { transform: 'translate(3px, -4px)' },
+          '60%': { transform: 'translate(-3px, -2px)' },
+          '80%': { transform: 'translate(4px, 2px)' },
         },
       },
     },

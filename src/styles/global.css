@@ -2,13 +2,44 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/*
+ * Creative Bandit — risograph / digital space cowboy design system.
+ * See docs/creative-bandit-visual-identity.md
+ *
+ * Texture layers, in compositing order:
+ *   1. .field-*        blurred gradient ink grounds (behind everything)
+ *   2. .halftone       dot-screen
+ *   3. .duotone-*      two-plate photo treatment
+ *   4. .plate-type     misregistered ink plates on type
+ *   5. .scanline       scan smear
+ *   6. global grain    film grain, applied once on body::after
+ */
+
 @layer base {
   html {
     @apply scroll-smooth;
   }
 
   body {
-    @apply bg-base text-paper relative overflow-x-hidden;
+    @apply bg-base text-paper-mute font-sans relative overflow-x-hidden;
+  }
+
+  /*
+   * Global grain. One fixed layer for the whole document — never per-card,
+   * because every `mix-blend-mode` element forces its own compositing layer.
+   * The tile is a baked PNG (scripts/make-grain.mjs) rather than a live
+   * feTurbulence filter, which would re-evaluate noise on every paint.
+   */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background-image: url('/textures/grain.png');
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+    opacity: 0.12;
   }
 
   h1,
@@ -17,15 +48,25 @@
   h4,
   h5,
   h6 {
-    @apply font-heading font-bold leading-tight;
+    @apply font-display font-bold text-paper;
+    font-stretch: 125%;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  /* Poster caps for the two loudest levels only. h3 and below stay sentence
+     case so longer headings inside body copy don't turn into shouting. */
+  h1,
+  h2 {
+    text-transform: uppercase;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
+    @apply text-5xl md:text-6xl lg:text-7xl;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl md:text-5xl;
   }
 
   h3 {
@@ -35,6 +76,14 @@
   p {
     @apply leading-relaxed;
   }
+
+  ::selection {
+    @apply bg-ink-hot text-base;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ink-acid ring-offset-2 ring-offset-base;
+  }
 }
 
 @layer components {
@@ -42,83 +91,350 @@
     @apply px-4 md:px-8 mx-auto max-w-7xl;
   }
 
+  /* ---------------------------------------------------------------------
+   * Type treatments
+   * ------------------------------------------------------------------ */
+
+  /*
+   * Misregistration — the signature Riso artifact. Bone type with two ink
+   * plates knocked slightly out of alignment. This is what replaces the old
+   * red-to-purple gradient fill as the "this headline matters" marker.
+   */
+  .plate-type {
+    @apply text-paper;
+    text-shadow:
+      -2px 0 0 theme('colors.ink-hot'),
+      3px 2px 0 theme('colors.ink-cold');
+  }
+
+  /* Mono technical micro-label. Replaces the pulsing dot + uppercase eyebrow
+     that opened every single section. */
+  .label-tech {
+    @apply font-mono text-xs uppercase tracking-[0.18em] text-ink-acid;
+  }
+
+  .label-tech::before {
+    content: '// ';
+    @apply text-paper-mute;
+  }
+
+  /* Chromatic aberration. Decorative only — never the sole state indicator. */
+  .aberration {
+    text-shadow:
+      -1px 0 0 rgb(0 255 255 / 0.5),
+      1px 0 0 rgb(255 0 90 / 0.5);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Ink fields — blurred gradient grounds
+   * ------------------------------------------------------------------ */
+
+  /*
+   * The reference gradients read expensive because of the grain sitting over
+   * them; a smooth CSS gradient alone looks cheap. The global body::after
+   * grain supplies that. Two to three fields per page, maximum.
+   */
+  .field {
+    @apply absolute -z-10 pointer-events-none;
+    filter: blur(80px);
+    opacity: 0.55;
+  }
+
+  .field-hot {
+    background: radial-gradient(
+      circle at 30% 40%,
+      theme('colors.ink-hot') 0%,
+      theme('colors.ink-pink') 45%,
+      transparent 70%
+    );
+  }
+
+  .field-cold {
+    background: radial-gradient(
+      circle at 60% 50%,
+      theme('colors.ink-cold') 0%,
+      theme('colors.ink-cold-lift') 40%,
+      transparent 72%
+    );
+  }
+
+  .field-acid {
+    background: radial-gradient(
+      circle at 50% 50%,
+      theme('colors.ink-acid') 0%,
+      transparent 68%
+    );
+  }
+
+  /* ---------------------------------------------------------------------
+   * Halftone + duotone
+   * ------------------------------------------------------------------ */
+
+  .halftone {
+    background-image: radial-gradient(circle, currentColor 32%, transparent 34%);
+    background-size: 5px 5px;
+  }
+
+  .halftone-fine {
+    background-image: radial-gradient(circle, currentColor 30%, transparent 32%);
+    background-size: 3px 3px;
+  }
+
+  /* Masked variant bites into artwork instead of sitting on top of it. */
+  .halftone-mask {
+    -webkit-mask-image: radial-gradient(circle, #000 32%, transparent 34%);
+    mask-image: radial-gradient(circle, #000 32%, transparent 34%);
+    -webkit-mask-size: 4px 4px;
+    mask-size: 4px 4px;
+  }
+
+  /*
+   * Two-plate photo treatment. Also the fix for generic stock photography:
+   * heavy duotone plus halftone makes filler imagery read as deliberate
+   * collage material rather than as filler.
+   */
+  .duotone {
+    @apply relative overflow-hidden;
+  }
+
+  .duotone img {
+    filter: grayscale(1) contrast(1.35) brightness(0.9);
+  }
+
+  .duotone::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    mix-blend-mode: color;
+  }
+
+  .duotone-hot::after {
+    background: linear-gradient(
+      135deg,
+      theme('colors.ink-hot') 0%,
+      theme('colors.ink-pink') 100%
+    );
+  }
+
+  .duotone-cold::after {
+    background: linear-gradient(
+      135deg,
+      theme('colors.ink-cold') 0%,
+      theme('colors.ink-cold-lift') 100%
+    );
+  }
+
+  /* ---------------------------------------------------------------------
+   * Scan artifacts — seasoning, easy to overdo
+   * ------------------------------------------------------------------ */
+
+  .scanline {
+    @apply relative;
+  }
+
+  .scanline::before {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.03) 0px,
+      rgb(255 255 255 / 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  /* Ripped-paper section edge instead of a straight border. */
+  .torn-bottom {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 6px),
+      92% 100%,
+      78% calc(100% - 4px),
+      61% calc(100% - 9px),
+      44% calc(100% - 2px),
+      27% calc(100% - 7px),
+      13% calc(100% - 3px),
+      0 calc(100% - 8px)
+    );
+  }
+
+  /* Technical crop marks, per scanner-cutoff.avif. */
+  .crop-marks {
+    @apply relative;
+  }
+
+  .crop-marks::before,
+  .crop-marks::after {
+    content: '';
+    @apply absolute w-3 h-3 pointer-events-none border-ink-acid/50;
+  }
+
+  .crop-marks::before {
+    @apply top-0 left-0 border-t border-l;
+  }
+
+  .crop-marks::after {
+    @apply bottom-0 right-0 border-b border-r;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Buttons — hard-edged ink blocks, no rounding
+   * ------------------------------------------------------------------ */
+
   .btn {
-    @apply inline-block px-6 py-3 font-medium rounded-md transition-all duration-300 text-center;
+    @apply inline-block px-6 py-3 font-mono text-sm uppercase tracking-[0.12em] text-center transition-all duration-200;
   }
 
   .btn-primary {
-    @apply inline-block px-6 py-3 font-medium rounded-md transition-all duration-300 text-center bg-ink-hot text-white hover:bg-ink-hot/90;
+    @apply inline-block px-6 py-3 font-mono text-sm font-bold uppercase tracking-[0.12em] text-center transition-all duration-200 bg-ink-hot text-base border border-ink-hot;
+  }
+
+  .btn-primary:hover {
+    @apply bg-ink-acid border-ink-acid;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 theme('colors.ink-cold');
   }
 
   .btn-secondary {
-    @apply inline-block px-6 py-3 font-medium rounded-md transition-all duration-300 text-center bg-transparent border-2 border-ink-hot text-white hover:bg-ink-hot/10;
+    @apply inline-block px-6 py-3 font-mono text-sm uppercase tracking-[0.12em] text-center transition-all duration-200 bg-transparent border border-paper-mute text-paper;
+  }
+
+  .btn-secondary:hover {
+    @apply border-ink-acid text-ink-acid;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 theme('colors.ink-hot');
   }
 
   .nav-link {
-    @apply relative px-4 py-2 font-medium transition-colors duration-300 hover:text-ink-hot;
+    @apply relative px-4 py-2 font-mono text-sm uppercase tracking-[0.1em] text-paper-mute transition-colors duration-200 hover:text-paper;
+  }
+
+  .nav-link:hover {
+    text-shadow:
+      -1px 0 0 rgb(0 255 255 / 0.5),
+      1px 0 0 rgb(255 0 90 / 0.5);
   }
 
   .nav-link-active {
-    @apply text-ink-hot;
+    @apply text-ink-acid;
   }
 
-  .flame-gradient {
-    @apply fixed top-0 left-0 w-full h-full opacity-20 -z-10 pointer-events-none;
-    background: radial-gradient(
-      circle at 50% 0%,
-      rgba(255, 28, 28, 0.15) 0%,
-      rgba(255, 106, 0, 0.1) 30%,
-      rgba(161, 0, 255, 0.05) 60%,
-      rgba(13, 13, 13, 0) 100%
-    );
-  }
+  /* ---------------------------------------------------------------------
+   * Surfaces
+   * ------------------------------------------------------------------ */
 
   .section {
     @apply py-16 md:py-24;
   }
 
   .card {
-    @apply bg-base-100 rounded-lg p-6 transition-all duration-300 border border-base-100 hover:border-ink-hot/30;
+    @apply bg-base-100 p-6 transition-all duration-200 border border-paper/10;
   }
 
-  .gradient-text {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-ink-hot to-ink-cold;
+  .card:hover {
+    @apply border-ink-hot/60;
   }
 
   .service-card {
-    @apply bg-base-100 rounded-lg p-6 transition-all duration-300 border border-base-100 hover:border-ink-hot/30 relative overflow-hidden;
+    @apply bg-base-100 p-6 transition-all duration-200 border border-paper/10 relative overflow-hidden;
   }
 
   .service-card::before {
     content: '';
-    @apply absolute top-0 left-0 w-0 h-1 bg-gradient-to-r from-ink-hot to-ink-hot-alt transition-all duration-500;
+    @apply absolute top-0 left-0 w-0 h-[3px] bg-ink-hot transition-all duration-300;
   }
 
   .service-card:hover::before {
     @apply w-full;
   }
 
+  .service-card:hover {
+    @apply border-ink-hot/60;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 theme('colors.ink-cold');
+  }
+
   .project-card {
-    @apply relative overflow-hidden rounded-lg;
+    @apply relative overflow-hidden border border-paper/10;
   }
 
   .project-card img {
     @apply transition-all duration-500;
+    filter: grayscale(1) contrast(1.3);
   }
 
   .project-card:hover img {
     @apply scale-105;
+    filter: grayscale(0) contrast(1.05);
   }
 
   .project-card .overlay {
-    @apply absolute inset-0 bg-base/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6;
+    @apply absolute inset-0 bg-base/85 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6;
   }
 
   .project-card:hover .overlay {
     @apply opacity-100;
   }
 
+  /* ---------------------------------------------------------------------
+   * Legacy aliases
+   *
+   * These names are still used across the pages (.gradient-text in 11 files,
+   * .flame-dot in 12). Rather than churn every call site in this commit,
+   * they are redefined to the new treatments so the whole site restyles at
+   * once and stays deployable. Phase 4/5 migrates call sites onto
+   * .plate-type / .label-tech and deletes these three rules.
+   * ------------------------------------------------------------------ */
+
+  /* was: red-to-purple bg-clip-text gradient */
+  .gradient-text {
+    @apply text-paper;
+    text-shadow:
+      -2px 0 0 theme('colors.ink-hot'),
+      3px 2px 0 theme('colors.ink-cold');
+  }
+
+  /* was: pulsing round ember dot */
   .flame-dot {
-    @apply w-2 h-2 rounded-full inline-block mr-2 bg-ink-hot animate-pulse;
+    @apply w-2 h-2 inline-block mr-2 bg-ink-acid;
+  }
+
+  /* was: full-viewport radial ember glow */
+  .flame-gradient {
+    @apply fixed top-0 left-0 w-full h-full -z-10 pointer-events-none;
+    background:
+      radial-gradient(
+        ellipse 70% 50% at 15% 0%,
+        rgb(255 77 20 / 0.22) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 60% 45% at 85% 15%,
+        rgb(27 39 232 / 0.2) 0%,
+        transparent 62%
+      );
+    filter: blur(40px);
+  }
+}
+
+/*
+ * Every animated affordance above is decorative, so honour the OS setting.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .service-card:hover {
+    transform: none;
+    box-shadow: none;
   }
 }
