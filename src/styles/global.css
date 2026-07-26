@@ -1,6 +1,14 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+/*
+ * Use the @tailwind directives, not `@import 'tailwindcss/...'`. With the
+ * @import form, this file's @layer components block was emitted *after*
+ * Tailwind's utilities, so component classes silently beat any utility
+ * override on the same element (`class="card p-8"` ignored the p-8, and a
+ * z-index in .field beat -z-30). The directive form restores the intended
+ * base -> components -> utilities order.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /*
  * Creative Bandit — risograph / digital space cowboy design system.
@@ -134,8 +142,13 @@
    * them; a smooth CSS gradient alone looks cheap. The global body::after
    * grain supplies that. Two to three fields per page, maximum.
    */
+  /*
+   * No z-index here on purpose: a field is almost always layered against
+   * something else (the hero canvas, page content), so the caller owns the
+   * stacking order and states it explicitly at the usage site.
+   */
   .field {
-    @apply absolute -z-10 pointer-events-none;
+    @apply absolute pointer-events-none;
     filter: blur(80px);
     opacity: 0.55;
   }

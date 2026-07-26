@@ -7,44 +7,74 @@ let yearsExperience = now.getFullYear() - startDate.getFullYear();
 if (now.getMonth() < 9) {
   yearsExperience -= 1;
 }
+
+const stats = [
+  { value: `${yearsExperience}+`, label: 'Years Experience' },
+  { value: '20+', label: 'Projects Completed' },
+  { value: '10+', label: 'Happy Clients' },
+];
 ---
 
-<section class="relative min-h-[90vh] flex items-center">
-  <div class="container mx-auto px-4">
-    <div class="max-w-3xl relative z-10 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg shadow-2xl p-8 md:p-10 lg:p-12">
-      <div class="mb-6 flex items-center">
-        <span class="flame-dot"></span>
-        <span class="uppercase tracking-wider text-paper-mute">AI & Automation Engineering</span>
-      </div>
-      <h1 class="mb-6">
-        Building <span class="gradient-text">Intelligent</span> Systems That Work
-      </h1>
-      <p class="text-xl text-paper-mute mb-8 max-w-2xl">
-        Full-stack developer specializing in AI-powered automation systems and modern web applications that reduce manual work by 60-90% and deliver measurable business impact.
-      </p>
-      <div class="flex flex-wrap gap-4">
-        <a href="/contact" class="btn-primary">Start Your Project</a>
-        <a href="/work" class="btn-secondary">View Our Work</a>
+<section class="relative min-h-[92vh] flex items-center overflow-hidden py-20 lg:py-0">
+  <!--
+    Ink fields sit behind the flock. Deliberately asymmetric and bleeding off
+    the viewport edge rather than politely centred - see the doc, §4.2. The
+    page-level grain (body::after) composites over all of this, which is what
+    keeps the gradients from reading as cheap CSS blur.
+  -->
+  <div class="field field-hot -z-30 -top-40 -left-32 h-[36rem] w-[36rem] md:h-[46rem] md:w-[46rem]"></div>
+  <div class="field field-cold -z-30 -bottom-56 -right-40 h-[34rem] w-[34rem] md:h-[44rem] md:w-[44rem]"></div>
+
+  <canvas id="birdSwarmCanvas" class="absolute inset-0 -z-20 h-full w-full"></canvas>
+
+  <div class="container relative z-10">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.35fr_1fr] lg:gap-8">
+      <!-- Type sits directly on the field. No glass card. -->
+      <div>
+        <p class="label-tech mb-6">AI &amp; Automation Engineering</p>
+
+        <h1 class="mb-6">
+          Building <span class="plate-type">Intelligent</span> Systems That Work
+        </h1>
+
+        <p class="mb-10 max-w-2xl text-lg text-paper-mute md:text-xl">
+          Full-stack developer specializing in AI-powered automation systems and modern web applications that reduce manual work by 60-90% and deliver measurable business impact.
+        </p>
+
+        <div class="flex flex-wrap gap-4">
+          <a href="/contact" class="btn-primary">Start Your Project</a>
+          <a href="/work" class="btn-secondary">View Our Work</a>
+        </div>
+
+        <!-- Left-aligned and rule-separated, rather than three centred
+             gradient numerals in a row. -->
+        <dl class="mt-14 flex flex-wrap gap-x-10 gap-y-6 border-t border-paper/15 pt-8">
+          {stats.map((stat) => (
+            <div class="border-l-2 border-ink-hot pl-4">
+              <dt class="font-display text-3xl font-extrabold leading-none text-paper md:text-4xl" style="font-stretch: 125%;">
+                {stat.value}
+              </dt>
+              <dd class="mt-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-paper-mute">
+                {stat.label}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
 
-      <div class="mt-12 lg:mt-16 grid grid-cols-3 gap-8">
-        <div class="text-center">
-          <p class="text-3xl font-bold gradient-text mb-1">{yearsExperience}+</p>
-          <p class="text-paper-mute text-sm">Years Experience</p>
-        </div>
-        <div class="text-center">
-          <p class="text-3xl font-bold gradient-text mb-1">20+</p>
-          <p class="text-paper-mute text-sm">Projects Completed</p>
-        </div>
-        <div class="text-center">
-          <p class="text-3xl font-bold gradient-text mb-1">10+</p>
-          <p class="text-paper-mute text-sm">Happy Clients</p>
-        </div>
+      <!-- Mascot. Decorative, so alt is empty and it drops out below lg
+           rather than squeezing the type. -->
+      <div class="hidden justify-self-center lg:block">
+        <img
+          src="/mascot/bandit-cat.svg"
+          alt=""
+          width="400"
+          height="400"
+          class="w-full max-w-[24rem] drop-shadow-[0_0_60px_rgba(255,77,20,0.25)]"
+        />
       </div>
     </div>
   </div>
-
-  <canvas id="birdSwarmCanvas" class="absolute top-0 right-0 w-full h-full -z-10"></canvas>
 </section>
 
 <script>
