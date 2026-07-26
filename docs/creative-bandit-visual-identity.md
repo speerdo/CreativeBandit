@@ -1,7 +1,7 @@
 # Creative Bandit — Visual Identity Redesign
 
 **Branch:** `kat-design-updates`
-**Status:** Phases 0–6 landed. Remaining work in §9.
+**Status:** Phases 0–7 landed. Remaining work in §9.
 **Date:** 2026-07-26
 
 Aesthetic overhaul of creativebandit.studio. Site structure, routes, copy, and SEO stay as-is. What changes is the entire visual language: from generic dark-SaaS-with-neon-gradients to **digital space cowboy** — grainy photography, risograph print artifacts, gritty blurred gradients, and a bandit-cat mascot.
@@ -197,8 +197,8 @@ Animation (all behind `prefers-reduced-motion`):
 | `tailwind.config.js` | New ink tokens; delete flame colors; Archivo + Space Mono; new keyframes (`plate-jitter`, `grain-drift`); remove `flicker`/`float` |
 | `styles/global.css` | Core rewrite. All texture utilities land here. Delete `.gradient-text`, `.flame-dot`, `.flame-gradient`, `.about-card-glow` |
 | `layouts/Layout.astro` | Swap font links; add global `.grain-overlay`; new `theme-color`; mascot favicon + OG image |
-| `components/BirdSwarmHero.astro` | **Kill the glass card.** Type sits directly on the gradient field with plate-shift. Mascot composited in. Mono micro-labels for stats |
-| `lib/birdSwarm.ts` | Recolor `PALETTE` (line 7) to 2 inks + paper. Note: material is already flat unlit `MeshBasicMaterial` with no additive blending (line 177) — so this is genuinely just a palette swap, plus grain composited over the canvas |
+| `components/SpaceSceneHero.astro` | **Kill the glass card.** Type sits directly on the gradient field with plate-shift. Mono micro-labels for stats. (Was `BirdSwarmHero.astro`; renamed in Phase 7.) |
+| `lib/rocketScene.ts` | Replaced `birdSwarm.ts` in Phase 7. Flat 2D ink plates in the screen plane rather than a 3D flock |
 | `components/Navbar.astro` | Wordmark → mascot head + Archivo caps. Nav links get `.aberration` on hover |
 | `components/ServiceCard.astro` | Riso-plate cards: hard edges or `.torn`, ink-block icon wells, halftone corner. Break the uniform grid — vary sizes |
 | `components/ProjectCard.astro` | Duotone + halftone on imagery. Mono spec labels for category |
@@ -263,6 +263,20 @@ Also found: the work/blog filter buttons toggled active state by stacking `text-
 - Contrast: 16 pairs audited across text, buttons, chips (including the tinted active background) and the bone slabs. All pass; worst case 5.10:1.
 - `grain-drift` deleted rather than left as unused config. `plate-jitter` is wired to the navbar mascot hover.
 
+**Phase 7 — Hero scene: rocket, cat, UFOs** ✅
+The bird flock is replaced by a rocket with the bandit cat in the cockpit and four UFOs strung out behind it. `birdSwarm.ts` deleted; `BirdSwarmHero.astro` renamed `SpaceSceneHero.astro`.
+
+Built **flat in the XY plane**, not in full 3D. The flock used a proper 3D orientation basis, but a rocket that rolls in 3D turns its cockpit window away from the camera and loses the cat. Restricting the craft to a single Z rotation keeps it broadside at all times, and flat vector plates sit closer to the riso look than shaded solids anyway.
+
+The UFOs sample a **time-stamped trail** of the rocket's own past positions rather than each chasing the one ahead. A pursuit chain can oscillate and bunch up under hard turns; sampling a shared trail keeps the convoy evenly spaced whatever the rocket does.
+
+Two things worth recording:
+- Materials are deliberately **not** flagged `transparent`. Every plate is opaque, and marking them transparent would move them into the depth-sorted transparent pass where near-coplanar parts can flicker in and out of order.
+- The static mascot is now a **fallback**, hidden at `lg` by default and un-hidden when the scene skips (reduced motion) or fails, with a `<noscript>` rule for JS being off. Showing it by default would have flashed a mascot on desktop and popped it out once the chunk arrived.
+
+Checked the craft by mirroring the exact shape coordinates into an SVG and rasterising it — the first pass had ears that read as devil horns and a bandana that read as a pointed beard. Both reshaped.
+
+
 Not done: a real Lighthouse run and the cross-browser blend-mode check, both of which need a browser.
 
 ---
@@ -300,7 +314,7 @@ The failure mode is applying all six texture layers everywhere and landing at il
 
 **Design decisions still open:**
 - [ ] Mascot name. "Bandit" is the obvious read but may be too on-the-nose against "Creative Bandit".
-- [ ] The flock now only renders on desktop without reduced-motion. Given the mascot also lives in the hero, is the flock still earning its place at all?
+- [ ] The hero scene only renders on desktop without reduced-motion, and is still ~500KB of Three.js for decoration. If it ever stops earning that, the same rocket could be done as an animated SVG for a fraction of the payload.
 - [ ] Stock photography: duotone is carrying the Pexels placeholders convincingly, but real project screenshots would be better.
 - [ ] Bone-paper *sections* (full inverted slabs) or bone only for cards? Testimonials are the only inversion so far.
 - [ ] Should the mono labels carry real data (dates, project IDs) rather than section names?

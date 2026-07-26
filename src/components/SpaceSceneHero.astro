@@ -17,7 +17,7 @@ const stats = [
 
 <section class="relative min-h-[92vh] flex items-center overflow-hidden py-20 lg:py-0">
   <!--
-    Ink fields sit behind the flock. Deliberately asymmetric and bleeding off
+    Ink fields sit behind the scene. Deliberately asymmetric and bleeding off
     the viewport edge rather than politely centred - see the doc, §4.2. The
     page-level grain (body::after) composites over all of this, which is what
     keeps the gradients from reading as cheap CSS blur.
@@ -25,7 +25,7 @@ const stats = [
   <div class="field field-hot -z-30 -top-40 -left-32 h-[36rem] w-[36rem] md:h-[46rem] md:w-[46rem]"></div>
   <div class="field field-cold -z-30 -bottom-56 -right-40 h-[34rem] w-[34rem] md:h-[44rem] md:w-[44rem]"></div>
 
-  <canvas id="birdSwarmCanvas" class="absolute inset-0 -z-20 h-full w-full"></canvas>
+  <canvas id="heroSceneCanvas" class="absolute inset-0 -z-20 h-full w-full"></canvas>
 
   <div class="container relative z-10">
     <div class="grid items-center gap-12 lg:grid-cols-[1.35fr_1fr] lg:gap-8">
@@ -62,15 +62,21 @@ const stats = [
         </dl>
       </div>
 
-      <!-- Mascot. Decorative, so alt is empty and it drops out below lg
-           rather than squeezing the type. -->
-      <div class="hidden justify-self-center lg:block">
+      <!--
+        Static stand-in for the rocket scene. Shown below lg, where the
+        scene never loads, and hidden at lg where it does - so the desktop
+        hero does not flash a mascot and then pop it out of existence once
+        the chunk arrives. The script un-hides it at lg only when it decides
+        to skip (reduced motion) or the scene fails to start, and the
+        noscript rule covers JS being off. Decorative, hence the empty alt.
+      -->
+      <div id="heroSceneFallback" class="justify-self-center lg:hidden">
         <img
           src="/mascot/bandit-cat.svg"
           alt=""
           width="400"
           height="400"
-          class="w-full max-w-[24rem] drop-shadow-[0_0_60px_rgba(255,77,20,0.25)]"
+          class="w-full max-w-[18rem] lg:max-w-[24rem] drop-shadow-[0_0_60px_rgba(255,77,20,0.25)]"
         />
       </div>
     </div>
@@ -79,36 +85,55 @@ const stats = [
 
 <script>
   /*
-   * The flock pulls in Three.js, which is ~490KB - a lot of JavaScript for a
+   * The scene pulls in Three.js, which is ~490KB - a lot of JavaScript for a
    * decorative background. So it is a dynamic import (Vite splits it into its
    * own chunk, off the critical path) and it only loads when it will actually
    * be seen and wanted:
    *
-   *   - not at all under prefers-reduced-motion. birdSwarm.ts slows itself to
-   *     25%, but the honest answer for a purely decorative animation is to
-   *     skip it and skip the download with it.
+   *   - not at all under prefers-reduced-motion. A rocket tearing around the
+   *     header is exactly what that setting is asking us not to do, and
+   *     skipping it skips the download too.
    *   - not on small viewports, where the payload costs the most and the
    *     canvas is largely covered by the type anyway.
    *   - otherwise, only once the hero is actually on screen.
    *
-   * The hero still reads without it: ink fields, type, and mascot are all CSS
-   * and markup.
+   * The static mascot covers every path where the scene does not run: it is
+   * visible below lg by default, and is un-hidden at lg when we skip or when
+   * startup throws.
    */
-  const canvas = document.querySelector('#birdSwarmCanvas');
+  const canvas = document.querySelector('#heroSceneCanvas');
+  const fallback = document.querySelector('#heroSceneFallback');
 
   if (canvas instanceof HTMLCanvasElement) {
     const skip =
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
       window.matchMedia('(max-width: 767px)').matches;
 
-    if (!skip) {
+    if (skip) {
+      // No scene here, so the static mascot carries the column at every width.
+      fallback?.classList.remove('lg:hidden');
+    } else {
       const observer = new IntersectionObserver(async (entries, obs) => {
         if (!entries.some((e) => e.isIntersecting)) return;
         obs.disconnect();
-        const { initBirdSwarm } = await import('../lib/birdSwarm');
-        initBirdSwarm(canvas);
+        try {
+          const { initRocketScene } = await import('../lib/rocketScene');
+          initRocketScene(canvas);
+        } catch (error) {
+          // Chunk failed to load, or no WebGL context. Bring the static
+          // mascot back rather than leaving an empty column.
+          fallback?.classList.remove('lg:hidden');
+          console.warn('Hero scene unavailable, showing static mascot.', error);
+        }
       });
       observer.observe(canvas);
     }
   }
 </script>
+
+<noscript>
+  <style>
+    /* Without JS the scene can never start, so the stand-in has to show. */
+    #heroSceneFallback { display: block !important; }
+  </style>
+</noscript>
