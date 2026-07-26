@@ -327,6 +327,24 @@
     box-shadow: 4px 4px 0 theme('colors.ink-hot');
   }
 
+  /*
+   * Filter / category chips. Active state is a single `is-active` class
+   * rather than JS bolting on `text-ink-hot` next to a `text-paper-mute`
+   * already in the class list - two utilities of the same property, where
+   * the winner is decided by stylesheet order, not DOM order.
+   */
+  .chip {
+    @apply border border-paper/20 px-5 py-2 font-mono text-xs uppercase tracking-[0.12em] text-paper-mute transition-colors duration-200;
+  }
+
+  .chip:hover {
+    @apply border-ink-acid text-ink-acid;
+  }
+
+  .chip.is-active {
+    @apply border-ink-hot bg-ink-hot/15 text-ink-hot;
+  }
+
   .nav-link {
     @apply relative px-4 py-2 font-mono text-sm uppercase tracking-[0.1em] text-paper-mute transition-colors duration-200 hover:text-paper;
   }
@@ -407,31 +425,16 @@
     @apply opacity-100;
   }
 
-  /* ---------------------------------------------------------------------
-   * Legacy aliases
+  /*
+   * A very faint document-wide wash, sitting under every page so the
+   * near-black ground is never perfectly flat. Distinct from `.field`, which
+   * is a deliberate, saturated, per-section moment.
    *
-   * These names are still used across the pages (.gradient-text in 11 files,
-   * .flame-dot in 12). Rather than churn every call site in this commit,
-   * they are redefined to the new treatments so the whole site restyles at
-   * once and stays deployable. Phase 4/5 migrates call sites onto
-   * .plate-type / .label-tech and deletes these three rules.
-   * ------------------------------------------------------------------ */
-
-  /* was: red-to-purple bg-clip-text gradient */
-  .gradient-text {
-    @apply text-paper;
-    text-shadow:
-      -2px 0 0 theme('colors.ink-hot'),
-      3px 2px 0 theme('colors.ink-cold');
-  }
-
-  /* was: pulsing round ember dot */
-  .flame-dot {
-    @apply w-2 h-2 inline-block mr-2 bg-ink-acid;
-  }
-
-  /* was: full-viewport radial ember glow */
-  .flame-gradient {
+   * (.gradient-text and .flame-dot lived here as legacy aliases through
+   * phases 1-4; all call sites now use .plate-type / .label-tech, so both
+   * rules are gone.)
+   */
+  .page-wash {
     @apply fixed top-0 left-0 w-full h-full -z-10 pointer-events-none;
     background:
       radial-gradient(

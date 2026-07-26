@@ -117,11 +117,8 @@ const projects = [
   <section class="section pt-24 relative">
     <div class="container mx-auto">
       <div class="max-w-3xl">
-        <div class="mb-6 flex items-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">Our Portfolio</span>
-        </div>
-        <h1 class="mb-6">Real <span class="gradient-text">Projects</span>, Real Results</h1>
+        <p class="label-tech mb-6">Our Portfolio</p>
+        <h1 class="mb-6">Real <span class="plate-type">Projects</span>, Real Results</h1>
         <p class="text-xl text-paper-mute mb-8">
           Production applications and design/motion work showcasing AI automation, full-stack development, and measurable business outcomes across healthcare, e-commerce, fintech, and enterprise software.
         </p>
@@ -141,8 +138,8 @@ const projects = [
         {categories.map(category => (
           <button 
             data-filter={category.id} 
-            class="px-6 py-2 rounded-full bg-base-100 hover:bg-ink-hot/10 transition-colors duration-300 focus:outline-none filter-btn"
-            class:list={[{ 'bg-ink-hot/10 text-ink-hot': category.id === 'all' }]}
+            class="chip focus:outline-none filter-btn"
+            class:list={[{ 'is-active': category.id === 'all' }]}
           >
             {category.name}
           </button>
@@ -168,12 +165,9 @@ const projects = [
   <!-- Case Studies Section -->
   <section class="section bg-base-200">
     <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">Featured Projects</span>
-        </div>
-        <h2 class="mb-6">Project <span class="gradient-text">Highlights</span></h2>
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">Featured Projects</p>
+        <h2 class="mb-6">Project <span class="plate-type">Highlights</span></h2>
         <p class="text-paper-mute">Detailed look at key projects showcasing AI automation, e-commerce optimization, and healthcare technology solutions.</p>
       </div>
       
@@ -183,15 +177,12 @@ const projects = [
           <img 
             src="https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
             alt="DowntownDry AI Verification System" 
-            class="rounded-lg w-full h-auto"
+            class="w-full h-auto"
           />
         </div>
         
         <div>
-          <div class="mb-4 flex items-center">
-            <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-paper-mute">Featured Project</span>
-          </div>
+          <p class="label-tech mb-4">Featured Project</p>
           <h3 class="text-2xl font-bold mb-3">DowntownDry AI Verification</h3>
           <p class="text-paper-mute mb-6">
             Nationwide alcohol-free venue directory with AI-powered verification using Google APIs and Gemini AI. Achieved 100% accuracy in venue validation while reducing manual review time by 90%.
@@ -257,7 +248,7 @@ const projects = [
   <section class="py-24 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="mb-6">Ready to <span class="gradient-text">Start</span> Your Project?</h2>
+        <h2 class="mb-6">Ready to <span class="plate-type">Start</span> Your Project?</h2>
         <p class="text-paper-mute text-lg mb-8">Tell us what you're working on and we'll figure out the right approach together.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Contact Us</a>
@@ -266,8 +257,6 @@ const projects = [
       </div>
     </div>
     <div class="absolute top-0 right-0 w-full h-full -z-10">
-      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-ink-hot/5 blur-3xl rounded-full"></div>
-      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-ink-cold/5 blur-3xl rounded-full"></div>
     </div>
   </section>
 </Layout>
@@ -285,11 +274,11 @@ const projects = [
       btn.addEventListener('click', () => {
         // Remove active class from all buttons
         filterBtns.forEach(b => {
-          b.classList.remove('bg-ink-hot/10', 'text-ink-hot');
+          b.classList.remove('is-active');
         });
         
         // Add active class to clicked button
-        btn.classList.add('bg-ink-hot/10', 'text-ink-hot');
+        btn.classList.add('is-active');
         
         // Get filter value
         const filterValue = btn.getAttribute('data-filter');

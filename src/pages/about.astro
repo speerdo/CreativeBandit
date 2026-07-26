@@ -92,11 +92,8 @@ const approach = [
   <section class="section pt-24 relative">
     <div class="container mx-auto">
       <div class="max-w-4xl">
-        <div class="mb-6 flex items-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">About Creative Bandit</span>
-        </div>
-        <h1 class="mb-6">Full-Stack Development + <span class="gradient-text">Design That Moves</span></h1>
+        <p class="label-tech mb-6">About Creative Bandit</p>
+        <h1 class="mb-6">Full-Stack Development + <span class="plate-type">Design That Moves</span></h1>
         <p class="text-xl text-paper-mute mb-8">
           We're Creative Bandit: Adam on development and AI automation, Katlyn on design and motion. Together we build digital products that work as good as they look, and deliver measurable business impact.
         </p>
@@ -122,20 +119,20 @@ const approach = [
               <img
                 src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                 alt="Creative team collaborating on digital innovation"
-                class="rounded-lg object-cover w-full h-full"
+                class="object-cover w-full h-full"
               />
             </div>
-            <div class="absolute -bottom-6 -right-6 bg-base-100 p-6 rounded-lg shadow-xl">
+            <div class="absolute -bottom-6 -right-6 bg-base-100 p-6 shadow-xl">
               <div class="grid grid-cols-2 gap-6">
                 {stats.slice(0, 2).map(stat => (
                   <div class="text-center">
-                    <p class="text-2xl font-bold gradient-text">{stat.value}</p>
+                    <p class="text-2xl font-bold plate-type">{stat.value}</p>
                     <p class="text-paper-mute text-xs">{stat.label}</p>
                   </div>
                 ))}
                 {stats.slice(2, 4).map(stat => (
                   <div class="text-center">
-                    <p class="text-2xl font-bold gradient-text">{stat.value}</p>
+                    <p class="text-2xl font-bold plate-type">{stat.value}</p>
                     <p class="text-paper-mute text-xs">{stat.label}</p>
                   </div>
                 ))}
@@ -145,11 +142,8 @@ const approach = [
         </div>
         
         <div>
-          <div class="mb-4 flex items-center">
-            <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-paper-mute">Our Story</span>
-          </div>
-          <h2 class="mb-6">From Enterprise to <span class="gradient-text">AI Automation</span></h2>
+          <p class="label-tech mb-4">Our Story</p>
+          <h2 class="mb-6">From Enterprise to <span class="plate-type">AI Automation</span></h2>
           <p class="mb-6 text-paper-mute">
             With 8+ years of full-stack development experience, we've built production applications for Fortune 500 companies including Eli Lilly and Salesforce, as well as mission-driven startups in healthcare and education. Our background spans pharmaceutical web applications, HIPAA-compliant healthcare systems, and SaaS platforms serving thousands of users.
           </p>
@@ -159,7 +153,7 @@ const approach = [
           <p class="mb-6 text-paper-mute">
             Beyond client work, we build and operate our own web properties including DowntownDry (a nationwide alcohol-free venue directory) and RecycleOldTech.com (an electronics recycling directory with automated affiliate systems achieving 8.08% conversion, 4x industry average).
           </p>
-          <div class="bg-base-200 p-6 rounded-lg">
+          <div class="bg-base-200 p-6">
             <p class="text-ink-hot font-semibold mb-2">Our Focus</p>
             <p class="text-paper-mute">Building intelligent systems that eliminate manual work and deliver measurable business impact, whether that's automating hours of repetitive tasks, increasing conversion rates, or building platforms that serve millions of users.</p>
           </div>
@@ -171,12 +165,9 @@ const approach = [
   <!-- Our Approach Section -->
   <section class="section bg-base-200">
     <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">Our Process</span>
-        </div>
-        <h2 class="mb-6">How We Create <span class="gradient-text">Digital Magic</span></h2>
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">Our Process</p>
+        <h2 class="mb-6">How We Create <span class="plate-type">Digital Magic</span></h2>
         <p class="text-paper-mute">Our process keeps every project focused on a clear outcome, with strategic planning, real craft, and technical precision at each step.</p>
       </div>
       
@@ -184,7 +175,7 @@ const approach = [
         {approach.map(step => (
           <div class="relative">
             <div class="card h-full">
-              <div class="text-4xl font-bold gradient-text mb-4">{step.step}</div>
+              <div class="text-4xl font-bold plate-type mb-4">{step.step}</div>
               <h3 class="text-xl font-bold mb-3">{step.title}</h3>
               <p class="text-paper-mute">{step.description}</p>
             </div>
@@ -200,12 +191,9 @@ const approach = [
   <!-- Our Values Section -->
   <section class="section">
     <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">Our Core Values</span>
-        </div>
-        <h2 class="mb-6">The Principles That <span class="gradient-text">Drive</span> Us</h2>
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">Our Core Values</p>
+        <h2 class="mb-6">The Principles That <span class="plate-type">Drive</span> Us</h2>
         <p class="text-paper-mute">These fundamental values shape our culture, guide our decisions, and define how we approach every client relationship and project.</p>
       </div>
       
@@ -225,11 +213,8 @@ const approach = [
     <div class="container mx-auto">
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-16">
-          <div class="mb-4 flex items-center justify-center">
-            <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-paper-mute">Why Work With Us</span>
-          </div>
-          <h2 class="mb-6">What Sets Creative Bandit <span class="gradient-text">Apart</span></h2>
+          <p class="label-tech mb-4">Why Work With Us</p>
+          <h2 class="mb-6">What Sets Creative Bandit <span class="plate-type">Apart</span></h2>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -271,12 +256,9 @@ const approach = [
   {team.length > 0 && (
     <section class="section">
       <div class="container mx-auto">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-          <div class="mb-4 flex items-center justify-center">
-            <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-paper-mute">Who We Are</span>
-          </div>
-          <h2 class="mb-6">Meet The <span class="gradient-text">Team</span></h2>
+        <div class="max-w-3xl mb-16">
+          <p class="label-tech mb-4">Who We Are</p>
+          <h2 class="mb-6">Meet The <span class="plate-type">Team</span></h2>
           <p class="text-paper-mute">Two disciplines, one studio. Development and design working together from day one of every project.</p>
         </div>
 
@@ -298,7 +280,7 @@ const approach = [
   <section class="py-24 bg-base-200 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
       <div class="max-w-4xl mx-auto text-center">
-        <h2 class="mb-6">Ready to Build Your <span class="gradient-text">Next Thing</span>?</h2>
+        <h2 class="mb-6">Ready to Build Your <span class="plate-type">Next Thing</span>?</h2>
         <p class="text-paper-mute text-lg mb-8">Tell us what you're working on. Whether you're launching something new or fixing an existing product, we'll help you ship it and make it work.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Start Your Project</a>
@@ -307,8 +289,6 @@ const approach = [
       </div>
     </div>
     <div class="absolute top-0 right-0 w-full h-full -z-10">
-      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-ink-hot/5 blur-3xl rounded-full"></div>
-      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-ink-cold/5 blur-3xl rounded-full"></div>
     </div>
   </section>
 </Layout>

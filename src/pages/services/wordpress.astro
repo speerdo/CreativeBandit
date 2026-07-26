@@ -40,11 +40,8 @@ const pricingTiers = [
   <section class="section pt-24 relative">
     <div class="container mx-auto">
       <div class="max-w-3xl">
-        <div class="mb-6 flex items-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">WordPress Development & Care</span>
-        </div>
-        <h1 class="mb-6">Custom <span class="gradient-text">WordPress</span> Sites Built Right</h1>
+        <p class="label-tech mb-6">WordPress Development & Care</p>
+        <h1 class="mb-6">Custom <span class="plate-type">WordPress</span> Sites Built Right</h1>
         <p class="text-xl text-paper-mute mb-8">
           WordPress powers a huge share of the web, which means most WordPress sites look and run the same. We build custom WordPress setups and headless configurations that load fast, stay secure, and fit your business instead of a generic template.
         </p>
@@ -65,11 +62,8 @@ const pricingTiers = [
     <div class="container mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
-          <div class="mb-4 flex items-center">
-            <span class="flame-dot"></span>
-            <span class="uppercase tracking-wider text-paper-mute">Why WordPress With Us</span>
-          </div>
-          <h2 class="mb-6">WordPress, <span class="gradient-text">Without the Bloat</span></h2>
+          <p class="label-tech mb-4">Why WordPress With Us</p>
+          <h2 class="mb-6">WordPress, <span class="plate-type">Without the Bloat</span></h2>
           <p class="text-paper-mute mb-4">
             Most WordPress projects fall into one of two traps: a bloated page-builder theme that loads dozens of scripts per page, or a hand-rolled setup that breaks the moment a non-developer tries to edit content.
           </p>
@@ -81,27 +75,27 @@ const pricingTiers = [
           </p>
         </div>
 
-        <div class="rounded-xl p-8 border border-ink-hot/20 bg-base-100/80 backdrop-blur-sm">
+        <div class="p-8 border border-ink-hot/20 bg-base-100">
           <h3 class="text-xl font-bold mb-6">What You Get</h3>
           <ul class="space-y-4">
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-ink-acid rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-paper-mute">Custom theme and plugin work, not a generic page-builder template</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-ink-hot rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-ink-hot mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-paper-mute">Headless options with Astro, Next.js, or Nuxt for performance and SEO</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-ink-hot rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-ink-hot mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-paper-mute">Care plans covering updates, security, backups, and small edits</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-ink-cold rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-ink-cold mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-paper-mute">Migrations that preserve content, URLs, and search ranking</span>
             </li>
             <li class="flex items-start">
-              <span class="w-2 h-2 bg-ink-acid rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
               <span class="text-paper-mute">An editor experience non-developers can actually use</span>
             </li>
           </ul>
@@ -113,12 +107,9 @@ const pricingTiers = [
   <!-- What's Included -->
   <section class="py-16">
     <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">What's Included</span>
-        </div>
-        <h2 class="mb-6">Full <span class="gradient-text">WordPress</span> Coverage</h2>
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">What's Included</p>
+        <h2 class="mb-6">Full <span class="plate-type">WordPress</span> Coverage</h2>
         <p class="text-paper-mute">From a brand-new build to ongoing care, here's what a WordPress engagement covers.</p>
       </div>
 
@@ -136,12 +127,9 @@ const pricingTiers = [
   <!-- Pricing -->
   <section class="section bg-base-200">
     <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">Pricing</span>
-        </div>
-        <h2 class="mb-6">Typical <span class="gradient-text">Engagements</span></h2>
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">Pricing</p>
+        <h2 class="mb-6">Typical <span class="plate-type">Engagements</span></h2>
         <p class="text-paper-mute">Every project is scoped individually. These starting points give you a sense of cost before we talk specifics.</p>
       </div>
 
@@ -149,7 +137,7 @@ const pricingTiers = [
         {pricingTiers.map(tier => (
           <div class="card text-center">
             <h3 class="text-xl font-bold mb-2">{tier.name}</h3>
-            <p class="text-2xl font-bold gradient-text mb-4">{tier.price}</p>
+            <p class="text-2xl font-bold plate-type mb-4">{tier.price}</p>
             <p class="text-paper-mute">{tier.description}</p>
           </div>
         ))}
@@ -161,7 +149,7 @@ const pricingTiers = [
   <section class="py-24 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="mb-6">Need a <span class="gradient-text">WordPress</span> Site That Actually Performs?</h2>
+        <h2 class="mb-6">Need a <span class="plate-type">WordPress</span> Site That Actually Performs?</h2>
         <p class="text-paper-mute text-lg mb-8">Tell us what you're working with. We'll scope the build, migration, or care plan and give you a clear timeline and price.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Start Your WordPress Project</a>
@@ -170,8 +158,6 @@ const pricingTiers = [
       </div>
     </div>
     <div class="absolute top-0 right-0 w-full h-full -z-10">
-      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-ink-hot/5 blur-3xl rounded-full"></div>
-      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-ink-cold/5 blur-3xl rounded-full"></div>
     </div>
   </section>
 </Layout>

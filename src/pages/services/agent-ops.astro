@@ -33,11 +33,8 @@ const pricingTiers = [
   <section class="section pt-24 relative">
     <div class="container mx-auto">
       <div class="max-w-3xl">
-        <div class="mb-6 flex items-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">New: Currently Onboarding Pilot Agencies</span>
-        </div>
-        <h1 class="mb-6">Automated Security &amp; Maintenance Ops for <span class="gradient-text">WordPress Agencies</span></h1>
+        <p class="label-tech mb-6">New: Currently Onboarding Pilot Agencies</p>
+        <h1 class="mb-6">Automated Security &amp; Maintenance Ops for <span class="plate-type">WordPress Agencies</span></h1>
         <p class="text-xl text-paper-mute mb-8">
           Agencies manage security, updates, and uptime across dozens of client sites by hand, a process that's slow and error-prone at scale. Agent Ops automates the monitoring and reporting so nothing falls through the cracks.
         </p>
@@ -56,12 +53,9 @@ const pricingTiers = [
   <!-- What's Included -->
   <section class="py-16">
     <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">What's Included</span>
-        </div>
-        <h2 class="mb-6">Ops, <span class="gradient-text">Automated</span></h2>
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">What's Included</p>
+        <h2 class="mb-6">Ops, <span class="plate-type">Automated</span></h2>
         <p class="text-paper-mute">A draft feature set, refined as pilot agencies come on board.</p>
       </div>
 
@@ -79,12 +73,9 @@ const pricingTiers = [
   <!-- Pricing -->
   <section class="section bg-base-200">
     <div class="container mx-auto">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="mb-4 flex items-center justify-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">Pricing</span>
-        </div>
-        <h2 class="mb-6">Tiered by <span class="gradient-text">Site Count</span></h2>
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">Pricing</p>
+        <h2 class="mb-6">Tiered by <span class="plate-type">Site Count</span></h2>
         <p class="text-paper-mute">Pilot pricing, finalized as we onboard the first agencies. [TODO: confirm rates]</p>
       </div>
 
@@ -93,7 +84,7 @@ const pricingTiers = [
           <div class="card text-center">
             <h3 class="text-xl font-bold mb-2">{tier.name}</h3>
             <p class="text-paper-mute mb-4">{tier.sites}</p>
-            <p class="text-2xl font-bold gradient-text">{tier.price}</p>
+            <p class="text-2xl font-bold plate-type">{tier.price}</p>
           </div>
         ))}
       </div>
@@ -104,7 +95,7 @@ const pricingTiers = [
   <section class="py-24 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="mb-6">Managing Security Across <span class="gradient-text">Client Sites</span> Manually?</h2>
+        <h2 class="mb-6">Managing Security Across <span class="plate-type">Client Sites</span> Manually?</h2>
         <p class="text-paper-mute text-lg mb-8">We're onboarding a small group of pilot agencies to shape Agent Ops around real workflows. Book a free audit to see where your client sites stand.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Book a Free Audit</a>
@@ -112,8 +103,6 @@ const pricingTiers = [
       </div>
     </div>
     <div class="absolute top-0 right-0 w-full h-full -z-10">
-      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-ink-hot/5 blur-3xl rounded-full"></div>
-      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-ink-cold/5 blur-3xl rounded-full"></div>
     </div>
   </section>
 </Layout>

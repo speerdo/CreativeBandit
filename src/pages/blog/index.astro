@@ -9,11 +9,8 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
   <section class="section pt-24 relative">
     <div class="container mx-auto">
       <div class="max-w-3xl">
-        <div class="mb-6 flex items-center">
-          <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-paper-mute">Our Blog</span>
-        </div>
-        <h1 class="mb-6">Latest <span class="gradient-text">Insights</span> & Updates</h1>
+        <p class="label-tech mb-6">Our Blog</p>
+        <h1 class="mb-6">Latest <span class="plate-type">Insights</span> & Updates</h1>
         <p class="text-xl text-paper-mute mb-8">
           Notes, tutorials, and updates on web development, design, and AI automation from the Creative Bandit team.
         </p>
@@ -26,14 +23,14 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
       <!-- Categories -->
       <div class="flex flex-wrap gap-2 mb-12">
         <button 
-          class="px-6 py-2 rounded-full bg-ink-hot/10 text-ink-hot transition-colors duration-300 focus:outline-none category-btn"
+          class="chip is-active focus:outline-none category-btn"
           data-category="all"
         >
           All
         </button>
         {categories.map(category => (
           <button 
-            class="px-6 py-2 rounded-full bg-base-100 hover:bg-ink-hot/10 transition-colors duration-300 focus:outline-none category-btn"
+            class="chip focus:outline-none category-btn"
             data-category={category}
           >
             {category}
@@ -49,7 +46,7 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
               <img 
                 src={post.frontmatter.image} 
                 alt={post.frontmatter.title}
-                class="w-full h-48 object-cover rounded-lg mb-4"
+                class="w-full h-48 object-cover mb-4"
               />
               <div class="mb-4">
                 <span class="text-sm text-ink-hot">{post.frontmatter.category}</span>
@@ -99,10 +96,10 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
     categoryBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         // Remove active class from all buttons
-        categoryBtns.forEach(b => b.classList.remove('bg-ink-hot/10', 'text-ink-hot'));
+        categoryBtns.forEach(b => b.classList.remove('is-active'));
         
         // Add active class to clicked button
-        btn.classList.add('bg-ink-hot/10', 'text-ink-hot');
+        btn.classList.add('is-active');
         
         // Filter posts
         filterPosts(btn.dataset.category);
