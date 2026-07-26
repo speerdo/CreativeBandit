@@ -24,20 +24,20 @@ const social = [
 ];
 ---
 
-<footer class="bg-dark-200 border-t border-dark-100">
+<footer class="bg-base-200 border-t border-base-100">
   <!-- TODO: re-add newsletter signup banner once a real ConvertKit form + lead magnet exist -->
 
   <div class="container mx-auto pt-12 pb-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div>
         <a href="/" class="inline-block mb-4">
-          <span class="text-xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-blazingEmber to-flameTip">CREATIVE</span>
-          <span class="text-xl font-heading font-normal text-light-100">BANDIT</span>
+          <span class="text-xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-ink-hot to-ink-acid">CREATIVE</span>
+          <span class="text-xl font-heading font-normal text-paper">BANDIT</span>
         </a>
-        <p class="text-light-300 mb-4">Building intelligent systems that eliminate manual work and deliver measurable business impact.</p>
+        <p class="text-paper-mute mb-4">Building intelligent systems that eliminate manual work and deliver measurable business impact.</p>
         <div class="flex space-x-4">
           {social.map(item => (
-            <a href={item.href} class="text-light-300 hover:text-blazingEmber transition-colors duration-300" aria-label={`Follow us on ${item.name}`} target="_blank" rel="noopener">
+            <a href={item.href} class="text-paper-mute hover:text-ink-hot transition-colors duration-300" aria-label={`Follow us on ${item.name}`} target="_blank" rel="noopener">
               <span class="sr-only">{item.name}</span>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 {item.icon === "twitter" && <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>}
@@ -55,7 +55,7 @@ const social = [
         <ul class="space-y-2">
           {services.map(item => (
             <li>
-              <a href={item.href} class="text-light-300 hover:text-blazingEmber transition-colors duration-300">
+              <a href={item.href} class="text-paper-mute hover:text-ink-hot transition-colors duration-300">
                 {item.name}
               </a>
             </li>
@@ -68,7 +68,7 @@ const social = [
         <ul class="space-y-2">
           {company.map(item => (
             <li>
-              <a href={item.href} class="text-light-300 hover:text-blazingEmber transition-colors duration-300">
+              <a href={item.href} class="text-paper-mute hover:text-ink-hot transition-colors duration-300">
                 {item.name}
               </a>
             </li>
@@ -78,24 +78,24 @@ const social = [
 
       <div>
         <h4 class="text-lg font-bold mb-4">Contact</h4>
-        <address class="not-italic text-light-300">
+        <address class="not-italic text-paper-mute">
           <p class="mb-4">Indianapolis, IN (Remote-first)</p>
           <p class="mb-2">
-            <a href="mailto:hello@creativebandit.studio" class="hover:text-blazingEmber transition-colors duration-300">hello@creativebandit.studio</a>
+            <a href="mailto:hello@creativebandit.studio" class="hover:text-ink-hot transition-colors duration-300">hello@creativebandit.studio</a>
           </p>
           <p>
-            <a href="tel:+13176605295" class="hover:text-blazingEmber transition-colors duration-300">(317) 660-5295</a>
+            <a href="tel:+13176605295" class="hover:text-ink-hot transition-colors duration-300">(317) 660-5295</a>
           </p>
         </address>
       </div>
     </div>
 
-    <div class="border-t border-dark-100 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-      <p class="text-light-300 text-sm">&copy; {currentYear} Creative Bandit, LLC. All rights reserved.</p>
+    <div class="border-t border-base-100 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-paper-mute text-sm">&copy; {currentYear} Creative Bandit, LLC. All rights reserved.</p>
       <div class="mt-4 md:mt-0">
         <ul class="flex space-x-6 text-sm">
-          <li><a href="/privacy" class="text-light-300 hover:text-blazingEmber transition-colors duration-300">Privacy Policy</a></li>
-          <li><a href="/terms" class="text-light-300 hover:text-blazingEmber transition-colors duration-300">Terms of Service</a></li>
+          <li><a href="/privacy" class="text-paper-mute hover:text-ink-hot transition-colors duration-300">Privacy Policy</a></li>
+          <li><a href="/terms" class="text-paper-mute hover:text-ink-hot transition-colors duration-300">Terms of Service</a></li>
         </ul>
       </div>
     </div>

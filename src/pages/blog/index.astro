@@ -11,10 +11,10 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
       <div class="max-w-3xl">
         <div class="mb-6 flex items-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Our Blog</span>
+          <span class="uppercase tracking-wider text-paper-mute">Our Blog</span>
         </div>
         <h1 class="mb-6">Latest <span class="gradient-text">Insights</span> & Updates</h1>
-        <p class="text-xl text-light-300 mb-8">
+        <p class="text-xl text-paper-mute mb-8">
           Notes, tutorials, and updates on web development, design, and AI automation from the Creative Bandit team.
         </p>
       </div>
@@ -26,14 +26,14 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
       <!-- Categories -->
       <div class="flex flex-wrap gap-2 mb-12">
         <button 
-          class="px-6 py-2 rounded-full bg-blazingEmber/10 text-blazingEmber transition-colors duration-300 focus:outline-none category-btn"
+          class="px-6 py-2 rounded-full bg-ink-hot/10 text-ink-hot transition-colors duration-300 focus:outline-none category-btn"
           data-category="all"
         >
           All
         </button>
         {categories.map(category => (
           <button 
-            class="px-6 py-2 rounded-full bg-dark-100 hover:bg-blazingEmber/10 transition-colors duration-300 focus:outline-none category-btn"
+            class="px-6 py-2 rounded-full bg-base-100 hover:bg-ink-hot/10 transition-colors duration-300 focus:outline-none category-btn"
             data-category={category}
           >
             {category}
@@ -52,11 +52,11 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
                 class="w-full h-48 object-cover rounded-lg mb-4"
               />
               <div class="mb-4">
-                <span class="text-sm text-blazingEmber">{post.frontmatter.category}</span>
+                <span class="text-sm text-ink-hot">{post.frontmatter.category}</span>
                 <h2 class="text-xl font-bold mt-2 mb-2 line-clamp-2">{post.frontmatter.title}</h2>
-                <p class="text-light-300 text-sm line-clamp-3">{post.frontmatter.description}</p>
+                <p class="text-paper-mute text-sm line-clamp-3">{post.frontmatter.description}</p>
               </div>
-              <div class="flex items-center justify-between text-sm text-light-300">
+              <div class="flex items-center justify-between text-sm text-paper-mute">
                 <div class="flex items-center">
                   <img 
                     src={post.frontmatter.authorImage} 
@@ -99,10 +99,10 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
     categoryBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         // Remove active class from all buttons
-        categoryBtns.forEach(b => b.classList.remove('bg-blazingEmber/10', 'text-blazingEmber'));
+        categoryBtns.forEach(b => b.classList.remove('bg-ink-hot/10', 'text-ink-hot'));
         
         // Add active class to clicked button
-        btn.classList.add('bg-blazingEmber/10', 'text-blazingEmber');
+        btn.classList.add('bg-ink-hot/10', 'text-ink-hot');
         
         // Filter posts
         filterPosts(btn.dataset.category);

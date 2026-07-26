@@ -4,21 +4,24 @@ export default {
   theme: {
     extend: {
       colors: {
-        charcoal: '#0d0d0d',
-        flameTip: '#ffd700',
-        coreFire: '#ff6a00',
-        blazingEmber: '#ff1c1c',
-        magentaFlame: '#a100ff',
-        dark: {
+        // Phase 0: names are final, values are still the old flame palette.
+        // Phase 1 swaps these to the risograph ink set — see
+        // docs/creative-bandit-visual-identity.md §2.
+        base: {
+          DEFAULT: '#0d0d0d',
           100: '#1a1a1a',
           200: '#141414',
           300: '#0d0d0d',
         },
-        light: {
-          100: '#ffffff',
-          200: '#f5f5f5',
-          300: '#e0e0e0',
+        paper: {
+          DEFAULT: '#ffffff',
+          dim: '#f5f5f5',
+          mute: '#e0e0e0',
         },
+        'ink-hot': '#ff1c1c',
+        'ink-hot-alt': '#ff6a00',
+        'ink-acid': '#ffd700',
+        'ink-cold': '#a100ff',
         success: '#10b981',
         warning: '#f59e0b',
         error: '#ef4444',

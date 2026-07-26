@@ -1,0 +1,280 @@
+# Creative Bandit — Visual Identity Redesign
+
+**Branch:** `kat-design-updates`
+**Status:** Planning — not yet implemented
+**Date:** 2026-07-26
+
+Aesthetic overhaul of creativebandit.studio. Site structure, routes, copy, and SEO stay as-is. What changes is the entire visual language: from generic dark-SaaS-with-neon-gradients to **digital space cowboy** — grainy photography, risograph print artifacts, gritty blurred gradients, and a bandit-cat mascot.
+
+Reference assets live in `public/ref img/`:
+
+| File | What we're taking from it |
+| --- | --- |
+| `blurred gradient.avif` | The core background move — huge soft-focus color fields, saturated, **grain over the gradient** |
+| `photo-grain.avif` | Halftone/photocopy photography, hard-cut grid collage, single acid accent line-work |
+| `risograph-1.jpg`, `risograph-2.avif` | Halftone dot cutouts, hand/eye/face fragments, spiky vector bursts over duotone photo |
+| `scanner-cutoff.avif` | Chromatic aberration, scan smear, technical crop marks, tight Helvetica-ish display type |
+| `weird-western-1.avif`, `weird-west-2.avif` | The cowboy half — bandana masks, distressed print texture, saloon-poster type energy |
+| `web design.avif` | Editorial layout discipline: black/bone slabs, one hot accent blob, restrained grid |
+
+The synthesis: **risograph print shop meets scanned-in sci-fi paperback.** Cowboy iconography rendered as if run through a Riso duplicator and then a broken flatbed scanner. Grainy, off-register, high-contrast — but laid out with editorial restraint so it reads professional, not "grunge tumblr."
+
+---
+
+## 1. Why the site currently looks AI-generated
+
+Worth naming precisely, because these are the things to remove. The current design isn't bad — it's *generic*. Every one of these is a 2024-era LLM-scaffold tell:
+
+1. **Glassmorphic hero card** — `rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg shadow-2xl` in `BirdSwarmHero.astro:14`. This exact class string is the single loudest signal.
+2. **Gradient text on every headline** — `.gradient-text` (red→purple `bg-clip-text`) appears **46 times across 11 files**. One word of every `h2` is gradient-filled, without exception.
+3. **The `flame-dot` + uppercase eyebrow** — 32 uses across 12 files. Pulsing dot, `uppercase tracking-wider text-light-300` label, then `h2`, then a gray paragraph. Identical rhythm on every single section.
+4. **Neon blur blobs** — `w-96 h-96 bg-<color>/5 blur-3xl rounded-full` scattered as "ambient depth." ~10 instances. Reads as glow, not as ink.
+5. **Uniform card grid** — every card is `rounded-lg p-6 border` with a hover border-color change. No variation in shape, weight, or texture.
+6. **Outfit + Inter** — the default "modern startup" pairing.
+7. **Pexels stock photos** — four hotlinked generic stock images in `index.astro:42-67`.
+8. **Centered `max-w-3xl mx-auto` section intros** — same alignment, same width, every section, top to bottom.
+
+The fix is not to add texture on top of this. It's to replace items 1–6 and let texture do the work items 1–4 were faking.
+
+---
+
+## 2. Palette — risograph ink set
+
+Retiring the flame palette. New tokens, modeled on actual Riso ink drums:
+
+```
+BASE     #0B0B0C   near-black          page ground
+PAPER    #EDE8DF   bone / riso paper   inverted sections, body type on dark
+INK-HOT  #FF4D14   fluoro orange       primary accent, CTAs
+INK-COLD #1B27E8   riso blue           plates, fills, large graphic areas
+INK-ACID #D9F24A   yellow-green        line-work, technical labels, hover
+INK-PINK #E5195A   riso pink           secondary accent, duotone partner
+```
+
+Duotone pairings (never more than two inks in one composition):
+- `INK-HOT` + `INK-COLD` — hero, primary sections
+- `INK-PINK` + `INK-ACID` — work/portfolio, secondary sections
+- `PAPER` on `BASE` — all body copy
+
+### Contrast constraints — read this before using the blue
+
+Measured against `BASE` (#0B0B0C):
+
+| Ink | Ratio | Verdict |
+| --- | --- | --- |
+| `PAPER` #EDE8DF | **16.0:1** | ✅ any text size |
+| `INK-ACID` #D9F24A | **15.6:1** | ✅ any text size |
+| `INK-HOT` #FF4D14 | **5.9:1** | ✅ passes AA normal text |
+| `INK-PINK` #E5195A | **4.3:1** | ⚠️ large text only (≥24px, or ≥19px bold) |
+| `INK-COLD` #1B27E8 | **2.3:1** | ❌ **never for text.** Fills and plates only. |
+
+Riso blue is the trap here — it's gorgeous as a flat plate and unreadable as type. For blue *text* on dark, add a lightened tint:
+
+```
+INK-COLD-LIFT  #6E79FF   5.4:1 ✅   text-on-dark variant of INK-COLD
+```
+
+### Token migration
+
+Current usage counts: `blazingEmber` 129 hits / 19 files, `light-300` 168 / 20, `gradient-text` 46 / 11, `flame-dot` 32 / 12, `coreFire` 17, `magentaFlame` 20, `flameTip` 18.
+
+Rename rather than retune — `blazingEmber` describing `#FF4D14` would be a lie future-us trips over. **Do the rename as its own mechanical commit** (`sed` across `src/`, no visual intent) so the subsequent styling commits stay reviewable:
+
+| Old | New |
+| --- | --- |
+| `charcoal` | `base` |
+| `blazingEmber` | `ink-hot` |
+| `coreFire` | `ink-hot` (collapse — near-duplicates today) |
+| `flameTip` | `ink-acid` |
+| `magentaFlame` | `ink-cold` |
+| `light-100/200/300` | `paper` / `paper-dim` / `paper-mute` |
+| `dark-100/200/300` | `base-100/200/300` |
+
+`.gradient-text` and `.flame-dot` get deleted, not renamed — see §4.
+
+---
+
+## 3. Typography
+
+Drop Outfit. Three roles:
+
+| Role | Face | Why |
+| --- | --- | --- |
+| Display | **Archivo** (variable: width + weight axes) | One family gives both wide-caps poster headlines and tight condensed labels. Google-hosted, no license cost. Grotesque bones match `scanner-cutoff`. |
+| Body | **Inter** (already loaded) | Neutral, invisible, stays out of the way. Keep. |
+| Technical | **Space Mono** | The `scanner-cutoff` micro-labels — crop marks, coordinates, file specs, `//` annotations. Carries most of the "digital artifact" flavor for almost no effort. |
+
+Treatments:
+- Headlines: `Archivo` expanded, tight tracking (`-0.02em`), **all-caps for h1/h2**. Poster energy.
+- Ditch centered section intros. Left-align, and let a few headlines break the grid or bleed off-canvas.
+- Mono micro-labels replace the `flame-dot` eyebrow: `// 01 — SERVICES` instead of `● OUR SERVICES`.
+- Occasional condensed-caps stack for stat blocks, saloon-poster style.
+
+---
+
+## 4. The texture system
+
+This is the actual substance of the redesign. Six layers, built as reusable utilities in `global.css` — **not** hand-rolled per component.
+
+### 4.1 Global grain — `.grain-overlay`
+
+The load-bearing layer. Everything else looks cheap without it.
+
+- Baked tiling PNG (data-URI, ~2–4KB) from an `feTurbulence fractalNoise` render. **Bake it; don't run a live SVG filter full-viewport** — that's a real per-frame cost for a static result.
+- One `position: fixed` full-viewport pseudo-element, `mix-blend-mode: overlay`, `opacity: 0.10–0.14`, `pointer-events: none`, `z-index` above content.
+- Single global instance. Never per-card.
+
+### 4.2 Blurred gradient fields — `.field-*`
+
+Replaces the neon blur blobs. Key insight from `blurred gradient.avif`: those gradients look expensive **because of the grain sitting on them**. A smooth CSS gradient alone reads cheap and web-2.0.
+
+- Large `radial-gradient` lobes at full ink saturation, `filter: blur(60–100px)`.
+- Asymmetric and off-canvas — bleeding past the viewport edge, not politely centered.
+- Grain composited over the top, always.
+- 2–3 per page maximum. These are hero moments, not ambient filler.
+
+### 4.3 Halftone — `.halftone`, `.halftone-fine`
+
+- CSS dot grid: `radial-gradient` + `background-size: 3px 3px`, applied via `mask-image` so it bites into artwork rather than sitting on top.
+- Photo treatment uses an SVG filter chain (`feColorMatrix` → `feComponentTransfer`) for a true 2-plate separation.
+
+### 4.4 Duotone images — `.duotone-hot`, `.duotone-cold`
+
+- `filter: grayscale(1) contrast(1.35)` then a colored layer in `mix-blend-mode: color` / `screen`.
+- Applies to team headshots, project screenshots, and any future photography. Also **solves the stock-photo problem** — heavy duotone + halftone makes generic photography read as deliberate collage material.
+
+### 4.5 Misregistration — `.plate-shift`
+
+The most authentic Riso artifact: plates that don't line up.
+
+- Duplicate the element via pseudo-elements, offset each 2–3px, one ink per plate, `mix-blend-mode: multiply`.
+- Applies to display headlines, the mascot, and section rules.
+- **This is what replaces `.gradient-type`.** Instead of a smooth red→purple fill, a headline is bone type with an orange plate 2px left and a blue plate 3px down. Same "the headline is special" job, completely different read.
+
+### 4.6 Scan artifacts — `.aberration`, `.scanline`, `.torn`
+
+Used sparingly — these are seasoning, and it's easy to overdo them.
+
+- `.aberration` — cyan/red `text-shadow` offsets. Hover states and scroll-triggered moments only.
+- `.scanline` — faint horizontal `repeating-linear-gradient`, very low opacity, on dark slabs.
+- `.torn` — irregular `clip-path` for section edges, so slabs end on a ripped-paper line instead of a straight border.
+
+---
+
+## 5. Mascot — the bandit cat
+
+Hand-built SVG in `public/mascot/`, riso treatment applied via filters. Version-controlled, recolorable, animatable, a couple KB.
+
+```
+public/mascot/bandit-cat.svg
+  <g id="plate-hot">    cowboy hat brim + crown       → INK-HOT
+  <g id="plate-cold">   bandana over muzzle           → INK-COLD
+  <g id="plate-paper">  head, ears, muzzle fur        → PAPER
+  <g id="plate-line">   eyes, whiskers, hat stitching → BASE
+  + feTurbulence grain inside the SVG
+  + 2-3px offset between plates = misregistration
+```
+
+Design direction: geometric, confident linework — closer to a stamped print or a mission patch than a cartoon. Cowboy hat, bandana pulled up over the muzzle, eyes visible above it. Futuristic elements come from framing rather than gadgetry: circular badge enclosure, mono coordinate labels, crop marks, faint scanlines across the face. Think *pilot patch for a ship that smuggles*.
+
+Deliverables:
+- `bandit-cat.svg` — full mascot, primary
+- `bandit-cat-head.svg` — tight crop for favicon and avatar use
+- `favicon.svg` — replace the current one
+- `og-image` — mascot on a grainy gradient field, replaces `ogImage = "/favicon.svg"` in `Layout.astro:18`
+
+Animation (all behind `prefers-reduced-motion`):
+- Idle: slow ear twitch, occasional blink
+- Hover: plates jolt apart then resettle — a print misfeed
+- Scroll: plate offset widens slightly with scroll velocity
+
+---
+
+## 6. Component-by-component
+
+| File | Change |
+| --- | --- |
+| `tailwind.config.js` | New ink tokens; delete flame colors; Archivo + Space Mono; new keyframes (`plate-jitter`, `grain-drift`); remove `flicker`/`float` |
+| `styles/global.css` | Core rewrite. All texture utilities land here. Delete `.gradient-text`, `.flame-dot`, `.flame-gradient`, `.about-card-glow` |
+| `layouts/Layout.astro` | Swap font links; add global `.grain-overlay`; new `theme-color`; mascot favicon + OG image |
+| `components/BirdSwarmHero.astro` | **Kill the glass card.** Type sits directly on the gradient field with plate-shift. Mascot composited in. Mono micro-labels for stats |
+| `lib/birdSwarm.ts` | Recolor `PALETTE` (line 7) to 2 inks + paper. Note: material is already flat unlit `MeshBasicMaterial` with no additive blending (line 177) — so this is genuinely just a palette swap, plus grain composited over the canvas |
+| `components/Navbar.astro` | Wordmark → mascot head + Archivo caps. Nav links get `.aberration` on hover |
+| `components/ServiceCard.astro` | Riso-plate cards: hard edges or `.torn`, ink-block icon wells, halftone corner. Break the uniform grid — vary sizes |
+| `components/ProjectCard.astro` | Duotone + halftone on imagery. Mono spec labels for category |
+| `components/TeamMember.astro` | Duotone headshots, halftone cutout edges à la `risograph-1` |
+| `components/TestimonialCard.astro` | Bone paper slab on dark — inverted, quote-poster feel |
+| `components/AnimatedStats.tsx` | Condensed-caps numerals, plate-shift, drop the pulse glow |
+| `components/ExitPopup.tsx` | Mascot appears here. Torn-paper edges, riso print aesthetic |
+| `components/Footer.astro` | Bone slab, mono legal type, crop marks. Also **fix the `#` LinkedIn link** (open from the earlier spec doc) |
+| `components/ContactForm.astro` | Hard-edged inputs, ink underlines instead of rounded boxes, acid focus ring |
+| `pages/*.astro` (10 files) | Remove per-page neon blobs; re-lay-out section intros left-aligned with mono labels; vary section rhythm |
+| `components/Hero.astro` | **Delete** — dead file, superseded by `BirdSwarmHero.astro`, nothing imports it |
+| `components/Welcome.astro` | **Delete** — dead Astro-starter leftover, nothing imports it |
+
+---
+
+## 7. Phasing
+
+Sized so each phase is independently reviewable and the site stays deployable throughout.
+
+**Phase 0 — Mechanical rename**
+Token rename via `sed`, zero visual change. Lands alone so later diffs are readable.
+
+**Phase 1 — Foundation**
+Tailwind tokens, fonts, `global.css` texture utilities, global grain overlay. Site will look *broken-ish* mid-phase (old components, new tokens) — expected.
+
+**Phase 2 — Mascot**
+Build `bandit-cat.svg`, favicon, OG image. Standalone, reviewable in isolation.
+
+**Phase 3 — Hero + navigation**
+Highest-visibility surface. Kill the glass card, recolor the flock, composite gradient field + mascot + grain.
+
+**Phase 4 — Components**
+Cards, team, testimonials, forms, footer. Mostly mechanical once Phase 1 utilities exist.
+
+**Phase 5 — Page layouts**
+Per-page rhythm, grid-breaking, section variation. The pass that makes it feel designed rather than templated.
+
+**Phase 6 — Polish**
+Reduced-motion audit, contrast audit, Lighthouse pass, cross-browser blend-mode check.
+
+---
+
+## 8. Guardrails
+
+**Performance**
+- Bake the grain to a tiling PNG. One fixed overlay, not per-element.
+- `mix-blend-mode` and `filter` force new compositing layers — keep blended elements few and large, never per-card.
+- `will-change` only on elements that actually animate.
+- Budget: keep Lighthouse performance ≥ 90 on mobile. Check after Phase 3, not at the end.
+
+**Accessibility**
+- Honor the §2 contrast table. `INK-COLD` never carries text.
+- Grain overlay at `opacity ≤ 0.14` — beyond that it starts eating small-type legibility.
+- `.aberration` is decorative only; never the sole indicator of state.
+- Every animation gated behind `prefers-reduced-motion`, including mascot idle and plate-shift.
+- Verify focus rings survive the restyle — acid ink on dark is the right call and passes easily.
+
+**Browser support**
+- `mix-blend-mode`, `backdrop-filter`, SVG filters: fine in evergreen browsers. Safari `mix-blend-mode: overlay` on `position: fixed` needs an explicit check.
+- Degradation path: no blend-mode support → flat inks, no grain. Still looks intentional.
+
+**Restraint**
+The failure mode is applying all six texture layers everywhere and landing at illegible mush. Discipline: **two inks per composition, one hero texture moment per page, grain everywhere, everything else sparingly.** `web design.avif` is the reference for restraint — mostly empty black and bone, one hot accent doing all the work.
+
+---
+
+## 9. Open questions
+
+- [ ] Mascot name? "Bandit" is the obvious read but may be too on-the-nose against "Creative Bandit."
+- [ ] Do we keep the 3D flock long-term, or does the mascot make it redundant? Revisit after Phase 3 — two competing focal points is a real risk.
+- [ ] Stock photography: duotone the existing Pexels images, or commission/shoot real project screenshots? Duotone buys time either way.
+- [ ] Bone-paper *sections* (full inverted slabs) or bone only for small cards? Full inversion is stronger but a bigger layout lift.
+- [ ] Should mono technical labels carry real data (dates, project IDs, file specs) rather than decorative filler? Real data is more convincing and no harder.
+
+## 10. Not in scope
+
+- Copy rewrites — content stays as-is except mono micro-labels
+- Route/IA changes — structure is explicitly preserved
+- The remaining `[TODO]` content gaps from `creative-bandit-site-updates.md` (real testimonials, Katlyn's project entries, pricing) — tracked separately, though testimonial cards and project cards get restyled here and will look better once populated

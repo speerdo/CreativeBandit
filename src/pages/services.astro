@@ -90,17 +90,17 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
       <div class="max-w-3xl">
         <div class="mb-6 flex items-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">What We Do</span>
+          <span class="uppercase tracking-wider text-paper-mute">What We Do</span>
         </div>
         <h1 class="mb-6">Services That <span class="gradient-text">Deliver</span> Results</h1>
-        <p class="text-xl text-light-300 mb-8">
+        <p class="text-xl text-paper-mute mb-8">
           AI automation, full-stack development, WordPress, and design &amp; motion under one roof, built to deliver measurable business impact.
         </p>
       </div>
     </div>
     
     <div class="absolute top-0 right-0 w-full h-full -z-10">
-      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blazingEmber/10 to-transparent opacity-30"></div>
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-ink-hot/10 to-transparent opacity-30"></div>
     </div>
   </section>
   
@@ -122,13 +122,13 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
   
   <!-- Service Details -->
   {detailedServices.map((service, index) => (
-    <section id={service.id} class="py-24 relative even:bg-dark-200">
+    <section id={service.id} class="py-24 relative even:bg-base-200">
       <div class="container mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div class={`${index % 2 === 0 ? 'order-2 lg:order-1' : 'order-2 lg:order-2'}`}>
             <div class="mb-4 flex items-center">
               <span class="flame-dot"></span>
-              <span class="uppercase tracking-wider text-light-300">
+              <span class="uppercase tracking-wider text-paper-mute">
                 {service.id === 'web-development' ? 'Expert Web Development' :
                  service.id === 'design' ? 'Design & Motion, Led by Katlyn' :
                  service.id === 'ai-integration' ? 'Advanced AI Solutions' : 
@@ -138,7 +138,7 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
               </span>
             </div>
             <h2 class="mb-6">{service.title}</h2>
-            <p class="mb-6 text-light-300">
+            <p class="mb-6 text-paper-mute">
               {service.id === 'web-development' ? 
                 'We build fast, well-structured websites and web applications that work well across every device. Development pairs technical know-how with practical problem-solving so the result looks good and runs cleanly.' :
               service.id === 'design' ?
@@ -157,31 +157,31 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
               {service.id === 'web-development' ? (
                 <>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Custom website development</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Web application development</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Responsive design implementation</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Performance optimization</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>SEO-friendly architecture</span>
@@ -190,31 +190,31 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
               ) : service.id === 'design' ? (
                 <>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Brand and UI design</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Motion design &amp; explainer animations</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Product motion &amp; UI animation</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Social &amp; marketing motion content</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     {/* TODO: confirm any additional services: illustration, design systems, video editing, etc. */}
@@ -224,31 +224,31 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
               ) : service.id === 'ai-integration' ? (
                 <>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>AI-powered chatbots and assistants</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Natural language processing</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Personalization engines</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Machine learning models</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Automated content generation</span>
@@ -257,31 +257,31 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
               ) : service.id === 'app-development' ? (
                 <>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Native iOS app development</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Native Android app development</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Cross-platform app development</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>App store optimization</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>App maintenance and updates</span>
@@ -290,31 +290,31 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
               ) : service.id === 'ecommerce' ? (
                 <>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Custom e-commerce development</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Platform migration and integration</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Payment gateway integration</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Inventory management systems</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Conversion rate optimization</span>
@@ -323,31 +323,31 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
               ) : (
                 <>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Digital transformation consultation</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Technology stack assessment</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Digital marketing strategy</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Business process optimization</span>
                   </li>
                   <li class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blazingEmber mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-ink-hot mr-2 mt-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                     </svg>
                     <span>Performance analytics and reporting</span>
@@ -382,10 +382,10 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="mb-4 flex items-center justify-center">
           <span class="flame-dot"></span>
-          <span class="uppercase tracking-wider text-light-300">Transparent Pricing</span>
+          <span class="uppercase tracking-wider text-paper-mute">Transparent Pricing</span>
         </div>
         <h2 class="mb-6">What Projects <span class="gradient-text">Typically Cost</span></h2>
-        <p class="text-light-300">Every project is scoped individually. These ranges give you a starting point before we talk specifics.</p>
+        <p class="text-paper-mute">Every project is scoped individually. These ranges give you a starting point before we talk specifics.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -393,7 +393,7 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
           <div class="card text-center">
             <h3 class="text-xl font-bold mb-2">{tier.name}</h3>
             <p class="text-2xl font-bold gradient-text mb-4">{tier.price}</p>
-            <p class="text-light-300">{tier.description}</p>
+            <p class="text-paper-mute">{tier.description}</p>
           </div>
         ))}
       </div>
@@ -401,11 +401,11 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
   </section>
 
   <!-- CTA Section -->
-  <section class="py-24 bg-dark-200 relative overflow-hidden">
+  <section class="py-24 bg-base-200 relative overflow-hidden">
     <div class="container mx-auto relative z-10">
       <div class="max-w-3xl mx-auto text-center">
         <h2 class="mb-6">Ready to <span class="gradient-text">Get Started</span>?</h2>
-        <p class="text-light-300 text-lg mb-8">Tell us about your project and we'll walk through how these services fit your goals.</p>
+        <p class="text-paper-mute text-lg mb-8">Tell us about your project and we'll walk through how these services fit your goals.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Get In Touch</a>
           <a href="/work" class="btn-secondary">View Our Work</a>
@@ -413,8 +413,8 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
       </div>
     </div>
     <div class="absolute top-0 right-0 w-full h-full -z-10">
-      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-blazingEmber/5 blur-3xl rounded-full"></div>
-      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-magentaFlame/5 blur-3xl rounded-full"></div>
+      <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-ink-hot/5 blur-3xl rounded-full"></div>
+      <div class="absolute top-0 left-0 w-1/3 h-1/2 bg-ink-cold/5 blur-3xl rounded-full"></div>
     </div>
   </section>
 </Layout>
@@ -432,11 +432,11 @@ const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].
       btn.addEventListener('click', () => {
         // Remove active class from all buttons
         filterBtns.forEach(b => {
-          b.classList.remove('bg-blazingEmber/10', 'text-blazingEmber');
+          b.classList.remove('bg-ink-hot/10', 'text-ink-hot');
         });
         
         // Add active class to clicked button
-        btn.classList.add('bg-blazingEmber/10', 'text-blazingEmber');
+        btn.classList.add('bg-ink-hot/10', 'text-ink-hot');
         
         // Get filter value
         const filterValue = btn.getAttribute('data-filter');
