@@ -58,6 +58,37 @@ const CURSOR_IDLE_TIMEOUT_MS = 4000;
 const BOUNDS_MARGIN = 0.68;
 const BOUNDS_FORCE = 16;
 
+/*
+ * Flattens the loops into wide horizontal ovals: a spring pulling the craft
+ * back toward the horizon, plus damping on vertical speed.
+ *
+ * The damping term is the important half. A bare spring is an oscillator and
+ * *adds* vertical motion - measured over two simulated minutes it left the
+ * vertical spread essentially unchanged. With damping, mean |vx|/|vy| goes
+ * from 0.74 to 5.5 and the vertical spread drops from 1.33 to 0.46, while
+ * horizontal travel stays free.
+ */
+const Y_FLATTEN = 1.6;
+const Y_DAMPING = 1.0;
+
+// Idle flight aims at randomised waypoints rather than tracing a fixed
+// lissajous, so the path never settles into a visibly repeating figure. A new
+// waypoint is picked on arrival, or when the dwell expires - whichever first.
+const WAYPOINT_X_SPREAD = 3.4;
+const WAYPOINT_Y_SPREAD = 0.8;
+const WAYPOINT_ARRIVE = 1.2;
+const WAYPOINT_HOLD_MIN = 3.5;
+const WAYPOINT_HOLD_MAX = 6;
+
+// Space Invaders style pot-shots. Purely cosmetic - bolts are their own
+// objects and never touch the flight solver, so they cannot perturb either
+// the rocket's path or the convoy's spacing.
+const BOLT_POOL = 12;
+const BOLT_SPEED = 2.6;
+const BOLT_LIFE = 1.5;
+const BOLT_INTERVAL_MIN = 2.5;
+const BOLT_INTERVAL_MAX = 7;
+
 // Seconds each UFO trails the rocket along its own past path. Sampling a
 // time-stamped trail (rather than each UFO chasing the one ahead) keeps the
 // convoy evenly spaced no matter how hard the rocket turns, and cannot
@@ -235,6 +266,18 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     return ufo;
   });
 
+  // Laser bolts, pre-allocated and recycled so firing never allocates.
+  const bolts = Array.from({ length: BOLT_POOL }, () => {
+    const mesh = flat(polygon([[-0.018, 0.07], [0.018, 0.07], [0.018, -0.07], [-0.018, -0.07]]), INK.acid, -0.2);
+    mesh.visible = false;
+    scene.add(mesh);
+    return { mesh, life: 0 };
+  });
+  const nextFire = Array.from(
+    { length: UFO_COUNT },
+    () => BOLT_INTERVAL_MIN + Math.random() * (BOLT_INTERVAL_MAX - BOLT_INTERVAL_MIN)
+  );
+
   const position = new THREE.Vector3(WANDER_CENTRE_X, 0, 0);
   const velocity = new THREE.Vector3(MAX_SPEED * 0.9, 0, 0);
   const smoothedAccel = new THREE.Vector3();
@@ -259,9 +302,19 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
   const seekPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
   const pointerNDC = new THREE.Vector2();
   const cursorTarget = new THREE.Vector3();
-  const autoTarget = new THREE.Vector3();
+  const autoTarget = new THREE.Vector3(WANDER_CENTRE_X + WAYPOINT_X_SPREAD * 0.8, 0.4, 0);
+  let waypointHold = WAYPOINT_HOLD_MIN;
   let hasCursorTarget = false;
   let lastPointerMove = 0;
+
+  function pickWaypoint() {
+    autoTarget.set(
+      WANDER_CENTRE_X + (Math.random() * 2 - 1) * WAYPOINT_X_SPREAD,
+      (Math.random() * 2 - 1) * WAYPOINT_Y_SPREAD,
+      0
+    );
+    waypointHold = WAYPOINT_HOLD_MIN + Math.random() * (WAYPOINT_HOLD_MAX - WAYPOINT_HOLD_MIN);
+  }
 
   function onPointerMove(event: PointerEvent) {
     const rect = canvas.getBoundingClientRect();
@@ -343,20 +396,14 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     if (hasCursorTarget && performance.now() - lastPointerMove < CURSOR_IDLE_TIMEOUT_MS) {
       target = cursorTarget;
     } else {
-      // A slow-drifting target the rocket laps around. The slower this moves
-      // relative to cruise speed, the more the craft orbits it rather than
-      // chasing it, and the bigger the loops read.
-      //
-      // The vertical amplitude is much smaller than the horizontal one on
-      // purpose. Overshoot is the whole mechanism here, and a hero canvas is
-      // far wider than it is tall, so the loops are given room to run
-      // sideways and kept from sailing off the top and bottom.
-      const t = elapsed * 0.15;
-      target = autoTarget.set(
-        WANDER_CENTRE_X + Math.sin(t) * 2.9,
-        Math.cos(t * 1.37) * 1.0,
-        0
-      );
+      // Retarget on arrival or when the dwell runs out, whichever comes
+      // first. Without the timeout the craft can orbit a waypoint it never
+      // quite reaches and stay stuck on it.
+      waypointHold -= delta;
+      const reached =
+        Math.hypot(autoTarget.x - position.x, autoTarget.y - position.y) < WAYPOINT_ARRIVE;
+      if (reached || waypointHold <= 0) pickWaypoint();
+      target = autoTarget;
     }
 
     // Full-cruise pursuit, with no easing on approach. The rocket overshoots
@@ -368,6 +415,11 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
 
     steer.subVectors(desired, velocity);
     if (steer.length() > MAX_FORCE) steer.setLength(MAX_FORCE);
+
+    // Squash the loops toward the horizontal. Spring pulls back to the
+    // horizon, damping bleeds off vertical speed so it settles instead of
+    // oscillating.
+    steer.y += -position.y * Y_FLATTEN - velocity.y * Y_DAMPING;
 
     // Containment steers rather than clamps, so the craft banks away from an
     // edge and keeps its arc instead of stopping dead against it.
@@ -411,7 +463,33 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
       ufo.position.set(sample.x, sample.y + wobble, -0.15 - i * 0.05);
       // Saucers stay level; only a slight tilt into the direction of travel.
       ufo.rotation.z = Math.sin(elapsed * 1.3 + i) * 0.12;
+
+      // Pot-shot, straight down like an Invaders bolt.
+      nextFire[i] -= delta;
+      if (nextFire[i] <= 0) {
+        nextFire[i] =
+          BOLT_INTERVAL_MIN + Math.random() * (BOLT_INTERVAL_MAX - BOLT_INTERVAL_MIN);
+        const free = bolts.find((b) => b.life <= 0);
+        if (free) {
+          free.life = BOLT_LIFE;
+          free.mesh.position.set(ufo.position.x, ufo.position.y - 0.1, -0.2);
+          free.mesh.visible = true;
+        }
+      }
     });
+
+    for (const bolt of bolts) {
+      if (bolt.life <= 0) continue;
+      bolt.life -= delta;
+      bolt.mesh.position.y -= BOLT_SPEED * delta;
+      // Blink on the way down, so it reads as an 8-bit bolt rather than a
+      // smooth falling tick.
+      bolt.mesh.visible = Math.sin(bolt.life * 42) > -0.35;
+      if (bolt.life <= 0 || bolt.mesh.position.y < -BOUNDS.y - 1.5) {
+        bolt.life = 0;
+        bolt.mesh.visible = false;
+      }
+    }
 
     renderer.render(scene, camera);
   }

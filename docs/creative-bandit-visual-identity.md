@@ -287,6 +287,30 @@ Not done: a real Lighthouse run and the cross-browser blend-mode check, both of 
 
 ---
 
+## 7b. Mascot pose set
+
+Three full-body builds, all wrapped around the **existing head artwork embedded verbatim** rather than redrawn — the head is the strongest piece of the identity and hand-coding a replacement would only make it worse.
+
+| File | Pose |
+| --- | --- |
+| `mascot/bandit-cat-sleeping.svg` | Curled asleep, tail wrapped, acid `z`s |
+| `mascot/bandit-cat-pistols.svg` | Sitting upright, arms akimbo, two alien sidearms |
+| `mascot/bandit-cat-batting.svg` | Sitting, swiping at a mouse-sized UFO |
+
+Regenerate with `python3 scripts/make-mascot-poses.py <outdir>`. **Beware**: that rebuilds from the head SVG and overwrites the poses, so hand edits made in Illustrator will be lost. Edit the SVGs directly and retire the script once the poses are settled.
+
+Three things learned building them:
+
+- **Limbs are stroked paths with round caps, not filled outlines.** Keeping a constant thickness through a bend is far easier this way, and the first attempt with filled shapes read as blobs rather than legs.
+- **Bone-on-bone needs tonal separation, not keylines.** Tails and far haunches drop to `paper-dim`. Outlining only the body would have looked grafted onto a head that has none.
+- **Judge them on the real background.** The first previews rendered on white and looked fine; on near-black the faded `z`s went muddy and the paper-on-paper overlaps vanished.
+
+The sleeping build drops the head's eye group and substitutes closed curves — the one place the embedded artwork is modified rather than reused as-is.
+
+Not yet placed anywhere on the site. Obvious homes: a 404 page (sleeping), the about/team section (pistols), the exit popup (batting).
+
+---
+
 ## 8. Guardrails
 
 **Performance**
