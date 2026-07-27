@@ -439,35 +439,45 @@
     transform: translate(7px, -4px);
   }
 
-  .cb-mascot--batting [data-cb='arm-swipe'] {
-    transform-origin: 0% 100%;
+  /*
+   * Arm and paw are separate elements, so to swing as one limb they share a
+   * pivot and a single set of keyframes. `transform-box: view-box` is what
+   * makes that possible: it puts transform-origin in the artwork's own
+   * coordinate system, so both can rotate about the shoulder at
+   * (201.7, 129.7) - the start of the arm path. Under the default fill-box
+   * each would spin about its own centre and the paw would tear off the arm.
+   *
+   * Positive rotation here swings the paw down and to the right, which is
+   * where the saucer is.
+   */
+  .cb-mascot--batting [data-cb='arm-swipe'],
+  .cb-mascot--batting [data-cb='paw'] {
+    transform-box: view-box;
+    transform-origin: 201.7px 129.7px;
   }
 
-  .cb-mascot--batting:hover [data-cb='arm-swipe'] {
-    transform: rotate(24deg);
-  }
-
+  .cb-mascot--batting:hover [data-cb='arm-swipe'],
   .cb-mascot--batting:hover [data-cb='paw'] {
-    transform: translate(12px, 30px);
+    animation: cb-swipe 1.2s ease-in-out infinite;
   }
 
   /*
-   * The saucer swerves clear rather than taking the hit: the paw comes from
-   * its lower left, so it breaks up and to the right and banks away. The
-   * short delay is what sells it as a reaction to the swipe rather than the
-   * two things moving in unison.
+   * The saucer ducks the swipe on every pass. Same period as the arm so the
+   * two stay locked, and it peaks just after the paw does - it is reacting,
+   * not moving in step. The paw arrives from its lower left, so it breaks up
+   * and to the right and banks away.
    */
   .cb-mascot--batting [data-cb='ufo'] {
-    transform-origin: 50% 50%;
-    transition-delay: 90ms;
+    transform-box: view-box;
+    transform-origin: 358px 101px;
   }
 
   .cb-mascot--batting:hover [data-cb='ufo'] {
-    transform: translate(18px, -14px) rotate(-16deg);
+    animation: cb-dodge 1.2s ease-in-out infinite;
   }
 
   .cb-mascot--batting:hover [data-cb='spark'] {
-    opacity: 0.35;
+    animation: cb-spark 1.2s ease-in-out infinite;
   }
 
   .cb-mascot--batting [data-cb='tail'] {
@@ -475,7 +485,7 @@
   }
 
   .cb-mascot--batting:hover [data-cb='tail'] {
-    animation: cb-tail-switch 0.9s ease-in-out infinite;
+    animation: cb-tail-switch 1.05s ease-in-out infinite;
   }
 
   /* --- sleeping: it does not wake up ----------------------------------- */
@@ -506,6 +516,44 @@
   }
   50% {
     transform: rotate(7deg);
+  }
+}
+
+/* Out on the swipe, back on the recovery - one pass per cycle. */
+@keyframes cb-swipe {
+  0%,
+  100% {
+    transform: rotate(-14deg);
+  }
+  50% {
+    transform: rotate(30deg);
+  }
+}
+
+/* Peaks a little after the arm, so it reads as ducking the paw. */
+@keyframes cb-dodge {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  42% {
+    transform: translate(16px, -13px) rotate(-12deg);
+  }
+  58% {
+    transform: translate(27px, -22px) rotate(-19deg);
+  }
+  80% {
+    transform: translate(9px, -7px) rotate(-6deg);
+  }
+}
+
+@keyframes cb-spark {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.3;
   }
 }
 

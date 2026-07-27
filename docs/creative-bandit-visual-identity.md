@@ -319,7 +319,7 @@ Every placement declares `width`/`height` matching its viewBox aspect. The three
 
 ## 7c. Mascot hover animations
 
-Each placed mascot animates on hover: the pistols cat coils to jump (squat, hat settles, arms swing out, tail sways), the batting cat leans in and brings its paw down on the UFO, and the sleeping cat twitches an ear and a tail without waking.
+Each placed mascot animates on hover: the pistols cat coils to jump (squat, hat settles, arms swing out, tail sways), the batting cat swipes back and forth at a UFO that ducks every pass, and the sleeping cat twitches an ear and a tail without waking.
 
 **This is why the mascots are inlined rather than `<img>`.** CSS cannot reach inside an `<img>`-loaded SVG document, so `:hover` on the page can't drive a transform on a path in there. `Mascot.astro` reads the file at build time and inlines it.
 
@@ -333,6 +333,8 @@ Inlining and animating flat Illustrator output turned up four traps, all now han
 With `transform-box: fill-box`, a rotation on a multi-element part spins each element about its own centre, so anything rotating must be a single wrapped group. Non-contiguous parts (the pistols hat, seven pieces interleaved with the ears) get one wrapper *each* — the group still shields any baked transform, and a uniform translate across separate wrappers is equivalent to translating one.
 
 Pivots matter as much as the transform: the sleeping tail leaves the body on the right and sweeps left, so hinging it at the left made the whole tail appear to slide rather than flick. Its origin is at the right-hand root.
+
+**Two parts can be driven as one rigid limb** by giving them a shared pivot. The batting arm and paw are separate elements, so `transform-box: view-box` puts `transform-origin` in the artwork's own coordinate system and both rotate about the shoulder at `(201.7, 129.7)` — the start of the arm path — under one set of keyframes. Under the default `fill-box` each would spin about its own centre and the paw would tear off the arm. The swing is 44°, which carries the paw about 72 units, 17% of the artwork's width; the paw's extents were checked at both extremes to confirm it stays in frame.
 
 All hover motion is disabled under `prefers-reduced-motion`; the keyframed parts only get an `animation` on hover, so nothing runs while the page sits idle.
 
