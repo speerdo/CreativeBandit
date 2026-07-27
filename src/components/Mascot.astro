@@ -65,6 +65,10 @@ const PARTS: Record<Pose, Record<string, PartSpec[]>> = {
     hat: [
       { index: 25, paint: '#1b27e8', box: [28, 36, 253, 81] },
       { index: 26, paint: '#0b0b0c', box: [28, 66, 253, 88] },
+      // Brim detail. Left out of the first pass, so they stayed put while the
+      // rest of the hat moved and the brim visibly came apart.
+      { index: 31, paint: '#1b27e8', box: [182, 21, 199, 100] },
+      { index: 32, paint: '#1b27e8', box: [51, 52, 130, 69] },
       { index: 33, paint: '#1b27e8', box: [94, -1, 187, 58] },
       { index: 34, paint: '#0b0b0c', box: [95, 43, 186, 55] },
       { index: 35, paint: '#d9f24a', box: [112, 41, 123, 56] },
@@ -215,7 +219,16 @@ for (const [part, specs] of Object.entries(PARTS[pose])) {
     inserts.push({ pos: first.start, text: `<g data-cb="${part}">` });
     inserts.push({ pos: last.end, text: `</g>` });
   } else {
-    for (const id of ids) inserts.push({ pos: spans[id].open, text: ` data-cb="${part}"` });
+    // Non-contiguous parts get one wrapper each rather than the attribute
+    // going on the element itself. A CSS transform REPLACES a baked
+    // `transform` attribute instead of composing with it, and the pistols
+    // hat band and buckle both carry one - tagging them directly threw the
+    // band clean off the hat. Wrapping keeps the child's own transform
+    // intact and animates the group above it.
+    for (const id of ids) {
+      inserts.push({ pos: spans[id].start, text: `<g data-cb="${part}">` });
+      inserts.push({ pos: spans[id].end, text: `</g>` });
+    }
   }
 }
 

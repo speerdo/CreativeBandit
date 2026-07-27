@@ -444,20 +444,26 @@
   }
 
   .cb-mascot--batting:hover [data-cb='arm-swipe'] {
-    transform: rotate(10deg);
+    transform: rotate(24deg);
   }
 
   .cb-mascot--batting:hover [data-cb='paw'] {
-    transform: translate(5px, 13px);
+    transform: translate(12px, 30px);
   }
 
-  /* Knocked down and sideways, as if just caught by the paw. */
+  /*
+   * The saucer swerves clear rather than taking the hit: the paw comes from
+   * its lower left, so it breaks up and to the right and banks away. The
+   * short delay is what sells it as a reaction to the swipe rather than the
+   * two things moving in unison.
+   */
   .cb-mascot--batting [data-cb='ufo'] {
     transform-origin: 50% 50%;
+    transition-delay: 90ms;
   }
 
   .cb-mascot--batting:hover [data-cb='ufo'] {
-    transform: translate(6px, 11px) rotate(9deg);
+    transform: translate(18px, -14px) rotate(-16deg);
   }
 
   .cb-mascot--batting:hover [data-cb='spark'] {
@@ -481,8 +487,11 @@
     animation: cb-ear-twitch 2.4s ease-in-out infinite;
   }
 
+  /* The tail leaves the body on the right and sweeps left, so it has to
+     pivot at that right-hand root. Hinged at the left it swung from the
+     tip, which read as the whole tail sliding. */
   .cb-mascot--sleeping [data-cb='tail'] {
-    transform-origin: 2% 45%;
+    transform-origin: 95% 42%;
   }
 
   .cb-mascot--sleeping:hover [data-cb='tail'] {
