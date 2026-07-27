@@ -1,4 +1,6 @@
 ---
+import Mascot from './Mascot.astro';
+
 const currentYear = new Date().getFullYear();
 
 const services = [
@@ -40,12 +42,9 @@ const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path)
     control in the section above.
   -->
   {showMascot && (
-    <img
-      src="/mascot/bandit-cat-sleeping.svg"
-      alt=""
-      width="290"
-      height="155"
-      class="pointer-events-none absolute bottom-full right-6 z-10 w-[132px] translate-y-px sm:right-10 sm:w-[168px] lg:right-16 lg:w-[210px]"
+    <Mascot
+      pose="sleeping"
+      class="pointer-events-auto absolute bottom-full right-6 z-10 w-[132px] translate-y-px sm:right-10 sm:w-[168px] lg:right-16 lg:w-[210px]"
     />
   )}
 

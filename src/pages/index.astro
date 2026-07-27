@@ -5,6 +5,7 @@ import ServiceCard from '../components/ServiceCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 import AnimatedStats from '../components/AnimatedStats';
+import Mascot from '../components/Mascot.astro';
 
 const services = [
   {
@@ -166,13 +167,7 @@ const projects = [
           <h2 class="mb-6">Measurable <span class="plate-type">Business Impact</span></h2>
           <p class="text-paper-mute">Concrete outcomes from real projects. Every metric represents actual production results, not projections.</p>
         </div>
-        <img
-          src="/mascot/bandit-cat-pistols.svg"
-          alt=""
-          width="281"
-          height="367"
-          class="hidden w-[124px] shrink-0 lg:block xl:w-[148px]"
-        />
+        <Mascot pose="pistols" class="hidden w-[124px] shrink-0 lg:block xl:w-[148px]" />
       </div>
 
       <div class="mb-16">
@@ -264,13 +259,7 @@ const projects = [
           <h2 class="mb-6">Real <span class="plate-type">Projects</span> With Real Results</h2>
           <p class="text-paper-mute">A selection of production applications showcasing AI automation, full-stack development, and measurable business outcomes.</p>
         </div>
-        <img
-          src="/mascot/bandit-cat-batting.svg"
-          alt=""
-          width="433"
-          height="390"
-          class="hidden w-[168px] shrink-0 lg:block xl:w-[196px]"
-        />
+        <Mascot pose="batting" class="hidden w-[168px] shrink-0 lg:block xl:w-[196px]" />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">

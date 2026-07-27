@@ -317,6 +317,25 @@ Every placement declares `width`/`height` matching its viewBox aspect. The three
 
 ---
 
+## 7c. Mascot hover animations
+
+Each placed mascot animates on hover: the pistols cat coils to jump (squat, hat settles, arms swing out, tail sways), the batting cat leans in and brings its paw down on the UFO, and the sleeping cat twitches an ear and a tail without waking.
+
+**This is why the mascots are inlined rather than `<img>`.** CSS cannot reach inside an `<img>`-loaded SVG document, so `:hover` on the page can't drive a transform on a path in there. `Mascot.astro` reads the file at build time and inlines it.
+
+Inlining and animating flat Illustrator output turned up four traps, all now handled in the component:
+
+1. **Class and id collisions.** Every export names its classes `st0..stN` and its ids `clippath`, `bch-halftone`. Two mascots on one page restyle each other, so both are namespaced per pose.
+2. **No layer names**, so parts are addressed by index in document order. Brittle by nature, so each entry records the paint it expects and the build **fails loudly** if the artwork shifts underneath it — verified by injecting a stray shape and watching it throw. Naming the layers in Illustrator would let us drop the index map entirely and target real ids.
+3. **Baked `transform` attributes.** Illustrator writes placement into `transform` on some shapes (the batting UFO's dome and body carry `translate+rotate`). A CSS transform *replaces* the attribute rather than composing with it, which threw the UFO across the canvas. Multi-element parts are now wrapped in a group that carries the animation while children keep their own transforms.
+4. **Tailwind purging.** The wrapper class was built as `` `cb-mascot--${pose}` `` — an interpolated name is invisible to Tailwind's content scanner, so every per-pose rule was purged and the animations silently did nothing while the markup still looked correct. The pose classes are now spelled out as literals.
+
+With `transform-box: fill-box`, a rotation on a multi-element part spins each element about its own centre, so anything rotating must be a wrapped group. Non-contiguous parts (the pistols hat) stay per-element and may only take uniform transforms — a translate is fine, a rotate is not.
+
+All hover motion is disabled under `prefers-reduced-motion`; the keyframed parts only get an `animation` on hover, so nothing runs while the page sits idle.
+
+---
+
 ## 8. Guardrails
 
 **Performance**
