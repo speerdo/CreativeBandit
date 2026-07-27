@@ -26,16 +26,22 @@ const INK = {
 
 const UFO_COUNT = 4;
 
-// Half-extents of the play area at z=0. The vertical figure is deliberately
-// well inside the frustum (FOV 75 at z=5 gives a half-height of 3.84): the
-// loops are wider than this box is tall, so the craft always overshoots it.
-// Simulated worst case with the cursor pinned outside the area is |y| 2.70,
-// which still leaves better than a unit of headroom.
+/*
+ * The play area is derived from the actual camera frustum on every resize,
+ * not hard-coded. A fixed box only works for one viewport shape: at 1024x768
+ * the visible half-width is about 5.6 units, so the old fixed x=5.0 let a
+ * 2.15-scaled rocket sail clean off the side, while on an ultrawide it kept
+ * the craft penned into the middle third.
+ *
+ * CRAFT_CLEARANCE is the rocket's own reach (body radius at scale, plus the
+ * overshoot the soft containment allows) held back from each edge, so the
+ * hull stays on screen even though the exhaust plume may clip. Checked
+ * against nine viewport shapes from 768x900 to 3440x1200.
+ */
 const BOUNDS = { x: 5.0, y: 2.0 };
-
-// The hero's copy occupies the left of the grid, so the rocket's idle
-// wander is biased right to keep it out from behind the type.
-const WANDER_CENTRE_X = 1.5;
+const CRAFT_CLEARANCE = 2.0;
+const BOUNDS_X_RANGE = { min: 1.3, max: 5.6 };
+const BOUNDS_Y_RANGE = { min: 1.2, max: 2.0 };
 
 /*
  * Flight character is set by the ratio between these two, not by either
@@ -74,17 +80,25 @@ const Y_DAMPING = 1.0;
 // Idle flight aims at randomised waypoints rather than tracing a fixed
 // lissajous, so the path never settles into a visibly repeating figure. A new
 // waypoint is picked on arrival, or when the dwell expires - whichever first.
-const WAYPOINT_X_SPREAD = 3.4;
-const WAYPOINT_Y_SPREAD = 0.8;
+// Fractions of the play area rather than absolute units, so the wander fills
+// whatever space the viewport actually gives it. The x centre is biased right
+// to keep the craft clear of the hero copy.
+const WAYPOINT_X_CENTRE_FRAC = 0.3;
+const WAYPOINT_X_SPREAD_FRAC = 0.62;
+const WAYPOINT_Y_SPREAD_FRAC = 0.4;
 const WAYPOINT_ARRIVE = 1.2;
 const WAYPOINT_HOLD_MIN = 3.5;
 const WAYPOINT_HOLD_MAX = 6;
 
-// Space Invaders style pot-shots. Purely cosmetic - bolts are their own
-// objects and never touch the flight solver, so they cannot perturb either
-// the rocket's path or the convoy's spacing.
+// Pot-shots aimed up the convoy at the rocket. Purely cosmetic - bolts are
+// their own objects and never touch the flight solver, so they cannot perturb
+// either the rocket's path or the convoy's spacing.
+//
+// Bolt speed has to clear the rocket's cruise (3.2) by a decent margin, or a
+// shot fired from the back of the queue never catches what it is aimed at and
+// just trails along behind looking broken.
 const BOLT_POOL = 12;
-const BOLT_SPEED = 2.6;
+const BOLT_SPEED = 5.4;
 const BOLT_LIFE = 1.5;
 const BOLT_INTERVAL_MIN = 2.5;
 const BOLT_INTERVAL_MAX = 7;
@@ -256,12 +270,14 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const { group: rocket, plume } = createRocket();
-  rocket.scale.setScalar(1.45);
+  // Large enough that the cockpit - and the cat in it - is legible at hero
+  // size. At 2.15 the porthole is roughly 45px across on a 800px-tall canvas.
+  rocket.scale.setScalar(2.15);
   scene.add(rocket);
 
   const ufos = Array.from({ length: UFO_COUNT }, () => {
     const ufo = createUfo();
-    ufo.scale.setScalar(1.0);
+    ufo.scale.setScalar(1.3);
     scene.add(ufo);
     return ufo;
   });
@@ -271,14 +287,14 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     const mesh = flat(polygon([[-0.018, 0.07], [0.018, 0.07], [0.018, -0.07], [-0.018, -0.07]]), INK.acid, -0.2);
     mesh.visible = false;
     scene.add(mesh);
-    return { mesh, life: 0 };
+    return { mesh, life: 0, vx: 0, vy: 0 };
   });
   const nextFire = Array.from(
     { length: UFO_COUNT },
     () => BOLT_INTERVAL_MIN + Math.random() * (BOLT_INTERVAL_MAX - BOLT_INTERVAL_MIN)
   );
 
-  const position = new THREE.Vector3(WANDER_CENTRE_X, 0, 0);
+  const position = new THREE.Vector3(BOUNDS.x * 0.3, 0, 0);
   const velocity = new THREE.Vector3(MAX_SPEED * 0.9, 0, 0);
   const smoothedAccel = new THREE.Vector3();
 
@@ -302,15 +318,16 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
   const seekPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
   const pointerNDC = new THREE.Vector2();
   const cursorTarget = new THREE.Vector3();
-  const autoTarget = new THREE.Vector3(WANDER_CENTRE_X + WAYPOINT_X_SPREAD * 0.8, 0.4, 0);
+  const autoTarget = new THREE.Vector3(BOUNDS.x * 0.6, 0.4, 0);
   let waypointHold = WAYPOINT_HOLD_MIN;
   let hasCursorTarget = false;
   let lastPointerMove = 0;
 
   function pickWaypoint() {
     autoTarget.set(
-      WANDER_CENTRE_X + (Math.random() * 2 - 1) * WAYPOINT_X_SPREAD,
-      (Math.random() * 2 - 1) * WAYPOINT_Y_SPREAD,
+      BOUNDS.x * WAYPOINT_X_CENTRE_FRAC +
+        (Math.random() * 2 - 1) * BOUNDS.x * WAYPOINT_X_SPREAD_FRAC,
+      (Math.random() * 2 - 1) * BOUNDS.y * WAYPOINT_Y_SPREAD_FRAC,
       0
     );
     waypointHold = WAYPOINT_HOLD_MIN + Math.random() * (WAYPOINT_HOLD_MAX - WAYPOINT_HOLD_MIN);
@@ -338,6 +355,16 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
   };
   reduceMotionQuery.addEventListener('change', onMotionChange);
 
+  const clampTo = (v: number, r: { min: number; max: number }) =>
+    Math.min(Math.max(v, r.min), r.max);
+
+  function fitBoundsToFrustum() {
+    const halfH = Math.tan(((camera.fov / 2) * Math.PI) / 180) * camera.position.z;
+    const halfW = halfH * camera.aspect;
+    BOUNDS.x = clampTo(halfW - CRAFT_CLEARANCE, BOUNDS_X_RANGE);
+    BOUNDS.y = clampTo(halfH - CRAFT_CLEARANCE, BOUNDS_Y_RANGE);
+  }
+
   const updateSize = () => {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
@@ -345,8 +372,10 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
       renderer.setSize(width, height, false);
       camera.aspect = width / Math.max(height, 1);
       camera.updateProjectionMatrix();
+      fitBoundsToFrustum();
     }
   };
+  fitBoundsToFrustum();
   window.addEventListener('resize', updateSize);
 
   const clock = new THREE.Clock();
@@ -471,8 +500,19 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
           BOLT_INTERVAL_MIN + Math.random() * (BOLT_INTERVAL_MAX - BOLT_INTERVAL_MIN);
         const free = bolts.find((b) => b.life <= 0);
         if (free) {
+          // Aim up the convoy at the rocket, using its position at the
+          // moment of firing. The bolt then flies straight - it is a dumb
+          // projectile, not a homing missile, so the rocket's own turning
+          // makes most shots miss, which is the joke.
+          const aimX = position.x - ufo.position.x;
+          const aimY = position.y - ufo.position.y;
+          const len = Math.hypot(aimX, aimY) || 1;
+          free.vx = (aimX / len) * BOLT_SPEED;
+          free.vy = (aimY / len) * BOLT_SPEED;
           free.life = BOLT_LIFE;
-          free.mesh.position.set(ufo.position.x, ufo.position.y - 0.1, -0.2);
+          free.mesh.position.set(ufo.position.x, ufo.position.y, -0.2);
+          // Bolt geometry is drawn along Y, so square it to the heading.
+          free.mesh.rotation.z = Math.atan2(free.vy, free.vx) - Math.PI / 2;
           free.mesh.visible = true;
         }
       }
@@ -481,11 +521,15 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     for (const bolt of bolts) {
       if (bolt.life <= 0) continue;
       bolt.life -= delta;
-      bolt.mesh.position.y -= BOLT_SPEED * delta;
+      bolt.mesh.position.x += bolt.vx * delta;
+      bolt.mesh.position.y += bolt.vy * delta;
       // Blink on the way down, so it reads as an 8-bit bolt rather than a
       // smooth falling tick.
       bolt.mesh.visible = Math.sin(bolt.life * 42) > -0.35;
-      if (bolt.life <= 0 || bolt.mesh.position.y < -BOUNDS.y - 1.5) {
+      const strayed =
+        Math.abs(bolt.mesh.position.x) > BOUNDS.x + 2 ||
+        Math.abs(bolt.mesh.position.y) > BOUNDS.y + 2;
+      if (bolt.life <= 0 || strayed) {
         bolt.life = 0;
         bolt.mesh.visible = false;
       }

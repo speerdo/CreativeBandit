@@ -24,9 +24,31 @@ const social = [
   { name: "GitHub", href: "https://github.com/speerdo", icon: "github" },
   // { name: "LinkedIn", href: "TODO", icon: "linkedin" },
 ].filter((item) => item.href && item.href !== "#");
+
+// The sleeping cat is bone-coloured and sits above the footer rule, so it
+// only reads against a dark section. Privacy and Terms put a pale slab
+// directly above the footer, where it would all but disappear.
+const palePages = ["/privacy", "/terms"];
+const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path));
 ---
 
-<footer class="border-t border-paper/15 bg-base-200">
+<footer class="relative border-t border-paper/15 bg-base-200">
+  <!--
+    The cat dozes on the footer's top rule. `bottom-full` puts its baseline on
+    the border and the 1px nudge sets it down onto the line rather than
+    floating above it. Decorative and non-interactive, so it never covers a
+    control in the section above.
+  -->
+  {showMascot && (
+    <img
+      src="/mascot/bandit-cat-sleeping.svg"
+      alt=""
+      width="290"
+      height="155"
+      class="pointer-events-none absolute bottom-full right-6 z-10 w-[132px] translate-y-px sm:right-10 sm:w-[168px] lg:right-16 lg:w-[210px]"
+    />
+  )}
+
   <!-- TODO: re-add newsletter signup banner once a real ConvertKit form + lead magnet exist -->
 
   <div class="container mx-auto pt-12 pb-8">

@@ -297,7 +297,9 @@ Three full-body builds, all wrapped around the **existing head artwork embedded 
 | `mascot/bandit-cat-pistols.svg` | Sitting upright, arms akimbo, two alien sidearms |
 | `mascot/bandit-cat-batting.svg` | Sitting, swiping at a mouse-sized UFO |
 
-Regenerate with `python3 scripts/make-mascot-poses.py <outdir>`. **Beware**: that rebuilds from the head SVG and overwrites the poses, so hand edits made in Illustrator will be lost. Edit the SVGs directly and retire the script once the poses are settled.
+All three were subsequently reworked in Illustrator (orange boots, belts, better limbs), so the generator script has been **deleted** — it would have overwritten that work on any future run. These are now hand-maintained assets; edit the SVGs directly.
+
+Illustrator strips `<title>` on export, so the accessible name has to be restored by hand after each round-trip. Worth checking whenever a pose is re-exported.
 
 Three things learned building them:
 
@@ -307,7 +309,11 @@ Three things learned building them:
 
 The sleeping build drops the head's eye group and substitutes closed curves — the one place the embedded artwork is modified rather than reused as-is.
 
-Not yet placed anywhere on the site. Obvious homes: a 404 page (sleeping), the about/team section (pistols), the exit popup (batting).
+Placed on the homepage: pistols beside the *Real Results* header, batting beside *Featured Work*, both filling the empty right of a header row and hidden below `lg` where the column collapses.
+
+The sleeping cat sits on the footer's top rule sitewide, **except** `/privacy` and `/terms` — those put a pale slab directly above the footer, where a bone-coloured cat all but vanishes. (Both pages were also using off-palette `bg-white`; now `bg-paper`.)
+
+Every placement declares `width`/`height` matching its viewBox aspect. The three poses have quite different ratios — 1.87, 0.77, 1.11 — so a copy-pasted box would shift layout as the SVG loads.
 
 ---
 
