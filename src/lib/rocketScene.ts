@@ -365,15 +365,27 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     BOUNDS.y = clampTo(halfH - CRAFT_CLEARANCE, BOUNDS_Y_RANGE);
   }
 
+  /*
+   * Track the last CSS size we handed to the renderer, rather than reading it
+   * back off the canvas. `setSize(w, h, false)` writes `canvas.width` in
+   * DEVICE pixels (w * pixelRatio), so comparing it against `clientWidth` in
+   * CSS pixels never matches on a HiDPI display - the resize path then ran on
+   * every frame, and assigning `canvas.width` reallocates the drawing buffer
+   * each time.
+   */
+  let lastWidth = -1;
+  let lastHeight = -1;
+
   const updateSize = () => {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
-    if (canvas.width !== width || canvas.height !== height) {
-      renderer.setSize(width, height, false);
-      camera.aspect = width / Math.max(height, 1);
-      camera.updateProjectionMatrix();
-      fitBoundsToFrustum();
-    }
+    if (width === lastWidth && height === lastHeight) return;
+    lastWidth = width;
+    lastHeight = height;
+    renderer.setSize(width, height, false);
+    camera.aspect = width / Math.max(height, 1);
+    camera.updateProjectionMatrix();
+    fitBoundsToFrustum();
   };
   fitBoundsToFrustum();
   window.addEventListener('resize', updateSize);
@@ -538,10 +550,40 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     renderer.render(scene, camera);
   }
 
-  animate();
+  /*
+   * Only run while the hero is actually on screen. rAF already stops for a
+   * hidden TAB, but not for a canvas that has been scrolled past, so without
+   * this the solver and a full WebGL draw keep going for the whole session on
+   * a page the hero occupies only the top of.
+   *
+   * The first delta after a resume is clamped by the same Math.min in
+   * animate(), so the craft picks up where it left off rather than jumping.
+   */
+  let running = false;
+
+  function start() {
+    if (running) return;
+    running = true;
+    clock.getDelta(); // discard time accumulated while parked
+    frameId = requestAnimationFrame(animate);
+  }
+
+  function stop() {
+    if (!running) return;
+    running = false;
+    cancelAnimationFrame(frameId);
+    frameId = 0;
+  }
+
+  const visibility = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) start();
+    else stop();
+  });
+  visibility.observe(canvas);
 
   return function cleanup() {
-    cancelAnimationFrame(frameId);
+    stop();
+    visibility.disconnect();
     window.removeEventListener('resize', updateSize);
     window.removeEventListener('pointermove', onPointerMove);
     reduceMotionQuery.removeEventListener('change', onMotionChange);

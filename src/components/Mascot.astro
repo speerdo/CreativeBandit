@@ -150,7 +150,7 @@ if (styleBlock) {
 
 const elements = [...svg.matchAll(/<(path|circle|ellipse|rect|polygon)\b([^>]*)>/g)];
 
-const wanted = new Map<number, string>();
+// Verification pass only - the wrapping below re-walks PARTS itself.
 for (const [part, specs] of Object.entries(PARTS[pose])) {
   for (const spec of specs) {
     if (spec.index >= offsets.length) {
@@ -174,7 +174,6 @@ for (const [part, specs] of Object.entries(PARTS[pose])) {
           `animating the wrong shape.`
       );
     }
-    wanted.set(spec.index, part);
   }
 }
 

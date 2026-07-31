@@ -38,8 +38,12 @@ const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path)
   <!--
     The cat dozes on the footer's top rule. `bottom-full` puts its baseline on
     the border and the 1px nudge sets it down onto the line rather than
-    floating above it. Decorative and non-interactive, so it never covers a
-    control in the section above.
+    floating above it.
+
+    It DOES take pointer events - that is what drives the hover animation - so
+    although it is decorative it still sits over the bottom-right corner of
+    whatever section precedes the footer. No page currently puts a control
+    there; keep it that way, or this will silently eat the clicks.
   -->
   {showMascot && (
     <Mascot

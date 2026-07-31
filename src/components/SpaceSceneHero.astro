@@ -93,8 +93,10 @@ const stats = [
    *   - not at all under prefers-reduced-motion. A rocket tearing around the
    *     header is exactly what that setting is asking us not to do, and
    *     skipping it skips the download too.
-   *   - not on small viewports, where the payload costs the most and the
-   *     canvas is largely covered by the type anyway.
+   *   - not below lg, where the payload costs the most and the canvas is
+   *     largely covered by the type anyway. This threshold must stay in step
+   *     with the fallback's `lg:hidden`: at a narrower one the two overlap,
+   *     and a tablet pays for the chunk AND paints the mascot over it.
    *   - otherwise, only once the hero is actually on screen.
    *
    * The static mascot covers every path where the scene does not run: it is
@@ -107,7 +109,7 @@ const stats = [
   if (canvas instanceof HTMLCanvasElement) {
     const skip =
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      window.matchMedia('(max-width: 767px)').matches;
+      window.matchMedia('(max-width: 1023px)').matches;
 
     if (skip) {
       // No scene here, so the static mascot carries the column at every width.
@@ -118,7 +120,15 @@ const stats = [
         obs.disconnect();
         try {
           const { initRocketScene } = await import('../lib/rocketScene');
-          initRocketScene(canvas);
+          const cleanup = initRocketScene(canvas);
+          // Drop the GL context and listeners on the way out. Not when the
+          // page is only being parked in the bfcache though - it can be
+          // restored with this exact context, and disposing it there would
+          // bring the visitor back to a dead hero. Nothing runs while it is
+          // parked anyway; the browser freezes rAF.
+          window.addEventListener('pagehide', (event) => {
+            if (!event.persisted) cleanup();
+          });
         } catch (error) {
           // Chunk failed to load, or no WebGL context. Bring the static
           // mascot back rather than leaving an empty column.
