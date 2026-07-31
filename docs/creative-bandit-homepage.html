@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creative Bandit — The build team for WordPress agencies</title>
+<style>
+  :root{
+    --ink:#14171C;
+    --ink-soft:#4A5260;
+    --paper:#FFFFFF;
+    --panel:#F3F4F7;
+    --line:#DFE2E9;
+    --cobalt:#2F3BE0;
+    --cobalt-dim:#E8E9FC;
+    --flag:#B4531A;
+    --ok:#1F7A55;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:"Helvetica Neue",Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:17px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--cobalt);outline-offset:3px}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 20px;
+  }
+  h1,h2,h3{letter-spacing:-.025em;line-height:1.1;margin:0}
+  h1{font-size:clamp(38px,6vw,62px);font-weight:700}
+  h2{font-size:clamp(28px,4vw,40px);font-weight:700}
+  h3{font-size:19px;font-weight:700;letter-spacing:-.01em}
+  p{margin:0 0 18px}
+  .lede{font-size:clamp(18px,2.1vw,21px);color:var(--ink-soft);max-width:60ch}
+
+  /* ---------- header (boilerplate) ---------- */
+  header{border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{font-weight:700;letter-spacing:-.03em;font-size:19px}
+  nav{display:flex;gap:28px;font-size:15px}
+  nav a{text-decoration:none;color:var(--ink-soft)}
+  nav a:hover{color:var(--ink)}
+  @media(max-width:720px){nav{display:none}}
+
+  .btn{
+    display:inline-block;background:var(--cobalt);color:#fff;text-decoration:none;
+    font-weight:600;font-size:16px;padding:15px 26px;border-radius:4px;
+  }
+  .btn:hover{background:#232DC4}
+  .btn-ghost{
+    display:inline-block;text-decoration:none;font-weight:600;font-size:16px;
+    padding:15px 26px;border:1px solid var(--line);border-radius:4px;
+  }
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .note{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);margin-top:16px}
+
+  section{padding:88px 0;border-bottom:1px solid var(--line)}
+  .tint{background:var(--panel)}
+
+  /* ---------- hero ---------- */
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;gap:40px}}
+
+  /* signature: the scan result card */
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(20,23,28,.05),0 12px 32px rgba(20,23,28,.07);
+  }
+  .card-top{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:13px 18px;border-bottom:1px solid var(--line);background:#FAFBFD;
+    font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:7px}
+  .row{display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .tag{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 7px;border-radius:3px;height:fit-content;white-space:nowrap;
+  }
+  .t-gap{background:#FBEDE4;color:var(--flag)}
+  .t-opp{background:var(--cobalt-dim);color:var(--cobalt)}
+  .t-ok{background:#E4F2EC;color:var(--ok)}
+  .row strong{display:block;font-size:15px;margin-bottom:2px}
+  .row span{font-size:14px;color:var(--ink-soft);line-height:1.45}
+  .card-foot{
+    padding:14px 18px;background:#FAFBFD;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+  }
+
+  /* ---------- generic grids ---------- */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:44px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;margin-top:44px}
+  @media(max-width:860px){.grid-3,.grid-2{grid-template-columns:1fr;gap:28px}}
+  .item p{color:var(--ink-soft);font-size:16px;margin:10px 0 0}
+
+  .svc{border-top:2px solid var(--ink);padding-top:18px}
+  .svc .who{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cobalt);margin-bottom:10px}
+  .svc ul{margin:14px 0 0;padding-left:18px;color:var(--ink-soft);font-size:15.5px}
+  .svc li{margin-bottom:6px}
+
+  .step{display:flex;gap:20px;padding:26px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:0}
+  .num{font-family:var(--mono);font-size:13px;color:var(--cobalt);padding-top:4px;min-width:34px}
+  .step p{margin:8px 0 0;color:var(--ink-soft);font-size:16px;max-width:62ch}
+
+  .quote{
+    border-left:3px solid var(--cobalt);padding:4px 0 4px 22px;
+    font-size:19px;line-height:1.5;max-width:56ch;
+  }
+  .attrib{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);margin-top:14px}
+
+  .price{border:1px solid var(--line);border-radius:6px;padding:26px}
+  .price .amt{font-size:15px;font-family:var(--mono);color:var(--cobalt);margin:10px 0 0}
+
+  .cta{text-align:center;padding:96px 0}
+  .cta h2{max-width:20ch;margin:0 auto 18px}
+  .cta .lede{margin:0 auto 30px}
+  .cta .btn-row{justify-content:center}
+
+  footer{padding:44px 0;font-size:14px;color:var(--ink-soft)}
+  .foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+  .ph{background:#FFF6D6;padding:0 4px;border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER (boilerplate) ===== -->
+<header>
+  <div class="wrap bar">
+    <div class="logo">Creative Bandit</div>
+    <nav>
+      <a href="#build">What we build</a>
+      <a href="#scan">Free scan</a>
+      <a href="#why">Why us</a>
+      <a href="#work">Work</a>
+    </nav>
+    <a class="btn" href="#scan">Run a free scan</a>
+  </div>
+</header>
+
+<!-- ===== 1. HERO ===== -->
+<section>
+  <div class="wrap hero">
+    <div>
+      <p class="eyebrow">For agencies running 5+ WordPress sites</p>
+      <h1>Your clients are asking about AI. You don't have anyone to build it.</h1>
+      <p class="lede" style="margin-top:22px">
+        Creative Bandit is the build team behind WordPress agencies. We ship the AI
+        work your clients are asking for, under your name, without you hiring an
+        engineer to do it.
+      </p>
+      <div class="btn-row" style="margin-top:30px">
+        <a class="btn" href="#scan">Scan a client site free</a>
+        <a class="btn-ghost" href="#build">See what we build</a>
+      </div>
+      <p class="note">No call required. Results in about 90 seconds.</p>
+    </div>
+
+    <!-- signature element: the scan is the business model, so it leads -->
+    <div class="card" aria-label="Example scan result">
+      <div class="card-top">
+        <span><span class="dot"></span>clientsite.com</span>
+        <span>AI readiness scan</span>
+      </div>
+      <div class="row">
+        <span class="tag t-gap">Gap</span>
+        <div><strong>No structured data on 34 of 41 pages</strong>
+        <span>AI assistants can't reliably read what this business does or sells.</span></div>
+      </div>
+      <div class="row">
+        <span class="tag t-opp">Opportunity</span>
+        <div><strong>68% of support pages answer repeat questions</strong>
+        <span>Most of this inbound could be handled before it reaches a human.</span></div>
+      </div>
+      <div class="row">
+        <span class="tag t-gap">Gap</span>
+        <div><strong>Product data is locked in page templates</strong>
+        <span>Nothing here can feed an assistant, a chat layer, or an internal tool.</span></div>
+      </div>
+      <div class="row">
+        <span class="tag t-ok">Good</span>
+        <div><strong>Clean URL structure and fast response times</strong>
+        <span>The foundation is solid. The gaps above are fixable.</span></div>
+      </div>
+      <div class="card-foot">4 findings · full report emailed · no obligation</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. THE PROBLEM ===== -->
+<section class="tint">
+  <div class="wrap">
+    <p class="eyebrow">The position you're in</p>
+    <h2>Every agency is having the same three conversations right now.</h2>
+    <div class="grid-3">
+      <div class="item">
+        <h3>The client asks first</h3>
+        <p>They've read something, or a competitor shipped a chat layer. They want
+        to know what you're doing about it. Saying "we're evaluating options" works
+        exactly once.</p>
+      </div>
+      <div class="item">
+        <h3>Hiring for it doesn't pencil</h3>
+        <p>An engineer who can actually ship this is expensive and hard to keep busy.
+        You need one three times a quarter, not five days a week.</p>
+      </div>
+      <div class="item">
+        <h3>The cheap tools embarrass you</h3>
+        <p>A bolt-on chat widget that hallucinates pricing is worse than nothing.
+        It goes out under your name, and so does the apology.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. WHAT WE BUILD ===== -->
+<section id="build">
+  <div class="wrap">
+    <p class="eyebrow">What we build</p>
+    <h2>Two things agencies subcontract badly. We do both properly.</h2>
+    <p class="lede" style="margin-top:18px">
+      Everything ships white-labeled. Your client never has to know we exist,
+      and we're fine with that.
+    </p>
+
+    <div class="grid-2">
+      <div class="svc">
+        <p class="who">Engineering</p>
+        <h3>AI that touches real systems</h3>
+        <p style="color:var(--ink-soft);font-size:16px;margin-top:10px">
+          Not a chat bubble trained on a sitemap. Agents wired into the systems a
+          business actually runs on, built by someone who has shipped this where
+          being wrong has consequences.
+        </p>
+        <ul>
+          <li>Support agents grounded in real client data, not guesses</li>
+          <li>Internal tools that read and write to the systems staff already use</li>
+          <li>Content and product pipelines that keep large sites current</li>
+          <li>Custom integrations where the off-the-shelf tool gives up</li>
+          <li>Ongoing monitoring, because an agent left alone drifts</li>
+        </ul>
+      </div>
+
+      <div class="svc">
+        <p class="who">Creative</p>
+        <h3>Design and motion that ships on time</h3>
+        <p style="color:var(--ink-soft);font-size:16px;margin-top:10px">
+          The overflow work that's currently going to a freelancer you have to
+          manage. Same team, same standards, already briefed on the build.
+        </p>
+        <ul>
+          <li>Brand systems and site design</li>
+          <li>Motion graphics and short-form video</li>
+          <li>Ad creative built to be tested, not just delivered</li>
+          <li>Paid media production and management your client sees as yours</li>
+          <li>Interface design for the tools we build, so they don't look built by engineers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. THE SCAN ===== -->
+<section id="scan" class="tint">
+  <div class="wrap">
+    <p class="eyebrow">Start here</p>
+    <h2>Point us at one client site. We'll tell you what's actually possible.</h2>
+    <p class="lede" style="margin-top:18px">
+      Most AI conversations start with a pitch deck. This one starts with findings
+      about a site you already manage.
+    </p>
+
+    <div style="margin-top:36px;max-width:760px">
+      <div class="step">
+        <div class="num">01</div>
+        <div>
+          <h3>Give us a URL</h3>
+          <p>One client site. No account, no discovery call, no form that asks for
+          your budget range before it tells you anything.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <div>
+          <h3>We scan and report</h3>
+          <p>What AI assistants can and can't currently understand about that
+          business, how much of its support load is automatable, and which data is
+          stranded in places nothing can reach. Specific findings, not a grade.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <div>
+          <h3>You decide what to do with it</h3>
+          <p>Take the report to your client and win the work yourself. Or hand the
+          build to us and put your name on it. Both outcomes are fine. The report
+          is yours either way.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row" style="margin-top:36px">
+      <a class="btn" href="#">Scan a client site</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. WHY US ===== -->
+<section id="why">
+  <div class="wrap">
+    <p class="eyebrow">Why us</p>
+    <h2>We operate what we sell.</h2>
+
+    <div class="grid-3">
+      <div class="item">
+        <h3>We run our own fleet</h3>
+        <p>Five sites in production, built and maintained by the same two people
+        who'd be doing your work. We find the problems in our own properties before
+        we go looking in yours.</p>
+      </div>
+      <div class="item">
+        <h3>Shipped where it has to be right</h3>
+        <p>AI agent tooling built and deployed inside a regulated financial
+        institution. The standards there are not the standards of a weekend
+        chatbot build.</p>
+      </div>
+      <div class="item">
+        <h3>Two people, no handoffs</h3>
+        <p>You talk to the engineer and the designer. There is no account manager
+        translating your brief into a ticket, and nothing gets lost on the way to
+        whoever actually builds it.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:52px">
+      <div class="quote">
+        <span class="ph">[Client quote goes here. Best version names a specific
+        outcome: hours saved, a deadline hit, a client retained.]</span>
+      </div>
+      <p class="attrib"><span class="ph">[Name, role, agency]</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. WORK / PROOF ===== -->
+<section id="work" class="tint">
+  <div class="wrap">
+    <p class="eyebrow">Recent work</p>
+    <h2>Three builds, and what they actually changed.</h2>
+    <div class="grid-3">
+      <div class="item">
+        <h3><span class="ph">[Build name]</span></h3>
+        <p><span class="ph">[One sentence on the problem. One on what you built.
+        One on the measurable result. Numbers beat adjectives every time.]</span></p>
+      </div>
+      <div class="item">
+        <h3><span class="ph">[Build name]</span></h3>
+        <p><span class="ph">[Same structure. If you don't have a client result yet,
+        use one of your own properties and say so plainly. Operators respect
+        that more than a vague case study.]</span></p>
+      </div>
+      <div class="item">
+        <h3><span class="ph">[Design or motion piece]</span></h3>
+        <p><span class="ph">[Kat's work. Lead with the constraint she worked
+        within, not the deliverable list.]</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. PRICING POSTURE ===== -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">How this works commercially</p>
+    <h2>Priced so you can mark it up.</h2>
+    <p class="lede" style="margin-top:18px">
+      You're reselling this. We price with that in mind and we don't approach your
+      clients directly, ever.
+    </p>
+
+    <div class="grid-3">
+      <div class="price">
+        <h3>Scan</h3>
+        <p style="color:var(--ink-soft);font-size:15.5px;margin-top:10px">
+          One client site, full findings report, yours to use however you want.</p>
+        <p class="amt">Free</p>
+      </div>
+      <div class="price">
+        <h3>Build</h3>
+        <p style="color:var(--ink-soft);font-size:15.5px;margin-top:10px">
+          Fixed scope, fixed price, agreed before anything starts. No hourly
+          surprises landing in the middle of your client's project.</p>
+        <p class="amt">From <span class="ph">[$X]</span></p>
+      </div>
+      <div class="price">
+        <h3>Retained</h3>
+        <p style="color:var(--ink-soft);font-size:15.5px;margin-top:10px">
+          Monthly capacity across engineering and creative. Priced by the number of
+          sites you run, not by ticket.</p>
+        <p class="amt">From <span class="ph">[$X]</span>/mo</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. CLOSING CTA ===== -->
+<section class="cta tint" style="border-bottom:0">
+  <div class="wrap">
+    <h2>Find out what one client site is sitting on.</h2>
+    <p class="lede">
+      The scan is free, it takes about 90 seconds, and the report is useful whether
+      or not you ever hire us.
+    </p>
+    <div class="btn-row">
+      <a class="btn" href="#">Run a free scan</a>
+      <a class="btn-ghost" href="#">Book 20 minutes instead</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER (boilerplate) ===== -->
+<footer>
+  <div class="wrap foot">
+    <span>Creative Bandit LLC · Zionsville, Indiana</span>
+    <span><span class="ph">[hello@creativebandit.studio]</span></span>
+  </div>
+</footer>
+
+</body>
+</html>
