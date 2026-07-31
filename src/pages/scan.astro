@@ -1,0 +1,214 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Free AI Readiness Scan"
+  description="Point us at one client site and we'll tell you what AI assistants can and can't currently do with it. Free, no account, no discovery call."
+  keywords="AI readiness scan, GPTBot blocked, ClaudeBot robots.txt, AI crawler blocking, WordPress AI audit, llms.txt"
+>
+  <section class="section pt-32">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <p class="label-tech mb-4">Free scan</p>
+        <h1 class="mb-6">What Can AI Assistants <span class="plate-type">Actually See</span> On This Site?</h1>
+        <p class="text-paper-mute text-lg mb-10">
+          One client site. No account, no discovery call, no form that asks for your budget range before it tells you anything.
+        </p>
+
+        <form id="scanForm" class="crop-marks border border-paper/15 bg-base-100 p-8">
+          <label for="scanUrl" class="mb-2 block font-mono text-[0.7rem] uppercase tracking-[0.14em] text-paper-mute">
+            Site URL <span class="text-ink-hot">*</span>
+          </label>
+          <input
+            type="text"
+            id="scanUrl"
+            name="url"
+            required
+            placeholder="clientsite.com"
+            autocomplete="url"
+            class="w-full border border-paper/20 bg-base-200 px-4 py-3 text-paper transition-colors duration-200 focus:border-ink-acid focus:outline-none focus:ring-1 focus:ring-ink-acid"
+          />
+
+          <label class="mt-6 flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="scanAttest"
+              required
+              class="mt-1 h-4 w-4 flex-shrink-0 accent-[#FF4D14]"
+            />
+            <span class="text-sm text-paper-mute">
+              I manage this site, or I have permission to scan it.
+            </span>
+          </label>
+
+          <button type="submit" id="scanSubmit" class="btn-primary mt-8 w-full py-4 text-lg">
+            Run the Scan
+          </button>
+
+          <p class="mt-3 text-center font-mono text-[0.65rem] uppercase tracking-[0.12em] text-paper-mute/70">
+            No call required. Checks run in a few seconds.
+          </p>
+        </form>
+
+        <!-- Status line, swapped for results once the scan returns. -->
+        <p id="scanStatus" class="mt-6 font-mono text-sm text-ink-acid" hidden></p>
+        <p id="scanError" class="mt-6 font-mono text-sm text-ink-hot" role="alert" hidden></p>
+      </div>
+
+      <!-- Results. Structure mirrors the card in docs/creative-bandit-homepage.html. -->
+      <div id="scanResults" class="mt-12 max-w-3xl" hidden>
+        <div class="flex items-center justify-between border border-paper/15 bg-base-200 px-5 py-3">
+          <span class="font-mono text-xs text-paper-mute">
+            <span id="scanDomain"></span>
+          </span>
+          <span class="font-mono text-xs text-paper-mute">AI readiness scan</span>
+        </div>
+
+        <div id="scanFindings" class="border-x border-b border-paper/15"></div>
+
+        <div class="border-x border-b border-paper/15 bg-base-200 px-5 py-3 font-mono text-xs text-paper-mute">
+          <span id="scanFooter"></span>
+        </div>
+
+        <div class="mt-10">
+          <p class="text-paper-mute mb-6">
+            Take these findings to your client and win the work yourself, or hand the build to us and put your name on it. Both outcomes are fine.
+          </p>
+          <a href="/contact" class="btn-primary">Talk to Us About the Build</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.querySelector('#scanForm') as HTMLFormElement | null;
+  const urlInput = document.querySelector('#scanUrl') as HTMLInputElement | null;
+  const attest = document.querySelector('#scanAttest') as HTMLInputElement | null;
+  const submit = document.querySelector('#scanSubmit') as HTMLButtonElement | null;
+  const status = document.querySelector('#scanStatus') as HTMLElement | null;
+  const errorEl = document.querySelector('#scanError') as HTMLElement | null;
+  const results = document.querySelector('#scanResults') as HTMLElement | null;
+  const findingsEl = document.querySelector('#scanFindings') as HTMLElement | null;
+  const domainEl = document.querySelector('#scanDomain') as HTMLElement | null;
+  const footerEl = document.querySelector('#scanFooter') as HTMLElement | null;
+
+  interface Finding {
+    id: string;
+    tag: 'gap' | 'opportunity' | 'good';
+    title: string;
+    detail: string;
+    evidence?: { quote?: string; source?: string };
+    remediation: string;
+  }
+
+  // Tag colours come from the existing ink palette rather than new tokens.
+  const TAG_CLASS: Record<Finding['tag'], string> = {
+    gap: 'border-ink-hot text-ink-hot',
+    opportunity: 'border-ink-cold-lift text-ink-cold-lift',
+    good: 'border-ink-acid text-ink-acid',
+  };
+
+  const TAG_LABEL: Record<Finding['tag'], string> = {
+    gap: 'Gap',
+    opportunity: 'Opportunity',
+    good: 'Good',
+  };
+
+  function show(el: HTMLElement | null, visible: boolean) {
+    if (el) el.hidden = !visible;
+  }
+
+  function renderFinding(finding: Finding): HTMLElement {
+    const row = document.createElement('div');
+    row.className = 'flex gap-4 border-b border-paper/10 px-5 py-4 last:border-b-0';
+
+    const tag = document.createElement('span');
+    tag.className = `h-fit shrink-0 border px-2 py-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] ${TAG_CLASS[finding.tag]}`;
+    tag.textContent = TAG_LABEL[finding.tag];
+
+    const body = document.createElement('div');
+
+    const title = document.createElement('strong');
+    title.className = 'block text-paper';
+    title.textContent = finding.title;
+    body.append(title);
+
+    const detail = document.createElement('span');
+    detail.className = 'mt-1 block text-sm text-paper-mute';
+    detail.textContent = finding.detail;
+    body.append(detail);
+
+    // Never assert without showing the receipt.
+    if (finding.evidence?.quote) {
+      const quote = document.createElement('code');
+      quote.className = 'mt-2 block bg-base-200 px-2 py-1 font-mono text-xs text-paper-dim';
+      quote.textContent = finding.evidence.quote;
+      body.append(quote);
+    }
+
+    const fix = document.createElement('span');
+    fix.className = 'mt-2 block text-sm text-paper-mute/80';
+    fix.textContent = `Fix: ${finding.remediation}`;
+    body.append(fix);
+
+    row.append(tag, body);
+    return row;
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!urlInput || !attest || !submit) return;
+
+    show(errorEl, false);
+    show(results, false);
+    show(status, true);
+    if (status) status.textContent = 'Checking robots.txt and probing the CDN...';
+    submit.disabled = true;
+    submit.textContent = 'Scanning...';
+
+    try {
+      const response = await fetch('/api/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: urlInput.value, attested: attest.checked }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error ?? 'The scan could not complete.');
+      }
+
+      show(status, false);
+
+      if (domainEl) domainEl.textContent = new URL(data.url).hostname;
+      if (findingsEl) {
+        findingsEl.replaceChildren(...data.findings.map(renderFinding));
+      }
+      if (footerEl) {
+        const count = data.findings.length;
+        const seconds = (data.durationMs / 1000).toFixed(1);
+        const parts = [`${count} finding${count === 1 ? '' : 's'}`, `${seconds}s`];
+        // A partial report is a success, but say so plainly.
+        if (data.incomplete?.length) {
+          parts.push(`${data.incomplete.length} check(s) did not complete`);
+        }
+        footerEl.textContent = parts.join(' · ');
+      }
+
+      show(results, true);
+    } catch (error) {
+      show(status, false);
+      if (errorEl) {
+        errorEl.textContent =
+          error instanceof Error ? error.message : 'The scan could not complete.';
+      }
+      show(errorEl, true);
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'Run the Scan';
+    }
+  });
+</script>

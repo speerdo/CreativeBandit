@@ -1,8 +1,31 @@
 # Creative Bandit — AI Readiness Scan
 
-**Status:** Spec. Nothing built.
+**Status:** Phases 0 and 1 built on `ai-readiness-scan`. Phases 2–5 outstanding.
 **Date:** 2026-07-31
 **Blocks:** homepage copy that is already live-ready on `kat-design-updates`
+
+> **Build notes — what shipped, and where it departed from this document.**
+>
+> - **Synchronous, not a job queue (§2.2).** With only check 1 running, a scan
+>   completes in well under a second on a healthy site, so `/api/scan` is a
+>   plain request/response and there is no database yet. The job model becomes
+>   necessary in phase 2, when page sampling lands.
+> - **A reachability precheck was added**, and it is not in the original plan.
+>   A parked domain resolves fine but answers nothing, and without the
+>   precheck the scan burned 14 seconds timing out and then reported "No
+>   robots.txt" as an opportunity — which reads as *your site is fine, just add
+>   a file* about a site that is not responding. Found by scanning
+>   `creativebandit.studio`, which is currently parked.
+> - **Rate limiting is in-memory**, therefore per-instance and reset by cold
+>   starts. It is a speed bump, not the §6 requirement. Shared state is needed
+>   before this is linked publicly.
+> - **UA emulation defaults to the compound string** (§3.1). `SCANNER_EXACT_UA=1`
+>   switches to exact bot UAs. Still needs the decision in §9.1.
+> - **Address pinning has a residual TOCTOU window.** We validate every resolved
+>   address and re-validate every redirect hop, but Node's `fetch` performs its
+>   own lookup, so closing the gap fully needs a custom agent with a `lookup`
+>   hook. The practical redirect-to-metadata attack is blocked; the theoretical
+>   race is not.
 
 ---
 
@@ -324,18 +347,18 @@ Also required:
 ## 8. Implementation plan
 
 ### Phase 0 — Infrastructure
-- [ ] Add `@astrojs/vercel`; keep static output, opt API routes into on-demand rendering
-- [ ] Confirm the account's actual max function duration (§2.3) before finalizing the job design
-- [ ] Neon: `scan_job` and `scan_finding` tables
-- [ ] Build the hardened fetch layer from §6 **first**, and unit-test it against the SSRF cases before any check uses it
-- [ ] `POST /api/scan` + `GET /api/scan/:jobId` skeleton returning a stub finding
+- [x] Add `@astrojs/vercel`; keep static output, opt API routes into on-demand rendering
+- [ ] Confirm the account's actual max function duration (§2.3) — not yet needed, but gates phase 2
+- [ ] ~~Neon: `scan_job` and `scan_finding` tables~~ — deferred to phase 2; check 1 is synchronous
+- [x] Build the hardened fetch layer from §6 **first**, and unit-test it against the SSRF cases before any check uses it
+- [x] `POST /api/scan` (synchronous; no `:jobId` route until phase 2)
 
 ### Phase 1 — Ship check 1 alone
-- [ ] robots.txt parser with correct group/precedence semantics
-- [ ] Agent table (§3.1) with per-agent consequence copy
-- [ ] Edge-block detection with control comparison
+- [x] robots.txt parser with correct group/precedence semantics
+- [x] Agent table (§3.1) with per-agent consequence copy
+- [x] Edge-block detection with control comparison
 - [ ] **Decision on UA emulation (§9) before this ships**
-- [ ] Results UI: findings stream in, tagged, 4 on screen
+- [x] Results UI at `/scan`, tagged gap/opportunity/good (renders all findings; streaming lands with phase 2)
 
 A scan that *only* reports crawler blocking is already worth putting on the site. It is the best finding, it fits in ~10 seconds, and shipping it alone proves the funnel before we pay for headless rendering. **Do not wait for all five checks to launch.**
 
@@ -354,7 +377,7 @@ A scan that *only* reports crawler blocking is already worth putting on the site
 ### Phase 4 — Delivery
 - [ ] Email provider + report template
 - [ ] Ownership attestation, rate limiting, privacy-policy update
-- [ ] Point the homepage CTAs at the scanner instead of `/contact` (`SpaceSceneHero.astro`, and the closing CTA in `index.astro`)
+- [x] Point the homepage CTAs at the scanner instead of `/contact` (all three now go to `/scan`)
 
 ### Phase 5 — Validate the claim
 - [ ] Run 20 real agency-managed WordPress sites through it
