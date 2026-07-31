@@ -1,4 +1,6 @@
 ---
+import Mascot from './Mascot.astro';
+
 const currentYear = new Date().getFullYear();
 
 const services = [
@@ -17,27 +19,54 @@ const company = [
   { name: "Contact", href: "/contact" },
 ];
 
+// Only entries with a real URL. LinkedIn previously shipped as href="#",
+// which renders a control that looks live and goes nowhere. Add the URL here
+// and it comes back automatically.
 const social = [
   { name: "GitHub", href: "https://github.com/speerdo", icon: "github" },
-  // TODO: replace with real LinkedIn URL (personal or company page)
-  { name: "LinkedIn", href: "#", icon: "linkedin" },
-];
+  // { name: "LinkedIn", href: "TODO", icon: "linkedin" },
+].filter((item) => item.href && item.href !== "#");
+
+// The sleeping cat is bone-coloured and sits above the footer rule, so it
+// only reads against a dark section. Privacy and Terms put a pale slab
+// directly above the footer, where it would all but disappear.
+const palePages = ["/privacy", "/terms"];
+const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path));
 ---
 
-<footer class="bg-dark-200 border-t border-dark-100">
+<footer class="relative border-t border-paper/15 bg-base-200">
+  <!--
+    The cat dozes on the footer's top rule. `bottom-full` puts its baseline on
+    the border and the 1px nudge sets it down onto the line rather than
+    floating above it.
+
+    It DOES take pointer events - that is what drives the hover animation - so
+    although it is decorative it still sits over the bottom-right corner of
+    whatever section precedes the footer. No page currently puts a control
+    there; keep it that way, or this will silently eat the clicks.
+  -->
+  {showMascot && (
+    <Mascot
+      pose="sleeping"
+      class="pointer-events-auto absolute bottom-full right-6 z-10 w-[132px] translate-y-px sm:right-10 sm:w-[168px] lg:right-16 lg:w-[210px]"
+    />
+  )}
+
   <!-- TODO: re-add newsletter signup banner once a real ConvertKit form + lead magnet exist -->
 
   <div class="container mx-auto pt-12 pb-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       <div>
-        <a href="/" class="inline-block mb-4">
-          <span class="text-xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-blazingEmber to-flameTip">CREATIVE</span>
-          <span class="text-xl font-heading font-normal text-light-100">BANDIT</span>
+        <a href="/" class="mb-4 inline-flex items-center gap-3" aria-label="Creative Bandit, home">
+          <img src="/mascot/bandit-cat-head.svg" alt="" width="38" height="32" class="h-8 w-auto" />
+          <span class="font-display text-lg font-extrabold uppercase tracking-tight text-paper" style="font-stretch: 125%;">
+            Creative<span class="text-ink-hot">Bandit</span>
+          </span>
         </a>
-        <p class="text-light-300 mb-4">Building intelligent systems that eliminate manual work and deliver measurable business impact.</p>
+        <p class="text-paper-mute mb-4">Building intelligent systems that eliminate manual work and deliver measurable business impact.</p>
         <div class="flex space-x-4">
           {social.map(item => (
-            <a href={item.href} class="text-light-300 hover:text-blazingEmber transition-colors duration-300" aria-label={`Follow us on ${item.name}`} target="_blank" rel="noopener">
+            <a href={item.href} class="text-paper-mute transition-colors duration-200 hover:text-ink-acid" aria-label={`Follow us on ${item.name}`} target="_blank" rel="noopener">
               <span class="sr-only">{item.name}</span>
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 {item.icon === "twitter" && <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.054 10.054 0 01-3.127 1.184 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>}
@@ -51,11 +80,11 @@ const social = [
       </div>
 
       <div>
-        <h4 class="text-lg font-bold mb-4">Services</h4>
+        <h4 class="label-tech mb-4">Services</h4>
         <ul class="space-y-2">
           {services.map(item => (
             <li>
-              <a href={item.href} class="text-light-300 hover:text-blazingEmber transition-colors duration-300">
+              <a href={item.href} class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">
                 {item.name}
               </a>
             </li>
@@ -64,11 +93,11 @@ const social = [
       </div>
 
       <div>
-        <h4 class="text-lg font-bold mb-4">Company</h4>
+        <h4 class="label-tech mb-4">Company</h4>
         <ul class="space-y-2">
           {company.map(item => (
             <li>
-              <a href={item.href} class="text-light-300 hover:text-blazingEmber transition-colors duration-300">
+              <a href={item.href} class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">
                 {item.name}
               </a>
             </li>
@@ -77,25 +106,25 @@ const social = [
       </div>
 
       <div>
-        <h4 class="text-lg font-bold mb-4">Contact</h4>
-        <address class="not-italic text-light-300">
+        <h4 class="label-tech mb-4">Contact</h4>
+        <address class="not-italic text-paper-mute">
           <p class="mb-4">Indianapolis, IN (Remote-first)</p>
           <p class="mb-2">
-            <a href="mailto:hello@creativebandit.studio" class="hover:text-blazingEmber transition-colors duration-300">hello@creativebandit.studio</a>
+            <a href="mailto:hello@creativebandit.studio" class="transition-colors duration-200 hover:text-ink-acid">hello@creativebandit.studio</a>
           </p>
           <p>
-            <a href="tel:+13176605295" class="hover:text-blazingEmber transition-colors duration-300">(317) 660-5295</a>
+            <a href="tel:+13176605295" class="transition-colors duration-200 hover:text-ink-acid">(317) 660-5295</a>
           </p>
         </address>
       </div>
     </div>
 
-    <div class="border-t border-dark-100 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-      <p class="text-light-300 text-sm">&copy; {currentYear} Creative Bandit, LLC. All rights reserved.</p>
+    <div class="mt-12 border-t border-paper/15 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p class="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper-mute">&copy; {currentYear} Creative Bandit, LLC. All rights reserved.</p>
       <div class="mt-4 md:mt-0">
-        <ul class="flex space-x-6 text-sm">
-          <li><a href="/privacy" class="text-light-300 hover:text-blazingEmber transition-colors duration-300">Privacy Policy</a></li>
-          <li><a href="/terms" class="text-light-300 hover:text-blazingEmber transition-colors duration-300">Terms of Service</a></li>
+        <ul class="flex space-x-6 font-mono text-[0.7rem] uppercase tracking-[0.12em]">
+          <li><a href="/privacy" class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">Privacy Policy</a></li>
+          <li><a href="/terms" class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">Terms of Service</a></li>
         </ul>
       </div>
     </div>

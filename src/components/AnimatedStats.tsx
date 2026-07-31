@@ -12,25 +12,25 @@ const stats: Stat[] = [
     value: 8.08,
     suffix: "%",
     label: "Affiliate conversion rate, 4x the industry average",
-    color: "#ffd700",
+    color: "#D9F24A",
   },
   {
     value: 100,
     suffix: "%",
     label: "AI verification accuracy with Gemini-powered validation",
-    color: "#ff6a00",
+    color: "#FF4D14",
   },
   {
     value: 40,
     suffix: "%",
     label: "Page load improvement on EdReports platform migration",
-    color: "#ff1c1c",
+    color: "#EDE8DF",
   },
   {
     value: 90,
     suffix: "%",
     label: "Reduction in manual review time through automation",
-    color: "#a100ff",
+    color: "#6E79FF",
   },
 ];
 
@@ -44,6 +44,16 @@ function useCountUp(
 
   useEffect(() => {
     if (!trigger) return;
+
+    // A number ticking up from zero is exactly the kind of motion the OS
+    // setting is asking us to skip. Jump straight to the final value.
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      setCurrent(end);
+      return;
+    }
 
     const startTime = performance.now();
 
@@ -75,37 +85,32 @@ function StatCard({ stat, index, isVisible }: { stat: Stat; index: number; isVis
 
   return (
     <div className="relative group">
-      {/* Glow background */}
       <div
-        className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
-        style={{ background: stat.color, opacity: isVisible ? undefined : 0 }}
-      />
-      <div
-        className="relative rounded-2xl p-8 border transition-all duration-500 overflow-hidden"
+        className="relative overflow-hidden border p-8 transition-all duration-300"
         style={{
-          background: "linear-gradient(135deg, rgba(26,26,26,0.9), rgba(13,13,13,0.95))",
-          borderColor: isVisible ? `${stat.color}33` : "transparent",
+          background: "#17171A",
+          borderColor: isVisible ? `${stat.color}55` : "transparent",
         }}
       >
         {/* Accent line at top */}
         <div
-          className="absolute top-0 left-0 h-1 transition-all duration-1000 ease-out"
+          className="absolute left-0 top-0 h-[3px] transition-all duration-1000 ease-out"
           style={{
             width: isVisible ? "100%" : "0%",
-            background: `linear-gradient(90deg, ${stat.color}, transparent)`,
+            background: stat.color,
             transitionDelay: `${index * 150}ms`,
           }}
         />
 
-        <div className="text-center">
+        <div>
           <div
-            className="text-5xl md:text-6xl font-bold font-heading mb-3 transition-colors duration-300"
-            style={{ color: stat.color }}
+            className="mb-3 font-display text-5xl font-extrabold leading-none transition-colors duration-300 md:text-6xl"
+            style={{ color: stat.color, fontStretch: "125%" }}
           >
             {displayValue}
             <span className="text-3xl md:text-4xl">{stat.suffix}</span>
           </div>
-          <p className="text-gray-400 text-sm leading-relaxed">{stat.label}</p>
+          <p className="font-mono text-[0.7rem] uppercase leading-relaxed tracking-[0.14em] text-paper-mute">{stat.label}</p>
         </div>
       </div>
     </div>

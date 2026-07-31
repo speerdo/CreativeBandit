@@ -1,0 +1,259 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+
+export type Pose = 'sleeping' | 'pistols' | 'batting';
+
+export interface Props {
+  pose: Pose;
+  /** Sizing/visibility utilities for the wrapper. */
+  class?: string;
+  /** Accessible name. Omit for decorative use (the default). */
+  label?: string;
+}
+
+const { pose, class: className = '', label } = Astro.props;
+
+/*
+ * Spelled out rather than built as `cb-mascot--${pose}`. Tailwind finds the
+ * classes to keep by scanning source text for literals, so an interpolated
+ * name is invisible to it and every per-pose rule gets purged - the hover
+ * animations silently do nothing while the markup still looks correct.
+ */
+const POSE_CLASS: Record<Pose, string> = {
+  sleeping: 'cb-mascot--sleeping',
+  pistols: 'cb-mascot--pistols',
+  batting: 'cb-mascot--batting',
+};
+
+/*
+ * The SVG is inlined rather than used via <img> because CSS cannot reach
+ * inside an <img>-loaded document - :hover on the page can't drive a
+ * transform on a path in there. Inlining is what makes the hover animation
+ * possible at all.
+ *
+ * Inlining brings two problems, both handled below:
+ *
+ *  1. Illustrator names every class st0..stN and every id `clippath`,
+ *     `bch-halftone` and so on. Two mascots on one page would collide and
+ *     restyle each other, so both are namespaced per pose.
+ *
+ *  2. The artwork has no layer names, so animatable parts are addressed by
+ *     their index in document order. That is brittle by nature, so each
+ *     entry carries the fill and bbox it expects and the build fails loudly
+ *     if the artwork moves underneath it - far better than silently
+ *     animating a boot instead of a tail.
+ *
+ * If these get re-exported from Illustrator, naming the layers there would
+ * let us drop the index map entirely and target real ids instead.
+ */
+interface PartSpec {
+  /** Index in document order over path/circle/ellipse/rect/polygon, defs included. */
+  index: number;
+  /** Expected paint. Verified at build time - see the check below. */
+  paint: string;
+  /** Rounded bbox in the artwork's own units. Documentation for whoever has
+   *  to re-derive this map by hand; not machine-checked. */
+  box: [number, number, number, number];
+}
+
+const PARTS: Record<Pose, Record<string, PartSpec[]>> = {
+  pistols: {
+    tail: [{ index: 5, paint: '#d8d2c6', box: [113, 98, 280, 282] }],
+    'arm-left': [{ index: 12, paint: 'stroke', box: [15, 151, 84, 211] }],
+    'arm-right': [{ index: 6, paint: 'stroke', box: [197, 151, 266, 210] }],
+    hat: [
+      { index: 25, paint: '#1b27e8', box: [28, 36, 253, 81] },
+      { index: 26, paint: '#0b0b0c', box: [28, 66, 253, 88] },
+      // Brim detail. Left out of the first pass, so they stayed put while the
+      // rest of the hat moved and the brim visibly came apart.
+      { index: 31, paint: '#1b27e8', box: [182, 21, 199, 100] },
+      { index: 32, paint: '#1b27e8', box: [51, 52, 130, 69] },
+      { index: 33, paint: '#1b27e8', box: [94, -1, 187, 58] },
+      { index: 34, paint: '#0b0b0c', box: [95, 43, 186, 55] },
+      { index: 35, paint: '#d9f24a', box: [112, 41, 123, 56] },
+    ],
+  },
+  batting: {
+    tail: [{ index: 8, paint: '#d8d2c6', box: [0, 122, 206, 279] }],
+    'arm-swipe': [{ index: 9, paint: 'stroke', box: [202, 53, 260, 130] }],
+    paw: [
+      { index: 19, paint: '#ede8df', box: [232, 30, 276, 74] },
+      { index: 20, paint: '#ff4d14', box: [234, 41, 244, 51] },
+      { index: 21, paint: '#ff4d14', box: [245, 32, 255, 42] },
+      { index: 22, paint: '#ff4d14', box: [259, 37, 269, 47] },
+    ],
+    ufo: [
+      { index: 25, paint: '#ede8df', box: [347, 78, 376, 110] },
+      { index: 26, paint: '#1b27e8', box: [347, 61, 370, 141] },
+      { index: 27, paint: '#d9f24a', box: [336, 94, 342, 101] },
+      { index: 28, paint: '#d9f24a', box: [354, 102, 360, 109] },
+      { index: 29, paint: '#d9f24a', box: [372, 109, 379, 116] },
+    ],
+    spark: [
+      { index: 30, paint: 'stroke', box: [401, 57, 419, 69] },
+      { index: 31, paint: 'stroke', box: [409, 93, 431, 95] },
+      { index: 32, paint: 'stroke', box: [399, 127, 417, 137] },
+    ],
+  },
+  sleeping: {
+    ear: [
+      { index: 19, paint: '#ede8df', box: [26, 17, 66, 62] },
+      { index: 20, paint: '#ff4d14', box: [35, 28, 60, 59] },
+    ],
+    tail: [{ index: 34, paint: '#ede8df', box: [114, 96, 291, 156] }],
+  },
+};
+
+const file = path.join(process.cwd(), 'public', 'mascot', `bandit-cat-${pose}.svg`);
+let svg = fs.readFileSync(file, 'utf8');
+
+// --- namespace classes and ids so two mascots can share a page ------------
+svg = svg.replace(/\b(st\d+)\b/g, `${pose}-$1`);
+const ids = [...svg.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
+for (const id of ids) {
+  if (id.startsWith(`${pose}-`)) continue;
+  const esc = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  svg = svg.replace(new RegExp(`id="${esc}"`, 'g'), `id="${pose}-${id}"`);
+  svg = svg.replace(new RegExp(`url\\(#${esc}\\)`, 'g'), `url(#${pose}-${id})`);
+  svg = svg.replace(new RegExp(`href="#${esc}"`, 'g'), `href="#${pose}-${id}"`);
+}
+
+// --- tag animatable parts, verifying each is still what we think it is ----
+const DRAWABLE = /<(path|circle|ellipse|rect|polygon)\b[^>]*?\/?>/g;
+const spans = [...svg.matchAll(DRAWABLE)].map((m) => ({
+  open: m.index! + m[0].indexOf(m[1]) + m[1].length, // just after the tag name
+  start: m.index!,
+  end: m.index! + m[0].length,
+}));
+const offsets = spans.map((s) => s.open);
+
+// Resolve each Illustrator class to the paint it actually carries, so the
+// index map can be checked rather than merely hoped at.
+const classPaint = new Map<string, string>();
+const styleBlock = svg.match(/<style>([\s\S]*?)<\/style>/);
+if (styleBlock) {
+  for (const [, selector, body] of styleBlock[1].matchAll(/([^{}]+)\{([^{}]+)\}/g)) {
+    const fill = body.match(/fill:\s*([^;]+)/);
+    const stroke = body.match(/stroke:\s*([^;]+)/);
+    for (const one of selector.split(',')) {
+      const key = one.trim().replace(/^\./, '');
+      if (!key) continue;
+      const prev = classPaint.get(key);
+      const next = fill ? fill[1].trim() : undefined;
+      if (next && next !== 'none') classPaint.set(key, next);
+      else if (stroke) classPaint.set(key, 'stroke');
+      else if (next && !prev) classPaint.set(key, next);
+    }
+  }
+}
+
+const elements = [...svg.matchAll(/<(path|circle|ellipse|rect|polygon)\b([^>]*)>/g)];
+
+// Verification pass only - the wrapping below re-walks PARTS itself.
+for (const [part, specs] of Object.entries(PARTS[pose])) {
+  for (const spec of specs) {
+    if (spec.index >= offsets.length) {
+      throw new Error(
+        `Mascot "${pose}": part "${part}" wants element ${spec.index} but the ` +
+          `artwork only has ${offsets.length}. It has been re-exported - ` +
+          `re-derive the part map before trusting these indices.`
+      );
+    }
+    const attrs = elements[spec.index]?.[2] ?? '';
+    // Selectors were namespaced along with the elements, so look the class
+    // up exactly as it now appears - stripping the prefix misses every time.
+    const cls = attrs.match(/class="([^"]+)"/)?.[1] ?? '';
+    const inline = attrs.match(/fill="([^"]+)"/)?.[1];
+    const actual = (inline && inline !== 'none' ? inline : classPaint.get(cls)) ?? '(none)';
+    if (actual.toLowerCase() !== spec.paint.toLowerCase()) {
+      throw new Error(
+        `Mascot "${pose}": element ${spec.index} was mapped to part "${part}" ` +
+          `expecting paint ${spec.paint}, but it paints ${actual}. The artwork ` +
+          `has changed underneath the part map - re-derive it rather than ` +
+          `animating the wrong shape.`
+      );
+    }
+  }
+}
+
+/*
+ * A part made of several contiguous elements is WRAPPED in a group rather
+ * than having every element tagged. Two reasons, both of which bit:
+ *
+ *  - Illustrator bakes placement into `transform` attributes on some shapes
+ *    (the batting UFO's dome and body carry translate+rotate). A CSS
+ *    transform replaces the attribute rather than composing with it, so
+ *    animating those elements directly threw the UFO across the canvas.
+ *
+ *  - With `transform-box: fill-box`, a rotation applied to each element
+ *    spins each about its own centre, so a multi-part object shears apart
+ *    instead of tipping as one body.
+ *
+ * Wrapping sidesteps both: the group has no transform of its own and its
+ * children keep theirs. Non-contiguous parts (the pistols hat) stay
+ * per-element and must only ever be given uniform transforms - a translate
+ * is fine, a rotate is not.
+ */
+type Insert = { pos: number; text: string };
+const inserts: Insert[] = [];
+
+for (const [part, specs] of Object.entries(PARTS[pose])) {
+  const ids = specs.map((sp) => sp.index).sort((a, b) => a - b);
+  const contiguous = ids.every((v, k) => v === ids[0] + k);
+
+  if (ids.length > 1 && contiguous) {
+    const first = spans[ids[0]];
+    const last = spans[ids[ids.length - 1]];
+    // Wrapping is only valid if the run does not straddle a group boundary.
+    const between = svg.slice(first.start, last.end);
+    const opens = (between.match(/<g\b/g) ?? []).length;
+    const closes = (between.match(/<\/g>/g) ?? []).length;
+    if (opens !== closes) {
+      throw new Error(
+        `Mascot "${pose}": part "${part}" spans a group boundary, so it cannot ` +
+          `be wrapped. Re-check the part map against the artwork.`
+      );
+    }
+    inserts.push({ pos: first.start, text: `<g data-cb="${part}">` });
+    inserts.push({ pos: last.end, text: `</g>` });
+  } else {
+    // Non-contiguous parts get one wrapper each rather than the attribute
+    // going on the element itself. A CSS transform REPLACES a baked
+    // `transform` attribute instead of composing with it, and the pistols
+    // hat band and buckle both carry one - tagging them directly threw the
+    // band clean off the hat. Wrapping keeps the child's own transform
+    // intact and animates the group above it.
+    for (const id of ids) {
+      inserts.push({ pos: spans[id].start, text: `<g data-cb="${part}">` });
+      inserts.push({ pos: spans[id].end, text: `</g>` });
+    }
+  }
+}
+
+// Apply back-to-front so earlier positions stay valid.
+for (const ins of inserts.sort((a, b) => b.pos - a.pos)) {
+  svg = svg.slice(0, ins.pos) + ins.text + svg.slice(ins.pos);
+}
+
+// --- size the root and give it an accessible role ------------------------
+const vb = svg.match(/viewBox="([\d.\-\s]+)"/);
+const [, , vw, vh] = vb ? vb[1].split(/\s+/).map(Number) : [0, 0, 100, 100];
+
+svg = svg.replace(
+  /<svg\b([^>]*)>/,
+  (_full, attrs: string) => {
+    let a = attrs
+      .replace(/\s(width|height)="[^"]*"/g, '')
+      .replace(/\srole="[^"]*"/g, '')
+      .replace(/\saria-[a-z]+="[^"]*"/g, '');
+    return `<svg${a} width="${vw}" height="${vh}" ${
+      label ? `role="img" aria-label="${label}"` : 'role="presentation" aria-hidden="true" focusable="false"'
+    }>`;
+  }
+);
+// The <title> would otherwise be announced even on a decorative instance.
+if (!label) svg = svg.replace(/<title\b[^>]*>[\s\S]*?<\/title>/, '');
+---
+
+<span class:list={['cb-mascot', POSE_CLASS[pose], className]} set:html={svg} />

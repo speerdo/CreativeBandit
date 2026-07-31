@@ -1,0 +1,149 @@
+---
+// Calculate years of experience (started October 2017)
+const startDate = new Date(2017, 9); // October 2017
+const now = new Date();
+let yearsExperience = now.getFullYear() - startDate.getFullYear();
+// If we haven't reached October yet this year, subtract 1
+if (now.getMonth() < 9) {
+  yearsExperience -= 1;
+}
+
+const stats = [
+  { value: `${yearsExperience}+`, label: 'Years Experience' },
+  { value: '20+', label: 'Projects Completed' },
+  { value: '10+', label: 'Happy Clients' },
+];
+---
+
+<section class="relative min-h-[92vh] flex items-center overflow-hidden py-20 lg:py-0">
+  <!--
+    Ink fields sit behind the scene. Deliberately asymmetric and bleeding off
+    the viewport edge rather than politely centred - see the doc, §4.2. The
+    page-level grain (body::after) composites over all of this, which is what
+    keeps the gradients from reading as cheap CSS blur.
+  -->
+  <div class="field field-hot -z-30 -top-40 -left-32 h-[36rem] w-[36rem] md:h-[46rem] md:w-[46rem]"></div>
+  <div class="field field-cold -z-30 -bottom-56 -right-40 h-[34rem] w-[34rem] md:h-[44rem] md:w-[44rem]"></div>
+
+  <canvas id="heroSceneCanvas" class="absolute inset-0 -z-20 h-full w-full"></canvas>
+
+  <div class="container relative z-10">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.35fr_1fr] lg:gap-8">
+      <!-- Type sits directly on the field. No glass card. -->
+      <div>
+        <p class="label-tech mb-6">AI &amp; Automation Engineering</p>
+
+        <h1 class="mb-6">
+          Building <span class="plate-type">Intelligent</span> Systems That Work
+        </h1>
+
+        <p class="mb-10 max-w-2xl text-lg text-paper-mute md:text-xl">
+          Full-stack developer specializing in AI-powered automation systems and modern web applications that reduce manual work by 60-90% and deliver measurable business impact.
+        </p>
+
+        <div class="flex flex-wrap gap-4">
+          <a href="/contact" class="btn-primary">Start Your Project</a>
+          <a href="/work" class="btn-secondary">View Our Work</a>
+        </div>
+
+        <!-- Left-aligned and rule-separated, rather than three centred
+             gradient numerals in a row. -->
+        <dl class="mt-14 flex flex-wrap gap-x-10 gap-y-6 border-t border-paper/15 pt-8">
+          {stats.map((stat) => (
+            <div class="border-l-2 border-ink-hot pl-4">
+              <dt class="font-display text-3xl font-extrabold leading-none text-paper md:text-4xl" style="font-stretch: 125%;">
+                {stat.value}
+              </dt>
+              <dd class="mt-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-paper-mute">
+                {stat.label}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <!--
+        Static stand-in for the rocket scene. Shown below lg, where the
+        scene never loads, and hidden at lg where it does - so the desktop
+        hero does not flash a mascot and then pop it out of existence once
+        the chunk arrives. The script un-hides it at lg only when it decides
+        to skip (reduced motion) or the scene fails to start, and the
+        noscript rule covers JS being off. Decorative, hence the empty alt.
+      -->
+      <div id="heroSceneFallback" class="justify-self-center lg:hidden">
+        <img
+          src="/mascot/bandit-cat.svg"
+          alt=""
+          width="400"
+          height="400"
+          class="w-full max-w-[18rem] lg:max-w-[24rem] drop-shadow-[0_0_60px_rgba(255,77,20,0.25)]"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /*
+   * The scene pulls in Three.js, which is ~490KB - a lot of JavaScript for a
+   * decorative background. So it is a dynamic import (Vite splits it into its
+   * own chunk, off the critical path) and it only loads when it will actually
+   * be seen and wanted:
+   *
+   *   - not at all under prefers-reduced-motion. A rocket tearing around the
+   *     header is exactly what that setting is asking us not to do, and
+   *     skipping it skips the download too.
+   *   - not below lg, where the payload costs the most and the canvas is
+   *     largely covered by the type anyway. This threshold must stay in step
+   *     with the fallback's `lg:hidden`: at a narrower one the two overlap,
+   *     and a tablet pays for the chunk AND paints the mascot over it.
+   *   - otherwise, only once the hero is actually on screen.
+   *
+   * The static mascot covers every path where the scene does not run: it is
+   * visible below lg by default, and is un-hidden at lg when we skip or when
+   * startup throws.
+   */
+  const canvas = document.querySelector('#heroSceneCanvas');
+  const fallback = document.querySelector('#heroSceneFallback');
+
+  if (canvas instanceof HTMLCanvasElement) {
+    const skip =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.matchMedia('(max-width: 1023px)').matches;
+
+    if (skip) {
+      // No scene here, so the static mascot carries the column at every width.
+      fallback?.classList.remove('lg:hidden');
+    } else {
+      const observer = new IntersectionObserver(async (entries, obs) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        obs.disconnect();
+        try {
+          const { initRocketScene } = await import('../lib/rocketScene');
+          const cleanup = initRocketScene(canvas);
+          // Drop the GL context and listeners on the way out. Not when the
+          // page is only being parked in the bfcache though - it can be
+          // restored with this exact context, and disposing it there would
+          // bring the visitor back to a dead hero. Nothing runs while it is
+          // parked anyway; the browser freezes rAF.
+          window.addEventListener('pagehide', (event) => {
+            if (!event.persisted) cleanup();
+          });
+        } catch (error) {
+          // Chunk failed to load, or no WebGL context. Bring the static
+          // mascot back rather than leaving an empty column.
+          fallback?.classList.remove('lg:hidden');
+          console.warn('Hero scene unavailable, showing static mascot.', error);
+        }
+      });
+      observer.observe(canvas);
+    }
+  }
+</script>
+
+<noscript>
+  <style>
+    /* Without JS the scene can never start, so the stand-in has to show. */
+    #heroSceneFallback { display: block !important; }
+  </style>
+</noscript>

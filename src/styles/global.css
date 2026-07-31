@@ -1,6 +1,27 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+/*
+ * Use the @tailwind directives, not `@import 'tailwindcss/...'`. With the
+ * @import form, this file's @layer components block was emitted *after*
+ * Tailwind's utilities, so component classes silently beat any utility
+ * override on the same element (`class="card p-8"` ignored the p-8, and a
+ * z-index in .field beat -z-30). The directive form restores the intended
+ * base -> components -> utilities order.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Creative Bandit — risograph / digital space cowboy design system.
+ * See docs/creative-bandit-visual-identity.md
+ *
+ * Texture layers, in compositing order:
+ *   1. .field-*        blurred gradient ink grounds (behind everything)
+ *   2. .halftone       dot-screen
+ *   3. .duotone-*      two-plate photo treatment
+ *   4. .plate-type     misregistered ink plates on type
+ *   5. .scanline       scan smear
+ *   6. global grain    film grain, applied once on body::after
+ */
 
 @layer base {
   html {
@@ -8,7 +29,25 @@
   }
 
   body {
-    @apply bg-charcoal text-light-100 relative overflow-x-hidden;
+    @apply bg-base text-paper-mute font-sans relative overflow-x-hidden;
+  }
+
+  /*
+   * Global grain. One fixed layer for the whole document — never per-card,
+   * because every `mix-blend-mode` element forces its own compositing layer.
+   * The tile is a baked PNG (scripts/make-grain.mjs) rather than a live
+   * feTurbulence filter, which would re-evaluate noise on every paint.
+   */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background-image: url('/textures/grain.png');
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+    opacity: 0.12;
   }
 
   h1,
@@ -17,15 +56,25 @@
   h4,
   h5,
   h6 {
-    @apply font-heading font-bold leading-tight;
+    @apply font-display font-bold text-paper;
+    font-stretch: 125%;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  /* Poster caps for the two loudest levels only. h3 and below stay sentence
+     case so longer headings inside body copy don't turn into shouting. */
+  h1,
+  h2 {
+    text-transform: uppercase;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
+    @apply text-5xl md:text-6xl lg:text-7xl;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl md:text-5xl;
   }
 
   h3 {
@@ -35,6 +84,21 @@
   p {
     @apply leading-relaxed;
   }
+
+  /*
+   * `text-base` would be ambiguous here: our near-black colour token is
+   * named `base`, but `base` is also Tailwind's default font-size key, so
+   * @apply emits BOTH the colour and font-size:1rem. Set the colour
+   * directly wherever near-black type is wanted.
+   */
+  ::selection {
+    @apply bg-ink-hot;
+    color: theme('colors.base.DEFAULT');
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ink-acid ring-offset-2 ring-offset-base;
+  }
 }
 
 @layer components {
@@ -42,83 +106,616 @@
     @apply px-4 md:px-8 mx-auto max-w-7xl;
   }
 
+  /* ---------------------------------------------------------------------
+   * Type treatments
+   * ------------------------------------------------------------------ */
+
+  /*
+   * Misregistration — the signature Riso artifact. Bone type with two ink
+   * plates knocked slightly out of alignment. This is what replaces the old
+   * red-to-purple gradient fill as the "this headline matters" marker.
+   */
+  .plate-type {
+    @apply text-paper;
+    text-shadow:
+      -2px 0 0 theme('colors.ink-hot'),
+      3px 2px 0 theme('colors.ink-cold');
+  }
+
+  /* Mono technical micro-label. Replaces the pulsing dot + uppercase eyebrow
+     that opened every single section. */
+  .label-tech {
+    @apply font-mono text-xs uppercase tracking-[0.18em] text-ink-acid;
+  }
+
+  .label-tech::before {
+    content: '// ';
+    @apply text-paper-mute;
+  }
+
+  /* Chromatic aberration. Decorative only — never the sole state indicator. */
+  .aberration {
+    text-shadow:
+      -1px 0 0 rgb(0 255 255 / 0.5),
+      1px 0 0 rgb(255 0 90 / 0.5);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Ink fields — blurred gradient grounds
+   * ------------------------------------------------------------------ */
+
+  /*
+   * The reference gradients read expensive because of the grain sitting over
+   * them; a smooth CSS gradient alone looks cheap. The global body::after
+   * grain supplies that. Two to three fields per page, maximum.
+   */
+  /*
+   * No z-index here on purpose: a field is almost always layered against
+   * something else (the hero canvas, page content), so the caller owns the
+   * stacking order and states it explicitly at the usage site.
+   */
+  .field {
+    @apply absolute pointer-events-none;
+    filter: blur(80px);
+    opacity: 0.55;
+  }
+
+  .field-hot {
+    background: radial-gradient(
+      circle at 30% 40%,
+      theme('colors.ink-hot') 0%,
+      theme('colors.ink-pink') 45%,
+      transparent 70%
+    );
+  }
+
+  .field-cold {
+    background: radial-gradient(
+      circle at 60% 50%,
+      theme('colors.ink-cold') 0%,
+      theme('colors.ink-cold-lift') 40%,
+      transparent 72%
+    );
+  }
+
+  .field-acid {
+    background: radial-gradient(
+      circle at 50% 50%,
+      theme('colors.ink-acid') 0%,
+      transparent 68%
+    );
+  }
+
+  /* ---------------------------------------------------------------------
+   * Halftone + duotone
+   * ------------------------------------------------------------------ */
+
+  .halftone {
+    background-image: radial-gradient(circle, currentColor 32%, transparent 34%);
+    background-size: 5px 5px;
+  }
+
+  .halftone-fine {
+    background-image: radial-gradient(circle, currentColor 30%, transparent 32%);
+    background-size: 3px 3px;
+  }
+
+  /* Masked variant bites into artwork instead of sitting on top of it. */
+  .halftone-mask {
+    -webkit-mask-image: radial-gradient(circle, #000 32%, transparent 34%);
+    mask-image: radial-gradient(circle, #000 32%, transparent 34%);
+    -webkit-mask-size: 4px 4px;
+    mask-size: 4px 4px;
+  }
+
+  /*
+   * Two-plate photo treatment. Also the fix for generic stock photography:
+   * heavy duotone plus halftone makes filler imagery read as deliberate
+   * collage material rather than as filler.
+   */
+  .duotone {
+    @apply relative overflow-hidden;
+  }
+
+  .duotone img {
+    filter: grayscale(1) contrast(1.35) brightness(0.9);
+  }
+
+  .duotone::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    mix-blend-mode: color;
+  }
+
+  .duotone-hot::after {
+    background: linear-gradient(
+      135deg,
+      theme('colors.ink-hot') 0%,
+      theme('colors.ink-pink') 100%
+    );
+  }
+
+  .duotone-cold::after {
+    background: linear-gradient(
+      135deg,
+      theme('colors.ink-cold') 0%,
+      theme('colors.ink-cold-lift') 100%
+    );
+  }
+
+  /* ---------------------------------------------------------------------
+   * Scan artifacts — seasoning, easy to overdo
+   * ------------------------------------------------------------------ */
+
+  .scanline {
+    @apply relative;
+  }
+
+  .scanline::before {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.03) 0px,
+      rgb(255 255 255 / 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  /* Ripped-paper section edge instead of a straight border. */
+  .torn-bottom {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 6px),
+      92% 100%,
+      78% calc(100% - 4px),
+      61% calc(100% - 9px),
+      44% calc(100% - 2px),
+      27% calc(100% - 7px),
+      13% calc(100% - 3px),
+      0 calc(100% - 8px)
+    );
+  }
+
+  /* Technical crop marks, per scanner-cutoff.avif. */
+  .crop-marks {
+    @apply relative;
+  }
+
+  .crop-marks::before,
+  .crop-marks::after {
+    content: '';
+    @apply absolute w-3 h-3 pointer-events-none border-ink-acid/50;
+  }
+
+  .crop-marks::before {
+    @apply top-0 left-0 border-t border-l;
+  }
+
+  .crop-marks::after {
+    @apply bottom-0 right-0 border-b border-r;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Buttons — hard-edged ink blocks, no rounding
+   * ------------------------------------------------------------------ */
+
   .btn {
-    @apply inline-block px-6 py-3 font-medium rounded-md transition-all duration-300 text-center;
+    @apply inline-block px-6 py-3 font-mono text-sm uppercase tracking-[0.12em] text-center transition-all duration-200;
   }
 
   .btn-primary {
-    @apply inline-block px-6 py-3 font-medium rounded-md transition-all duration-300 text-center bg-blazingEmber text-white hover:bg-blazingEmber/90;
+    @apply inline-block px-6 py-3 font-mono text-sm font-bold uppercase tracking-[0.12em] text-center transition-all duration-200 bg-ink-hot border border-ink-hot;
+    color: theme('colors.base.DEFAULT');
+  }
+
+  .btn-primary:hover {
+    @apply bg-ink-acid border-ink-acid;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 theme('colors.ink-cold');
   }
 
   .btn-secondary {
-    @apply inline-block px-6 py-3 font-medium rounded-md transition-all duration-300 text-center bg-transparent border-2 border-blazingEmber text-white hover:bg-blazingEmber/10;
+    @apply inline-block px-6 py-3 font-mono text-sm uppercase tracking-[0.12em] text-center transition-all duration-200 bg-transparent border border-paper-mute text-paper;
+  }
+
+  .btn-secondary:hover {
+    @apply border-ink-acid text-ink-acid;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 theme('colors.ink-hot');
+  }
+
+  /*
+   * Filter / category chips. Active state is a single `is-active` class
+   * rather than JS bolting on `text-ink-hot` next to a `text-paper-mute`
+   * already in the class list - two utilities of the same property, where
+   * the winner is decided by stylesheet order, not DOM order.
+   */
+  .chip {
+    @apply border border-paper/20 px-5 py-2 font-mono text-xs uppercase tracking-[0.12em] text-paper-mute transition-colors duration-200;
+  }
+
+  .chip:hover {
+    @apply border-ink-acid text-ink-acid;
+  }
+
+  .chip.is-active {
+    @apply border-ink-hot bg-ink-hot/15 text-ink-hot;
   }
 
   .nav-link {
-    @apply relative px-4 py-2 font-medium transition-colors duration-300 hover:text-blazingEmber;
+    @apply relative px-4 py-2 font-mono text-sm uppercase tracking-[0.1em] text-paper-mute transition-colors duration-200 hover:text-paper;
+  }
+
+  .nav-link:hover {
+    text-shadow:
+      -1px 0 0 rgb(0 255 255 / 0.5),
+      1px 0 0 rgb(255 0 90 / 0.5);
   }
 
   .nav-link-active {
-    @apply text-blazingEmber;
+    @apply text-ink-acid;
   }
 
-  .flame-gradient {
-    @apply fixed top-0 left-0 w-full h-full opacity-20 -z-10 pointer-events-none;
-    background: radial-gradient(
-      circle at 50% 0%,
-      rgba(255, 28, 28, 0.15) 0%,
-      rgba(255, 106, 0, 0.1) 30%,
-      rgba(161, 0, 255, 0.05) 60%,
-      rgba(13, 13, 13, 0) 100%
-    );
+  /* ---------------------------------------------------------------------
+   * Mascot hover animations
+   *
+   * Driven off `data-cb` attributes that Mascot.astro stamps onto individual
+   * paths at build time. `transform-box: fill-box` makes transform-origin
+   * relative to each part's own bounding box, so a tail can pivot at its
+   * root without hand-computing coordinates in the artwork's space.
+   *
+   * Everything is inert until hover; the keyframed parts only get an
+   * animation on hover, so nothing runs while the page just sits there.
+   * ------------------------------------------------------------------ */
+
+  .cb-mascot {
+    @apply inline-block;
   }
+
+  .cb-mascot svg {
+    @apply h-auto w-full overflow-visible;
+  }
+
+  .cb-mascot [data-cb] {
+    transform-box: fill-box;
+    transition:
+      transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 380ms ease;
+  }
+
+  /* --- pistols: coiling to jump ---------------------------------------- */
+  .cb-mascot--pistols svg {
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: 50% 100%;
+  }
+
+  .cb-mascot--pistols:hover svg {
+    transform: translateY(5px) scaleY(0.965);
+  }
+
+  .cb-mascot--pistols [data-cb='hat'] {
+    transform-origin: 50% 100%;
+  }
+
+  .cb-mascot--pistols:hover [data-cb='hat'] {
+    transform: translateY(7px);
+  }
+
+  /* Shoulders sit at the torso end of each arm's box, so the pivots are
+     opposite corners. */
+  .cb-mascot--pistols [data-cb='arm-left'] {
+    transform-origin: 100% 0%;
+  }
+
+  .cb-mascot--pistols [data-cb='arm-right'] {
+    transform-origin: 0% 0%;
+  }
+
+  .cb-mascot--pistols:hover [data-cb='arm-left'] {
+    transform: rotate(15deg);
+  }
+
+  .cb-mascot--pistols:hover [data-cb='arm-right'] {
+    transform: rotate(-15deg);
+  }
+
+  .cb-mascot--pistols [data-cb='tail'] {
+    transform-origin: 12% 92%;
+  }
+
+  .cb-mascot--pistols:hover [data-cb='tail'] {
+    animation: cb-tail-sway 1.15s ease-in-out infinite;
+  }
+
+  /* --- batting: leaning in, paw coming down ---------------------------- */
+  .cb-mascot--batting svg {
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cb-mascot--batting:hover svg {
+    transform: translate(7px, -4px);
+  }
+
+  /*
+   * Arm and paw are separate elements, so to swing as one limb they share a
+   * pivot and a single set of keyframes. `transform-box: view-box` is what
+   * makes that possible: it puts transform-origin in the artwork's own
+   * coordinate system, so both can rotate about the shoulder at
+   * (201.7, 129.7) - the start of the arm path. Under the default fill-box
+   * each would spin about its own centre and the paw would tear off the arm.
+   *
+   * Positive rotation here swings the paw down and to the right, which is
+   * where the saucer is.
+   */
+  .cb-mascot--batting [data-cb='arm-swipe'],
+  .cb-mascot--batting [data-cb='paw'] {
+    transform-box: view-box;
+    transform-origin: 201.7px 129.7px;
+  }
+
+  .cb-mascot--batting:hover [data-cb='arm-swipe'],
+  .cb-mascot--batting:hover [data-cb='paw'] {
+    animation: cb-swipe 1.2s ease-in-out infinite;
+  }
+
+  /*
+   * The saucer ducks the swipe on every pass. Same period as the arm so the
+   * two stay locked, and it peaks just after the paw does - it is reacting,
+   * not moving in step. The paw arrives from its lower left, so it breaks up
+   * and to the right and banks away.
+   */
+  .cb-mascot--batting [data-cb='ufo'] {
+    transform-box: view-box;
+    transform-origin: 358px 101px;
+  }
+
+  .cb-mascot--batting:hover [data-cb='ufo'] {
+    animation: cb-dodge 1.2s ease-in-out infinite;
+  }
+
+  .cb-mascot--batting:hover [data-cb='spark'] {
+    animation: cb-spark 1.2s ease-in-out infinite;
+  }
+
+  .cb-mascot--batting [data-cb='tail'] {
+    transform-origin: 96% 55%;
+  }
+
+  .cb-mascot--batting:hover [data-cb='tail'] {
+    animation: cb-tail-switch 1.05s ease-in-out infinite;
+  }
+
+  /* --- sleeping: it does not wake up ----------------------------------- */
+  .cb-mascot--sleeping [data-cb='ear'] {
+    transform-origin: 50% 100%;
+  }
+
+  .cb-mascot--sleeping:hover [data-cb='ear'] {
+    animation: cb-ear-twitch 2.4s ease-in-out infinite;
+  }
+
+  /* The tail leaves the body on the right and sweeps left, so it has to
+     pivot at that right-hand root. Hinged at the left it swung from the
+     tip, which read as the whole tail sliding. */
+  .cb-mascot--sleeping [data-cb='tail'] {
+    transform-origin: 95% 42%;
+  }
+
+  .cb-mascot--sleeping:hover [data-cb='tail'] {
+    animation: cb-tail-drowse 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes cb-tail-sway {
+  0%,
+  100% {
+    transform: rotate(-7deg);
+  }
+  50% {
+    transform: rotate(7deg);
+  }
+}
+
+/* Out on the swipe, back on the recovery - one pass per cycle. */
+@keyframes cb-swipe {
+  0%,
+  100% {
+    transform: rotate(-14deg);
+  }
+  50% {
+    transform: rotate(30deg);
+  }
+}
+
+/* Peaks a little after the arm, so it reads as ducking the paw. */
+@keyframes cb-dodge {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  42% {
+    transform: translate(16px, -13px) rotate(-12deg);
+  }
+  58% {
+    transform: translate(27px, -22px) rotate(-19deg);
+  }
+  80% {
+    transform: translate(9px, -7px) rotate(-6deg);
+  }
+}
+
+@keyframes cb-spark {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes cb-tail-switch {
+  0%,
+  100% {
+    transform: rotate(9deg);
+  }
+  50% {
+    transform: rotate(-9deg);
+  }
+}
+
+/* Long hold, then two quick flicks - a twitch, not a wave. */
+@keyframes cb-ear-twitch {
+  0%,
+  62%,
+  100% {
+    transform: rotate(0deg);
+  }
+  68% {
+    transform: rotate(-9deg);
+  }
+  74% {
+    transform: rotate(1deg);
+  }
+  80% {
+    transform: rotate(-6deg);
+  }
+  87% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes cb-tail-drowse {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@layer components {
+  /* ---------------------------------------------------------------------
+   * Surfaces
+   * ------------------------------------------------------------------ */
 
   .section {
     @apply py-16 md:py-24;
   }
 
   .card {
-    @apply bg-dark-100 rounded-lg p-6 transition-all duration-300 border border-dark-100 hover:border-blazingEmber/30;
+    @apply bg-base-100 p-6 transition-all duration-200 border border-paper/10;
   }
 
-  .gradient-text {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-blazingEmber to-magentaFlame;
+  .card:hover {
+    @apply border-ink-hot/60;
   }
 
   .service-card {
-    @apply bg-dark-100 rounded-lg p-6 transition-all duration-300 border border-dark-100 hover:border-blazingEmber/30 relative overflow-hidden;
+    @apply bg-base-100 p-6 transition-all duration-200 border border-paper/10 relative overflow-hidden;
   }
 
   .service-card::before {
     content: '';
-    @apply absolute top-0 left-0 w-0 h-1 bg-gradient-to-r from-blazingEmber to-coreFire transition-all duration-500;
+    @apply absolute top-0 left-0 w-0 h-[3px] bg-ink-hot transition-all duration-300;
   }
 
   .service-card:hover::before {
     @apply w-full;
   }
 
+  .service-card:hover {
+    @apply border-ink-hot/60;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 theme('colors.ink-cold');
+  }
+
   .project-card {
-    @apply relative overflow-hidden rounded-lg;
+    @apply relative overflow-hidden border border-paper/10;
   }
 
   .project-card img {
     @apply transition-all duration-500;
+    filter: grayscale(1) contrast(1.3);
   }
 
   .project-card:hover img {
     @apply scale-105;
+    filter: grayscale(0) contrast(1.05);
+  }
+
+  /* Lift the ink plate on hover so the image resolves to full colour. */
+  .project-card .duotone::after {
+    @apply transition-opacity duration-500;
+  }
+
+  .project-card:hover .duotone::after {
+    @apply opacity-0;
   }
 
   .project-card .overlay {
-    @apply absolute inset-0 bg-charcoal/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6;
+    @apply absolute inset-0 bg-base/85 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6;
   }
 
   .project-card:hover .overlay {
     @apply opacity-100;
   }
 
-  .flame-dot {
-    @apply w-2 h-2 rounded-full inline-block mr-2 bg-blazingEmber animate-pulse;
+  /*
+   * A very faint document-wide wash, sitting under every page so the
+   * near-black ground is never perfectly flat. Distinct from `.field`, which
+   * is a deliberate, saturated, per-section moment.
+   *
+   * (.gradient-text and .flame-dot lived here as legacy aliases through
+   * phases 1-4; all call sites now use .plate-type / .label-tech, so both
+   * rules are gone.)
+   */
+  .page-wash {
+    @apply fixed top-0 left-0 w-full h-full -z-10 pointer-events-none;
+    background:
+      radial-gradient(
+        ellipse 70% 50% at 15% 0%,
+        rgb(255 77 20 / 0.22) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 60% 45% at 85% 15%,
+        rgb(27 39 232 / 0.2) 0%,
+        transparent 62%
+      );
+    filter: blur(40px);
+  }
+}
+
+/*
+ * Every animated affordance above is decorative, so honour the OS setting.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .service-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* The mascots are pure decoration, so hover does nothing at all here
+     rather than snapping to the end state in 0.01ms. */
+  .cb-mascot:hover svg,
+  .cb-mascot:hover [data-cb] {
+    transform: none !important;
+    animation: none !important;
   }
 }

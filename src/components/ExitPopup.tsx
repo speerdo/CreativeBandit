@@ -65,16 +65,16 @@ export default function ExitPopup() {
 
       {/* Modal */}
       <div
-        className="relative w-full max-w-lg rounded-2xl border border-[#ff6a00]/30 overflow-hidden"
+        className="relative w-full max-w-lg border border-[#FF4D14]/40 overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)",
+          background: "linear-gradient(135deg, #17171A 0%, #0B0B0C 100%)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={dismiss}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+          className="absolute right-4 top-4 z-10 text-[#B5AEA3] transition-colors hover:text-[#D9F24A]"
           aria-label="Close popup"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,18 +86,25 @@ export default function ExitPopup() {
         <div
           className="h-1 w-full"
           style={{
-            background: "linear-gradient(90deg, #ffd700, #ff6a00, #ff1c1c, #a100ff)",
+            background: "linear-gradient(90deg, #D9F24A 0%, #D9F24A 25%, #FF4D14 25%, #FF4D14 50%, #E5195A 50%, #E5195A 75%, #1B27E8 75%)",
           }}
         />
 
         <div className="p-8">
           {!submitted ? (
             <>
-              <h3 className="text-2xl font-bold mb-2 font-heading">
+              <img
+                src="/mascot/bandit-cat-head.svg"
+                alt=""
+                width="77"
+                height="64"
+                className="mb-4 h-16 w-auto"
+              />
+              <h3 className="mb-2 font-display text-2xl font-extrabold uppercase leading-none" style={{ fontStretch: "125%" }}>
                 Before you go, grab your free checklist
               </h3>
-              <p className="text-gray-400 mb-6 text-sm leading-relaxed">
-                Get our <strong className="text-white">AI Automation Readiness Checklist</strong>,
+              <p className="mb-6 text-sm leading-relaxed text-[#B5AEA3]">
+                Get our <strong className="text-[#EDE8DF]">AI Automation Readiness Checklist</strong>,
                 15 questions to evaluate where AI can save your business the most time and money.
               </p>
 
@@ -113,22 +120,22 @@ export default function ExitPopup() {
                   name="email_address"
                   placeholder="Enter your email"
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#ff6a00]/50"
-                  style={{ background: "#0d0d0d" }}
+                  className="w-full px-4 py-3 border border-[#B5AEA3]/40 text-[#EDE8DF] placeholder:text-[#B5AEA3]/50 focus:outline-none focus:ring-2 focus:ring-[#D9F24A]"
+                  style={{ background: "#0B0B0C" }}
                 />
                 <input type="hidden" name="tags" value="lead-magnet-checklist" />
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-lg font-semibold text-white transition-all hover:brightness-110"
+                  className="w-full py-3 font-mono text-sm font-bold uppercase tracking-[0.12em] text-[#0B0B0C] transition-all hover:brightness-110"
                   style={{
-                    background: "linear-gradient(135deg, #ff6a00, #ff1c1c)",
+                    background: "#FF4D14",
                   }}
                 >
                   Send the Free Checklist
                 </button>
               </form>
 
-              <p className="text-gray-500 text-xs mt-3 text-center">
+              <p className="mt-3 text-center font-mono text-[0.65rem] uppercase tracking-[0.12em] text-[#B5AEA3]/70">
                 No spam. Unsubscribe anytime.
               </p>
             </>
@@ -143,12 +150,12 @@ export default function ExitPopup() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold mb-2">Check your inbox!</h3>
-              <p className="text-gray-400 text-sm">
+              <p className="text-sm text-[#B5AEA3]">
                 Your AI Automation Readiness Checklist is on its way.
               </p>
               <button
                 onClick={dismiss}
-                className="mt-4 text-sm text-gray-400 hover:text-white transition-colors underline"
+                className="mt-4 font-mono text-xs uppercase tracking-[0.12em] text-[#B5AEA3] underline transition-colors hover:text-[#D9F24A]"
               >
                 Close
               </button>
