@@ -5,7 +5,13 @@
 
 export type FindingTag = 'gap' | 'opportunity' | 'good';
 
-export type CheckId = 'crawlers' | 'schema' | 'js-content' | 'llms-txt' | 'metadata';
+export type CheckId =
+  | 'crawlers'
+  | 'schema'
+  | 'js-content'
+  | 'llms-txt'
+  | 'metadata'
+  | 'delivery';
 
 export interface Finding {
   /** Stable slug, e.g. 'robots-ai-blocked'. */

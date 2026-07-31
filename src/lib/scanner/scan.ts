@@ -1,5 +1,6 @@
-import { validateTarget, safeFetch, BlockedUrlError } from './safeFetch';
+import { validateTarget, safeFetch, BlockedUrlError, type SafeResponse } from './safeFetch';
 import { checkCrawlers } from './checkCrawlers';
+import { checkDelivery } from './checkDelivery';
 import { sortFindings, type Finding, type ScanResult, type CheckId } from './types';
 
 /** The site resolved but did not answer. Distinct from a blocked target. */
@@ -57,11 +58,25 @@ export async function runScan(rawUrl: string): Promise<ScanResult> {
    * responding at all, which is the worst possible failure mode for a tool
    * whose entire pitch is telling people something they did not know.
    */
+  let control: SafeResponse;
   try {
-    await safeFetch(target.url.href, { userAgent: CONTROL_UA, timeoutMs: 8000 });
+    control = await safeFetch(target.url.href, { userAgent: CONTROL_UA, timeoutMs: 8000 });
   } catch {
     throw new UnreachableSiteError(
       `Could not reach ${target.url.hostname}. Check the address is right and the site is responding.`
+    );
+  }
+
+  /*
+   * A 5xx to an ordinary browser means the site is unhealthy, not that it is
+   * doing something interesting to crawlers. Scanning on regardless produces
+   * confident nonsense: an overloaded origin returns 503 to the bot probes
+   * too, and the report announces "AI crawlers are blocked at the CDN" about
+   * a site that is simply down. Bail instead.
+   */
+  if (control.status >= 500) {
+    throw new UnreachableSiteError(
+      `${target.url.hostname} returned HTTP ${control.status}. The site looks unhealthy right now, so a scan would not mean much. Try again shortly.`
     );
   }
 
@@ -76,18 +91,30 @@ export async function runScan(rawUrl: string): Promise<ScanResult> {
     setTimeout(() => reject(new Error('budget')), SCAN_BUDGET_MS)
   );
 
-  try {
-    const crawlerFindings = await Promise.race([checkCrawlers(target.url.href), budget]);
-    findings.push(...crawlerFindings);
-  } catch (error) {
+  const checks: { id: CheckId; run: () => Promise<Finding[]> }[] = [
+    { id: 'crawlers', run: () => checkCrawlers(target.url.href, control) },
+    { id: 'delivery', run: () => checkDelivery(target.url.href, control) },
+  ];
+
+  // Checks are independent, so run them together and let each fail alone.
+  const settled = await Promise.allSettled(
+    checks.map(({ run }) => Promise.race([run(), budget]))
+  );
+
+  settled.forEach((outcome, i) => {
+    if (outcome.status === 'fulfilled') {
+      findings.push(...outcome.value);
+      return;
+    }
+    const error = outcome.reason;
     incomplete.push({
-      check: 'crawlers',
+      check: checks[i].id,
       reason:
         error instanceof Error && error.message === 'budget'
           ? 'The site did not respond in time.'
           : 'The check could not complete.',
     });
-  }
+  });
 
   const finished = Date.now();
 

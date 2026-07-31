@@ -26,6 +26,15 @@
 >   own lookup, so closing the gap fully needs a custom agent with a `lookup`
 >   hook. The practical redirect-to-metadata attack is blocked; the theoretical
 >   race is not.
+> - **Unhealthy sites are refused rather than scanned.** Caught by testing
+>   against an overloaded `httpbin.org`: it returned 503 to the control *and*
+>   to every bot probe, and the report confidently announced "AI crawlers are
+>   blocked at the CDN" about a site that was merely down. A 5xx to an ordinary
+>   browser now aborts the scan, and the edge probe refuses to judge whenever
+>   the control is itself ≥400. Crying wolf is the one failure this product
+>   cannot afford (§0.2).
+> - **Checks 6 and the directive half of check 1 were added** beyond the
+>   original five. See §3.1 half 3 and §3.6.
 
 ---
 
@@ -33,14 +42,16 @@
 
 The homepage rewrite put this on the page, twice:
 
-> **Scan a Client Site Free** — No call required. Results in about 90 seconds.
-> *The scan is free, it takes about 90 seconds, and the report is useful whether or not you ever hire us.*
+> **Scan a Client Site Free** — No call required. Results in seconds.
+> *The scan is free, it takes seconds, and the report is useful whether or not you ever hire us.*
 
-Both CTAs currently point at `/contact`, where a human answers. That is a promise the site cannot keep, and it is the kind of claim a visitor times with the clock on their phone. This spec closes that gap.
+The CTAs now point at `/scan`, and the phase-1 scan returns in roughly a second, so the copy is currently accurate.
+
+**It was "about 90 seconds" until phase 1 shipped**, written against the full five-check budget. With only checks 1 and 6 running it undersold by two orders of magnitude, so it was tightened. That makes it a live constraint again in the other direction: the page-sampling and headless checks in phases 2–3 will push a scan back toward a minute, and **"in seconds" has to be revisited when they land** rather than quietly becoming false.
 
 Two consequences worth stating up front, because they constrain every decision below:
 
-1. **90 seconds is a product requirement, not an aspiration.** It is printed on the page. A check that cannot fit inside the budget gets cut or moved to the emailed report, not allowed to stretch the number.
+1. **The stated duration is a product requirement, not an aspiration.** It is printed on the page. A check that cannot fit inside the budget gets cut or moved to the emailed report, not allowed to stretch the number — and if the number has to grow, the copy changes with it.
 2. **The scan is the top of the funnel for an agency audience.** The reader is a WordPress agency owner evaluating whether we know more than they do. A finding that is wrong, or that reads as generic SEO-tool output, costs more than no scan at all.
 
 The scan's job is to produce *findings about a site they already manage* — per the homepage, "Specific findings, not a grade." The report model below has no letter grade or score out of 100 on purpose.
@@ -174,11 +185,31 @@ Cap this at the homepage plus one interior URL per agent. This is a handful of r
 >
 > Constrain this hard regardless: only on domains the requester has attested they manage (§6), only a few requests, never behind auth. Get a human decision on this before shipping — see §9.
 
+**Half 3 — header and meta directives.**
+
+The third mechanism, and the quietest of them. `X-Robots-Tag` on the response, or `<meta name="robots">` in the head, can carry:
+
+| Directive | Effect |
+| --- | --- |
+| `noindex` / `none` | Excluded from indexing entirely. On a live site this is nearly always a staging leftover — WordPress core has a "Discourage search engines" checkbox that sets it. |
+| `nosnippet` / `max-snippet:0` | May be indexed, but **nothing may be quoted from it**. Found and unusable. |
+| `noarchive` | No cached copy. |
+| `noai` / `noimageai` | Partial opt-out, honoured by some crawlers and ignored by others. |
+
+Why this belongs in the headline check: an `X-Robots-Tag: noindex` is invisible in robots.txt, invisible in the CDN dashboard, and invisible in the page as a browser renders it. Nothing about the site looks wrong.
+
+Two parsing traps, both covered by tests:
+
+- **Only read the `<head>`.** A blog post *about* `noindex` will contain the string in body copy, and an article that trips the check is a finding we have to retract.
+- **`max-snippet:0` is not agent-scoped.** The colon makes it look like `googlebot: noindex`, and treating it as a scope loses the directive. `max-snippet:-1` means *no limit* and must not be reported as a block.
+
 **Findings produced:**
 
+- `gap` — "The homepage carries a 'noindex' directive" (weight 120 — the loudest finding in the product when it fires)
 - `gap` — "GPTBot, ClaudeBot and PerplexityBot are blocked in robots.txt" (name the agents, quote the rule, give the line number)
 - `gap` — "AI crawlers are blocked at the CDN. Your robots.txt looks clean, which is why this is easy to miss." ← *the most valuable single sentence in the product*
-- `good` — "All major AI crawlers can reach this site."
+- `gap` — "Snippets are suppressed on the homepage"
+- `good` — "All major AI crawlers can reach this site." — requires all three mechanisms clear, not just robots.txt.
 
 ### 3.2 Structured data coverage
 
@@ -257,6 +288,28 @@ Across the same sample as §3.2. Per page: `<title>`, `meta description`, `canon
 **Uniqueness** is the part generic tools do badly. Exact duplicates are easy; the common WordPress failure is *near*-duplicates — "Services | Agency", "Services - Chicago | Agency", "Services - Denver | Agency" — produced by a template or a location-page plugin. Use normalized shingling or a similarity ratio, cluster the near-duplicates, and report the cluster with examples rather than listing 40 individually.
 
 **Findings:** `gap` — "18 pages share 3 title templates"; `gap` — "11 pages have no meta description"; `good` — "Titles and descriptions are unique across the sample."
+
+### 3.6 Delivery and hygiene
+
+Added after the original five. Splits into two halves with very different justifications, and the split is the point.
+
+**On-thesis: fetchability.** A crawler that cannot resolve a canonical host, or that burns its budget on redirects, never reads the site. This is an AI readiness problem wearing an infrastructure hat.
+
+| Item | Finding |
+| --- | --- |
+| No HTTP→HTTPS redirect | `gap`. Crawlers increasingly distrust plain HTTP. |
+| Redirect chain ≥3 hops | `gap`. Some crawlers stop following before the end. |
+| Both `www` and apex serve 200 independently | `gap`. Two full copies of the site, splitting ranking and citation signals. Common WordPress misconfiguration, one extra request to detect. |
+
+**Off-thesis, included deliberately: security headers.** HSTS, CSP, `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`.
+
+None of these affect what an assistant can do with the site, and §1 lists "not a general SEO audit" as a non-goal. They are in anyway because they are cheap to check and clients ask about them — but the framing is load-bearing:
+
+- **One finding, never five.** Reported as "3 of 5 common security headers are missing", with the list as evidence.
+- **Weight 5**, below every AI finding including the good news, so it always lands last.
+- **The detail line says so out loud**: *"Not an AI readiness problem, and included here only because it is cheap to fix and clients ask about it."*
+
+The risk being managed: every free scanner reports these. Leading with them, in front of an audience specifically evaluating whether we know more than they do, would make the report look like securityheaders.io with extra steps. Bottom of the page, honestly labelled, it costs nothing and answers a question the reader was going to ask.
 
 ---
 
@@ -402,9 +455,10 @@ If the checks change, these strings change with them. All currently live on `kat
 
 | Location | String |
 | --- | --- |
-| `SpaceSceneHero.astro` | "No call required. Results in about 90 seconds." |
-| `SpaceSceneHero.astro` | CTA "Scan a Client Site Free" → currently `/contact` |
+| `SpaceSceneHero.astro` | "No call required. Results in seconds." — **revisit when phases 2–3 land** |
+| `SpaceSceneHero.astro` | CTA "Scan a Client Site Free" → `/scan` |
 | `index.astro` §Start here | The three steps — 01 give us a URL, 02 we scan and report, 03 you decide |
 | `index.astro` §Start here | "Specific findings, not a grade." — constrains §4 |
-| `index.astro` closing CTA | "The scan is free, it takes about 90 seconds, and the report is useful whether or not you ever hire us." |
-| `ContactForm.astro` | "Free AI Readiness Scan (agencies)" dropdown option — remove once the real scanner ships |
+| `index.astro` closing CTA | "The scan is free, it takes seconds, and the report is useful whether or not you ever hire us." — **same** |
+| `ContactForm.astro` | "Free AI Readiness Scan (agencies)" dropdown option — now redundant with `/scan`; keep as a fallback path or remove |
+| `scan.astro` | "No call required. Checks run in a few seconds." |

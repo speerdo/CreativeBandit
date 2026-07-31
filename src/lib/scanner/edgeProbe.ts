@@ -118,6 +118,20 @@ export async function probeEdge(url: string): Promise<EdgeProbeReport> {
     return { control: null, results: [], blocked: [] };
   }
 
+  /*
+   * Every verdict here is relative to the control. If a normal browser is
+   * already being refused, the bot responses carry no information - refusing
+   * everyone is not the same as refusing crawlers - and reporting a CDN block
+   * off the back of it is a false positive. Bail rather than guess.
+   */
+  if (control.status >= 400) {
+    return {
+      control: { status: control.status, length: control.body.length },
+      results: [],
+      blocked: [],
+    };
+  }
+
   const settled = await Promise.allSettled(
     PROBEABLE_AGENTS.map(async (agent) => {
       const probe = await safeFetch(url, {

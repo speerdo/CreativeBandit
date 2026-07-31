@@ -1,7 +1,8 @@
-import { safeFetch } from './safeFetch';
+import { safeFetch, type SafeResponse } from './safeFetch';
 import { parseRobots, isAllowed, type ParsedRobots } from './robots';
 import { AI_AGENTS } from './agents';
 import { probeEdge } from './edgeProbe';
+import { collectDirectives, blockingDirectives } from './directives';
 import type { Finding } from './types';
 
 /*
@@ -22,7 +23,10 @@ function list(names: string[]): string {
   return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
 }
 
-export async function checkCrawlers(siteUrl: string): Promise<Finding[]> {
+export async function checkCrawlers(
+  siteUrl: string,
+  control: SafeResponse
+): Promise<Finding[]> {
   const findings: Finding[] = [];
   const origin = new URL(siteUrl).origin;
 
@@ -111,16 +115,93 @@ export async function checkCrawlers(siteUrl: string): Promise<Finding[]> {
     });
   }
 
+  // --- half 3: header and meta directives ---------------------------------
+  /*
+   * The quietest of the three mechanisms. An X-Robots-Tag left over from a
+   * staging config blocks indexing and snippets while the site looks entirely
+   * normal in a browser, in robots.txt, and in the CDN dashboard.
+   */
+  const directives = collectDirectives(control.headers, control.body);
+  const blocking = blockingDirectives(directives);
+
+  const noindex = blocking.find((d) => d.directive === 'noindex' || d.directive === 'none');
+  if (noindex) {
+    findings.push({
+      id: 'directive-noindex',
+      check: 'crawlers',
+      tag: 'gap',
+      title: `The homepage carries a "${noindex.directive}" directive`,
+      detail:
+        'This tells search engines and assistants not to index the page at all. On a live site ' +
+        'it is almost always left over from staging, and nothing about the page looks wrong ' +
+        'in a browser.',
+      evidence: {
+        quote: `${noindex.source}: ${noindex.agent ? `${noindex.agent}: ` : ''}${noindex.directive}`,
+        source: control.url,
+      },
+      remediation:
+        'Remove the directive. If it comes from an SEO plugin, check its search-visibility ' +
+        'setting; in WordPress core, Settings > Reading has a "Discourage search engines" box.',
+      weight: 120, // the loudest finding in the product when it fires
+    });
+  }
+
+  const snippet = blocking.find(
+    (d) => d.directive === 'nosnippet' || /^max-snippet\s*:\s*0$/.test(d.directive)
+  );
+  if (snippet) {
+    findings.push({
+      id: 'directive-nosnippet',
+      check: 'crawlers',
+      tag: 'gap',
+      title: 'Snippets are suppressed on the homepage',
+      detail:
+        'The page may be indexed, but assistants and search results are forbidden from quoting ' +
+        'any text from it. In practice that means it can be found and not used.',
+      evidence: {
+        quote: `${snippet.source}: ${snippet.directive}`,
+        source: control.url,
+      },
+      remediation:
+        'Remove the nosnippet or max-snippet:0 directive unless it is there for a licensing reason.',
+      weight: 95,
+    });
+  }
+
+  const aiOptOut = blocking.filter((d) => d.directive === 'noai' || d.directive === 'noimageai');
+  if (aiOptOut.length > 0) {
+    findings.push({
+      id: 'directive-noai',
+      check: 'crawlers',
+      tag: 'opportunity',
+      title: `An AI opt-out directive is set (${aiOptOut.map((d) => d.directive).join(', ')})`,
+      detail:
+        'These are honoured by some crawlers and ignored by others, so the effect is partial. ' +
+        'Worth confirming it was deliberate rather than inherited from a theme or plugin.',
+      evidence: {
+        quote: `${aiOptOut[0].source}: ${aiOptOut[0].directive}`,
+        source: control.url,
+      },
+      remediation: 'Remove it if the opt-out was not intentional.',
+      weight: 60,
+    });
+  }
+
   // --- the good news ------------------------------------------------------
-  if (blockedInRobots.length === 0 && edge.blocked.length === 0 && edge.control) {
+  if (
+    blockedInRobots.length === 0 &&
+    edge.blocked.length === 0 &&
+    blocking.length === 0 &&
+    edge.control
+  ) {
     findings.push({
       id: 'crawlers-clear',
       check: 'crawlers',
       tag: 'good',
       title: 'All major AI crawlers can reach this site',
       detail:
-        'Nothing in robots.txt or at the CDN is turning away GPTBot, ClaudeBot, PerplexityBot or ' +
-        'Google-Extended. Assistants can fetch these pages.',
+        'Nothing in robots.txt, at the CDN, or in the page headers is turning away GPTBot, ' +
+        'ClaudeBot, PerplexityBot or Google-Extended. Assistants can fetch and quote these pages.',
       evidence: { source: robotsSource },
       remediation: 'No action needed. Worth re-checking after any CDN or SEO plugin change.',
       weight: 40,
