@@ -554,9 +554,18 @@ A scan that *only* reports crawler blocking is already worth putting on the site
 - [x] Point the homepage CTAs at the scanner instead of `/contact` (all three now go to `/scan`)
 
 ### Phase 5 — Validate the claim
-- [ ] Run 20 real agency-managed WordPress sites through it
-- [ ] Measure p50/p95 wall-clock against the 90-second promise
-- [ ] **If p95 exceeds 90s, change the copy or cut a check — do not ship a number the product misses**
+- [x] First sweep: 15 sites across WordPress, Shopify-adjacent, Astro, Next.js, Gatsby, Ghost and hand-rolled. Harness in `validation.manual.ts`, run with `vitest.manual.config.ts` — deliberately outside the normal suite, because it hits live third-party sites.
+- [x] Measured p50 **2.9s**, p95 **30.8s**, max **30.8s** (14 completed, 1 hard failure)
+- [x] Copy changed to match, per the rule below: "Results in seconds" → "Usually a few seconds", and `/scan` states the worst case outright
+- [ ] Second sweep against 20 *client-style* sites once the domain transfer lands — the current list is tech-industry sites, which are better maintained than the average agency-managed site and therefore an optimistic sample
+- [ ] **If p95 drifts past a minute, change the copy or cut a check — do not ship a number the product misses**
+
+**What the first sweep found.** Two real defects, neither visible from reading the code:
+
+1. **`woocommerce.com` was refused outright** — "that domain resolves to a private address". The SSRF guard blocked all of `192.0.0.0/16`, but only `192.0.0.0/24` and `192.0.2.0/24` are reserved. `192.0.66.0/24` is Automattic, so **woocommerce.com, WordPress.com-hosted sites and anything behind Jetpack** were being turned away. On a product aimed at WordPress agencies that is close to the worst possible false positive. Fixed, with the specific address in the test suite.
+2. **`metadata-near-duplicates` was over-firing.** It flagged Kinsta's "Kinsta Kingpin: Interview With &lt;name&gt;" series and Stripe's "Stripe Services Agreement - &lt;document&gt;" pages as interchangeable. They are not: the varying token *is* the subject. Severity now depends on whether the descriptions differentiate the pages — distinct descriptions downgrade it to an `opportunity` about truncation, identical or absent ones keep it a `gap`. Verified both sites land on the right side.
+
+**Sample bias worth naming.** Every site in the first sweep is a tech company's own marketing site. They have SEO staff. A real agency-managed client site will be worse, which means these numbers are the *optimistic* end for finding counts and probably the pessimistic end for nothing at all. The second sweep matters more than the first.
 
 ---
 

@@ -37,6 +37,26 @@ describe('isBlockedAddress — IPv4', () => {
   ])('allows public address %s', (address) => {
     expect(isBlockedAddress(address)).toBe(false);
   });
+
+  it('allows Automattic space inside 192.0.0.0/16', () => {
+    /*
+     * Regression: blocking the whole /16 refused woocommerce.com and every
+     * WordPress.com-hosted site, which is the core audience. Only
+     * 192.0.0.0/24 and 192.0.2.0/24 are reserved.
+     */
+    expect(isBlockedAddress('192.0.66.5')).toBe(false);
+    expect(isBlockedAddress('192.0.78.12')).toBe(false);
+    expect(isBlockedAddress('192.0.0.1')).toBe(true);
+    expect(isBlockedAddress('192.0.2.1')).toBe(true);
+  });
+
+  it.each([
+    ['198.51.100.1', 'TEST-NET-2'],
+    ['203.0.113.1', 'TEST-NET-3'],
+    ['192.88.99.1', '6to4 relay anycast'],
+  ])('blocks %s (%s)', (address) => {
+    expect(isBlockedAddress(address)).toBe(true);
+  });
 });
 
 describe('isBlockedAddress — IPv6', () => {

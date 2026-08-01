@@ -325,22 +325,56 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
   if (clusters.length > 0) {
     const largest = clusters[0];
     const total = clusters.reduce((sum, c) => sum + c.size, 0);
+
+    /*
+     * Severity depends on whether the DESCRIPTIONS are templated too.
+     *
+     * A shared title stem is not automatically a problem. Phase 5 validation
+     * flagged Kinsta's "Kinsta Kingpin: Interview With <name>" series and
+     * Stripe's "Stripe Services Agreement - <document>" pages, where the
+     * varying token IS the subject and the pages are genuinely distinct. The
+     * failure this check exists for - a location plugin stamping out
+     * "Services - Denver", "Services - Chicago" - differs in that the pages
+     * are interchangeable all the way down.
+     *
+     * Distinct descriptions are the cheapest available evidence that the
+     * pages really are about different things. When they are distinct we
+     * still report the pattern, but as an opportunity in the author's own
+     * terms rather than as a fault.
+     */
+    const byUrl = new Map(profiles.map((p) => [p.url, p]));
+    const clusterDescriptions = largest.urls
+      .map((url) => byUrl.get(url)?.description?.trim())
+      .filter((d): d is string => !!d);
+
+    const distinctDescriptions = new Set(clusterDescriptions).size;
+    const descriptionsDifferentiate =
+      clusterDescriptions.length >= 2 && distinctDescriptions === clusterDescriptions.length;
+
     findings.push({
       id: 'metadata-near-duplicates',
       check: 'metadata',
-      tag: 'gap',
-      title: `${total} of ${titled.length} sampled pages share ${clusters.length === 1 ? 'a single' : clusters.length} title template${clusters.length === 1 ? '' : 's'}`,
-      detail:
-        'The common WordPress failure: a location or services plugin stamps the same title ' +
-        'with a city name swapped in, so every page tells an assistant the same thing about ' +
-        'what it is. Exact-duplicate scanners miss this because "Services - Denver" is not ' +
-        'literally "Services - Chicago".',
+      tag: descriptionsDifferentiate ? 'opportunity' : 'gap',
+      title: descriptionsDifferentiate
+        ? `${total} of ${titled.length} sampled pages share ${clusters.length === 1 ? 'a title template' : `${clusters.length} title templates`}`
+        : `${total} of ${titled.length} sampled pages share ${clusters.length === 1 ? 'a single' : clusters.length} title template${clusters.length === 1 ? '' : 's'}`,
+      detail: descriptionsDifferentiate
+        ? 'Their descriptions are all different, so these are genuinely separate pages behind a ' +
+          'shared naming pattern - a series or a document set, not duplicate content. Worth ' +
+          'knowing because the distinguishing part sits at the end of the title, where a ' +
+          'truncated search result or citation is most likely to cut it off.'
+        : 'The common WordPress failure: a location or services plugin stamps the same title ' +
+          'with a city name swapped in, so every page tells an assistant the same thing about ' +
+          'what it is. Exact-duplicate scanners miss this because "Services - Denver" is not ' +
+          'literally "Services - Chicago".',
       evidence: { quote: largest.representative, source: largest.urls[0] },
       affectedUrls: largest.urls.slice(0, 10),
-      remediation:
-        'Rewrite each cluster so the page\'s actual subject leads. A template with a swap-in ' +
-        'location is fine as a starting point; it is not fine as the entire title.',
-      weight: 85,
+      remediation: descriptionsDifferentiate
+        ? 'Nothing urgent. If these matter commercially, lead with the part that differs so it ' +
+          'survives truncation.'
+        : 'Rewrite each cluster so the page\'s actual subject leads. A template with a swap-in ' +
+          'location is fine as a starting point; it is not fine as the entire title.',
+      weight: descriptionsDifferentiate ? 45 : 85,
     });
   }
 

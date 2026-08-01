@@ -63,14 +63,31 @@ function isBlockedIPv4(address: string): boolean {
   }
   const [a, b] = parts;
 
+  const c = parts[2];
+
   if (a === 0) return true; // 0.0.0.0/8 "this network"
   if (a === 10) return true; // private
   if (a === 127) return true; // loopback
   if (a === 169 && b === 254) return true; // link-local, incl. cloud metadata
   if (a === 172 && b >= 16 && b <= 31) return true; // private
   if (a === 192 && b === 168) return true; // private
-  if (a === 192 && b === 0) return true; // IETF protocol assignments / 192.0.2.0 TEST-NET
-  if (a === 198 && (b === 18 || b === 19)) return true; // benchmarking
+
+  /*
+   * Only two /24s inside 192.0.0.0/16 are reserved, NOT the whole /16.
+   *
+   * Blocking the /16 refused 192.0.66.0/24, which is Automattic - so
+   * woocommerce.com, WordPress.com-hosted sites and anything behind Jetpack
+   * were turned away with "that domain resolves to a private address". On a
+   * product aimed at WordPress agencies that is close to the worst possible
+   * false positive. Found by the phase 5 validation sweep.
+   */
+  if (a === 192 && b === 0 && c === 0) return true; // 192.0.0.0/24 IETF assignments
+  if (a === 192 && b === 0 && c === 2) return true; // 192.0.2.0/24 TEST-NET-1
+
+  if (a === 198 && (b === 18 || b === 19)) return true; // 198.18.0.0/15 benchmarking
+  if (a === 198 && b === 51 && c === 100) return true; // 198.51.100.0/24 TEST-NET-2
+  if (a === 203 && b === 0 && c === 113) return true; // 203.0.113.0/24 TEST-NET-3
+  if (a === 192 && b === 88 && c === 99) return true; // 192.88.99.0/24 6to4 relay anycast
   if (a === 100 && b >= 64 && b <= 127) return true; // CGNAT
   if (a >= 224) return true; // multicast (224/4) and reserved (240/4), incl. 255.255.255.255
 
