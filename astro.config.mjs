@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import vercel from '@astrojs/vercel';
 
@@ -31,7 +31,15 @@ export default defineConfig({
      */
     maxDuration: 60,
   }),
-  integrations: [tailwind(), mdx(), react()],
+  /*
+   * Tailwind 4 ships as a Vite plugin. The old @astrojs/tailwind integration
+   * peers on astro ^3-^5 and was never updated for 6 or 7, so it is not an
+   * option here; this is the supported path, not a preference.
+   */
+  vite: {
+    plugins: [tailwindcss()],
+  },
+  integrations: [mdx(), react()],
   markdown: {
     shikiConfig: {
       theme: 'dracula',

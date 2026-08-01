@@ -35,6 +35,10 @@
 >   cannot afford (§0.2).
 > - **Checks 6 and the directive half of check 1 were added** beyond the
 >   original five. See §3.1 half 3 and §3.6.
+> - **Stack upgraded to Astro 7 / Tailwind 4** (2026-08-01), which retired the
+>   `@astrojs/vercel@9` pin this project used to need. §2.1's "no adapter"
+>   description is historical; the adapter is `@astrojs/vercel@11` and
+>   `maxDuration: 60` survives the upgrade. The scanner needed no changes.
 
 > **Phase 2 notes.** Six checks now run — crawlers, delivery, feeds, schema,
 > metadata, llms.txt — still synchronously (§2.2 stays unbuilt). Measured

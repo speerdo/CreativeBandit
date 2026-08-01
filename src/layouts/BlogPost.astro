@@ -62,6 +62,15 @@ const { frontmatter } = Astro.props;
 </Layout>
 
 <style is:global>
+  /*
+   * Tailwind 4 compiles every stylesheet in isolation, so `@apply` here has
+   * no idea what `text-paper-mute` means without being pointed back at the
+   * file that defines the theme. `@reference` loads those definitions for
+   * resolution only, without emitting the whole stylesheet again into this
+   * component's CSS.
+   */
+  @reference '../styles/global.css';
+
   .prose {
     @apply text-paper-mute;
   }

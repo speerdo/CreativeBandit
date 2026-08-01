@@ -1,6 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-const posts = await Astro.glob('./*.mdx');
+/*
+ * `Astro.glob()` was deprecated in v5 and removed in v7. `import.meta.glob`
+ * is the Vite-native replacement; `eager` gives the modules themselves
+ * rather than lazy importers, which is what the template needs to read
+ * frontmatter at build time.
+ */
+const posts = Object.values(
+  import.meta.glob('./*.mdx', { eager: true })
+) as { url: string; frontmatter: Record<string, any> }[];
 
 const categories = [...new Set(posts.map(post => post.frontmatter.category))];
 ---

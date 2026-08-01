@@ -1,14 +1,23 @@
 /*
- * Use the @tailwind directives, not `@import 'tailwindcss/...'`. With the
- * @import form, this file's @layer components block was emitted *after*
- * Tailwind's utilities, so component classes silently beat any utility
- * override on the same element (`class="card p-8"` ignored the p-8, and a
- * z-index in .field beat -z-30). The directive form restores the intended
- * base -> components -> utilities order.
+ * Tailwind 4. The three `@tailwind` directives collapsed into one import,
+ * and layer ordering is now handled by real CSS cascade layers rather than
+ * by the order the directives appear in.
+ *
+ * That matters here because of an old bug worth not reintroducing: under
+ * Tailwind 3 the `@import 'tailwindcss/...'` form emitted this file's
+ * `@layer components` block *after* the utilities, so component classes
+ * silently beat any utility override on the same element (`class="card p-8"`
+ * ignored the p-8). Tailwind 4 registers `theme, base, components,
+ * utilities` as named cascade layers, so utilities win by layer order
+ * regardless of source position, and the problem cannot recur.
+ *
+ * The design tokens still live in tailwind.config.js. Tailwind 4 prefers a
+ * CSS-first `@theme` block, but it still honours a JS config when pointed at
+ * one, and moving ~60 lines of palette into CSS is a separate change from
+ * upgrading the framework.
  */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config '../../tailwind.config.js';
 
 /*
  * Creative Bandit — risograph / digital space cowboy design system.
