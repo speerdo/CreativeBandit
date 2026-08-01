@@ -16,7 +16,21 @@ export default defineConfig({
    * for those routes, so the 14 static pages are unaffected.
    */
   output: 'static',
-  adapter: vercel(),
+  adapter: vercel({
+    /*
+     * Set explicitly rather than inherited, because the plan default has
+     * changed over time and a default below the scan budget would kill a slow
+     * scan mid-flight - the visitor gets a Vercel timeout page instead of the
+     * partial report the scanner is careful to produce.
+     *
+     * Sized against the worst case in scan.ts: an 8s reachability precheck
+     * before the budget timer starts, plus SCAN_BUDGET_MS (45s), plus room to
+     * serialise the response. 60 is the ceiling on the lowest plan. If
+     * SCAN_BUDGET_MS grows, this has to grow first - never the other way
+     * round.
+     */
+    maxDuration: 60,
+  }),
   integrations: [tailwind(), mdx(), react()],
   markdown: {
     shikiConfig: {

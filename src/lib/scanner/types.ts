@@ -11,7 +11,8 @@ export type CheckId =
   | 'js-content'
   | 'llms-txt'
   | 'metadata'
-  | 'delivery';
+  | 'delivery'
+  | 'feeds';
 
 export interface Finding {
   /** Stable slug, e.g. 'robots-ai-blocked'. */

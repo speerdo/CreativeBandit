@@ -1,6 +1,6 @@
 # Creative Bandit — AI Readiness Scan
 
-**Status:** Phases 0 and 1 built on `ai-readiness-scan`. Phases 2–5 outstanding.
+**Status:** Phase 2 shipped 2026-07-31: checks 2 (schema), 4 (llms.txt), 5 (metadata) and 7 (feeds/API) are live, on top of Phase 1's check 1 and check 6. Phases 3–5 outstanding.
 **Date:** 2026-07-31
 **Blocks:** homepage copy that is already live-ready on `kat-design-updates`
 
@@ -35,6 +35,51 @@
 >   cannot afford (§0.2).
 > - **Checks 6 and the directive half of check 1 were added** beyond the
 >   original five. See §3.1 half 3 and §3.6.
+
+> **Phase 2 notes.** Six checks now run — crawlers, delivery, feeds, schema,
+> metadata, llms.txt — still synchronously (§2.2 stays unbuilt). Measured
+> end-to-end: example.com 0.4s, astro.build 1.0s, wpbeginner.com 16.6s. The
+> spread is page-fetch time on the origin, not our overhead, and a heavy
+> WordPress site sits at the top of it. `maxDuration` is pinned to 60 in
+> `astro.config.mjs` against a 45s `SCAN_BUDGET_MS` plus an 8s precheck that
+> runs before the budget timer starts — if the budget grows, the function
+> ceiling has to grow first. Checks run in two waves: the four that need no page
+> bodies run first, then sitemap discovery + up to 24 page fetches at
+> concurrency 4, and schema/metadata/images/identity all parse the bodies
+> from memory. Phase-2 findings report against the sample, not the whole
+> site, and say so out loud. Sitemap sampling is homepage-first, not
+> stratified — revisiting if phase 5 shows it skewing to archives.
+>
+> **Near-duplicate title clustering had to be fixed against a real site.**
+> The first pass scored "About – WordPress.org" and "Counter – WordPress.org"
+> as the same template because the shared brand suffix drowned the leading
+> subject in a character-shingle Dice score. Fix: compare titles after
+> stripping a shared trailing suffix, require the brand portion of the
+> suffix to match, ignore any one-word remainder, and merge at 0.7 rather
+> than 0.65. Verified against wordpress.org (no false positive) and against
+> a synthetic Denver/Chicago location template (still catches it).
+>
+> **Review fixes, 2026-08-01.**
+>
+> - **`<loc>` CDATA was not unwrapped**, so sitemap discovery returned nothing
+>   on most WordPress sites. Both AIOSEO and Yoast wrap the URL in CDATA, and
+>   the `[^<]+?` pattern could not match content beginning with `<`. The scan
+>   then reported a confident, false "No sitemap exists" *and* silently lost
+>   every check that needs the page sample — schema, metadata, images,
+>   identity. Found against wpbeginner.com; regression tests in
+>   `sitemap.test.ts`. This was the single most damaging bug in the tree,
+>   because it failed hardest on exactly the platform the product targets.
+> - **The result reported the pre-redirect URL**, so an apex that 301s to www
+>   captioned the findings with a host that was never examined.
+> - **`maxDuration` was absent** from `astro.config.mjs` — the commit adding it
+>   never reached main — leaving the function on a plan default that may sit
+>   below the 45s budget. Pinned to 60.
+> - **The privacy policy described an emailed report, 90-day retention of URLs
+>   and findings, and per-target rate limiting.** None of the three exist:
+>   there is no email field, no persistence of any kind, and the limiter is
+>   per source address only. Rewritten to describe what the code does. Worth
+>   re-reading whenever a check gains a side effect — it is the one document
+>   here where over-claiming is a legal problem rather than a copy problem.
 
 ---
 
@@ -126,7 +171,7 @@ Check 3 requires a real browser. This is the single heaviest dependency in the s
 
 ## 3. The checks
 
-Ordered by value to the reader, which is also the order they should resolve on screen.
+Eleven checks in total: the original five (§3.1–§3.5), check 6 added in phase 1 (§3.6), checks 7–10 added in phase 2 (§3.7–§3.10), and check 11 deferred (§3.11). Ordered by value to the reader, which is also the order they should resolve on screen.
 
 ### 3.1 AI crawler blocking — the headline finding
 
@@ -311,6 +356,74 @@ None of these affect what an assistant can do with the site, and §1 lists "not 
 
 The risk being managed: every free scanner reports these. Leading with them, in front of an audience specifically evaluating whether we know more than they do, would make the report look like securityheaders.io with extra steps. Bottom of the page, honestly labelled, it costs nothing and answers a question the reader was going to ask.
 
+### 3.7 Feed and API surface discovery
+
+Added in phase 2. Agency owners routinely do not know these endpoints exist, and they are the cleanest way for an assistant to read the site without scraping.
+
+**Detection.** On the already-fetched homepage, look for:
+
+| Signal | Where | What it means |
+| --- | --- | --- |
+| `<link rel="alternate" type="application/rss+xml">` | `<head>` | RSS/Atom feed. |
+| `href=".../feed/"` or `/feed.xml` or `/rss.xml` | `<head>` or link tags | Same. |
+| `rel="https://api.w.org/"` | `<head>` or HTTP `Link` header | WordPress REST API is on. |
+| `<meta name="generator" content="WordPress ...">` | `<head>` | Confirms WP; also tells us which sitemap path to try first in §3.2. |
+
+If the REST API is detected, do **not** probe it further in v1 — the point is "your content is already machine-readable," not an API reconnaissance exercise.
+
+**Findings:**
+
+- `opportunity` — "This site already has a WordPress REST API or RSS feed. An assistant can read it directly — no screen-scraping needed." Detail: mention the REST API is often enabled by default and most owners have never seen it.
+- `good` — omitted; absence of feeds is not a gap, only a missed convenience.
+
+The insight worth printing: "The REST API is how an AI assistant can answer questions about your business accurately — with prices, hours, and services pulled live rather than guessed from a cached snapshot. It is probably already on, and you have never used it for anything."
+
+### 3.8 Image AI-accessibility
+
+Added in phase 2 as a sub-check inside the §3.5 metadata pass (the sample pages are already parsed, so there is no fetch cost). Kept as a separate finding family because the remediation is image-specific.
+
+**Checks on the sample:**
+
+- `<img>` tags with missing or empty `alt`. A meaningful number of WordPress galleries ship like this — the page builder focuses on layout, not text alternatives. Assistants doing multimodal grounding cannot see what the image shows.
+- Key business imagery delivered as CSS `background-image` rather than `<img>` — logo walls, team photos, portfolio pieces. Invisible to a text-first crawler and invisible to an assistant that can see images.
+
+**Findings:**
+
+- `gap` — "N of M sampled images have no alt text" (only if the count crosses a floor — one missing alt is not news).
+- `opportunity` — "Your portfolio / team / location imagery is delivered as CSS backgrounds, so nothing can see it. Moving key images to real `<img>` tags with alt text also improves accessibility, which is a free win."
+
+**Framing note.** This is not an accessibility audit; do not grade. It is about what an AI assistant can *see*, which is on-thesis.
+
+### 3.9 Organisation identity consistency (NAP)
+
+Added in phase 2. The question is whether the site tells an assistant, unambiguously, *which business this is*.
+
+**Look for:**
+
+- `Organization` / `LocalBusiness` JSON-LD with a `name`, on the homepage.
+- The `<title>` of the homepage.
+- An `h1` on the homepage.
+- Any visible footer / contact page business name.
+
+**The failure mode worth reporting:** business name present in title or h1, but no `Organization` schema at all, or `Organization` schema with a `name` that does not match the visible brand (very common when the site was built from a theme demo and the schema was never updated). An assistant grounding a "who are these people" answer will pick whichever string it found last, and it may pick wrong.
+
+**Findings:**
+
+- `opportunity` — "This site does not tell an assistant which business it belongs to." Detail: no Organization/LocalBusiness schema, or schema name does not match the brand in the title/h1. Remediation: a five-minute JSON-LD block in the footer, or the SEO plugin's knowledge-graph settings.
+- `good` — omitted. Only report the mismatch.
+
+This is deliberately lighter than a full GBP/citation cross-reference — that belongs in the paid audit, not a free scan.
+
+### 3.10 Platform fingerprint
+
+Added in phase 2, but deliberately muted — not a finding in its own right. The homepage body we already have contains `<meta name="generator">` tags, `wp-content` paths, and `X-Powered-By` headers. Record what the site is (WordPress version, page builder, theme) and use it to shape remediation copy elsewhere: "in Yoast, turn on X" reads as expertise; "check your settings" reads as every other tool.
+
+**Rule:** never report "you are running WordPress 6.4" as a gap. That is security-scanner behaviour and it is off-thesis. The fingerprint is intelligence for the rest of the report, not content for it.
+
+### 3.11 AI licensing signals — deferred
+
+`ai.txt`, `X-AI-License`, `noai`/`noimageai` opt-outs. Partially covered by check 1 half 3 (noai/noimageai directives). A standalone `ai.txt` proposal has essentially zero adoption today, and recommending it as a gap would sell a file format rather than solve a client problem. Revisit if the `llms.txt` framing in §3.4 changes or if a client asks specifically about AI licensing posture.
+
 ---
 
 ## 4. Finding schema
@@ -320,7 +433,7 @@ One shape for every check, so the UI and the email template never special-case.
 ```ts
 interface Finding {
   id: string;                    // stable slug, e.g. 'robots-ai-blocked'
-  check: 'crawlers' | 'schema' | 'js-content' | 'llms-txt' | 'metadata';
+  check: 'crawlers' | 'schema' | 'js-content' | 'llms-txt' | 'metadata' | 'delivery' | 'feeds';
   tag: 'gap' | 'opportunity' | 'good';
   title: string;                 // one line, specific, numbers not adjectives
   detail: string;                // 1-2 sentences: what it means for them
@@ -340,23 +453,24 @@ interface Finding {
 
 ---
 
-## 5. The 90-second budget
+## 5. The budget
 
-Indicative allocation. Measure and revise once real sites are running through it.
+Phase 1 ("in seconds," ~10s) is intact. Phase 2 pushed a healthy WordPress scan to **25–35s** — still under a serverless timeout, still "seconds," but the number is now a live constraint again in the direction §0 warned about. The 90-second ceiling is the original headroom for when phase 3's headless renders land; do not spend it early.
 
 | Phase | Budget | Notes |
 | --- | --- | --- |
 | Resolve, validate, SSRF checks | 2s | §6 |
 | robots.txt + edge probes (§3.1) | 8s | Parallel across agents. First findings on screen here. |
-| Sitemap discovery + sampling | 8s | |
-| Fetch sample pages (raw) | 20s | Concurrency 5, per-domain politeness |
-| Schema + metadata parse (§3.2, §3.5) | 5s | CPU-bound, cheap, runs on already-fetched HTML |
-| llms.txt (§3.4) | 2s | Trivial, can run anytime |
-| Headless renders (§3.3) | 35s | 5–8 pages, the long pole |
-| Assemble, persist, queue email | 5s | |
-| **Total** | **~85s** | |
+| Sitemap discovery + sampling | 3s | Measured fast on real sites (see phase 2 notes) |
+| Fetch sample pages (raw, ≤24) | 2–15s | Concurrency 4 — the phase-2 long pole; measured 3s on wordpress.org |
+| Schema + metadata + feeds parse (§3.2, §3.5, §3.7, §3.8, §3.9) | ~0s | CPU-bound on already-fetched bodies |
+| llms.txt + soft-404 probe (§3.4) | 2s | Same-origin probe only; HEAD would be unreliable |
+| Headless renders (§3.3) | 35s | Phase 3 — the budget's eventual spender |
+| Assemble, persist, queue email | 5s | Phase 4 |
+| **Phase 2 total** | **~3–15s** | Measured: wordpress.org in 3.1s, example.com in 0.35s |
+| **Phase 3+ total** | **~70s** | |
 
-**Degradation, in order, on overrun:** cut headless renders to 3 pages → drop §3.3 entirely → shrink the page sample to 15. Never drop §3.1; it is the product.
+**Degradation, in order, on overrun:** cut the page sample to 12 → cut headless renders to 3 pages → drop §3.3 → shrink the page sample to 8. Never drop §3.1; it is the product.
 
 **A partial report is a success, not a failure.** If the budget expires, return what completed with a clear note about what did not, and say so in the email. Never hold the whole report hostage to one slow check.
 
@@ -393,7 +507,7 @@ Also required:
 | Email address | Until unsubscribe | This is a marketing list. It needs an unsubscribe link and a privacy-policy line. |
 | Raw fetched HTML | Do not persist in v1 | Only add if re-analysis without re-fetching becomes necessary |
 
-`/privacy` will need a paragraph covering the scanner before launch — it currently says nothing about processing third-party sites or storing scan results.
+`/privacy` covers the scanner in §6 ("The Free Site Scanner"): what it fetches and why, email handling and unsubscribe, 90-day retention of URL+findings, third parties the scan reveals the URL to, the ownership attestation, and the rate limits. Updated 2026-08-01 alongside Phase 2.
 
 ---
 
@@ -415,12 +529,17 @@ Also required:
 
 A scan that *only* reports crawler blocking is already worth putting on the site. It is the best finding, it fits in ~10 seconds, and shipping it alone proves the funnel before we pay for headless rendering. **Do not wait for all five checks to launch.**
 
-### Phase 2 — Cheap checks
-- [ ] Sitemap discovery + stratified sampling
-- [ ] Raw page fetcher with concurrency control
-- [ ] §3.2 structured data, with the boilerplate/entity tiering
-- [ ] §3.5 metadata, including near-duplicate clustering
-- [ ] §3.4 llms.txt, with soft-404 guarding
+### Phase 2 — Cheap checks — **shipped 2026-07-31**
+- [x] Sitemap discovery + sampling (homepage-first, 24 pages; stratification deferred)
+- [x] Raw page fetcher with concurrency control
+- [x] §3.2 structured data, with the boilerplate/entity tiering
+- [x] §3.5 metadata, including near-duplicate clustering
+- [x] §3.4 llms.txt, with soft-404 guarding
+- [x] §3.7 feed/API surface discovery
+- [x] §3.8 image AI-accessibility (folded into the metadata pass)
+- [x] §3.9 organisation identity consistency
+- [x] §3.10 platform fingerprint (drives remediation copy; never reported)
+- [ ] §3.11 AI licensing signals — deferred (see §3.11)
 
 ### Phase 3 — Headless
 - [ ] Choose the render provider (§2.5)
@@ -429,7 +548,9 @@ A scan that *only* reports crawler blocking is already worth putting on the site
 
 ### Phase 4 — Delivery
 - [ ] Email provider + report template
-- [ ] Ownership attestation, rate limiting, privacy-policy update
+- [x] Ownership attestation (shipped in Phase 1)
+- [ ] Shared-state rate limiting (in-memory limiter is a speed bump, not the §6 requirement)
+- [x] Privacy-policy update — `/privacy` §6 covers the scanner: what it fetches, email handling, retention, third parties, attestation, rate limits
 - [x] Point the homepage CTAs at the scanner instead of `/contact` (all three now go to `/scan`)
 
 ### Phase 5 — Validate the claim

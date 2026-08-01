@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
   <section class="pt-32 pb-20 bg-paper text-base-300">
     <div class="container mx-auto px-4">
       <h1 class="text-4xl md:text-5xl font-bold mb-4 font-heading text-center text-base-300">Privacy Policy</h1>
-      <p class="text-base-300/70 text-center max-w-2xl mx-auto mb-16">Last Updated: February 3, 2026</p>
+      <p class="text-base-300/70 text-center max-w-2xl mx-auto mb-16">Last Updated: August 1, 2026</p>
 
       <div class="max-w-4xl mx-auto bg-paper-dim p-8 md:p-12 border border-paper-mute text-base-300 prose prose-lg prose-headings:text-base-300">
         
@@ -50,14 +50,32 @@ import Layout from '../layouts/Layout.astro';
           <li><strong>Google Analytics:</strong> We may use Google Analytics to monitor and analyze the use of our Service.</li>
         </ul>
 
-        <h3 class="mb-6">6. Data Security</h3>
+        <h3 class="mb-6">6. The Free Site Scanner</h3>
+        <p class="mb-8">
+          The scanner at <strong>/scan</strong> lets you submit a URL for a website you manage, or have permission to scan, so we
+          can check how AI assistants can and cannot use it. When you run a scan:
+        </p>
+        <ul class="list-disc pl-6 mb-8 space-y-4">
+          <li><strong>What we fetch and why.</strong> Our servers make requests to the URL you provide - the homepage, robots.txt, a sitemap, and a sample of up to about 24 pages - to detect things like crawler access, structured data, metadata quality, and feed availability. We identify ourselves with a scanner User-Agent that names this tool.</li>
+          <li><strong>Crawler identification.</strong> To detect whether a site blocks AI crawlers at the network edge, a small number of those requests carry a User-Agent naming the relevant crawler alongside our own. These requests may appear in the scanned site's access logs.</li>
+          <li><strong>What we ask you for.</strong> The URL, and your confirmation that you manage the site or have permission to scan it. There is no account, and we do not ask for an email address.</li>
+          <li><strong>What we store.</strong> Findings are generated and returned to your browser. We do not currently store scan results, submitted URLs, or the page content we fetched once the request has finished. Standard server logs may record the request in the ordinary course of running the site.</li>
+          <li><strong>Third parties.</strong> Running a scan reveals the URL you tested and the time of the request to our hosting provider (Vercel), in the normal course of serving the request.</li>
+          <li><strong>Rate limits.</strong> We limit how many scans can be run from a single source address, to keep the scanner free and to stop it being pointed at someone else's site in volume.</li>
+          <li><strong>Third-party sites.</strong> Scanning a site you do not manage may breach that site's terms of use. You are responsible for confirming you have permission before running a scan.</li>
+        </ul>
+        <p class="mb-8">
+          This section will be updated if the scanner starts storing results or emailing reports.
+        </p>
+
+        <h3 class="mb-6">7. Data Security</h3>
         <p class="mb-8">
           We have implemented measures designed to secure your personal information from accidental loss and from unauthorized access, use, alteration, and disclosure. 
           However, the transmission of information via the internet is not completely secure. Although we do our best to protect your personal information, 
           we cannot guarantee the security of your personal information transmitted to our Website.
         </p>
 
-        <h3 class="mb-6">7. Your Rights</h3>
+        <h3 class="mb-6">8. Your Rights</h3>
         <p class="mb-8">Depending on your location, you may have the right to:</p>
         <ul class="list-disc pl-6 mb-8 space-y-4">
           <li>Access the personal data we hold about you.</li>
@@ -68,24 +86,24 @@ import Layout from '../layouts/Layout.astro';
         </ul>
         <p class="mb-8">To exercise these rights, please contact us at <strong>hello@creativebandit.studio</strong>.</p>
 
-        <h3 class="mb-6">8. Children's Privacy</h3>
+        <h3 class="mb-6">9. Children's Privacy</h3>
         <p class="mb-8">
           Our Service does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from anyone under the age of 13. 
           If You are a parent or guardian and You are aware that Your child has provided Us with Personal Data, please contact Us.
         </p>
 
-        <h3 class="mb-6">9. Governing Law</h3>
+        <h3 class="mb-6">10. Governing Law</h3>
         <p class="mb-8">
           This policy and any disputes related to it shall be governed by and construed in accordance with the laws of the State of Indiana, United States, 
           without giving effect to any choice or conflict of law provision or rule.
         </p>
 
-        <h3 class="mb-6">10. Changes to Our Privacy Policy</h3>
+        <h3 class="mb-6">11. Changes to Our Privacy Policy</h3>
         <p class="mb-8">
           It is our policy to post any changes we make to our privacy policy on this page. The date the privacy policy was last revised is identified at the top of the page.
         </p>
 
-        <h3 class="mb-6">11. Contact Information</h3>
+        <h3 class="mb-6">12. Contact Information</h3>
         <p class="mb-8">
           To ask questions or comment about this privacy policy and our privacy practices, contact us at: <br/>
           <strong>Email:</strong> hello@creativebandit.studio
