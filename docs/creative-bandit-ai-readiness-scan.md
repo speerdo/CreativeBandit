@@ -542,9 +542,18 @@ A scan that *only* reports crawler blocking is already worth putting on the site
 - [ ] §3.11 AI licensing signals — deferred (see §3.11)
 
 ### Phase 3 — Headless
-- [ ] Choose the render provider (§2.5)
-- [ ] §3.3 JS-content comparison
-- [ ] Budget instrumentation and the degradation ladder from §5
+- [x] Render provider chosen: **self-hosted, no paid service.** `puppeteer-core` + `@sparticuz/chromium`, lazily imported so the ~75MB never loads on a scan that skips the check. Local machines reuse an installed Chrome (`CHROME_PATH` overrides); Vercel gets the Amazon Linux binary.
+- [x] §3.3 JS-content comparison
+- [x] Budget instrumentation and the degradation ladder from §5
+
+**§2.5 is superseded.** That section recommended a paid render API for predictable latency, written before there was any timing data. Measured: **~1.7s per page**, and the function bundle lands at **107MB against a 500MB limit**. Both fit comfortably, so the recommendation is reversed — self-hosted first, revisit only if cold starts prove worse in production than locally.
+
+**Two things the spike changed.**
+
+1. **Text extraction had to be real.** Stripping `<script>` and `<style>` then removing tags — the obvious approach — measured linear.app's homepage at **834KB of "text"**. It ships 179 inline SVGs and a 261KB stylesheet, and the leftover markup swamped the actual copy, making the ratio meaningless. `extractText` now also drops SVG, comments, `noscript`, `template` and `iframe`. This is the concrete form of the spec's own warning against raw `innerText`.
+2. **Three pages, not five to eight.** At 1.7s each, the §3.3 sample had to shrink to keep the check inside the budget. It also runs *last* and only when at least 12s of budget remains, reporting itself as skipped otherwise — the §5 ladder, made explicit.
+
+**Validation split.** The live sweep (linear.app, astro.build, wpbeginner.com) confirmed no false positives — all three correctly returned `good`, since Linear's marketing pages are prerendered rather than a true SPA. Proving the check *fires* needed fixtures rather than hunting for a live SPA, so `checkJsContent.test.ts` covers empty `#root`/`#__next`/`#___gatsby` shells and the content-rich negatives.
 
 ### Phase 4 — Delivery
 - [ ] Email provider + report template

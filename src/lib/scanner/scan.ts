@@ -3,6 +3,7 @@ import { checkCrawlers } from './checkCrawlers';
 import { checkDelivery } from './checkDelivery';
 import { checkFeeds } from './checkFeeds';
 import { checkSchema } from './checkSchema';
+import { checkJsContent } from './checkJsContent';
 import { checkLlmsTxt } from './checkLlmsTxt';
 import { checkMetadata } from './checkMetadata';
 import { fingerprintPlatform } from './platform';
@@ -41,6 +42,15 @@ export class UnreachableSiteError extends Error {
 
 export const SCAN_BUDGET_MS = 45_000;
 const WAVE1_BUDGET_MS = 15_000;
+
+/*
+ * The JS-content check needs a browser launch plus ~1.7s per page, so it is
+ * only worth starting when there is comfortably enough budget left for it to
+ * finish. Below this, skip and say so, rather than starting something that
+ * will be cut off halfway.
+ */
+const JS_CHECK_MIN_BUDGET_MS = 12_000;
+const JS_CHECK_MAX_MS = 10_000;
 
 /** Ordinary browser UA, matching the edge probe's control request. */
 const CONTROL_UA =
@@ -202,6 +212,34 @@ export async function runScan(rawUrl: string): Promise<ScanResult> {
       findings.push(...metaFindings);
     } catch {
       incomplete.push({ check: 'metadata', reason: 'The check could not complete.' });
+    }
+
+    /*
+     * --- wave 3: JavaScript content (§3.3) ---------------------------------
+     *
+     * Last, and only with real budget left. It launches a browser at roughly
+     * 1.7s per page, which is more than every other check combined, and §5
+     * names it as the first thing to degrade. Everything above has already
+     * produced its findings by this point, so skipping it costs one finding
+     * rather than the report.
+     */
+    const remaining = SCAN_BUDGET_MS - (Date.now() - started);
+    if (remaining >= JS_CHECK_MIN_BUDGET_MS) {
+      try {
+        findings.push(
+          ...(await checkJsContent(pages, {
+            platform,
+            deadline: Date.now() + Math.min(remaining - 2_000, JS_CHECK_MAX_MS),
+          }))
+        );
+      } catch {
+        incomplete.push({ check: 'js-content', reason: 'The check could not complete.' });
+      }
+    } else {
+      incomplete.push({
+        check: 'js-content',
+        reason: 'Skipped: the site was too slow to leave time for a browser render.',
+      });
     }
   } else if (!incomplete.some((i) => i.check === 'schema')) {
     // No pages at all: both downstream checks are incomplete for the same reason.
