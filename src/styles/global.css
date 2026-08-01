@@ -11,13 +11,75 @@
  * utilities` as named cascade layers, so utilities win by layer order
  * regardless of source position, and the problem cannot recur.
  *
- * The design tokens still live in tailwind.config.js. Tailwind 4 prefers a
- * CSS-first `@theme` block, but it still honours a JS config when pointed at
- * one, and moving ~60 lines of palette into CSS is a separate change from
- * upgrading the framework.
+ * There is no tailwind.config.js. Tokens are declared in the `@theme` block
+ * below, which is the v4 default: one source of truth that is simultaneously
+ * a CSS custom property and a generated utility.
  */
 @import 'tailwindcss';
-@config '../../tailwind.config.js';
+
+/*
+ * Design tokens. Tailwind 4 is CSS-first: everything declared here becomes
+ * both a real CSS custom property and a generated utility, so `--color-ink-hot`
+ * gives `bg-ink-hot`, `text-ink-hot`, `border-ink-hot` and can equally be read
+ * as `var(--color-ink-hot)` in hand-written CSS below.
+ *
+ * There is no `content` array any more; v4 discovers template files itself.
+ *
+ * Contrast ratios are measured against base (#0B0B0C). See
+ * docs/creative-bandit-visual-identity.md §2 before changing any of them.
+ */
+@theme {
+  /* --- risograph ink set ------------------------------------------------- */
+  --color-base: #0b0b0c; /* page ground */
+  --color-base-100: #17171a; /* raised surface (cards) */
+  --color-base-200: #111113; /* alternating section band */
+  --color-base-300: #0b0b0c;
+
+  --color-paper: #ede8df; /* 16.0:1 - headings, any size */
+  --color-paper-dim: #d8d2c6; /* 13.1:1 - secondary headings */
+  --color-paper-mute: #b5aea3; /*  8.9:1 - body copy */
+
+  --color-ink-hot: #e8451f; /*  4.97:1 - passes AA for normal text, only just */
+  --color-ink-acid: #ffe800; /* 15.7:1 - any size, fluorescent riso yellow */
+  --color-ink-pink: #e5195a; /*  4.3:1 - LARGE TEXT ONLY (>=24px / 19px bold) */
+  --color-ink-cold: #1b27e8; /*  2.3:1 - never carries text. Plates and fills only. */
+  --color-ink-cold-lift: #6e79ff; /*  5.4:1 - the text-safe tint of ink-cold */
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* --- type -------------------------------------------------------------- */
+  /* Archivo is variable on both weight and width, so one family covers both
+     expanded poster headlines and condensed technical labels. */
+  --font-display: 'Archivo', 'Archivo Expanded', system-ui, sans-serif;
+  --font-heading: 'Archivo', 'Archivo Expanded', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* --- motion ------------------------------------------------------------ */
+  /* Print misfeed: plates jolt apart, then resettle. Stepped rather than
+     eased, because smooth motion here reads as a wobble instead of a
+     mechanical misfeed. */
+  --animate-plate-jitter: plate-jitter 320ms steps(3, end) 1;
+}
+
+/* Referenced by --animate-plate-jitter above. Keyframes live outside @theme;
+   only the animation shorthand is a token. */
+@keyframes plate-jitter {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-2px, 1px);
+  }
+  66% {
+    transform: translate(2px, -1px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
 
 /*
  * Creative Bandit — risograph / digital space cowboy design system.
@@ -102,7 +164,7 @@
    */
   ::selection {
     @apply bg-ink-hot;
-    color: theme('colors.base.DEFAULT');
+    color: var(--color-base);
   }
 
   :focus-visible {
@@ -127,8 +189,8 @@
   .plate-type {
     @apply text-paper;
     text-shadow:
-      -2px 0 0 theme('colors.ink-hot'),
-      3px 2px 0 theme('colors.ink-cold');
+      -2px 0 0 var(--color-ink-hot),
+      3px 2px 0 var(--color-ink-cold);
   }
 
   /* Mono technical micro-label. Replaces the pulsing dot + uppercase eyebrow
@@ -172,8 +234,8 @@
   .field-hot {
     background: radial-gradient(
       circle at 30% 40%,
-      theme('colors.ink-hot') 0%,
-      theme('colors.ink-pink') 45%,
+      var(--color-ink-hot) 0%,
+      var(--color-ink-pink) 45%,
       transparent 70%
     );
   }
@@ -181,8 +243,8 @@
   .field-cold {
     background: radial-gradient(
       circle at 60% 50%,
-      theme('colors.ink-cold') 0%,
-      theme('colors.ink-cold-lift') 40%,
+      var(--color-ink-cold) 0%,
+      var(--color-ink-cold-lift) 40%,
       transparent 72%
     );
   }
@@ -190,7 +252,7 @@
   .field-acid {
     background: radial-gradient(
       circle at 50% 50%,
-      theme('colors.ink-acid') 0%,
+      var(--color-ink-acid) 0%,
       transparent 68%
     );
   }
@@ -239,16 +301,16 @@
   .duotone-hot::after {
     background: linear-gradient(
       135deg,
-      theme('colors.ink-hot') 0%,
-      theme('colors.ink-pink') 100%
+      var(--color-ink-hot) 0%,
+      var(--color-ink-pink) 100%
     );
   }
 
   .duotone-cold::after {
     background: linear-gradient(
       135deg,
-      theme('colors.ink-cold') 0%,
-      theme('colors.ink-cold-lift') 100%
+      var(--color-ink-cold) 0%,
+      var(--color-ink-cold-lift) 100%
     );
   }
 
@@ -317,13 +379,13 @@
 
   .btn-primary {
     @apply inline-block px-6 py-3 font-mono text-sm font-bold uppercase tracking-[0.12em] text-center transition-all duration-200 bg-ink-hot border border-ink-hot;
-    color: theme('colors.base.DEFAULT');
+    color: var(--color-base);
   }
 
   .btn-primary:hover {
     @apply bg-ink-acid border-ink-acid;
     transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 theme('colors.ink-cold');
+    box-shadow: 4px 4px 0 var(--color-ink-cold);
   }
 
   .btn-secondary {
@@ -333,7 +395,7 @@
   .btn-secondary:hover {
     @apply border-ink-acid text-ink-acid;
     transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 theme('colors.ink-hot');
+    box-shadow: 4px 4px 0 var(--color-ink-hot);
   }
 
   /*
@@ -640,7 +702,7 @@
   .service-card:hover {
     @apply border-ink-hot/60;
     transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 theme('colors.ink-cold');
+    box-shadow: 4px 4px 0 var(--color-ink-cold);
   }
 
   .project-card {

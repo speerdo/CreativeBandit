@@ -194,7 +194,7 @@ Animation (all behind `prefers-reduced-motion`):
 
 | File | Change |
 | --- | --- |
-| `tailwind.config.js` | New ink tokens; delete flame colors; Archivo + Space Mono; new keyframes (`plate-jitter`, `grain-drift`); remove `flicker`/`float` |
+| `src/styles/global.css` `@theme` | Ink tokens, Archivo + Space Mono, `plate-jitter` keyframes. Tailwind 4 is CSS-first, so there is no `tailwind.config.js`; tokens are custom properties that double as utilities. |
 | `styles/global.css` | Core rewrite. All texture utilities land here. Delete `.gradient-text`, `.flame-dot`, `.flame-gradient`, `.about-card-glow` |
 | `layouts/Layout.astro` | Swap font links; add global `.grain-overlay`; new `theme-color`; mascot favicon + OG image |
 | `components/SpaceSceneHero.astro` | **Kill the glass card.** Type sits directly on the gradient field with plate-shift. Mono micro-labels for stats. (Was `BirdSwarmHero.astro`; renamed in Phase 7.) |
