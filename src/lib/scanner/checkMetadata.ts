@@ -236,10 +236,7 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
         'and paraphrases drift.',
       evidence: { source: missingDesc[0]?.url },
       affectedUrls: missingDesc.map((p) => p.url).slice(0, 10),
-      remediation:
-        ctx.platform.isWordPress
-          ? 'Write descriptions in the SEO plugin for the pages a client would actually land on first.'
-          : 'Add a meta description to each key page.',
+      remediation: `Write descriptions for the pages a client would actually land on first. On ${ctx.platform.label}, that is ${ctx.platform.seoHome}.`,
       weight: 72,
     });
   }
@@ -344,6 +341,43 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
         'Rewrite each cluster so the page\'s actual subject leads. A template with a swap-in ' +
         'location is fine as a starting point; it is not fine as the entire title.',
       weight: 85,
+    });
+  }
+
+  /*
+   * --- good news (§1) -----------------------------------------------------
+   *
+   * A report that is nothing but faults reads as a sales tool, and this
+   * audience is specifically judging whether we are one. Metadata is the
+   * check most likely to come back genuinely clean on a well-run site, so
+   * without this a competent agency got silence for the work they had
+   * already done.
+   *
+   * Gated on every negative condition above being clear, and on a sample
+   * large enough to mean something - "titles are unique across 1 page" is
+   * not a compliment, it is a tautology.
+   */
+  const metadataClean =
+    missingTitle.length === 0 &&
+    missingDesc.length === 0 &&
+    canonicalMismatched.length === 0 &&
+    h1Zero.length === 0 &&
+    ogMissing.length === 0 &&
+    clusters.length === 0;
+
+  if (metadataClean && n >= 4) {
+    findings.push({
+      id: 'metadata-clean',
+      check: 'metadata',
+      tag: 'good',
+      title: `Titles, descriptions and previews are clean across ${n} sampled pages`,
+      detail:
+        'Every sampled page states what it is, no two are interchangeable, and each carries a ' +
+        'description and a social preview. This is the part most sites get wrong, and an ' +
+        'assistant citing any of these pages has something specific to quote.',
+      evidence: { source: profiles[0]?.url },
+      remediation: 'No action needed. Worth re-checking after a theme or SEO-plugin change.',
+      weight: 38,
     });
   }
 

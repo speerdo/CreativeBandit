@@ -100,7 +100,10 @@ export function checkSchema(
       remediation: platform.isWordPress
         ? 'Any SEO plugin (Yoast, RankMath) generates one automatically; WordPress core also ' +
           'ships /wp-sitemap.xml since 5.5.'
-        : 'Generate a sitemap and reference it from robots.txt with a Sitemap: line.',
+        : platform.id === 'unknown'
+          ? 'Generate a sitemap and reference it from robots.txt with a Sitemap: line.'
+          : `${platform.label} generates a sitemap automatically - check it is switched on, and ` +
+            'reference it from robots.txt with a Sitemap: line.',
       weight: 65,
     });
   }
@@ -129,8 +132,14 @@ export function checkSchema(
       evidence: { source: profiles[0]?.url ?? `${origin}/` },
       remediation:
         'Add Service schema to each service page and LocalBusiness schema to the homepage. ' +
-        'On WordPress, Yoast and RankMath both have knowledge-graph settings that generate ' +
-        'most of this from fields you have probably already filled in.',
+        (platform.isWordPress
+          ? 'On WordPress, Yoast and RankMath both have knowledge-graph settings that generate ' +
+            'most of this from fields you have probably already filled in.'
+          : platform.id === 'shopify'
+            ? 'Shopify emits Product schema from the theme already; the gap is usually the ' +
+              'organisation and service markup, which goes in theme.liquid.'
+            : `On ${platform.label}, this goes in ${platform.seoHome}, or as a JSON-LD block ` +
+              'injected into the site head.'),
       weight: 80,
     });
   } else if (withEntity > 0) {

@@ -128,9 +128,20 @@ export async function runScan(rawUrl: string): Promise<ScanResult> {
     return response?.status === 200 ? parseRobots(response.body) : { groups: [], sitemaps: [], absent: true };
   })();
 
-  const wave1Budget = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error('budget')), WAVE1_BUDGET_MS)
-  );
+  /*
+   * A bare `setTimeout` inside a promise keeps the event loop alive for its
+   * full duration even after the race has been won, so a scan that finished
+   * in 400ms still held the function open for the rest of the window. On a
+   * serverless platform that is billed wall-clock time for nothing. Timers
+   * are tracked and cleared on the way out.
+   */
+  const timers: ReturnType<typeof setTimeout>[] = [];
+  const budgetAfter = (ms: number): Promise<never> =>
+    new Promise<never>((_, reject) => {
+      timers.push(setTimeout(() => reject(new Error('budget')), ms));
+    });
+
+  const wave1Budget = budgetAfter(WAVE1_BUDGET_MS);
 
   const wave1: { id: CheckId; run: () => Promise<Finding[]> }[] = [
     { id: 'crawlers', run: () => checkCrawlers(target.url.href, control) },
@@ -152,9 +163,7 @@ export async function runScan(rawUrl: string): Promise<ScanResult> {
    */
   const elapsed = Date.now() - started;
   const wave2BudgetMs = Math.max(8_000, SCAN_BUDGET_MS - elapsed - 2_000);
-  const wave2Budget = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error('budget')), wave2BudgetMs)
-  );
+  const wave2Budget = budgetAfter(wave2BudgetMs);
 
   const sitemap = await discoverSitemap(origin, robots, platform);
   const urls = sampleUrls(sitemap, control.body, origin);
@@ -201,6 +210,9 @@ export async function runScan(rawUrl: string): Promise<ScanResult> {
       { check: 'metadata', reason: 'No sampled pages were reachable.' }
     );
   }
+
+  // Release the budget timers so the function can exit as soon as it replies.
+  for (const timer of timers) clearTimeout(timer);
 
   const finished = Date.now();
 
