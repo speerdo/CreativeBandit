@@ -142,7 +142,7 @@ export async function checkJsContent(
         tag: 'opportunity',
         title: `About ${pct(1 - worst.ratio)} of the content on some pages needs JavaScript`,
         detail:
-          'The page is mostly readable without JavaScript, but a meaningful slice is not - ' +
+          'The page is mostly readable without JavaScript, but a meaningful slice is not. It is ' +
           'usually tabs, accordions, reviews, or product data injected after load. Assistants ' +
           'see the page without that part.',
         evidence: {

@@ -76,12 +76,12 @@ export async function checkLlmsTxt(origin: string): Promise<Finding[]> {
         tag: 'opportunity',
         title: `${filename} exists but doesn't look like an llms.txt file`,
         detail:
-          'The file is present but lacks the expected shape - an H1 heading and at least ' +
+          'The file is present but lacks the expected shape: an H1 heading and at least ' +
           'one markdown link. An assistant would open it and find nothing it can use.',
         evidence: { quote: body.slice(0, 120).replace(/\s+/g, ' '), source: `${origin}${filename}` },
         remediation:
           'Add an H1 naming the business and a list of links to the pages a client ' +
-          'would actually ask about - services, pricing, about.',
+          'would actually ask about: services, pricing, about.',
         weight: 20,
       });
       return findings;
@@ -94,7 +94,7 @@ export async function checkLlmsTxt(origin: string): Promise<Finding[]> {
       title: `${filename} is present`,
       detail:
         'Adoption by real assistants is still early, but you are ahead of almost every ' +
-        'competitor simply by having one.',
+        'competitor just by having one.',
       evidence: { source: `${origin}${filename}` },
       remediation: 'No action needed.',
       weight: 15,

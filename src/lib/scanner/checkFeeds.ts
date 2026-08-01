@@ -44,7 +44,7 @@ export function checkFeeds(
       detail:
         'Most site owners have never seen it, but it means an assistant can answer with live ' +
         'prices, opening hours, and service details instead of a cached snapshot. It is the ' +
-        'cleanest way for an AI to read this site - cleaner than scraping the pages your ' +
+        'cleanest way for an AI to read this site, cleaner than scraping the pages your ' +
         'visitors see.',
       evidence: {
         quote: '<link rel="https://api.w.org/" …>',

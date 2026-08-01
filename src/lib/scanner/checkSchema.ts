@@ -102,7 +102,7 @@ export function checkSchema(
           'ships /wp-sitemap.xml since 5.5.'
         : platform.id === 'unknown'
           ? 'Generate a sitemap and reference it from robots.txt with a Sitemap: line.'
-          : `${platform.label} generates a sitemap automatically - check it is switched on, and ` +
+          : `${platform.label} generates a sitemap automatically. Check it is switched on, and ` +
             'reference it from robots.txt with a Sitemap: line.',
       weight: 65,
     });
@@ -162,8 +162,8 @@ export function checkSchema(
         },
         affectedUrls: profiles.filter((p) => p.entityTypes.size === 0).map((p) => p.url).slice(0, 10),
         remediation:
-          'Identify the pages a prospective client would actually land on - services, case ' +
-          'studies, about - and make sure each carries the schema type that describes it.',
+          'Identify the pages a prospective client would actually land on, such as services, ' +
+          'case studies and about, then make sure each carries the schema type that describes it.',
         weight: 60,
       });
     }
@@ -197,7 +197,7 @@ export function checkSchema(
       tag: 'gap',
       title: `Entity schema is present but incomplete on ${incompletePages.length} of ${sampleSize} sampled pages`,
       detail:
-        `A ${first.type} without ${first.missing.join(' or ')} is present-but-useless - an ` +
+        `A ${first.type} without ${first.missing.join(' or ')} is present but useless. An ` +
         'assistant finds the markup and cannot say what the business actually offers.',
       evidence: {
         quote: `${first.type}: missing ${first.missing.join(', ')}`,
@@ -206,7 +206,7 @@ export function checkSchema(
       affectedUrls: incompletePages.map((p) => p.url).slice(0, 10),
       remediation:
         'Fill the missing fields. If the schema comes from a plugin, check the plugin\'s ' +
-        'per-type settings - a partially-filled "Organization" tab is the usual cause.',
+        'per-type settings. A partially filled "Organization" tab is the usual cause.',
       weight: 70,
     });
   }

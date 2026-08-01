@@ -215,11 +215,11 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
       tag: 'opportunity',
       title: `${badLength.length} of ${n} sampled titles are unusually ${badLength.every((p) => (p.title?.length ?? 0) > TITLE_TOO_LONG) ? 'long' : 'short or long'}`,
       detail:
-        'Outside the roughly 30–60 character range, titles truncate in search results and ' +
+        'Outside the roughly 30-60 character range, titles truncate in search results and ' +
         'assistants see a clipped or anemic label rather than a clear statement of what the page is.',
       evidence: { quote: badLength[0]?.title ?? undefined, source: badLength[0]?.url },
       affectedUrls: badLength.map((p) => p.url).slice(0, 10),
-      remediation: 'Rewrite outliers toward 30–60 characters and make the subject of the page the subject of the title.',
+      remediation: 'Rewrite outliers toward 30-60 characters and make the subject of the page the subject of the title.',
       weight: 40,
     });
   }
@@ -252,9 +252,9 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
       check: 'metadata',
       tag: 'opportunity',
       title: `${descBadLength.length} of ${n} sampled descriptions are ${descBadLength.every((p) => (p.description?.length ?? 0) > DESC_TOO_LONG) ? 'too long' : 'an unusual length'}`,
-      detail: 'Aim for roughly 70–160 characters: enough to quote cleanly, short enough not to truncate.',
+      detail: 'Aim for roughly 70-160 characters: enough to quote cleanly, short enough not to truncate.',
       evidence: { quote: descBadLength[0]?.description?.slice(0, 80) ?? undefined, source: descBadLength[0]?.url },
-      remediation: 'Rewrite outliers toward 70–160 characters.',
+      remediation: 'Rewrite outliers toward 70-160 characters.',
       weight: 30,
     });
   }
@@ -275,7 +275,7 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
       tag: 'gap',
       title: `${canonicalMismatched.length} of ${n} sampled pages canonical to a different domain`,
       detail:
-        'A cross-domain canonical usually means a migration never finished - the pages are ' +
+        'A cross-domain canonical usually means a migration never finished. The pages are ' +
         'telling crawlers the real site lives somewhere else.',
       evidence: { quote: canonicalMismatched[0].canonical ?? undefined, source: canonicalMismatched[0].url },
       affectedUrls: canonicalMismatched.map((p) => p.url).slice(0, 10),
@@ -360,7 +360,7 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
         : `${total} of ${titled.length} sampled pages share ${clusters.length === 1 ? 'a single' : clusters.length} title template${clusters.length === 1 ? '' : 's'}`,
       detail: descriptionsDifferentiate
         ? 'Their descriptions are all different, so these are genuinely separate pages behind a ' +
-          'shared naming pattern - a series or a document set, not duplicate content. Worth ' +
+          'shared naming pattern, a series or a document set rather than duplicate content. Worth ' +
           'knowing because the distinguishing part sits at the end of the title, where a ' +
           'truncated search result or citation is most likely to cut it off.'
         : 'The common WordPress failure: a location or services plugin stamps the same title ' +
@@ -480,7 +480,7 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
         title: 'Nothing tells an assistant which business this site belongs to',
         detail:
           'There is no Organization or LocalBusiness schema on the sampled pages, so an assistant ' +
-          'has to infer the business name from the title and h1 - and it might pick a page ' +
+          'has to infer the business name from the title and h1, and it might pick a page ' +
           'headline instead of a brand.',
         evidence: { source: homepage.url },
         remediation:
