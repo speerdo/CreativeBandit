@@ -59,7 +59,7 @@
       }
 
       .st14 {
-        fill: #d9f24a;
+        fill: #ffe800;
       }
 
       .st15 {
@@ -71,7 +71,7 @@
       }
 
       .st2 {
-        stroke: #d9f24a;
+        stroke: #ffe800;
         stroke-width: 1.8px;
       }
 

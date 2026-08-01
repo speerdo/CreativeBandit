@@ -77,7 +77,7 @@
       }
 
       .st18 {
-        fill: #d9f24a;
+        fill: #ffe800;
       }
 
       .st19 {
@@ -89,7 +89,7 @@
       }
 
       .st3, .st4 {
-        stroke: #d9f24a;
+        stroke: #ffe800;
       }
 
       .st4 {

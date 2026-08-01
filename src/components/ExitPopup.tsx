@@ -74,7 +74,7 @@ export default function ExitPopup() {
         {/* Close button */}
         <button
           onClick={dismiss}
-          className="absolute right-4 top-4 z-10 text-[#B5AEA3] transition-colors hover:text-[#D9F24A]"
+          className="absolute right-4 top-4 z-10 text-[#B5AEA3] transition-colors hover:text-[#FFE800]"
           aria-label="Close popup"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,7 +86,7 @@ export default function ExitPopup() {
         <div
           className="h-1 w-full"
           style={{
-            background: "linear-gradient(90deg, #D9F24A 0%, #D9F24A 25%, #FF4D14 25%, #FF4D14 50%, #E5195A 50%, #E5195A 75%, #1B27E8 75%)",
+            background: "linear-gradient(90deg, #FFE800 0%, #FFE800 25%, #FF4D14 25%, #FF4D14 50%, #E5195A 50%, #E5195A 75%, #1B27E8 75%)",
           }}
         />
 
@@ -120,7 +120,7 @@ export default function ExitPopup() {
                   name="email_address"
                   placeholder="Enter your email"
                   required
-                  className="w-full px-4 py-3 border border-[#B5AEA3]/40 text-[#EDE8DF] placeholder:text-[#B5AEA3]/50 focus:outline-none focus:ring-2 focus:ring-[#D9F24A]"
+                  className="w-full px-4 py-3 border border-[#B5AEA3]/40 text-[#EDE8DF] placeholder:text-[#B5AEA3]/50 focus:outline-none focus:ring-2 focus:ring-[#FFE800]"
                   style={{ background: "#0B0B0C" }}
                 />
                 <input type="hidden" name="tags" value="lead-magnet-checklist" />
@@ -155,7 +155,7 @@ export default function ExitPopup() {
               </p>
               <button
                 onClick={dismiss}
-                className="mt-4 font-mono text-xs uppercase tracking-[0.12em] text-[#B5AEA3] underline transition-colors hover:text-[#D9F24A]"
+                className="mt-4 font-mono text-xs uppercase tracking-[0.12em] text-[#B5AEA3] underline transition-colors hover:text-[#FFE800]"
               >
                 Close
               </button>

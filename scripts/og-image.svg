@@ -108,7 +108,7 @@
   <!-- ========== LINE: hat band, buckle, whiskers ======================== -->
   <g>
     <rect x="156" y="130" width="92" height="16" fill="#0B0B0C" opacity="0.85"/>
-    <rect x="226" y="128" width="14" height="20" fill="#D9F24A"/>
+    <rect x="226" y="128" width="14" height="20" fill="#FFE800"/>
 
     <!-- Bone whiskers: they read against the dark ground, so they start at
          the head edge and travel outward rather than crossing the face. -->
@@ -125,9 +125,9 @@
 
   <text x="86" y="290" font-family="Archivo, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="104" font-weight="800" fill="#EDE8DF" letter-spacing="-3">CREATIVE</text>
   <text x="86" y="390" font-family="Archivo, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="104" font-weight="800" fill="#FF4D14" letter-spacing="-3">BANDIT</text>
-  <text x="90" y="444" font-family="Space Mono, Menlo, monospace" font-size="21" fill="#D9F24A" letter-spacing="3">// DEV + AI AUTOMATION + DESIGN</text>
+  <text x="90" y="444" font-family="Space Mono, Menlo, monospace" font-size="21" fill="#FFE800" letter-spacing="3">// DEV + AI AUTOMATION + DESIGN</text>
 
-  <g fill="none" stroke="#D9F24A" stroke-width="2" opacity="0.6">
+  <g fill="none" stroke="#FFE800" stroke-width="2" opacity="0.6">
     <path d="M 40 76 L 40 40 L 76 40"/>
     <path d="M 1124 40 L 1160 40 L 1160 76"/>
     <path d="M 1160 554 L 1160 590 L 1124 590"/>

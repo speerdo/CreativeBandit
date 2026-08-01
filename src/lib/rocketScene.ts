@@ -21,7 +21,7 @@ const INK = {
   paper: '#EDE8DF',
   hot: '#FF4D14',
   cold: '#1B27E8',
-  acid: '#D9F24A',
+  acid: '#FFE800',
 } as const;
 
 const UFO_COUNT = 4;

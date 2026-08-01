@@ -51,7 +51,7 @@
       }
 
       .cls-14 {
-        fill: #d9f24a;
+        fill: #ffe800;
       }
 
       .cls-15 {
@@ -59,7 +59,7 @@
       }
 
       .cls-2 {
-        stroke: #d9f24a;
+        stroke: #ffe800;
         stroke-linecap: round;
         stroke-width: 2.4px;
       }

@@ -27,5 +27,5 @@
   <ellipse cx="32" cy="25" rx="25" ry="5" fill="#1B27E8"/>
   <path d="M 24 25 Q 23 14 28 11 Q 32 9 36 11 Q 41 14 40 25 Z" fill="#1B27E8"/>
   <rect x="24" y="21" width="16" height="3" fill="#0B0B0C" opacity="0.85"/>
-  <rect x="36" y="20.5" width="3" height="4" fill="#D9F24A"/>
+  <rect x="36" y="20.5" width="3" height="4" fill="#FFE800"/>
 </svg>

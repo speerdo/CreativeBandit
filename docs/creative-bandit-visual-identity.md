@@ -47,7 +47,7 @@ BASE     #0B0B0C   near-black          page ground
 PAPER    #EDE8DF   bone / riso paper   inverted sections, body type on dark
 INK-HOT  #FF4D14   fluoro orange       primary accent, CTAs
 INK-COLD #1B27E8   riso blue           plates, fills, large graphic areas
-INK-ACID #D9F24A   yellow-green        line-work, technical labels, hover
+INK-ACID #FFE800   fluorescent yellow  line-work, technical labels, hover
 INK-PINK #E5195A   riso pink           secondary accent, duotone partner
 ```
 
@@ -63,7 +63,7 @@ Measured against `BASE` (#0B0B0C):
 | Ink | Ratio | Verdict |
 | --- | --- | --- |
 | `PAPER` #EDE8DF | **16.0:1** | ✅ any text size |
-| `INK-ACID` #D9F24A | **15.6:1** | ✅ any text size |
+| `INK-ACID` #FFE800 | **15.7:1** | ✅ any text size |
 | `INK-HOT` #FF4D14 | **5.9:1** | ✅ passes AA normal text |
 | `INK-PINK` #E5195A | **4.3:1** | ⚠️ large text only (≥24px, or ≥19px bold) |
 | `INK-COLD` #1B27E8 | **2.3:1** | ❌ **never for text.** Fills and plates only. |

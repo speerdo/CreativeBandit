@@ -12,7 +12,7 @@ const stats: Stat[] = [
     value: 8.08,
     suffix: "%",
     label: "Affiliate conversion rate, 4x the industry average",
-    color: "#D9F24A",
+    color: "#FFE800",
   },
   {
     value: 100,
