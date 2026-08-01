@@ -65,7 +65,7 @@ export default function ExitPopup() {
 
       {/* Modal */}
       <div
-        className="relative w-full max-w-lg border border-[#FF4D14]/40 overflow-hidden"
+        className="relative w-full max-w-lg border border-[#E8451F]/40 overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #17171A 0%, #0B0B0C 100%)",
         }}
@@ -86,7 +86,7 @@ export default function ExitPopup() {
         <div
           className="h-1 w-full"
           style={{
-            background: "linear-gradient(90deg, #FFE800 0%, #FFE800 25%, #FF4D14 25%, #FF4D14 50%, #E5195A 50%, #E5195A 75%, #1B27E8 75%)",
+            background: "linear-gradient(90deg, #FFE800 0%, #FFE800 25%, #E8451F 25%, #E8451F 50%, #E5195A 50%, #E5195A 75%, #1B27E8 75%)",
           }}
         />
 
@@ -128,7 +128,7 @@ export default function ExitPopup() {
                   type="submit"
                   className="w-full py-3 font-mono text-sm font-bold uppercase tracking-[0.12em] text-[#0B0B0C] transition-all hover:brightness-110"
                   style={{
-                    background: "#FF4D14",
+                    background: "#E8451F",
                   }}
                 >
                   Send the Free Checklist

@@ -10,7 +10,7 @@
     </clipPath>
   
     <radialGradient id="fieldHot" cx="0.22" cy="0.35" r="0.62">
-      <stop offset="0%" stop-color="#FF4D14" stop-opacity="0.95"/>
+      <stop offset="0%" stop-color="#E8451F" stop-opacity="0.95"/>
       <stop offset="45%" stop-color="#E5195A" stop-opacity="0.55"/>
       <stop offset="100%" stop-color="#0B0B0C" stop-opacity="0"/>
     </radialGradient>
@@ -97,10 +97,10 @@
              Q 200 70 224 78
              Q 250 92 246 152
              Z"
-          fill="#FF4D14"/>
+          fill="#E8451F"/>
     <path d="M 200 80 L 200 132" stroke="#0B0B0C" stroke-width="3" opacity="0.28" fill="none"/>
     <!-- Brim, sitting low enough to overlap the forehead but clear the eyes -->
-    <ellipse cx="200" cy="152" rx="150" ry="30" fill="#FF4D14"/>
+    <ellipse cx="200" cy="152" rx="150" ry="30" fill="#E8451F"/>
     <!-- Brim underside, for a bit of form -->
     <path d="M 50 152 Q 200 196 350 152 Q 200 172 50 152 Z" fill="#0B0B0C" opacity="0.22"/>
   </g>
@@ -124,7 +124,7 @@
   </g>
 
   <text x="86" y="290" font-family="Archivo, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="104" font-weight="800" fill="#EDE8DF" letter-spacing="-3">CREATIVE</text>
-  <text x="86" y="390" font-family="Archivo, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="104" font-weight="800" fill="#FF4D14" letter-spacing="-3">BANDIT</text>
+  <text x="86" y="390" font-family="Archivo, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="104" font-weight="800" fill="#E8451F" letter-spacing="-3">BANDIT</text>
   <text x="90" y="444" font-family="Space Mono, Menlo, monospace" font-size="21" fill="#FFE800" letter-spacing="3">// DEV + AI AUTOMATION + DESIGN</text>
 
   <g fill="none" stroke="#FFE800" stroke-width="2" opacity="0.6">

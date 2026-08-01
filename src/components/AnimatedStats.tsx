@@ -18,7 +18,7 @@ const stats: Stat[] = [
     value: 100,
     suffix: "%",
     label: "AI verification accuracy with Gemini-powered validation",
-    color: "#FF4D14",
+    color: "#E8451F",
   },
   {
     value: 40,

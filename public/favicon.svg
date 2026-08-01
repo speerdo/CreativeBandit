@@ -10,8 +10,8 @@
   <!-- Ears -->
   <path d="M 15 30 L 18 11 L 31 25 Z" fill="#EDE8DF"/>
   <path d="M 49 30 L 46 11 L 33 25 Z" fill="#EDE8DF"/>
-  <path d="M 19 28 L 21 17 L 28 25 Z" fill="#FF4D14"/>
-  <path d="M 45 28 L 43 17 L 36 25 Z" fill="#FF4D14"/>
+  <path d="M 19 28 L 21 17 L 28 25 Z" fill="#E8451F"/>
+  <path d="M 45 28 L 43 17 L 36 25 Z" fill="#E8451F"/>
 
   <!-- Head -->
   <ellipse cx="32" cy="37" rx="16" ry="15" fill="#EDE8DF"/>
@@ -21,7 +21,7 @@
   <ellipse cx="38" cy="34" rx="3.4" ry="2.8" fill="#0B0B0C"/>
 
   <!-- Bandana -->
-  <path d="M 17 40 Q 32 44 47 40 L 48 44 Q 40 55 32 57 Q 24 55 16 44 Z" fill="#FF4D14"/>
+  <path d="M 17 40 Q 32 44 47 40 L 48 44 Q 40 55 32 57 Q 24 55 16 44 Z" fill="#E8451F"/>
 
   <!-- Hat: brim then crown, sitting clear of the eyes -->
   <ellipse cx="32" cy="25" rx="25" ry="5" fill="#1B27E8"/>

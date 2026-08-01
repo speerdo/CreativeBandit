@@ -19,7 +19,7 @@ import * as THREE from 'three';
 const INK = {
   base: '#0B0B0C',
   paper: '#EDE8DF',
-  hot: '#FF4D14',
+  hot: '#E8451F',
   cold: '#1B27E8',
   acid: '#FFE800',
 } as const;

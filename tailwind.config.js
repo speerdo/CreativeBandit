@@ -17,7 +17,7 @@ export default {
           dim: '#D8D2C6', // 12.4:1 — secondary headings
           mute: '#B5AEA3', //  8.9:1 — body copy
         },
-        'ink-hot': '#FF4D14', //  5.9:1 — passes AA for normal text
+        'ink-hot': '#E8451F', //  4.97:1 - passes AA for normal text, but only just
         'ink-acid': '#FFE800', // 15.7:1 - any size, fluorescent riso yellow
         'ink-pink': '#E5195A', //  4.3:1 — LARGE TEXT ONLY (>=24px / 19px bold)
         // 2.3:1 against base. Never carries text. Plates and fills only.

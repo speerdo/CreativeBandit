@@ -32,16 +32,16 @@
   <!-- ========== HOT (orange): kerchief tails, behind the head =========== -->
   <g transform="translate(3, -1)">
     <!-- Pulled out to the left as if knotted tight -->
-    <path d="M 118 250 L 66 232 L 48 262 L 104 278 Z" fill="#FF4D14"/>
-    <path d="M 66 232 L 28 206 L 14 236 L 48 262 Z" fill="#FF4D14" opacity="0.85"/>
+    <path d="M 118 250 L 66 232 L 48 262 L 104 278 Z" fill="#E8451F"/>
+    <path d="M 66 232 L 28 206 L 14 236 L 48 262 Z" fill="#E8451F" opacity="0.85"/>
   </g>
 
   <!-- ========== PAPER: ears + head ======================================= -->
   <g>
     <path d="M 108 184 L 122 64 L 196 150 Z" fill="#EDE8DF"/>
     <path d="M 292 184 L 278 64 L 204 150 Z" fill="#EDE8DF"/>
-    <path d="M 128 174 L 137 92 L 174 146 Z" fill="#FF4D14" opacity="0.85"/>
-    <path d="M 272 174 L 263 92 L 226 146 Z" fill="#FF4D14" opacity="0.85"/>
+    <path d="M 128 174 L 137 92 L 174 146 Z" fill="#E8451F" opacity="0.85"/>
+    <path d="M 272 174 L 263 92 L 226 146 Z" fill="#E8451F" opacity="0.85"/>
 
     <ellipse cx="200" cy="225" rx="96" ry="90" fill="#EDE8DF"/>
 
@@ -68,7 +68,7 @@
              Q 252 332 200 340
              Q 148 332 102 260
              Z"
-          fill="#FF4D14"/>
+          fill="#E8451F"/>
     <!-- Fold line, so the kerchief reads as cloth rather than a flat bib -->
     <path d="M 130 258 Q 200 286 270 258" fill="none" stroke="#0B0B0C" stroke-width="2" opacity="0.35"/>
   </g>
