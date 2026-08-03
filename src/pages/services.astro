@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ServiceCard from '../components/ServiceCard.astro';
+import { service } from '../lib/schema';
 
 const pricingTiers = [
   {
@@ -81,9 +82,26 @@ const services = [
 
 // Agent Ops and WordPress each have their own dedicated page, so they're excluded from the on-page anchor sections below.
 const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].includes(service.id));
+/*
+ * One Service node per offering, built from the same list the page renders so
+ * the two cannot drift. Service requires `provider` as well as `name` — see
+ * lib/schema.ts.
+ */
+const serviceSchema = services.map((s) =>
+  service({
+    name: s.title,
+    description: s.description,
+    url: `${Astro.url.origin}/services#${s.id}`,
+    category: s.title,
+  })
+);
 ---
 
-<Layout title="Services" description="AI automation, full-stack web development, WordPress, design & motion, e-commerce solutions, and healthcare technology services from Creative Bandit's two-person studio.">
+<Layout
+  title="Services"
+  description="AI automation, full-stack web development, WordPress, design and motion, e-commerce, and healthcare technology from a two-person studio."
+  schema={serviceSchema}
+>
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">

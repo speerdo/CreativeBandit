@@ -8,6 +8,26 @@
  * are sometimes cut mid-tag, so strict parsing buys nothing.
  */
 
+/**
+ * Read one attribute off a single tag.
+ *
+ * The quote character is captured and back-referenced rather than excluded
+ * by a character class. `content="[^"']*"` looks equivalent and is not: it
+ * stops at the first apostrophe inside a double-quoted value, so
+ * `content="what we'll do for you"` measured four characters instead of
+ * twenty-one. English marketing copy is full of apostrophes, and the
+ * downstream effect was a description reported as too short when it was
+ * fine. Unquoted values are accepted last, since malformed markup is the
+ * normal case here.
+ */
+export function attr(tag: string, name: string): string | null {
+  const quoted = new RegExp(`\\b${escapeRegex(name)}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, 'i');
+  const match = tag.match(quoted);
+  if (match) return match[2];
+  const bare = new RegExp(`\\b${escapeRegex(name)}\\s*=\\s*([^\\s"'>]+)`, 'i');
+  return tag.match(bare)?.[1] ?? null;
+}
+
 /** Extract the contents of the first <title> tag, if present. */
 export function extractTitle(html: string): string | null {
   const match = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i);
@@ -24,16 +44,16 @@ export function extractMetaByProperty(html: string, property: string): string | 
   return extractMeta(html, 'property', property);
 }
 
-function extractMeta(html: string, attr: 'name' | 'property', key: string): string | null {
+function extractMeta(html: string, keyAttr: 'name' | 'property', key: string): string | null {
   // Search only the head when it exists; meta tags elsewhere are not metadata.
   const head = headSection(html);
   const pattern = new RegExp(
-    `<meta\\b[^>]*\\b${attr}\\s*=\\s*["']${escapeRegex(key)}["'][^>]*>`,
+    `<meta\\b[^>]*\\b${keyAttr}\\s*=\\s*["']${escapeRegex(key)}["'][^>]*>`,
     'gi'
   );
   const tag = pattern.exec(head)?.[0];
   if (!tag) return null;
-  const content = tag.match(/\bcontent\s*=\s*["']([^"']*)["']/i)?.[1];
+  const content = attr(tag, 'content');
   return content != null ? decodeEntities(content.trim()) : null;
 }
 
@@ -42,7 +62,7 @@ export function extractCanonical(html: string): string | null {
   const head = headSection(html);
   const links = head.match(/<link\b[^>]*\brel\s*=\s*["'][^"']*\bcanonical\b[^"']*["'][^>]*>/gi) ?? [];
   for (const tag of links) {
-    const href = tag.match(/\bhref\s*=\s*["']([^"']+)["']/i)?.[1];
+    const href = attr(tag, 'href');
     if (href) return decodeEntities(href.trim());
   }
   return null;
@@ -71,13 +91,33 @@ export function extractLinkTags(html: string): string[] {
   return headSection(html).match(/<link\b[^>]*>/gi) ?? [];
 }
 
-/** Every <img> tag in the document. */
-export function extractImgTags(html: string): { src: string | null; alt: string | null }[] {
+/**
+ * Every <img> tag in the document.
+ *
+ * `alt` and `decorative` are separate answers to separate questions, and
+ * conflating them is a real false positive: `alt=""` is the correct ARIA
+ * treatment for an image that carries no information (a logo mark sitting
+ * next to the wordmark it duplicates, a spacer, an icon beside its own
+ * label). An author who writes it has done the right thing. An <img> with no
+ * `alt` attribute at all is the actual defect — a screen reader falls back to
+ * announcing the filename, and a multimodal crawler has nothing to read.
+ */
+export function extractImgTags(
+  html: string
+): { src: string | null; alt: string | null; decorative: boolean }[] {
   const tags = html.match(/<img\b[^>]*>/gi) ?? [];
-  return tags.map((tag) => ({
-    src: tag.match(/\bsrc\s*=\s*["']([^"']+)["']/i)?.[1] ?? null,
-    alt: tag.match(/\balt\s*=\s*["']([^"']*)["']/i)?.[1] ?? null,
-  }));
+  return tags.map((tag) => {
+    const alt = attr(tag, 'alt');
+    return {
+      src: attr(tag, 'src'),
+      alt,
+      // Explicitly declared decorative, by any of the three conventions.
+      decorative:
+        (alt !== null && alt.trim() === '') ||
+        /^(presentation|none)$/i.test(attr(tag, 'role') ?? '') ||
+        (attr(tag, 'aria-hidden') ?? '').toLowerCase() === 'true',
+    };
+  });
 }
 
 /**

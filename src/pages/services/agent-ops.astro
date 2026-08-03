@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { service } from '../../lib/schema';
 
 const included = [
   {
@@ -28,7 +29,20 @@ const pricingTiers = [
 ];
 ---
 
-<Layout title="Agent Ops: WordPress Security & Maintenance" description="Automated security, maintenance, and compliance monitoring for WordPress agencies and their clients. Currently onboarding pilot agencies.">
+<Layout
+  title="Agent Ops: WordPress Security"
+  description="Automated security, maintenance, and compliance monitoring for WordPress agencies and their clients. Currently onboarding pilot agencies."
+  schema={[
+    service({
+      name: 'Agent Ops',
+      description:
+        'Automated security, maintenance, and compliance monitoring across a WordPress ' +
+        'agency portfolio, with updates applied and verified on a schedule.',
+      url: Astro.url.href,
+      category: 'WordPress Maintenance',
+    }),
+  ]}
+>
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">

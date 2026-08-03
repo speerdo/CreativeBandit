@@ -1,0 +1,29 @@
+# Creative Bandit
+
+> A two-person studio in Indianapolis. We are the white-label build team behind
+> WordPress agencies: full-stack development and AI automation from Adam Speer,
+> design and motion from Katlyn. Agencies bring us the work their clients are
+> asking for and we ship it under their name.
+
+## What we do
+
+- [Services](https://creativebandit.studio/services): the full list, with what each engagement covers.
+- [WordPress development](https://creativebandit.studio/services/wordpress): headless builds, migrations, plugin and theme work, and maintenance for agency clients.
+- [Agent Ops](https://creativebandit.studio/services/agent-ops): ongoing WordPress security, updates, and monitoring across an agency's portfolio.
+- [AI readiness scan](https://creativebandit.studio/scan): a free scan reporting whether AI crawlers can reach and read a site, covering robots.txt, CDN-level blocks, structured data, and metadata.
+
+## Work
+
+- [Portfolio](https://creativebandit.studio/work): production projects with the stack and the measurable result for each, across fintech, healthcare, e-commerce, and enterprise software.
+
+## About
+
+- [About](https://creativebandit.studio/about): who we are and how we work.
+- [Contact](https://creativebandit.studio/contact): how to start a project.
+- [Blog](https://creativebandit.studio/blog): writing on AI integration, web development, and design systems.
+
+## Facts
+
+- Founded: 2026. Based in Indianapolis, Indiana, US. Works with agencies nationwide.
+- Contact: hello@creativebandit.studio
+- Stack we work in: Astro, React, Vue.js, Next.js, Nuxt.js, TypeScript, Node.js, WordPress, Postgres, and the major LLM APIs.

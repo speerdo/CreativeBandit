@@ -1,0 +1,10 @@
+# Creative Bandit — https://creativebandit.studio
+#
+# Deliberately open. We sell a scan whose headline finding is "your AI
+# crawlers are blocked", so any rule added here should be a decision
+# someone made on purpose rather than a plugin default.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://creativebandit.studio/sitemap-index.xml

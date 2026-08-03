@@ -1,9 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
+import { localBusiness } from '../lib/schema';
 ---
 
-<Layout title="Contact Us" description="Tell Creative Bandit what you are building. We reply within 24 hours with a straight answer on scope, timeline and cost.">
+<Layout
+  title="Contact Us"
+  description="Tell Creative Bandit what you are building. We reply within 24 hours with a straight answer on scope, timeline and cost."
+  schema={[localBusiness(Astro.url.href)]}
+>
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">

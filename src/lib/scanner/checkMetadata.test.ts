@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { clusterTitles, titleSimilarity } from './checkMetadata';
+import { checkMetadata, clusterTitles, titleSimilarity } from './checkMetadata';
 import { checkSchema, orgNamesFromPage } from './checkSchema';
+import { attr, extractImgTags, extractMetaByName } from './html';
 import type { SafeResponse } from './safeFetch';
 
 function page(url: string, body: string): SafeResponse {
@@ -170,5 +171,90 @@ describe('orgNamesFromPage', () => {
       "@type":"Article","headline":"A Blog Post"
     }</script>`;
     expect(orgNamesFromPage(html)).toHaveLength(0);
+  });
+});
+
+describe('image alt handling', () => {
+  const emptyPlatform = {
+    id: 'unknown',
+    label: 'this platform',
+    isWordPress: false,
+    clientRendered: false,
+    pageBuilder: null,
+    seoHome: 'your SEO settings',
+  } as const;
+
+  /** Ten pages, each carrying the same set of images. */
+  function pagesWith(imgs: string): SafeResponse[] {
+    return Array.from({ length: 10 }, (_, i) =>
+      page(
+        `https://example.com/p${i}/`,
+        `<html><head><title>Page ${i} About Something</title>
+         <meta name="description" content="${'A description long enough to clear the minimum. '.repeat(2)}">
+         <meta property="og:title" content="Page ${i}"><meta property="og:image" content="/og.png">
+         <link rel="canonical" href="https://example.com/p${i}/"></head>
+         <body><h1>Page ${i}</h1>${imgs}</body></html>`
+      )
+    );
+  }
+
+  const noSchema = { findings: [], orgName: 'Example', orgUrls: [] };
+  const ctx = { schema: noSchema, platform: emptyPlatform as never, origin: 'https://example.com' };
+
+  it('does not flag images explicitly marked decorative', () => {
+    // alt="" is the correct treatment for a logo that repeats the wordmark
+    // beside it. It is not a missing alt attribute.
+    const findings = checkMetadata(pagesWith('<img src="/logo.svg" alt="">'.repeat(6)), ctx);
+    expect(findings.find((f) => f.id === 'images-missing-alt')).toBeUndefined();
+  });
+
+  it('flags images with no alt attribute at all', () => {
+    const findings = checkMetadata(pagesWith('<img src="/photo.jpg">'.repeat(6)), ctx);
+    expect(findings.find((f) => f.id === 'images-missing-alt')).toBeDefined();
+  });
+
+  it('ignores role="presentation" and aria-hidden images', () => {
+    const findings = checkMetadata(
+      pagesWith('<img src="/deco.svg" role="presentation">'.repeat(6)),
+      ctx
+    );
+    expect(findings.find((f) => f.id === 'images-missing-alt')).toBeUndefined();
+  });
+
+  it('still counts a real gap when decorative images share the page', () => {
+    const findings = checkMetadata(
+      pagesWith('<img src="/logo.svg" alt="">'.repeat(4) + '<img src="/photo.jpg">'.repeat(5)),
+      ctx
+    );
+    const finding = findings.find((f) => f.id === 'images-missing-alt');
+    // Decorative images leave the denominator too: 50 real images, all bare.
+    expect(finding?.title).toBe('50 of 50 sampled images have no alt text');
+  });
+});
+
+describe('attribute parsing', () => {
+  it('does not truncate a double-quoted value at an apostrophe', () => {
+    // The bug this replaced measured 24 characters instead of 60, which
+    // reported a perfectly good description as too short.
+    const html =
+      `<html><head><meta name="description" content="We'll tell you what your client's site can't do today."></head></html>`;
+    expect(extractMetaByName(html, 'description')).toBe(
+      "We'll tell you what your client's site can't do today."
+    );
+  });
+
+  it('reads single-quoted values containing double quotes', () => {
+    const html = `<html><head><meta name='description' content='He said "hello" once.'></head></html>`;
+    expect(extractMetaByName(html, 'description')).toBe('He said "hello" once.');
+  });
+
+  it('reads an unquoted attribute value', () => {
+    expect(attr('<img src=/logo.svg alt=Logo>', 'src')).toBe('/logo.svg');
+  });
+
+  it('keeps alt text containing an apostrophe intact', () => {
+    const [img] = extractImgTags(`<img src="/a.jpg" alt="Adam's desk">`);
+    expect(img.alt).toBe("Adam's desk");
+    expect(img.decorative).toBe(false);
   });
 });

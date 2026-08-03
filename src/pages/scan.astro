@@ -1,10 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { service } from '../lib/schema';
+
+const scanService = service({
+  name: 'AI Readiness Scan',
+  description:
+    'A free scan reporting whether AI assistants can reach and read a site, covering ' +
+    'robots.txt, CDN-level crawler blocks, structured data, metadata and delivery.',
+  url: Astro.url.href,
+  category: 'AI Readiness Audit',
+});
 ---
 
 <Layout
   title="Free AI Readiness Scan"
-  description="Point us at one client site and we'll tell you what AI assistants can and can't currently do with it, plus the structured data, metadata, image and delivery problems we find on the way. Works on WordPress, Shopify, Squarespace, Webflow and anything else. Free, no account, no discovery call."
+  description="Point us at one client site and we'll tell you what AI assistants can and can't do with it, plus the schema and metadata problems we find. Free, no account."
+  schema={[scanService]}
   keywords="AI readiness scan, GPTBot blocked, ClaudeBot robots.txt, AI crawler blocking, structured data audit, schema markup checker, duplicate title checker, image alt text audit, sitemap checker, WordPress AI audit, Shopify AI audit, Squarespace AI audit, Webflow AI audit, llms.txt"
 >
   <section class="section pt-32">

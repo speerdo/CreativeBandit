@@ -1,10 +1,29 @@
 ---
 import Layout from './Layout.astro';
+import { article } from '../lib/schema';
 
 const { frontmatter } = Astro.props;
+
+// Article is an entity type: it is what lets an assistant attribute a claim
+// to this post rather than to the site in general.
+const schema = [
+  article({
+    title: frontmatter.title,
+    description: frontmatter.description,
+    url: Astro.url.href,
+    datePublished: frontmatter.date,
+    author: frontmatter.author,
+    image: frontmatter.image,
+  }),
+];
 ---
 
-<Layout title={frontmatter.title} description={frontmatter.description}>
+<Layout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  schema={schema}
+  ogType="article"
+>
   <article class="py-24">
     <div class="container mx-auto max-w-3xl">
       <div class="mb-8">

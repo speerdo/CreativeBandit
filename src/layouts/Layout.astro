@@ -2,6 +2,7 @@
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import ExitPopup from '../components/ExitPopup';
+import { organization, type SchemaNode } from '../lib/schema';
 import '../styles/global.css';
 
 export interface Props {
@@ -9,18 +10,40 @@ export interface Props {
   description?: string;
   keywords?: string;
   ogImage?: string;
+  /**
+   * Page-specific JSON-LD, merged into the @graph after the Organization
+   * node. Pass the entity that describes *this* page — Service, Article,
+   * Person — because Organization alone is boilerplate. See lib/schema.ts.
+   */
+  schema?: SchemaNode[];
+  /** Overrides og:type, which is "website" for everything but articles. */
+  ogType?: string;
 }
 
 const {
   title,
-  description = "Creative Bandit is a two-person studio pairing full-stack development and AI automation with design and motion. 8+ years experience with React, Vue.js, TypeScript, and modern AI APIs. Based in Indianapolis.",
+  // Kept under 170 characters. Longer descriptions truncate in search results
+  // and in assistant citations, which is the same rule our scanner applies.
+  description = "A two-person Indianapolis studio pairing full-stack development and AI automation with design and motion. The white-label build team behind WordPress agencies.",
   keywords = "AI automation consultant, full-stack developer, design and motion studio, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer, web development, WordPress development, WordPress maintenance, headless WordPress",
-  ogImage = "/og-image.png"
+  ogImage = "/og-image.png",
+  schema = [],
+  ogType = "website"
 } = Astro.props;
 
 // og:image must be absolute — relative paths are rejected by most social
 // platforms. Astro.site comes from astro.config.mjs.
 const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).href;
+
+/*
+ * One ld+json block per page rather than several. A single @graph keeps @id
+ * references (provider, publisher, worksFor) resolvable within the document
+ * instead of dangling across separate scripts.
+ */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [organization, ...schema],
+};
 ---
 
 <!DOCTYPE html>
@@ -38,9 +61,10 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).href;
     <meta name="author" content="Creative Bandit" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={Astro.url} />
+    <link rel="alternate" type="application/rss+xml" title="Creative Bandit" href="/rss.xml" />
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={`${title} | Creative Bandit`} />
     <meta property="og:description" content={description} />
@@ -67,54 +91,9 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).href;
     <link rel="preload" as="image" href="/textures/grain.png">
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Creative Bandit",
-      "description": "Two-person studio pairing full-stack development and AI automation with design and motion.",
-      "url": "https://creativebandit.studio",
-      "logo": "https://creativebandit.studio/mascot/bandit-cat.svg",
-      "foundingDate": "2026",
-      "founder": [
-        {
-          "@type": "Person",
-          "name": "Adam Speer"
-        },
-        {
-          "@type": "Person",
-          "name": "Katlyn"
-        }
-      ],
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Indianapolis",
-        "addressRegion": "IN",
-        "addressCountry": "US"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "Customer Service",
-        "email": "hello@creativebandit.studio",
-        "telephone": "+1-317-660-5295",
-        "url": "https://creativebandit.studio/contact"
-      },
-      "sameAs": [
-        "https://github.com/speerdo"
-      ],
-      "services": [
-        "AI Automation",
-        "Web Development",
-        "Full-Stack Development",
-        "WordPress Development",
-        "WordPress Maintenance",
-        "Healthcare Technology",
-        "E-commerce Development",
-        "Workflow Automation"
-      ]
-    }
-    </script>
+    <!-- JSON-LD Structured Data. Built in lib/schema.ts; page-specific entity
+         nodes arrive via the `schema` prop. -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body class="bg-base text-paper flex flex-col min-h-screen">
     <div class="page-wash"></div>

@@ -6,6 +6,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 import AnimatedStats from '../components/AnimatedStats';
 import Mascot from '../components/Mascot.astro';
+import { localBusiness } from '../lib/schema';
 
 const services = [
   {
@@ -74,7 +75,8 @@ const projects = [
 
 <Layout
   title="The Build Team For WordPress Agencies"
-  description="Creative Bandit is the white-label build team behind WordPress agencies. We ship the AI work your clients are asking for, under your name, plus design and motion overflow. 8+ years across React, Vue.js, TypeScript and modern AI APIs. Based in Indianapolis, serving agencies nationwide."
+  schema={[localBusiness(Astro.url.href)]}
+  description="The white-label build team behind WordPress agencies. We ship the AI work your clients are asking for, under your name, plus design and motion overflow."
   keywords="white label AI development, WordPress agency partner, subcontract AI development, white label web development, AI readiness scan, agency overflow design, AI automation consultant, full-stack developer, WordPress development, headless WordPress, Indianapolis developer"
 >
   <Hero />

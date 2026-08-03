@@ -421,9 +421,18 @@ export function checkMetadata(pages: SafeResponse[], ctx: MetadataContext): Find
     const imgs = extractImgTags(page.body).filter((img) => {
       const src = img.src ?? '';
       // Tracking pixels and inline SVGs are not content images.
-      return src !== '' && !src.startsWith('data:') && !/pixel|beacon|spacer/i.test(src);
+      if (src === '' || src.startsWith('data:') || /pixel|beacon|spacer/i.test(src)) return false;
+      /*
+       * Images explicitly marked decorative (alt="", role="presentation",
+       * aria-hidden) are out of scope entirely, numerator and denominator
+       * both. Counting them as faults punished authors for doing the correct
+       * thing, and it fired hardest on careful sites: a header logo beside
+       * its own wordmark is exactly the case where alt="" is right, and it
+       * repeats on every page in the sample.
+       */
+      return !img.decorative;
     });
-    const missingAlt = imgs.filter((img) => !img.alt || img.alt.trim() === '');
+    const missingAlt = imgs.filter((img) => img.alt === null);
     const bgImages = extractBackgroundImages(page.body).filter((u) => !u.startsWith('data:'));
     return { url: page.url, total: imgs.length, missingAlt: missingAlt.length, bgImages: bgImages.length };
   });

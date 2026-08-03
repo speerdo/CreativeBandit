@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import TeamMember from '../components/TeamMember.astro';
+import { person } from '../lib/schema';
 
 const team = [
   {
@@ -84,9 +85,26 @@ const approach = [
     description: "We support your launch and keep optimizing so the work keeps paying off as the business grows."
   }
 ];
+/*
+ * Person is an entity type: it is what lets an assistant answer "who runs
+ * this studio" from markup rather than by guessing at prose. Built from the
+ * same array the page renders.
+ */
+const teamSchema = team.map((member) =>
+  person({
+    name: member.name,
+    jobTitle: member.position,
+    description: member.bio,
+    image: member.image.startsWith('/') ? member.image : undefined,
+  })
+);
 ---
 
-<Layout title="About" description="Creative Bandit is a two-person studio pairing full-stack development and AI automation with design and motion. Based in Indianapolis, serving clients nationwide.">
+<Layout
+  title="About"
+  description="A two-person studio pairing full-stack development and AI automation with design and motion. Based in Indianapolis, working with agencies nationwide."
+  schema={teamSchema}
+>
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">
@@ -147,7 +165,7 @@ const approach = [
             With 8+ years of full-stack development experience, we've built production applications for Fortune 500 companies including Eli Lilly and Salesforce, as well as mission-driven startups in healthcare and education. Our background spans pharmaceutical web applications, HIPAA-compliant healthcare systems, and SaaS platforms serving thousands of users.
           </p>
           <p class="mb-6 text-paper-mute">
-            Today, we focus on AI-powered automation systems using OpenAI, Anthropic, and Google Gemini APIs. Recent projects include AI verification systems achieving 100% accuracy, automated marketing pipelines processing 1,000+ monthly transactions, and healthcare compliance automation for Medicare billing.
+            Today, we focus on AI-powered automation systems using OpenAI, Anthropic, and Google Gemini APIs. Recent projects include AI verification systems achieving 97% accuracy, automated marketing pipelines processing 1,000+ monthly transactions, and healthcare compliance automation for Medicare billing.
           </p>
           <p class="mb-6 text-paper-mute">
             Beyond client work, we build and operate our own web properties including DowntownDry (a nationwide alcohol-free venue directory) and RecycleOldTech.com (an electronics recycling directory with automated affiliate systems achieving 8.08% conversion, 4x industry average).

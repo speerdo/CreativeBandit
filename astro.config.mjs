@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 import react from '@astrojs/react';
@@ -39,7 +40,22 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [mdx(), react()],
+  /*
+   * The sitemap is not decoration: our own scanner reports a missing one as a
+   * gap, on the grounds that a crawler with no URL list mostly sees the
+   * homepage. Emits sitemap-index.xml, which is what robots.txt advertises.
+   *
+   * /thank-you and /404 are excluded: neither is a page anyone should arrive
+   * at from search, and a form-confirmation page in a sitemap is a classic
+   * way to get thin content indexed.
+   */
+  integrations: [
+    mdx(),
+    react(),
+    sitemap({
+      filter: (page) => !/\/(thank-you|404)\/?$/.test(page),
+    }),
+  ],
   markdown: {
     shikiConfig: {
       theme: 'dracula',
