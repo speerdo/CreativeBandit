@@ -4,24 +4,39 @@ export interface Props {
   category: string;
   image: string;
   link: string;
+  description?: string;
 }
 
-const { title, category, image, link } = Astro.props;
+const { title, category, image, link, description } = Astro.props;
+
+const isExternal = link.startsWith('http');
 ---
 
-<a href={link} class="project-card group block">
+<a
+  href={link}
+  class="project-card group block"
+  target={isExternal ? '_blank' : undefined}
+  rel={isExternal ? 'noopener' : undefined}
+>
   <!--
-    Duotone at rest, resolving to full colour on hover. This is also what
-    keeps the placeholder stock photography from reading as filler: heavy ink
-    treatment makes it look like deliberate collage material.
+    Duotone at rest, resolving to full colour on hover. Site screenshots are
+    busy by nature, so the ink plate holds the grid together until you point
+    at a single card.
   -->
   <div class="duotone duotone-cold">
-    <img src={image} alt={title} class="h-64 w-full object-cover" />
+    <img
+      src={image}
+      alt={`${title} website screenshot`}
+      loading="lazy"
+      decoding="async"
+      class="h-64 w-full object-cover object-top"
+    />
   </div>
 
   <div class="overlay">
     <span class="label-tech">{category}</span>
     <h3 class="mt-2 text-xl font-bold">{title}</h3>
+    {description && <p class="mt-2 text-sm text-paper-mute">{description}</p>}
     <div class="mt-3 flex items-center font-mono text-xs uppercase tracking-[0.14em] text-ink-acid">
       <span>View Project</span>
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1">

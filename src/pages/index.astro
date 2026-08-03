@@ -42,28 +42,32 @@ const services = [
 
 const projects = [
   {
-    title: 'RecycleOldTech.com',
-    category: 'E-commerce / SEO',
-    image: 'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: 'https://recycleoldtech.com'
-  },
-  {
     title: 'DowntownDry',
     category: 'AI Integration',
-    image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: 'https://downtowndry.com'
+    image: '/images/downtowndry_desktop.webp',
+    link: 'https://downtowndry.com',
+    description: 'Google APIs plus Gemini verifying venue data at 97% accuracy, with 90%+ less manual review.'
   },
   {
-    title: 'IndiAide RTM System',
-    category: 'Healthcare Tech',
-    image: 'https://images.pexels.com/photos/8106498/pexels-photo-8106498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '/work#indiaide'
+    title: 'Yield to Freedom',
+    category: 'Full-Stack Development / Fintech',
+    image: '/images/yieldtofreedom_desktop.webp',
+    link: 'https://yieldtofreedom.com',
+    description: '200+ income ETFs graded on a transparent A-to-D system, refreshed daily by a custom ingestion engine.'
+  },
+  {
+    title: 'RecycleOldTech.com',
+    category: 'E-commerce / SEO',
+    image: '/images/recycleoldtech_desktop.webp',
+    link: 'https://recycleoldtech.com',
+    description: 'US e-waste recycling directory with an automated SEO pipeline behind an 8.08% affiliate conversion rate.'
   },
   {
     title: 'EdReports Platform Migration',
     category: 'Full-Stack Development',
-    image: 'https://images.pexels.com/photos/5473302/pexels-photo-5473302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: 'https://edreports.org'
+    image: '/images/edreports_desktop.webp',
+    link: 'https://edreports.org/reports',
+    description: 'Legacy Java and Vue 3 moved to Nuxt.js: 40% faster page loads, zero downtime during the migration.'
   }
 ];
 ---
@@ -338,6 +342,7 @@ const projects = [
             category={project.category}
             image={project.image}
             link={project.link}
+            description={project.description}
           />
         ))}
       </div>

@@ -6,6 +6,7 @@ const categories = [
   { id: 'all', name: 'All' },
   { id: 'ai', name: 'AI Integration' },
   { id: 'web', name: 'Web Development' },
+  { id: 'wordpress', name: 'WordPress' },
   { id: 'ecommerce', name: 'E-commerce' },
   { id: 'healthcare', name: 'Healthcare' },
   { id: 'design', name: 'Design' },
@@ -14,72 +15,121 @@ const categories = [
 
 const projects = [
   {
-    title: 'yieldtofreedom.com',
+    title: 'Yield to Freedom',
     category: 'web',
     categoryName: 'Full-Stack Development / Fintech',
-    // TODO: replace with real screenshot
-    image: 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: '/images/yieldtofreedom_desktop.webp',
     link: 'https://yieldtofreedom.com',
-    // TODO: replace with real project description. Income-investing platform built with Astro 5, Neon, Vercel, and Drizzle.
-    client: 'Personal Project'
+    description: 'Income ETF research platform grading 200+ funds on a transparent A-to-D system, fed by a custom ingestion engine that syncs, backfills, and regrades daily with no manual data entry.',
+    client: 'Creative Bandit LLC'
   },
   {
-    title: 'ebikelocal.com',
+    title: 'Home Power Ready',
     category: 'web',
-    categoryName: 'Directory / SEO',
-    // TODO: replace with real screenshot
-    image: 'https://images.pexels.com/photos/5083491/pexels-photo-5083491.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: 'https://ebikelocal.com',
-    // TODO: replace with real project description. Niche eBike shop directory built with Astro SSG, Neon, and Vercel, with Playwright scrapers powering data collection.
-    client: 'Personal Project'
+    categoryName: 'Full-Stack Development / SEO',
+    image: '/images/homepowerready_desktop.webp',
+    link: 'https://homepowerready.com',
+    description: '167 static pages generated from a Neon Postgres catalog of standby generators and battery backup, with sizing and cost calculators shipped as the only JavaScript on the site.',
+    client: 'Creative Bandit LLC'
   },
   {
-    title: 'RecycleOldTech.com',
-    category: 'ecommerce',
-    categoryName: 'E-commerce / SEO',
-    image: 'https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: 'https://recycleoldtech.com',
-    client: 'Personal Project'
+    title: 'eBikeLocal',
+    category: 'ai',
+    categoryName: 'Directory / AI Data Pipeline',
+    image: '/images/ebikelocal_desktop.webp',
+    link: 'https://ebikelocal.com',
+    description: 'Nationwide e-bike vendor directory fed by a spec-driven pipeline that normalizes dozens of brand-specific APIs and enriches every record through Google Places and Maps.',
+    client: 'Creative Bandit LLC'
   },
   {
     title: 'DowntownDry',
     category: 'ai',
     categoryName: 'AI Integration',
-    image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: '/images/downtowndry_desktop.webp',
     link: 'https://downtowndry.com',
-    client: 'Personal Project'
+    description: 'Alcohol-free venue directory whose verification pipeline pairs three Google APIs with Gemini, hitting 97% accuracy and cutting manual review time by more than 90%.',
+    client: 'Creative Bandit LLC'
   },
   {
-    title: 'IndiAide RTM System',
+    title: 'RecycleOldTech.com',
+    category: 'ecommerce',
+    categoryName: 'E-commerce / SEO',
+    image: '/images/recycleoldtech_desktop.webp',
+    link: 'https://recycleoldtech.com',
+    description: 'Directory of certified US electronics recycling centers, built on Astro and Supabase with an automated SEO pipeline behind an 8.08% affiliate conversion rate.',
+    client: 'Creative Bandit LLC'
+  },
+  {
+    title: 'Mounjaro US Website',
     category: 'healthcare',
-    categoryName: 'Healthcare Tech',
-    image: 'https://images.pexels.com/photos/8106498/pexels-photo-8106498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '#indiaide',
-    client: 'IndiAide (NDA)'
+    categoryName: 'Enterprise Development / Pharma',
+    image: '/images/mounjaro_desktop.webp',
+    link: 'https://mounjaro.lilly.com',
+    description: 'Rebuilt the patient and provider site for Eli Lilly, migrating Nuxt.js to Next.js App Router with a new accessible design system and 90+ Lighthouse scores.',
+    client: 'Eli Lilly and Company'
   },
   {
     title: 'EdReports Platform Migration',
     category: 'web',
     categoryName: 'Full-Stack Development',
-    image: 'https://images.pexels.com/photos/5473302/pexels-photo-5473302.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: 'https://edreports.org',
+    image: '/images/edreports_desktop.webp',
+    link: 'https://edreports.org/reports',
+    description: 'Technical lead on moving a legacy Java app with embedded Vue 3 to Nuxt.js: 40% faster page loads, 30% better developer throughput, zero downtime for thousands of daily users.',
     client: 'EdReports'
   },
   {
-    title: 'Eli Lilly Design System',
-    category: 'web',
-    categoryName: 'Enterprise Development',
-    image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '#eli-lilly',
-    client: 'Eli Lilly'
-  },
-  {
-    title: 'Salesforce Platform',
+    title: 'Salesforce.org Nonprofit Cloud',
     category: 'web',
     categoryName: 'SaaS Development',
-    image: 'https://images.pexels.com/photos/5709661/pexels-photo-5709661.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '#salesforce',
+    image: '/images/sfdo_desktop.webp',
+    link: 'https://www.salesforce.com/nonprofit/',
+    description: 'Built Lightning Web Components and automated accessibility testing for the Nonprofit Cloud platform, serving as Scrum Master for the team.',
     client: 'Salesforce'
+  },
+  {
+    title: 'Workflow Automation Strategies',
+    category: 'web',
+    categoryName: 'Web Development / Motion',
+    image: '/images/was_desktop.webp',
+    link: 'https://www.workflowautomationstrategies.com/',
+    description: 'Marketing site on Astro and Vercel with a custom Three.js animation feature, built as the cornerstone for all downstream campaigns.',
+    client: 'Workflow Automation Strategies'
+  },
+  {
+    title: 'Advanced Agrilytics',
+    category: 'wordpress',
+    categoryName: 'WordPress / AgTech',
+    image: '/images/adag_desktop.webp',
+    link: 'https://advancedagrilytics.com/',
+    description: 'Content site for an agricultural research firm, built on WordPress and WP Engine with custom API integrations and authenticated grower resources.',
+    client: 'Advanced Agrilytics'
+  },
+  {
+    title: 'Ag & Business Legal Strategies',
+    category: 'wordpress',
+    categoryName: 'WordPress / Redesign',
+    image: '/images/abls_desktop.webp',
+    link: 'https://www.ablsonline.com/',
+    description: 'Full redesign from Figma mockups onto a page-builder theme, with reusable templates, third-party form and anti-spam APIs, and hardened security.',
+    client: 'Ag & Business Legal Strategies'
+  },
+  {
+    title: 'Indiana Agriculture Nutrient Alliance',
+    category: 'wordpress',
+    categoryName: 'WordPress / Nonprofit',
+    image: '/images/iana_desktop.webp',
+    link: 'https://keepitmidwest.com/',
+    description: 'Custom WordPress theme and CMS for a sustainable agriculture nonprofit, including interactive educational resources and an SEO and performance pass.',
+    client: 'Indiana Agriculture Nutrient Alliance'
+  },
+  {
+    title: 'Viewfinder Media',
+    category: 'wordpress',
+    categoryName: 'WordPress / Portfolio',
+    image: '/images/viewfinder_desktop.webp',
+    link: 'https://viewfinder.media',
+    description: 'Portfolio and showcase platform with a dynamic content management system, responsive throughout and tuned for performance and SEO.',
+    client: 'Viewfinder Media'
   },
   // TODO: Katlyn's design/motion projects. Replace title/description/link/image with real work.
   {
@@ -89,6 +139,7 @@ const projects = [
     image: 'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     link: '#',
     // TODO: replace with real description, before/after, or video/GIF
+    description: '[TODO: what the work was and what it did for the client]',
     client: '[TODO: client name]'
   },
   {
@@ -98,6 +149,7 @@ const projects = [
     image: 'https://images.pexels.com/photos/1779488/pexels-photo-1779488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     link: '#',
     // TODO: replace with real description, before/after, or video/GIF
+    description: '[TODO: what the work was and what it did for the client]',
     client: '[TODO: client name]'
   },
   {
@@ -107,6 +159,7 @@ const projects = [
     image: 'https://images.pexels.com/photos/1779489/pexels-photo-1779489.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     link: '#',
     // TODO: replace with real description, before/after, or video/GIF
+    description: '[TODO: what the work was and what it did for the client]',
     client: '[TODO: client name]'
   }
 ];
@@ -150,11 +203,12 @@ const projects = [
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
         {projects.map(project => (
           <div class="project-item" data-category={project.category}>
-            <ProjectCard 
-              title={project.title} 
-              category={project.categoryName} 
-              image={project.image} 
-              link={project.link} 
+            <ProjectCard
+              title={project.title}
+              category={project.categoryName}
+              image={project.image}
+              link={project.link}
+              description={project.description}
             />
           </div>
         ))}
@@ -174,9 +228,11 @@ const projects = [
       <!-- Featured Case Study -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
         <div>
-          <img 
-            src="https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-            alt="DowntownDry AI Verification System" 
+          <img
+            src="/images/downtowndry_desktop.webp"
+            alt="DowntownDry AI Verification System"
+            loading="lazy"
+            decoding="async"
             class="w-full h-auto"
           />
         </div>
@@ -185,13 +241,13 @@ const projects = [
           <p class="label-tech mb-4">Featured Project</p>
           <h3 class="text-2xl font-bold mb-3">DowntownDry AI Verification</h3>
           <p class="text-paper-mute mb-6">
-            Nationwide alcohol-free venue directory with AI-powered verification using Google APIs and Gemini AI. Achieved 100% accuracy in venue validation while reducing manual review time by 90%.
+            Nationwide directory of venues serving non-alcoholic drinks, kava, and other alternatives. The verification pipeline cross-references the Google Places, Maps, and Business APIs, hands the decision to Gemini, and flags only genuine edge cases for a human, so hundreds of venues clear review without a person touching them.
           </p>
-          
+
           <div class="grid grid-cols-2 gap-6 mb-6">
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Type</h4>
-              <p>Personal Project</p>
+              <p>Creative Bandit LLC</p>
             </div>
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Category</h4>
@@ -199,11 +255,11 @@ const projects = [
             </div>
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Key Result</h4>
-              <p>100% Accuracy</p>
+              <p>97% accuracy, 90%+ less review time</p>
             </div>
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Tech Stack</h4>
-              <p>Astro, Gemini AI, Supabase</p>
+              <p>Astro, Gemini AI, Supabase, Google APIs</p>
             </div>
           </div>
           
