@@ -141,7 +141,8 @@ Replaces the neon blur blobs. Key insight from `blurred gradient.avif`: those gr
 ### 4.4 Duotone images — `.duotone-hot`, `.duotone-cold`
 
 - `filter: grayscale(1) contrast(1.35)` then a colored layer in `mix-blend-mode: color` / `screen`.
-- Applies to team headshots, project screenshots, and any future photography. Also **solves the stock-photo problem** — heavy duotone + halftone makes generic photography read as deliberate collage material.
+- Applies to team headshots and to decorative photography.
+- **Never on project screenshots.** This treatment was originally justified as cover for stock placeholders, and it did that job well. A screenshot is a different kind of image: it is evidence of what a site actually looks like, and recolouring it answers a question the visitor did not ask. Cards carry the house style through the frame, the mono spec label and the acid CTA instead. If an image is on the page to be *read* rather than to set a mood, it runs unfiltered.
 
 ### 4.5 Misregistration — `.plate-shift`
 
@@ -201,7 +202,7 @@ Animation (all behind `prefers-reduced-motion`):
 | `lib/rocketScene.ts` | Replaced `birdSwarm.ts` in Phase 7. Flat 2D ink plates in the screen plane rather than a 3D flock |
 | `components/Navbar.astro` | Wordmark → mascot head + Archivo caps. Nav links get `.aberration` on hover |
 | `components/ServiceCard.astro` | Riso-plate cards: hard edges or `.torn`, ink-block icon wells, halftone corner. Break the uniform grid — vary sizes |
-| `components/ProjectCard.astro` | Duotone + halftone on imagery. Mono spec labels for category |
+| `components/ProjectCard.astro` | Unfiltered screenshots. Mono spec labels for category, acid CTA, frame lifts on hover |
 | `components/TeamMember.astro` | Duotone headshots, halftone cutout edges à la `risograph-1` |
 | `components/TestimonialCard.astro` | Bone paper slab on dark — inverted, quote-poster feel |
 | `components/AnimatedStats.tsx` | Condensed-caps numerals, plate-shift, drop the pulse glow |
@@ -374,7 +375,6 @@ The failure mode is applying all six texture layers everywhere and landing at il
 **Design decisions still open:**
 - [ ] Mascot name. "Bandit" is the obvious read but may be too on-the-nose against "Creative Bandit".
 - [ ] The hero scene only renders on desktop without reduced-motion, and is still ~500KB of Three.js for decoration. If it ever stops earning that, the same rocket could be done as an animated SVG for a fraction of the payload.
-- [ ] Stock photography: duotone is carrying the Pexels placeholders convincingly, but real project screenshots would be better.
 - [ ] Bone-paper *sections* (full inverted slabs) or bone only for cards? Testimonials are the only inversion so far.
 - [ ] Should the mono labels carry real data (dates, project IDs) rather than section names?
 

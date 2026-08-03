@@ -19,11 +19,13 @@ const isExternal = link.startsWith('http');
   rel={isExternal ? 'noopener' : undefined}
 >
   <!--
-    Duotone at rest, resolving to full colour on hover. Site screenshots are
-    busy by nature, so the ink plate holds the grid together until you point
-    at a single card.
+    Screenshots run unfiltered. The duotone plate that used to sit here was
+    justified as cover for stock filler (visual-identity 4.4); these are real
+    sites now, and the point of the image is what the site actually looks
+    like. The card carries the house style through its frame, mono label and
+    acid CTA instead of by recolouring the artwork.
   -->
-  <div class="duotone duotone-cold">
+  <div class="relative overflow-hidden">
     <img
       src={image}
       alt={`${title} website screenshot`}
