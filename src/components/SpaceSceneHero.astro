@@ -15,7 +15,7 @@ const stats = [
 ];
 ---
 
-<section class="relative min-h-[92vh] flex items-center overflow-hidden py-20 lg:py-0">
+<section class="relative min-h-[92vh] flex items-center overflow-hidden pt-28 pb-20 lg:pb-0">
   <!--
     Ink fields sit behind the scene. Deliberately asymmetric and bleeding off
     the viewport edge rather than politely centred - see the doc, §4.2. The
@@ -29,9 +29,16 @@ const stats = [
 
   <div class="container relative z-10">
     <div class="grid items-center gap-12 lg:grid-cols-[1.35fr_1fr] lg:gap-8">
-      <!-- Type sits directly on the field. No glass card. -->
-      <div>
-        <p class="label-tech mb-6">For agencies running 5+ WordPress sites</p>
+      <!--
+        Type sits directly on the field, but the rocket and UFOs render in
+        bone paper behind the copy, which washes out the paper-coloured
+        headline when they pass under it. A near-opaque dark panel on the
+        text column only - not the full hero card the visual-identity doc
+        killed (that was a bright bg-white/5 gloss) - keeps the type legible
+        and lets the ink plates behind it still breathe.
+      -->
+      <div class="relative justify-self-start w-fit bg-base/60 backdrop-blur-[2px] p-5 md:p-6 border-l-2 border-ink-hot">
+        <p class="label-tech mb-6">For agencies running multiple WordPress sites</p>
 
         <h1 class="mb-6">
           Your clients are asking about <span class="plate-type">AI</span>. You don't have anyone to build it.
