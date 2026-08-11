@@ -199,7 +199,7 @@ function ellipse(cx: number, cy: number, rx: number, ry: number): THREE.Shape {
 const ROCKET_SVG = '/mascot/bandit-cat-rocket.svg';
 
 // The artwork's own viewBox.
-const ART = { w: 1317.5, h: 701.6 } as const;
+const ART = { w: 1315.5, h: 701.7 } as const;
 
 /*
  * Which drawables belong to which plate, as inclusive index ranges over
@@ -207,18 +207,18 @@ const ART = { w: 1317.5, h: 701.6 } as const;
  * Mascot.astro's part map uses, and checked the same way below.
  */
 const PLATES = {
-  flame: { from: 6, to: 6 },
-  hull: { from: 7, to: 13 },
-  cockpit: { from: 14, to: 39 },
+  flame: { from: 7, to: 7 },
+  hull: { from: 8, to: 14 },
+  cockpit: { from: 15, to: 40 },
 } as const;
 
 // Where the porthole sits in the artwork, and how much around it to keep.
 // The radius is the window's own 114 plus a little for the hat brim, which
 // the artwork clips to the glass anyway.
-const COCKPIT = { cx: 505.4, cy: 350.8, r: 120 } as const;
+const COCKPIT = { cx: 503.4, cy: 350.8, r: 120 } as const;
 
 // The exhaust's bounding box, so the flame plate can be cropped to it.
-const FLAME_BOX = { x: 850, y: 237, w: 468, h: 228 } as const;
+const FLAME_BOX = { x: 848, y: 237, w: 468, h: 228 } as const;
 
 /*
  * World width of the whole artwork. Chosen so the hull alone comes out at
@@ -238,7 +238,7 @@ const COCKPIT_SETTLE_RATE = 9;
 // Art-space X the group's origin sits on: the middle of the hull, not the
 // middle of the image, so the craft turns about itself rather than about a
 // point somewhere out in its own exhaust.
-const CRAFT_PIVOT_X = 509;
+const CRAFT_PIVOT_X = 507;
 
 const ART_TO_WORLD = CRAFT_WIDTH / ART.w;
 const worldX = (artX: number) => (CRAFT_PIVOT_X - artX) * ART_TO_WORLD;
@@ -352,11 +352,11 @@ function createRocket(): { group: THREE.Group; plume: THREE.Mesh; cockpit: THREE
       const source = new DOMParser().parseFromString(await response.text(), 'image/svg+xml');
 
       const count = [...source.querySelectorAll('path,circle,ellipse,rect,polygon')].length;
-      if (count !== 40) {
+      if (count !== 41) {
         // Loud, but not fatal: a re-exported artwork should not take the hero
         // down, it should tell whoever re-exported it to re-cut the ranges.
         console.error(
-          `rocketScene: expected 40 drawables in ${ROCKET_SVG}, found ${count}. ` +
+          `rocketScene: expected 41 drawables in ${ROCKET_SVG}, found ${count}. ` +
             `The artwork has been re-exported - re-derive PLATES before trusting the split.`
         );
       }
