@@ -532,13 +532,26 @@
     width: 33%;
   }
 
-  /* --- pistols: coiling to jump ---------------------------------------- */
-  .cb-mascot--pistols svg {
+  /* --- pistols: coiling to jump ----------------------------------------
+   *
+   * `> svg` rather than a descendant match, and it has to be. The scene
+   * backdrop is an svg too, so a bare `.cb-mascot--pistols svg` reached
+   * inside `.cb-mascot__scene` and coiled the hill and the sun along with
+   * the cat - exactly the "hill that coils with the cat's jump" the SCENERY
+   * note in Mascot.astro says is worse than no hill. The artwork is a direct
+   * child of the wrapper, the scene is a grandchild, so the child combinator
+   * separates them with nothing else to maintain.
+   *
+   * Batting deliberately keeps its descendant match below: its scene is the
+   * alert burst, drawn in front and anchored to the head, so that one is
+   * meant to travel with the cat.
+   */
+  .cb-mascot--pistols > svg {
     transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
     transform-origin: 50% 100%;
   }
 
-  .cb-mascot--pistols:hover svg {
+  .cb-mascot--pistols:hover > svg {
     transform: translateY(5px) scaleY(0.965);
   }
 
@@ -687,6 +700,14 @@
        nose-up climb. CSS angles run clockwise; flip the sign for a dive. */
     --cb-rocket-tilt: 20deg;
     --cb-rocket-travel: 5%;
+    /* One tile of the streak pattern. Every distance in cb-hyperdrive is a
+       whole multiple of this, which is the only reason the loop is seamless -
+       change it and change those to match. */
+    --cb-warp-tile: 120px;
+    position: relative;
+    /* Keeps the negative z-index below inside this box, so the streaks cannot
+       slip behind an ancestor's background. */
+    isolation: isolate;
   }
 
   .cb-mascot--rocket svg {
@@ -699,7 +720,84 @@
   }
 
   /*
-   * The plume is one polygon joined to the tail at x=850, so it has to scale
+   * Hyperdrive streaks.
+   *
+   * Carries the same --cb-rocket-tilt as the hull, so the lines run parallel
+   * to the craft instead of flat across the page. The layer is painted first
+   * and rotated afterwards, which means `background-position` travels along
+   * the hull's own axis and no trigonometry has to be kept in sync - the same
+   * rotate-then-translate trick the travel above uses. Retilt the craft and
+   * the streaks retilt with it.
+   *
+   * The nose points left, so the craft flies left and the field streams
+   * rightward past it. Distances in cb-hyperdrive are therefore positive.
+   *
+   * Five separate rows rather than one gradient repeated down the box,
+   * because each row is given its own speed in the keyframes. That spread is
+   * what reads as depth; moving as one body reads as a sliding texture.
+   */
+  .cb-mascot--rocket::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    /*
+     * Oversized and offset so the band still covers the artwork's corners
+     * once rotated. Deliberately NOT clipped with `overflow: hidden`: that
+     * would also cut the exhaust plume, which overflows the viewBox on
+     * purpose. The mask is what stops the field spilling onto the page, and
+     * it fades rather than cuts, so there is no edge to notice.
+     */
+    left: -25%;
+    top: -20%;
+    width: 150%;
+    height: 140%;
+    pointer-events: none;
+    transform: rotate(var(--cb-rocket-tilt));
+
+    /*
+     * Each layer is one row: a tile as wide as --cb-warp-tile and only a
+     * pixel or two tall, repeated along x only. The dash lives inside the
+     * tile as a hard-stopped band, so its length is a share of the tile and
+     * the gap is whatever is left.
+     */
+    background-repeat: repeat-x;
+    background-size:
+      var(--cb-warp-tile) 2px,
+      var(--cb-warp-tile) 1px,
+      var(--cb-warp-tile) 1px,
+      var(--cb-warp-tile) 2px,
+      var(--cb-warp-tile) 1px;
+    background-position:
+      0 18%,
+      0 33%,
+      0 50%,
+      0 67%,
+      0 84%;
+    /* Palette, thinned: paper for the bulk, with acid, cold-lift and hot
+       salted through so the field belongs to the same ink set as the cat. */
+    background-image:
+      linear-gradient(90deg, transparent 0 8%, rgba(237, 232, 223, 0.85) 8% 26%, transparent 26%),
+      linear-gradient(90deg, transparent 0 40%, rgba(255, 232, 0, 0.7) 40% 52%, transparent 52%),
+      linear-gradient(90deg, transparent 0 62%, rgba(237, 232, 223, 0.5) 62% 88%, transparent 88%),
+      linear-gradient(90deg, transparent 0 20%, rgba(110, 121, 255, 0.6) 20% 30%, transparent 30%),
+      linear-gradient(90deg, transparent 0 70%, rgba(232, 69, 31, 0.55) 70% 84%, transparent 84%);
+
+    /* Dissolves the field before it reaches the layer's edge, so the streaks
+       read as a pocket of speed around the craft rather than a rectangle. */
+    -webkit-mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .cb-mascot--rocket:hover::before {
+    opacity: 1;
+    animation: cb-hyperdrive 900ms linear infinite;
+  }
+
+  /*
+   * The plume is one polygon joined to the tail at x=848, so it has to scale
    * from that edge or it detaches from the craft. `transform-box: view-box`
    * puts the origin in the artwork's own coordinates; under the default
    * fill-box it would scale about the plume's own centre and pump in and out
@@ -714,7 +812,7 @@
   .cb-mascot--rocket [data-cb='flame'],
   .cb-mascot--rocket [data-cb-drift='flame'] {
     transform-box: view-box;
-    transform-origin: 850px 351px;
+    transform-origin: 848px 351px;
   }
 
   .cb-mascot--rocket:hover [data-cb='flame'] {
@@ -871,6 +969,29 @@
   50% {
     transform: scale(1.04, 1.06);
     opacity: 1;
+  }
+}
+
+/*
+ * Starfield streaming past the craft. Only the `to` is written, so each row
+ * starts from the background-position it already carries and the rule stays
+ * the single place the rows are laid out.
+ *
+ * Every distance is a whole multiple of --cb-warp-tile (120px), which is what
+ * makes each row land exactly on its own next tile and loop without a seam:
+ * 3, 5, 2, 4 and 6 tiles. They are also mutually un-tidy enough that the five
+ * only realign every 60 tiles, so the field never resolves into a pattern.
+ * Different distances over one duration is the parallax - far rows slow, near
+ * rows fast.
+ */
+@keyframes cb-hyperdrive {
+  to {
+    background-position:
+      360px 18%,
+      600px 33%,
+      240px 50%,
+      480px 67%,
+      720px 84%;
   }
 }
 
@@ -1050,5 +1171,14 @@
   .cb-mascot:hover [data-cb] {
     transform: none !important;
     animation: none !important;
+  }
+
+  /* The streaks are a motion effect and nothing else - there is no static
+     version of them worth showing, so they stay down entirely. Needs its own
+     rule because a pseudo-element is not reached by the selectors above. */
+  .cb-mascot--rocket::before,
+  .cb-mascot--rocket:hover::before {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }
