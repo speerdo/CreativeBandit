@@ -92,6 +92,8 @@
  *   4. .plate-type     misregistered ink plates on type
  *   5. .scanline       scan smear
  *   6. global grain    film grain, applied once on body::after
+ *   7. mascot grain    per-mascot feTurbulence, clipped to the artwork's own
+ *                      alpha so it follows the hover animations (Mascot.astro)
  */
 
 @layer base {
@@ -450,11 +452,84 @@
     @apply h-auto w-full overflow-visible;
   }
 
+  /*
+   * Scene backdrop. Sits at -2 so it stacks behind both the cat and the
+   * ground shadow at -1; the wrapper's `isolation` keeps all of it inside the
+   * mascot's own box. Positioned entirely from inline percentages worked out
+   * in Mascot.astro, so nothing here needs to know which pose it is under.
+   */
+  .cb-mascot__scene {
+    position: absolute;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  /* Thrown off the cat rather than standing behind it. */
+  .cb-mascot__scene--front {
+    z-index: 1;
+  }
+
+  /* Overrides the overflow-visible above, which exists for artwork that spills
+     past its viewBox. The scene is the opposite case: the sun is meant to be
+     cut off at the ground line rather than hang below it. */
+  .cb-mascot__scene svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
   .cb-mascot [data-cb] {
     transform-box: fill-box;
     transition:
       transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
       opacity 380ms ease;
+  }
+
+  /* --- ground shadows ---------------------------------------------------
+   *
+   * One blue plate under the feet. Sized off where each cat actually touches
+   * down rather than centred by eye: the pistols cat stands square and
+   * contacts over x 20-261 of its 281-unit box, so its shadow is centred;
+   * the batting cat lunges left and contacts over x 24-143 of 432, so its
+   * shadow sits well left of the artwork's middle.
+   *
+   * Drawn on the wrapper rather than as an ellipse inside the artwork, so it
+   * stays planted while the hover animations move the cat above it. Put in
+   * the SVG it would squash and travel with the body, which reads as a
+   * sticker rather than as ground.
+   */
+  .cb-mascot--pistols,
+  .cb-mascot--batting {
+    position: relative;
+    /* Keeps the negative z-index below inside this box, so the shadow cannot
+       slip behind an ancestor's background. */
+    isolation: isolate;
+  }
+
+  .cb-mascot--pistols::before,
+  .cb-mascot--batting::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    /* Straddles the contact line rather than sitting under it: two thirds of
+       the oval tucks behind the boots, which is what plants them. */
+    bottom: -3%;
+    height: 9%;
+    border-radius: 50%;
+    background: var(--color-ink-cold);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .cb-mascot--pistols::before {
+    left: 11%;
+    width: 78%;
+  }
+
+  .cb-mascot--batting::before {
+    left: 3%;
+    width: 33%;
   }
 
   /* --- pistols: coiling to jump ---------------------------------------- */
@@ -547,8 +622,41 @@
     animation: cb-dodge 1.2s ease-in-out infinite;
   }
 
+  /*
+   * The dodge alone is locked to the arm, so the saucer ducked on the same
+   * beat every pass and read as clockwork. A second, longer wander rides on
+   * top of it: the five saucer elements are given the group's origin so they
+   * transform as one body, then drift on a path with no symmetry to it. At
+   * 2.9s against the dodge's 1.2s the two only realign every ~17s, so the
+   * flight never resolves into a loop you can count.
+   */
+  .cb-mascot--batting [data-cb-drift='ufo'] {
+    transform-box: view-box;
+    transform-origin: 358px 101px;
+  }
+
+  .cb-mascot--batting:hover [data-cb-drift='ufo'] {
+    animation: cb-ufo-weave 2.9s ease-in-out infinite;
+  }
+
   .cb-mascot--batting:hover [data-cb='spark'] {
     animation: cb-spark 1.2s ease-in-out infinite;
+  }
+
+  /*
+   * The alert burst sits at half strength as part of the drawing, then snaps
+   * up on the swipe. Its origin is the head centre - (130, 85) in the
+   * artwork, which is 60.7% / 76.1% of the overlay's own box - so it flares
+   * outward from the cat rather than growing from the corner of a rectangle.
+   */
+  .cb-mascot--batting .cb-mascot__scene {
+    transform-origin: 60.7% 76.1%;
+    opacity: 0.5;
+    transform: scale(0.94);
+  }
+
+  .cb-mascot--batting:hover .cb-mascot__scene {
+    animation: cb-alert 1.2s ease-in-out infinite;
   }
 
   .cb-mascot--batting [data-cb='tail'] {
@@ -557,6 +665,64 @@
 
   .cb-mascot--batting:hover [data-cb='tail'] {
     animation: cb-tail-switch 1.05s ease-in-out infinite;
+  }
+
+  /* --- rocket: throttle up --------------------------------------------- */
+
+  /*
+   * The craft sits at a fixed tilt and, on hover, travels along the line it
+   * is already pointing down.
+   *
+   * Both states start from the same `rotate()`, so the `translateX` that
+   * follows it is applied in the craft's own rotated frame rather than the
+   * page's. That is what keeps the travel parallel to the hull: change the
+   * tilt and the flight path follows it, no trigonometry to keep in sync.
+   * Order matters here - translate first and it would slide flat along the
+   * page while the hull pointed somewhere else.
+   *
+   * The nose points left in the artwork, so forward is negative X.
+   */
+  .cb-mascot--rocket {
+    /* Positive is counter-clockwise on a left-pointing hull, so this is a
+       nose-up climb. CSS angles run clockwise; flip the sign for a dive. */
+    --cb-rocket-tilt: 20deg;
+    --cb-rocket-travel: 5%;
+  }
+
+  .cb-mascot--rocket svg {
+    transform: rotate(var(--cb-rocket-tilt));
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cb-mascot--rocket:hover svg {
+    transform: rotate(var(--cb-rocket-tilt)) translateX(calc(-1 * var(--cb-rocket-travel)));
+  }
+
+  /*
+   * The plume is one polygon joined to the tail at x=850, so it has to scale
+   * from that edge or it detaches from the craft. `transform-box: view-box`
+   * puts the origin in the artwork's own coordinates; under the default
+   * fill-box it would scale about the plume's own centre and pump in and out
+   * of the hull.
+   *
+   * Two animations, on the group and on the polygon inside it, so their
+   * transforms stack. The periods are deliberately not multiples of each
+   * other, so they drift in and out of phase and the flame never settles
+   * into a visible loop. The hero rocket gets the same character by summing
+   * sines at 34 and 61 rad/s (rocketScene.ts).
+   */
+  .cb-mascot--rocket [data-cb='flame'],
+  .cb-mascot--rocket [data-cb-drift='flame'] {
+    transform-box: view-box;
+    transform-origin: 850px 351px;
+  }
+
+  .cb-mascot--rocket:hover [data-cb='flame'] {
+    animation: cb-thrust 310ms ease-in-out infinite;
+  }
+
+  .cb-mascot--rocket:hover [data-cb-drift='flame'] {
+    animation: cb-thrust-flicker 190ms ease-in-out infinite;
   }
 
   /* --- sleeping: it does not wake up ----------------------------------- */
@@ -601,6 +767,59 @@
   }
 }
 
+/*
+ * Rides on top of cb-dodge. Uneven stops and no mirrored pair anywhere, so
+ * it swerves rather than oscillates - a saucer taking evasive action, not a
+ * pendulum. Longer and slower than the dodge on purpose.
+ */
+@keyframes cb-ufo-weave {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  18% {
+    transform: translate(-9px, 5px) rotate(4deg);
+  }
+  37% {
+    transform: translate(6px, -8px) rotate(-3deg);
+  }
+  55% {
+    transform: translate(13px, 3px) rotate(5deg);
+  }
+  71% {
+    transform: translate(-4px, 9px) rotate(-6deg);
+  }
+  88% {
+    transform: translate(-11px, -4px) rotate(2deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/*
+ * Peaks just after the paw does, on the same 1.2s beat as the swipe - the
+ * burst is a consequence of the swing, so it cannot lead it.
+ */
+@keyframes cb-alert {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.94);
+  }
+  48% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  78% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
 /* Peaks a little after the arm, so it reads as ducking the paw. */
 @keyframes cb-dodge {
   0%,
@@ -625,6 +844,33 @@
   }
   55% {
     opacity: 0.3;
+  }
+}
+
+/*
+ * Plume length, on the group. Held under 1 at rest of the cycle and pushed
+ * past it at the peak, so the flame surges rather than merely wobbling.
+ */
+@keyframes cb-thrust {
+  0%,
+  100% {
+    transform: scaleX(0.84);
+  }
+  50% {
+    transform: scaleX(1.08);
+  }
+}
+
+/* Girth and brightness, on the polygon inside, at an unrelated period. */
+@keyframes cb-thrust-flicker {
+  0%,
+  100% {
+    transform: scale(1, 0.92);
+    opacity: 0.88;
+  }
+  50% {
+    transform: scale(1.04, 1.06);
+    opacity: 1;
   }
 }
 

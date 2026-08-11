@@ -174,68 +174,214 @@ function ellipse(cx: number, cy: number, rx: number, ry: number): THREE.Shape {
   return shape;
 }
 
+/* -------------------------------------------------------------------------
+ * The craft, cut from the mascot artwork
+ *
+ * The rocket used to be drawn here as a dozen hand-built shapes. It is now
+ * the same SVG the page mascots use, so the hero and the illustrations can
+ * never drift apart. It arrives as three plates cut from one document:
+ *
+ *   hull     the craft, its fins, and the cockpit ring and interior
+ *   cockpit  the cat and hat inside the porthole, cropped to the window
+ *   flame    the exhaust, kept apart so throttle can still stretch it
+ *
+ * Splitting at runtime rather than shipping three derived files means they
+ * cannot go stale when the artwork is re-exported: the document is fetched
+ * once and the elements each plate does not want are hidden.
+ *
+ * The artwork draws the craft nose-left. The scene's heading is a single
+ * atan2 about Z with the nose along +X, so every plate is mirrored as it is
+ * rasterised. Mirroring in the canvas rather than with a negative scale on a
+ * group keeps every transform in the scene right-handed - a mirrored parent
+ * would silently reverse the cockpit's counter-rotation below.
+ * ---------------------------------------------------------------------- */
+
+const ROCKET_SVG = '/mascot/bandit-cat-rocket.svg';
+
+// The artwork's own viewBox.
+const ART = { w: 1317.5, h: 701.6 } as const;
+
 /*
- * Rocket, nose pointing along +X so heading is a single atan2 about Z.
- * Parts are stacked in z so the plates read in the right order; the whole
- * group is scaled up by the caller.
+ * Which drawables belong to which plate, as inclusive index ranges over
+ * path/circle/ellipse/rect/polygon in document order - the same ordering
+ * Mascot.astro's part map uses, and checked the same way below.
  */
-function createRocket(): { group: THREE.Group; plume: THREE.Mesh } {
+const PLATES = {
+  flame: { from: 6, to: 6 },
+  hull: { from: 7, to: 13 },
+  cockpit: { from: 14, to: 39 },
+} as const;
+
+// Where the porthole sits in the artwork, and how much around it to keep.
+// The radius is the window's own 114 plus a little for the hat brim, which
+// the artwork clips to the glass anyway.
+const COCKPIT = { cx: 505.4, cy: 350.8, r: 120 } as const;
+
+// The exhaust's bounding box, so the flame plate can be cropped to it.
+const FLAME_BOX = { x: 850, y: 237, w: 468, h: 228 } as const;
+
+/*
+ * World width of the whole artwork. Chosen so the hull alone comes out at
+ * roughly the 0.96 units the hand-built craft measured, which is what the
+ * camera distance, the play-area clearances and the UFO spacing were all
+ * tuned against.
+ */
+const CRAFT_WIDTH = 1.24;
+
+/*
+ * How hard the porthole is pulled back to level, per second. High enough that
+ * it never visibly trails the craft through a turn, low enough that a hard
+ * bank still swings it. Raise it towards rigid, drop it towards a loose swing.
+ */
+const COCKPIT_SETTLE_RATE = 9;
+
+// Art-space X the group's origin sits on: the middle of the hull, not the
+// middle of the image, so the craft turns about itself rather than about a
+// point somewhere out in its own exhaust.
+const CRAFT_PIVOT_X = 509;
+
+const ART_TO_WORLD = CRAFT_WIDTH / ART.w;
+const worldX = (artX: number) => (CRAFT_PIVOT_X - artX) * ART_TO_WORLD;
+const worldY = (artY: number) => (ART.h / 2 - artY) * ART_TO_WORLD;
+
+/*
+ * Rasterise an SVG document to a canvas at an explicit pixel size, mirrored.
+ *
+ * The size has to be written onto the root element before the image loads:
+ * this artwork carries a viewBox but no width/height, so a browser rasterises
+ * it at a default size and drawImage would then scale that blur up.
+ */
+async function rasterise(svg: SVGSVGElement, pxW: number, pxH: number): Promise<HTMLCanvasElement> {
+  svg.setAttribute('width', String(pxW));
+  svg.setAttribute('height', String(pxH));
+  const markup = new XMLSerializer().serializeToString(svg);
+  const url = URL.createObjectURL(new Blob([markup], { type: 'image/svg+xml' }));
+  try {
+    const image = new Image();
+    image.src = url;
+    await image.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = pxW;
+    canvas.height = pxH;
+    const ctx = canvas.getContext('2d')!;
+    // Mirror about the vertical axis, so the nose ends up along +X.
+    ctx.translate(pxW, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(image, 0, 0, pxW, pxH);
+    return canvas;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+/*
+ * One plate: everything outside the index range hidden, optionally cropped to
+ * a tighter viewBox.
+ *
+ * Elements inside <defs> are left alone. The halftone pattern's own tiles and
+ * the cockpit's clip paths live there, and hiding those would strip the
+ * texture off the artwork and unclip the cat from its window.
+ */
+async function cutPlate(
+  source: Document,
+  range: { from: number; to: number },
+  crop: { x: number; y: number; w: number; h: number } | null,
+  pxW: number,
+  pxH: number
+): Promise<THREE.CanvasTexture> {
+  const doc = source.cloneNode(true) as Document;
+  const svg = doc.documentElement as unknown as SVGSVGElement;
+
+  const drawables = [...doc.querySelectorAll('path,circle,ellipse,rect,polygon')];
+  drawables.forEach((el, i) => {
+    if (el.closest('defs')) return;
+    if (i < range.from || i > range.to) (el as SVGElement).style.display = 'none';
+  });
+
+  if (crop) svg.setAttribute('viewBox', `${crop.x} ${crop.y} ${crop.w} ${crop.h}`);
+
+  const texture = new THREE.CanvasTexture(await rasterise(svg, pxW, pxH));
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+function plate(width: number, height: number, z: number): THREE.Mesh {
+  const material = new THREE.MeshBasicMaterial({
+    transparent: true,
+    // Plates overlap by design, so let them composite by draw order instead
+    // of punching holes in each other along their shared edges.
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), material);
+  mesh.position.z = z;
+  // Nothing to show until its texture lands.
+  mesh.visible = false;
+  return mesh;
+}
+
+/*
+ * Rocket, nose along +X. The meshes exist immediately and turn visible as
+ * their textures arrive, so initRocketScene stays synchronous and the scene
+ * can start animating - the craft simply appears a frame or two in.
+ */
+function createRocket(): { group: THREE.Group; plume: THREE.Mesh; cockpit: THREE.Mesh } {
   const group = new THREE.Group();
 
-  // Fins first, behind the hull.
-  group.add(flat(polygon([[-0.30, 0.09], [-0.44, 0.30], [-0.10, 0.11]]), INK.hot, 0));
-  group.add(flat(polygon([[-0.30, -0.09], [-0.44, -0.30], [-0.10, -0.11]]), INK.hot, 0));
+  const hull = plate(ART.w * ART_TO_WORLD, ART.h * ART_TO_WORLD, 0.01);
+  hull.position.set(worldX(ART.w / 2), worldY(ART.h / 2), 0.01);
 
-  // Hull.
-  const hull = new THREE.Shape();
-  hull.moveTo(-0.32, -0.13);
-  hull.lineTo(0.18, -0.13);
-  hull.quadraticCurveTo(0.34, -0.12, 0.52, 0);
-  hull.quadraticCurveTo(0.34, 0.12, 0.18, 0.13);
-  hull.lineTo(-0.32, 0.13);
-  hull.quadraticCurveTo(-0.40, 0, -0.32, -0.13);
-  group.add(flat(hull, INK.paper, 0.01));
+  const cockpit = plate(COCKPIT.r * 2 * ART_TO_WORLD, COCKPIT.r * 2 * ART_TO_WORLD, 0.04);
+  cockpit.position.set(worldX(COCKPIT.cx), worldY(COCKPIT.cy), 0.04);
 
-  // Nose cap and tail band, in the hot ink.
-  group.add(flat(polygon([[0.22, 0.125], [0.52, 0], [0.22, -0.125]]), INK.hot, 0.02));
-  group.add(flat(polygon([[-0.34, 0.125], [-0.24, 0.125], [-0.24, -0.125], [-0.34, -0.125]]), INK.hot, 0.02));
+  const plume = plate(FLAME_BOX.w * ART_TO_WORLD, FLAME_BOX.h * ART_TO_WORLD, 0.005);
+  /*
+   * The exhaust has to stretch away from where it meets the hull, not from
+   * its own middle, or throttle pumps it in and out of the tail. Shifting the
+   * geometry puts the mesh's origin on that joint, so a plain scale.x on the
+   * mesh grows it backwards.
+   */
+  plume.geometry.translate(-(FLAME_BOX.w * ART_TO_WORLD) / 2, 0, 0);
+  plume.position.set(worldX(FLAME_BOX.x), worldY(FLAME_BOX.y + FLAME_BOX.h / 2), 0.005);
 
-  // Cockpit: blue ring, dark interior.
-  group.add(flat(circle(0.02, 0, 0.105), INK.cold, 0.03));
-  group.add(flat(circle(0.02, 0, 0.085), INK.base, 0.04));
+  group.add(plume, hull, cockpit);
 
-  // The cat aboard - bone head, ears, orange bandana, two dark eyes. Sized
-  // to still read as a face at hero scale rather than as a smudge.
-  //
-  // Ears are broad and near-upright: narrow triangles splayed outward read
-  // as devil horns, not cat. Bases sit inside the head circle, which is
-  // drawn over them.
-  group.add(flat(polygon([[-0.030, 0.028], [-0.020, 0.074], [0.014, 0.046]]), INK.paper, 0.05));
-  group.add(flat(polygon([[0.070, 0.028], [0.060, 0.074], [0.026, 0.046]]), INK.paper, 0.05));
-  group.add(flat(circle(0.02, 0.005, 0.055), INK.paper, 0.05));
-  // Bandana as a shallow trapezoid with a slight centre dip. A single
-  // downward triangle reads as a pointed beard rather than a kerchief.
-  group.add(
-    flat(
-      polygon([
-        [-0.036, 0.0],
-        [0.076, 0.0],
-        [0.052, -0.040],
-        [0.020, -0.052],
-        [-0.012, -0.040],
-      ]),
-      INK.hot,
-      0.06
-    )
-  );
-  group.add(flat(circle(0.0, 0.024, 0.011), INK.base, 0.07));
-  group.add(flat(circle(0.042, 0.024, 0.011), INK.base, 0.07));
+  void (async () => {
+    try {
+      const response = await fetch(ROCKET_SVG);
+      const source = new DOMParser().parseFromString(await response.text(), 'image/svg+xml');
 
-  // Exhaust plume, scaled per-frame for flicker.
-  const plume = flat(polygon([[-0.34, 0.085], [-0.78, 0], [-0.34, -0.085]]), INK.acid, 0.005);
-  group.add(plume);
+      const count = [...source.querySelectorAll('path,circle,ellipse,rect,polygon')].length;
+      if (count !== 40) {
+        // Loud, but not fatal: a re-exported artwork should not take the hero
+        // down, it should tell whoever re-exported it to re-cut the ranges.
+        console.error(
+          `rocketScene: expected 40 drawables in ${ROCKET_SVG}, found ${count}. ` +
+            `The artwork has been re-exported - re-derive PLATES before trusting the split.`
+        );
+      }
 
-  return { group, plume };
+      const [hullTex, cockpitTex, flameTex] = await Promise.all([
+        cutPlate(source, PLATES.hull, null, 1024, Math.round(1024 * (ART.h / ART.w))),
+        cutPlate(source, PLATES.cockpit, { x: COCKPIT.cx - COCKPIT.r, y: COCKPIT.cy - COCKPIT.r, w: COCKPIT.r * 2, h: COCKPIT.r * 2 }, 512, 512),
+        cutPlate(source, PLATES.flame, FLAME_BOX, 512, Math.round(512 * (FLAME_BOX.h / FLAME_BOX.w))),
+      ]);
+
+      for (const [mesh, texture] of [
+        [hull, hullTex],
+        [cockpit, cockpitTex],
+        [plume, flameTex],
+      ] as const) {
+        (mesh.material as THREE.MeshBasicMaterial).map = texture;
+        (mesh.material as THREE.MeshBasicMaterial).needsUpdate = true;
+        mesh.visible = true;
+      }
+    } catch (error) {
+      console.error('rocketScene: could not build the craft from its artwork', error);
+    }
+  })();
+
+  return { group, plume, cockpit };
 }
 
 function createUfo(): THREE.Group {
@@ -269,7 +415,7 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  const { group: rocket, plume } = createRocket();
+  const { group: rocket, plume, cockpit } = createRocket();
   // Large enough that the cockpit - and the cat in it - is legible at hero
   // size. At 2.15 the porthole is roughly 45px across on a 800px-tall canvas.
   rocket.scale.setScalar(2.15);
@@ -485,6 +631,21 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     const heading = Math.atan2(velocity.y, velocity.x);
     rocket.rotation.z = heading;
 
+    /*
+     * The porthole is gimballed: it hangs level however the craft is banked,
+     * so the cat is never upside down at the top of a loop. Counter-rotating
+     * by exactly -heading would be rigid, so it chases level instead and
+     * swings a little coming out of a hard turn - which is what makes it read
+     * as hanging under gravity rather than as artwork pinned to the page.
+     *
+     * The correction is taken the short way round; without the wrap it would
+     * unwind the long way every time the heading crossed pi.
+     */
+    const levelDelta = -heading - cockpit.rotation.z;
+    cockpit.rotation.z +=
+      Math.atan2(Math.sin(levelDelta), Math.cos(levelDelta)) *
+      Math.min(1, rawDelta * COCKPIT_SETTLE_RATE);
+
     // Exhaust flickers with throttle: longer under hard acceleration.
     const throttle = Math.min(velocity.length() / MAX_SPEED, 1);
     const flicker = 0.75 + Math.sin(elapsed * 34) * 0.12 + Math.sin(elapsed * 61) * 0.06;
@@ -590,7 +751,11 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
     scene.traverse((object) => {
       if (object instanceof THREE.Mesh) {
         object.geometry.dispose();
-        (object.material as THREE.Material).dispose();
+        const material = object.material as THREE.MeshBasicMaterial;
+        // Disposing the material does not release its texture, and the craft's
+        // three plates hold canvases of their own.
+        material.map?.dispose();
+        material.dispose();
       }
     });
     renderer.dispose();

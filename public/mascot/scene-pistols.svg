@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Backdrop for the pistols mascot: low sun, two ridges of hills, one saguaro.
+
+  Drawn in the mascot's own coordinate system so the two line up without any
+  fudge factors - x 0-281 is where the cat stands and y=367 is the ground it
+  stands on, both taken straight from bandit-cat-pistols.svg. This file simply
+  reaches further out: x -130 to 295.
+
+  Everything sits to the LEFT of the cat because that is where the room is.
+  In the Real Results header row the mascot has 68px of clear space to its
+  left at 1024 and 300px above that, against only 32px to its right before the
+  container edge.
+
+  No classes and no ids beyond the filter and masks, so Mascot.astro can
+  inline it as-is without the namespacing pass the mascots need.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-130 150 425 217" role="presentation" aria-hidden="true" focusable="false">
+  <defs>
+    <!--
+      Same grain recipe as the mascots (see Mascot.astro), with the frequency
+      set for this artwork's scale: 425 units drawn about 190px wide is a
+      little under 0.45x, which wants a coarser speckle than the cats.
+    -->
+    <filter id="scene-pistols-grain" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.3" numOctaves="3" seed="53" result="noise"/>
+      <feColorMatrix in="noise" type="matrix" values="0.5333 0.5333 0.5333 0 -0.3 0.5333 0.5333 0.5333 0 -0.3 0.5333 0.5333 0.5333 0 -0.3 0 0 0 0 0.32" result="speckle"/>
+      <feComposite in="speckle" in2="SourceAlpha" operator="in" result="clipped"/>
+      <feBlend in="clipped" in2="SourceGraphic" mode="overlay"/>
+    </filter>
+
+    <!--
+      Edge fades. Without these the scene reads as a rectangular sticker parked
+      behind the cat: the ridges stop dead on a vertical cut at both sides and
+      the ground ends on a hard horizontal line under the boots.
+
+      Two single-gradient masks nested rather than one mask holding two
+      gradients - SVG masks take luminance from their content, and there is no
+      dependable way to multiply two gradients inside one mask. Nesting
+      multiplies them for free.
+    -->
+    <linearGradient id="scene-pistols-fade-x" gradientUnits="userSpaceOnUse" x1="-130" y1="0" x2="295" y2="0">
+      <stop offset="0" stop-color="#000"/>
+      <stop offset="0.09" stop-color="#fff"/>
+      <stop offset="0.91" stop-color="#fff"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="scene-pistols-fade-y" gradientUnits="userSpaceOnUse" x1="0" y1="150" x2="0" y2="367">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="0.86" stop-color="#fff"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <mask id="scene-pistols-mask-x" maskUnits="userSpaceOnUse" x="-130" y="150" width="425" height="217">
+      <rect x="-130" y="150" width="425" height="217" fill="url(#scene-pistols-fade-x)"/>
+    </mask>
+    <mask id="scene-pistols-mask-y" maskUnits="userSpaceOnUse" x="-130" y="150" width="425" height="217">
+      <rect x="-130" y="150" width="425" height="217" fill="url(#scene-pistols-fade-y)"/>
+    </mask>
+  </defs>
+
+  <g mask="url(#scene-pistols-mask-x)">
+    <g mask="url(#scene-pistols-mask-y)">
+      <g filter="url(#scene-pistols-grain)">
+        <!-- Low sun. Its bottom third goes behind the ridges and the rest is
+             cut by the ground line, so it reads as setting rather than as a
+             dot in the sky.
+
+             Held well left of x=0 on purpose. Centred any closer it sits
+             directly behind the cat, and the disc is the same hot ink as the
+             boots and bandana - the silhouette dissolves into it. -->
+        <circle cx="-58" cy="285" r="70" fill="#e8451f" opacity=".92"/>
+
+        <!-- Two ridges in the one blue at different strengths: the pale one
+             reads as distance, the strong one as the ground the cat stands on.
+             Both are kept low enough to leave most of the sun showing. -->
+        <path d="M-130,367 V332 Q-60,302 0,322 Q60,342 120,312 Q190,278 295,304 V367 Z" fill="#1b27e8" opacity=".34"/>
+        <path d="M-130,367 V352 Q-50,330 20,350 Q90,370 160,348 Q230,326 295,346 V367 Z" fill="#1b27e8" opacity=".62"/>
+
+        <!--
+          Saguaro, three prongs, silhouetted on the sun's disc. Built from
+          round-capped strokes rather than filled outlines: the cap is what
+          domes the arms, and it keeps the whole plant to three path commands
+          that are easy to nudge. The arms leave the trunk at different
+          heights - level arms read as a candelabra rather than as a cactus.
+        -->
+        <g fill="none" stroke="#1b27e8" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
+          <path d="M-52,367 V220" stroke-width="24"/>
+          <path d="M-52,296 H-84 V254" stroke-width="16"/>
+          <path d="M-52,272 H-22 V236" stroke-width="16"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

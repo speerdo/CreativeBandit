@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Alert burst for the batting mascot: short strokes thrown off the cat's head
+  as it swings.
+
+  Drawn in the mascot's own coordinate system, like scene-pistols.svg, so it
+  registers with the artwork without fudge factors. The head cluster in
+  bandit-cat-batting.svg - hat, ears, face, whiskers - spans x 16-247 and
+  y 0-181, so its centre is about (130, 85). Every stroke below is aimed
+  straight out from that point, between radius ~118 and ~158.
+
+  The arc runs from roughly 60 degrees round to 190, which is the clear air
+  above and to the left of the head: further clockwise is the raised paw, and
+  further anticlockwise the strokes would land on the tail. The box reaches
+  above the artwork's own top edge, which is where most of this sits.
+
+  Unlike the mascots and the pistols scene there is no grain filter here. At
+  this scale the strokes are barely two pixels through, and speckling them
+  just eats the line.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-40 -90 280 230" role="presentation" aria-hidden="true" focusable="false">
+  <g fill="none" stroke-linecap="round">
+    <!-- Acid ink: the long marks, unevenly spaced so it reads as an impact
+         rather than as a sunburst. -->
+    <g stroke="#ffe800" stroke-width="7">
+      <path d="M134.1,-32.9 L135.5,-72.9"/>
+      <path d="M85.1,-26.3 L73.8,-54.1"/>
+      <path d="M17.2,50.5 L-9.6,42.3"/>
+    </g>
+    <!-- Hot ink: shorter, so the burst has two weights in it. -->
+    <g stroke="#e8451f" stroke-width="6">
+      <path d="M186.3,-20.9 L201.4,-49.2"/>
+      <path d="M39.3,3.3 L14.1,-19.4"/>
+      <path d="M11.2,101.7 L-20.5,106.2"/>
+    </g>
+  </g>
+</svg>

@@ -111,10 +111,15 @@ const projects = [
   <!-- Services Section -->
   <section class="section bg-base-200">
     <div class="container mx-auto">
-      <div class="max-w-3xl mb-16">
-        <p class="label-tech mb-4">What we build</p>
-        <h2 class="mb-6">Two Things Agencies <span class="plate-type">Subcontract Badly</span>. We Do Both Properly.</h2>
-        <p class="text-paper-mute">Everything ships white-labeled. Your client never has to know we exist, and we're fine with that. Engineering and creative under one roof, working direct with businesses too.</p>
+      <!-- Same header-row treatment as Real Results below: mascot fills the
+           empty right, hidden below lg where the column collapses. -->
+      <div class="mb-16 flex items-end justify-between gap-10">
+        <div class="max-w-3xl">
+          <p class="label-tech mb-4">What we build</p>
+          <h2 class="mb-6">Two Things Agencies <span class="plate-type">Subcontract Badly</span>. We Do Both Properly.</h2>
+          <p class="text-paper-mute">Everything ships white-labeled. Your client never has to know we exist, and we're fine with that. Engineering and creative under one roof, working direct with businesses too.</p>
+        </div>
+        <Mascot pose="rocket" class="hidden w-[260px] shrink-0 lg:block xl:w-[300px]" />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
