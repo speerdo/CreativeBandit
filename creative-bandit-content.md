@@ -209,7 +209,8 @@ Current fake stats:
 
 ### RecycleOldTech Success
 - 8.08% Amazon affiliate conversion rate (vs industry avg of 1-3%)
-- $40+ monthly passive income from affiliate marketing
+- 8,000+ monthly visitors
+- $300+ monthly revenue from display advertising and affiliate marketing
 - 1,000+ monthly referrals processed through automated pipeline
 - Nationwide directory coverage across all 50 states
 
@@ -245,7 +246,7 @@ Current fake stats:
 - **Category:** Web Development / Affiliate Marketing / SEO
 - **Description:** Comprehensive nationwide electronics recycling directory with automated affiliate marketing pipeline. Built content strategy automation and SEO optimization achieving exceptional 8.08% conversion rate (4x industry average). Processes 1,000+ monthly referrals through Amazon Associates integration with intelligent tracking and analytics.
 - **Technologies Used:** Astro.js, JavaScript, Google APIs, Amazon Affiliate API, Analytics Integration, Vercel
-- **Key Results:** 8.08% conversion rate, $40+/month passive income, 1,000+ monthly transactions
+- **Key Results:** 8,000+ monthly visitors, $300+/month ad and affiliate revenue, 8.08% conversion rate, 1,000+ monthly transactions
 - **Link:** https://recycleoldtech.com
 - **Screenshot/Image:** Directory search interface + affiliate integration dashboard
 

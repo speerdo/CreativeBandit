@@ -36,7 +36,7 @@ Add real project entries. Replace [TODO] with actual project names, descriptions
 ### Adam's dev projects (expand existing "Work" section)
 - [ ] yieldtofreedom.com — income-investing platform, Astro 5 / Neon / Vercel / Drizzle. [TODO: description, screenshot]
 - [ ] ebikelocal.com — niche eBike shop directory, Astro SSG / Neon / Vercel, Playwright scrapers. [TODO: description, screenshot]
-- [ ] RecycleOldTech.com — electronics recycling directory, 20k+ monthly visitors. [TODO: description, screenshot]
+- [ ] RecycleOldTech.com — electronics recycling directory, 8k+ monthly visitors. [TODO: description, screenshot]
 - [ ] [TODO: any client work that's shareable — IndiAide, Ever.Ag, etc., if permitted]
 
 ### Katlyn's design/motion projects (new section)

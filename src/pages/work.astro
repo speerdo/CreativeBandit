@@ -13,6 +13,13 @@ const categories = [
   { id: 'motion', name: 'Motion' }
 ];
 
+const featuredStats = [
+  { label: 'Monthly Visitors', value: '8,000+' },
+  { label: 'Monthly Ad & Affiliate Revenue', value: '$300+' },
+  { label: 'Affiliate Conversion', value: '8.08%' },
+  { label: 'Monthly Referrals', value: '1,000+' }
+];
+
 const projects = [
   {
     title: 'Yield to Freedom',
@@ -229,20 +236,29 @@ const projects = [
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
         <div>
           <img
-            src="/images/downtowndry_desktop.webp"
-            alt="DowntownDry AI Verification System"
+            src="/images/recycleoldtech_desktop.webp"
+            alt="RecycleOldTech.com electronics recycling directory"
             loading="lazy"
             decoding="async"
             class="w-full h-auto"
           />
         </div>
-        
+
         <div>
           <p class="label-tech mb-4">Featured Project</p>
-          <h3 class="text-2xl font-bold mb-3">DowntownDry AI Verification</h3>
+          <h3 class="text-2xl font-bold mb-3">RecycleOldTech.com</h3>
           <p class="text-paper-mute mb-6">
-            Nationwide directory of venues serving non-alcoholic drinks, kava, and other alternatives. The verification pipeline cross-references the Google Places, Maps, and Business APIs, hands the decision to Gemini, and flags only genuine edge cases for a human, so hundreds of venues clear review without a person touching them.
+            Nationwide directory of certified electronics recycling centers across all 50 states. An automated content and SEO pipeline builds and refreshes the location pages, and the monetization sits on top of it: display advertising against the organic traffic plus Amazon Associates placements converting at roughly four times the category average.
           </p>
+
+          <div class="grid grid-cols-2 gap-6 mb-8">
+            {featuredStats.map(stat => (
+              <div class="border-l-2 border-ink-acid pl-4">
+                <p class="text-2xl font-bold">{stat.value}</p>
+                <h4 class="text-sm text-paper-mute">{stat.label}</h4>
+              </div>
+            ))}
+          </div>
 
           <div class="grid grid-cols-2 gap-6 mb-6">
             <div>
@@ -251,28 +267,28 @@ const projects = [
             </div>
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Category</h4>
-              <p>AI Integration</p>
+              <p>E-commerce / SEO</p>
             </div>
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Key Result</h4>
-              <p>97% accuracy, 90%+ less review time</p>
+              <p>Self-sustaining ad and affiliate revenue</p>
             </div>
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Tech Stack</h4>
-              <p>Astro, Gemini AI, Supabase, Google APIs</p>
+              <p>Astro, Supabase, Amazon Associates, Vercel</p>
             </div>
           </div>
-          
-          <a href="https://downtowndry.com" target="_blank" rel="noopener" class="btn-primary">Visit Site</a>
+
+          <a href="https://recycleoldtech.com" target="_blank" rel="noopener" class="btn-primary">Visit Site</a>
         </div>
       </div>
       
       <!-- Other Case Studies -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="card">
-          <h3 class="text-xl font-bold mb-3">RecycleOldTech.com</h3>
-          <p class="text-paper-mute mb-4">Electronics recycling directory achieving 8.08% affiliate conversion rate (4x industry average) with automated SEO pipeline processing 1,000+ monthly transactions.</p>
-          <a href="https://recycleoldtech.com" target="_blank" rel="noopener" class="text-ink-hot inline-flex items-center font-medium hover:text-ink-acid transition-colors duration-300">
+          <h3 class="text-xl font-bold mb-3">DowntownDry AI Verification</h3>
+          <p class="text-paper-mute mb-4">Alcohol-free venue directory whose verification pipeline pairs three Google APIs with Gemini, hitting 97% accuracy and cutting manual review time by more than 90%.</p>
+          <a href="https://downtowndry.com" target="_blank" rel="noopener" class="text-ink-hot inline-flex items-center font-medium hover:text-ink-acid transition-colors duration-300">
             Visit Site
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
