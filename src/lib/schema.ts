@@ -38,7 +38,7 @@ export const organization: SchemaNode = {
   description:
     'A two-person studio pairing full-stack development and AI automation with design and motion.',
   url: SITE,
-  logo: `${SITE}/mascot/bandit-cat.svg`,
+  logo: `${SITE}/mascot/bandit-cat-head.svg`,
   image: `${SITE}/og-image.png`,
   foundingDate: '2026',
   email: 'hello@creativebandit.studio',

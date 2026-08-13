@@ -92,6 +92,8 @@
  *   4. .plate-type     misregistered ink plates on type
  *   5. .scanline       scan smear
  *   6. global grain    film grain, applied once on body::after
+ *   7. mascot grain    per-mascot feTurbulence, clipped to the artwork's own
+ *                      alpha so it follows the hover animations (Mascot.astro)
  */
 
 @layer base {
@@ -450,6 +452,33 @@
     @apply h-auto w-full overflow-visible;
   }
 
+  /*
+   * Scene backdrop. Sits at -2 so it stacks behind both the cat and the
+   * ground shadow at -1; the wrapper's `isolation` keeps all of it inside the
+   * mascot's own box. Positioned entirely from inline percentages worked out
+   * in Mascot.astro, so nothing here needs to know which pose it is under.
+   */
+  .cb-mascot__scene {
+    position: absolute;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  /* Thrown off the cat rather than standing behind it. */
+  .cb-mascot__scene--front {
+    z-index: 1;
+  }
+
+  /* Overrides the overflow-visible above, which exists for artwork that spills
+     past its viewBox. The scene is the opposite case: the sun is meant to be
+     cut off at the ground line rather than hang below it. */
+  .cb-mascot__scene svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
   .cb-mascot [data-cb] {
     transform-box: fill-box;
     transition:
@@ -457,13 +486,72 @@
       opacity 380ms ease;
   }
 
-  /* --- pistols: coiling to jump ---------------------------------------- */
-  .cb-mascot--pistols svg {
+  /* --- ground shadows ---------------------------------------------------
+   *
+   * One blue plate under the feet. Sized off where each cat actually touches
+   * down rather than centred by eye: the pistols cat stands square and
+   * contacts over x 20-261 of its 281-unit box, so its shadow is centred;
+   * the batting cat lunges left and contacts over x 24-143 of 432, so its
+   * shadow sits well left of the artwork's middle.
+   *
+   * Drawn on the wrapper rather than as an ellipse inside the artwork, so it
+   * stays planted while the hover animations move the cat above it. Put in
+   * the SVG it would squash and travel with the body, which reads as a
+   * sticker rather than as ground.
+   */
+  .cb-mascot--pistols,
+  .cb-mascot--batting {
+    position: relative;
+    /* Keeps the negative z-index below inside this box, so the shadow cannot
+       slip behind an ancestor's background. */
+    isolation: isolate;
+  }
+
+  .cb-mascot--pistols::before,
+  .cb-mascot--batting::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    /* Straddles the contact line rather than sitting under it: two thirds of
+       the oval tucks behind the boots, which is what plants them. */
+    bottom: -3%;
+    height: 9%;
+    border-radius: 50%;
+    background: var(--color-ink-cold);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .cb-mascot--pistols::before {
+    left: 11%;
+    width: 78%;
+  }
+
+  .cb-mascot--batting::before {
+    left: 3%;
+    width: 33%;
+  }
+
+  /* --- pistols: coiling to jump ----------------------------------------
+   *
+   * `> svg` rather than a descendant match, and it has to be. The scene
+   * backdrop is an svg too, so a bare `.cb-mascot--pistols svg` reached
+   * inside `.cb-mascot__scene` and coiled the hill and the sun along with
+   * the cat - exactly the "hill that coils with the cat's jump" the SCENERY
+   * note in Mascot.astro says is worse than no hill. The artwork is a direct
+   * child of the wrapper, the scene is a grandchild, so the child combinator
+   * separates them with nothing else to maintain.
+   *
+   * Batting deliberately keeps its descendant match below: its scene is the
+   * alert burst, drawn in front and anchored to the head, so that one is
+   * meant to travel with the cat.
+   */
+  .cb-mascot--pistols > svg {
     transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
     transform-origin: 50% 100%;
   }
 
-  .cb-mascot--pistols:hover svg {
+  .cb-mascot--pistols:hover > svg {
     transform: translateY(5px) scaleY(0.965);
   }
 
@@ -547,8 +635,41 @@
     animation: cb-dodge 1.2s ease-in-out infinite;
   }
 
+  /*
+   * The dodge alone is locked to the arm, so the saucer ducked on the same
+   * beat every pass and read as clockwork. A second, longer wander rides on
+   * top of it: the five saucer elements are given the group's origin so they
+   * transform as one body, then drift on a path with no symmetry to it. At
+   * 2.9s against the dodge's 1.2s the two only realign every ~17s, so the
+   * flight never resolves into a loop you can count.
+   */
+  .cb-mascot--batting [data-cb-drift='ufo'] {
+    transform-box: view-box;
+    transform-origin: 358px 101px;
+  }
+
+  .cb-mascot--batting:hover [data-cb-drift='ufo'] {
+    animation: cb-ufo-weave 2.9s ease-in-out infinite;
+  }
+
   .cb-mascot--batting:hover [data-cb='spark'] {
     animation: cb-spark 1.2s ease-in-out infinite;
+  }
+
+  /*
+   * The alert burst sits at half strength as part of the drawing, then snaps
+   * up on the swipe. Its origin is the head centre - (130, 85) in the
+   * artwork, which is 60.7% / 76.1% of the overlay's own box - so it flares
+   * outward from the cat rather than growing from the corner of a rectangle.
+   */
+  .cb-mascot--batting .cb-mascot__scene {
+    transform-origin: 60.7% 76.1%;
+    opacity: 0.5;
+    transform: scale(0.94);
+  }
+
+  .cb-mascot--batting:hover .cb-mascot__scene {
+    animation: cb-alert 1.2s ease-in-out infinite;
   }
 
   .cb-mascot--batting [data-cb='tail'] {
@@ -557,6 +678,149 @@
 
   .cb-mascot--batting:hover [data-cb='tail'] {
     animation: cb-tail-switch 1.05s ease-in-out infinite;
+  }
+
+  /* --- rocket: throttle up --------------------------------------------- */
+
+  /*
+   * The craft sits at a fixed tilt and, on hover, travels along the line it
+   * is already pointing down.
+   *
+   * Both states start from the same `rotate()`, so the `translateX` that
+   * follows it is applied in the craft's own rotated frame rather than the
+   * page's. That is what keeps the travel parallel to the hull: change the
+   * tilt and the flight path follows it, no trigonometry to keep in sync.
+   * Order matters here - translate first and it would slide flat along the
+   * page while the hull pointed somewhere else.
+   *
+   * The nose points left in the artwork, so forward is negative X.
+   */
+  .cb-mascot--rocket {
+    /* Positive is counter-clockwise on a left-pointing hull, so this is a
+       nose-up climb. CSS angles run clockwise; flip the sign for a dive. */
+    --cb-rocket-tilt: 20deg;
+    --cb-rocket-travel: 5%;
+    /* One tile of the streak pattern. Every distance in cb-hyperdrive is a
+       whole multiple of this, which is the only reason the loop is seamless -
+       change it and change those to match. */
+    --cb-warp-tile: 120px;
+    position: relative;
+    /* Keeps the negative z-index below inside this box, so the streaks cannot
+       slip behind an ancestor's background. */
+    isolation: isolate;
+  }
+
+  .cb-mascot--rocket svg {
+    transform: rotate(var(--cb-rocket-tilt));
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cb-mascot--rocket:hover svg {
+    transform: rotate(var(--cb-rocket-tilt)) translateX(calc(-1 * var(--cb-rocket-travel)));
+  }
+
+  /*
+   * Hyperdrive streaks.
+   *
+   * Carries the same --cb-rocket-tilt as the hull, so the lines run parallel
+   * to the craft instead of flat across the page. The layer is painted first
+   * and rotated afterwards, which means `background-position` travels along
+   * the hull's own axis and no trigonometry has to be kept in sync - the same
+   * rotate-then-translate trick the travel above uses. Retilt the craft and
+   * the streaks retilt with it.
+   *
+   * The nose points left, so the craft flies left and the field streams
+   * rightward past it. Distances in cb-hyperdrive are therefore positive.
+   *
+   * Five separate rows rather than one gradient repeated down the box,
+   * because each row is given its own speed in the keyframes. That spread is
+   * what reads as depth; moving as one body reads as a sliding texture.
+   */
+  .cb-mascot--rocket::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    /*
+     * Oversized and offset so the band still covers the artwork's corners
+     * once rotated. Deliberately NOT clipped with `overflow: hidden`: that
+     * would also cut the exhaust plume, which overflows the viewBox on
+     * purpose. The mask is what stops the field spilling onto the page, and
+     * it fades rather than cuts, so there is no edge to notice.
+     */
+    left: -25%;
+    top: -20%;
+    width: 150%;
+    height: 140%;
+    pointer-events: none;
+    transform: rotate(var(--cb-rocket-tilt));
+
+    /*
+     * Each layer is one row: a tile as wide as --cb-warp-tile and only a
+     * pixel or two tall, repeated along x only. The dash lives inside the
+     * tile as a hard-stopped band, so its length is a share of the tile and
+     * the gap is whatever is left.
+     */
+    background-repeat: repeat-x;
+    background-size:
+      var(--cb-warp-tile) 2px,
+      var(--cb-warp-tile) 1px,
+      var(--cb-warp-tile) 1px,
+      var(--cb-warp-tile) 2px,
+      var(--cb-warp-tile) 1px;
+    background-position:
+      0 18%,
+      0 33%,
+      0 50%,
+      0 67%,
+      0 84%;
+    /* Palette, thinned: paper for the bulk, with acid, cold-lift and hot
+       salted through so the field belongs to the same ink set as the cat. */
+    background-image:
+      linear-gradient(90deg, transparent 0 8%, rgba(237, 232, 223, 0.85) 8% 26%, transparent 26%),
+      linear-gradient(90deg, transparent 0 40%, rgba(255, 232, 0, 0.7) 40% 52%, transparent 52%),
+      linear-gradient(90deg, transparent 0 62%, rgba(237, 232, 223, 0.5) 62% 88%, transparent 88%),
+      linear-gradient(90deg, transparent 0 20%, rgba(110, 121, 255, 0.6) 20% 30%, transparent 30%),
+      linear-gradient(90deg, transparent 0 70%, rgba(232, 69, 31, 0.55) 70% 84%, transparent 84%);
+
+    /* Dissolves the field before it reaches the layer's edge, so the streaks
+       read as a pocket of speed around the craft rather than a rectangle. */
+    -webkit-mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
+
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .cb-mascot--rocket:hover::before {
+    opacity: 1;
+    animation: cb-hyperdrive 900ms linear infinite;
+  }
+
+  /*
+   * The plume is one polygon joined to the tail at x=848, so it has to scale
+   * from that edge or it detaches from the craft. `transform-box: view-box`
+   * puts the origin in the artwork's own coordinates; under the default
+   * fill-box it would scale about the plume's own centre and pump in and out
+   * of the hull.
+   *
+   * Two animations, on the group and on the polygon inside it, so their
+   * transforms stack. The periods are deliberately not multiples of each
+   * other, so they drift in and out of phase and the flame never settles
+   * into a visible loop. The hero rocket gets the same character by summing
+   * sines at 34 and 61 rad/s (rocketScene.ts).
+   */
+  .cb-mascot--rocket [data-cb='flame'],
+  .cb-mascot--rocket [data-cb-drift='flame'] {
+    transform-box: view-box;
+    transform-origin: 848px 351px;
+  }
+
+  .cb-mascot--rocket:hover [data-cb='flame'] {
+    animation: cb-thrust 310ms ease-in-out infinite;
+  }
+
+  .cb-mascot--rocket:hover [data-cb-drift='flame'] {
+    animation: cb-thrust-flicker 190ms ease-in-out infinite;
   }
 
   /* --- sleeping: it does not wake up ----------------------------------- */
@@ -601,6 +865,59 @@
   }
 }
 
+/*
+ * Rides on top of cb-dodge. Uneven stops and no mirrored pair anywhere, so
+ * it swerves rather than oscillates - a saucer taking evasive action, not a
+ * pendulum. Longer and slower than the dodge on purpose.
+ */
+@keyframes cb-ufo-weave {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  18% {
+    transform: translate(-9px, 5px) rotate(4deg);
+  }
+  37% {
+    transform: translate(6px, -8px) rotate(-3deg);
+  }
+  55% {
+    transform: translate(13px, 3px) rotate(5deg);
+  }
+  71% {
+    transform: translate(-4px, 9px) rotate(-6deg);
+  }
+  88% {
+    transform: translate(-11px, -4px) rotate(2deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/*
+ * Peaks just after the paw does, on the same 1.2s beat as the swipe - the
+ * burst is a consequence of the swing, so it cannot lead it.
+ */
+@keyframes cb-alert {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.94);
+  }
+  48% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  78% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
 /* Peaks a little after the arm, so it reads as ducking the paw. */
 @keyframes cb-dodge {
   0%,
@@ -625,6 +942,56 @@
   }
   55% {
     opacity: 0.3;
+  }
+}
+
+/*
+ * Plume length, on the group. Held under 1 at rest of the cycle and pushed
+ * past it at the peak, so the flame surges rather than merely wobbling.
+ */
+@keyframes cb-thrust {
+  0%,
+  100% {
+    transform: scaleX(0.84);
+  }
+  50% {
+    transform: scaleX(1.08);
+  }
+}
+
+/* Girth and brightness, on the polygon inside, at an unrelated period. */
+@keyframes cb-thrust-flicker {
+  0%,
+  100% {
+    transform: scale(1, 0.92);
+    opacity: 0.88;
+  }
+  50% {
+    transform: scale(1.04, 1.06);
+    opacity: 1;
+  }
+}
+
+/*
+ * Starfield streaming past the craft. Only the `to` is written, so each row
+ * starts from the background-position it already carries and the rule stays
+ * the single place the rows are laid out.
+ *
+ * Every distance is a whole multiple of --cb-warp-tile (120px), which is what
+ * makes each row land exactly on its own next tile and loop without a seam:
+ * 3, 5, 2, 4 and 6 tiles. They are also mutually un-tidy enough that the five
+ * only realign every 60 tiles, so the field never resolves into a pattern.
+ * Different distances over one duration is the parallax - far rows slow, near
+ * rows fast.
+ */
+@keyframes cb-hyperdrive {
+  to {
+    background-position:
+      360px 18%,
+      600px 33%,
+      240px 50%,
+      480px 67%,
+      720px 84%;
   }
 }
 
@@ -804,5 +1171,14 @@
   .cb-mascot:hover [data-cb] {
     transform: none !important;
     animation: none !important;
+  }
+
+  /* The streaks are a motion effect and nothing else - there is no static
+     version of them worth showing, so they stay down entirely. Needs its own
+     rule because a pseudo-element is not reached by the selectors above. */
+  .cb-mascot--rocket::before,
+  .cb-mascot--rocket:hover::before {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }

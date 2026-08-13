@@ -27,9 +27,19 @@ const socials = [
 ---
 
 <div class="group">
-  <!-- Square, not a circle: hard edges read as a printed plate. Duotone
-       carries the headshot until hover resolves it to full colour. -->
-  <div class="duotone duotone-hot crop-marks mb-5 w-full">
+  <!--
+    Square, not a circle: hard edges read as a printed plate.
+
+    The portraits run unfiltered, for the same reason project screenshots do
+    (ProjectCard.astro). The duotone plate that used to sit here was cover for
+    a stock headshot; these are finished two-plate pieces with their own
+    halftone and red ink, and greyscaling them throws away the half of the
+    artwork the red was carrying. The card keeps the house style through the
+    crop marks, the square frame and the mono label instead.
+  -->
+  <!-- overflow-hidden keeps the hover scale inside the frame; `.crop-marks`
+       already supplies the positioning context. -->
+  <div class="crop-marks mb-5 w-full overflow-hidden">
     <img
       src={image}
       alt={name}

@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-export type Pose = 'sleeping' | 'pistols' | 'batting';
+export type Pose = 'sleeping' | 'pistols' | 'batting' | 'rocket';
 
 export interface Props {
   pose: Pose;
@@ -10,9 +10,12 @@ export interface Props {
   class?: string;
   /** Accessible name. Omit for decorative use (the default). */
   label?: string;
+  /** Film-grain strength, 0-1. 0 leaves the artwork clean. */
+  grain?: number;
 }
 
-const { pose, class: className = '', label } = Astro.props;
+const { pose, class: className = '', label, grain = 0.32 } = Astro.props;
+const grainAlpha = Math.max(0, Math.min(1, grain));
 
 /*
  * Spelled out rather than built as `cb-mascot--${pose}`. Tailwind finds the
@@ -24,6 +27,7 @@ const POSE_CLASS: Record<Pose, string> = {
   sleeping: 'cb-mascot--sleeping',
   pistols: 'cb-mascot--pistols',
   batting: 'cb-mascot--batting',
+  rocket: 'cb-mascot--rocket',
 };
 
 /*
@@ -103,10 +107,157 @@ const PARTS: Record<Pose, Record<string, PartSpec[]>> = {
     ],
     tail: [{ index: 34, paint: '#ede8df', box: [114, 96, 291, 156] }],
   },
+  rocket: {
+    // The whole exhaust plume is one polygon, attached at its left edge
+    // (x=848) on the craft's tail. Nothing else here moves: the hover nudge
+    // is applied to the root svg, not to a part.
+    flame: [{ index: 7, paint: '#ffe800', box: [848, 237, 1316, 465] }],
+  },
+};
+
+/*
+ * Parts that need a second animation channel. Two transforms cannot stack on
+ * one element, so these get an inner group as well as the outer one: the
+ * outer carries the motion the pose is built around, the inner an
+ * independent drift on a different period, and the two compose.
+ *
+ * It has to be a nested group rather than the elements themselves. The
+ * saucer's dome and body carry baked translate+rotate attributes from
+ * Illustrator, and giving those elements a `transform-box` re-anchors the
+ * attribute they already have - the saucer leaves the canvas entirely. A
+ * bare <g> owns no transform, so there is nothing to re-anchor.
+ */
+/*
+ * Backdrops, drawn behind the cat.
+ *
+ * A scene is a separate file rather than more shapes inside the mascot for
+ * two reasons: the artwork stays something Illustrator can reopen untouched,
+ * and the scenery stays still while the cat squashes and swings above it. A
+ * hill that coils with the cat's jump is worse than no hill.
+ *
+ * The box is stated in the POSE's own units, so a scene can reach outside the
+ * mascot's bounds - the numbers below are read straight off the scene file's
+ * viewBox and turned into percentages of the mascot underneath.
+ */
+const SCENERY: Partial<
+  Record<Pose, { file: string; x: number; y: number; w: number; h: number; front?: boolean }>
+> = {
+  pistols: { file: 'scene-pistols.svg', x: -130, y: 150, w: 425, h: 217 },
+  // The burst is thrown off the cat rather than standing behind it, so this
+  // one layers in front. Its strokes all sit outside the head's silhouette,
+  // so nothing of the artwork is covered.
+  batting: { file: 'scene-batting.svg', x: -40, y: -90, w: 280, h: 230, front: true },
+};
+
+const STACKED: Partial<Record<Pose, string[]>> = {
+  batting: ['ufo'],
+  rocket: ['flame'],
 };
 
 const file = path.join(process.cwd(), 'public', 'mascot', `bandit-cat-${pose}.svg`);
 let svg = fs.readFileSync(file, 'utf8');
+
+/* --- film grain -----------------------------------------------------------
+ *
+ * The page-wide grain on `body::after` is a baked PNG on purpose: a
+ * viewport-sized live filter would re-evaluate noise on every paint. At
+ * mascot size that objection doesn't hold, and a real filter buys two things
+ * a tiled PNG cannot. It clips the noise to the artwork's own alpha, so the
+ * grain bites into the cat rather than sitting over its bounding box, and it
+ * re-renders with the hover animations instead of staying put while the tail
+ * swings out from under it.
+ *
+ * Cost is a filter re-run per frame on the mascot being hovered. Three small
+ * mascots, one hovered at a time - if that ever changes, the cheaper route is
+ * a `::after` carrying /textures/grain.png masked by the pose SVG, which
+ * gives up on tracking the animation.
+ *
+ * Injected before the namespacing pass below so the `grain` id and its
+ * `url(#grain)` reference get rewritten per pose along with everything else.
+ */
+
+/*
+ * Speckle size is set in artwork units, but what matters is how big a speckle
+ * lands on screen, so the frequency is per pose: roughly the scale the pose
+ * renders at, divided by the ~1.5px speckle we want. The first three sit
+ * around 0.4x-0.6x and share a value. The rocket's viewBox is 1317 units wide
+ * against a ~280px placement, so it renders near 0.2x - left at 0.35 its
+ * grain lands under a pixel and turns to mush. Retune if a placement's width
+ * changes much.
+ */
+const GRAIN_FREQUENCY: Record<Pose, number> = {
+  sleeping: 0.35,
+  pistols: 0.35,
+  batting: 0.35,
+  rocket: 0.14,
+};
+const GRAIN_OCTAVES = 3;
+// Per pose, so two mascots sharing a page don't carry identical speckles.
+const GRAIN_SEED: Record<Pose, number> = {
+  sleeping: 7,
+  pistols: 19,
+  batting: 31,
+  rocket: 47,
+};
+// Contrast around mid-gray. fractalNoise clusters tightly on 0.5 and reads as
+// a flat wash without it.
+const GRAIN_CONTRAST = 1.6;
+
+if (grainAlpha > 0) {
+  // One matrix does three jobs: average the channels to gray, stretch that
+  // gray around 0.5, and flatten alpha to a constant. Mid-gray is the
+  // identity for `overlay`, so only the deviations show up as grain.
+  const w = (GRAIN_CONTRAST / 3).toFixed(4);
+  const offset = (0.5 - 0.5 * GRAIN_CONTRAST).toFixed(4);
+  const row = `${w} ${w} ${w} 0 ${offset}`;
+  const matrix = `${row} ${row} ${row} 0 0 0 0 ${grainAlpha}`;
+
+  // sRGB rather than the linearRGB default: linear washes the noise out and
+  // pays for two colour-space conversions to do it.
+  const filter =
+    `<filter id="grain" x="-5%" y="-5%" width="110%" height="110%" ` +
+    `color-interpolation-filters="sRGB">` +
+    `<feTurbulence type="fractalNoise" baseFrequency="${GRAIN_FREQUENCY[pose]}" ` +
+    `numOctaves="${GRAIN_OCTAVES}" seed="${GRAIN_SEED[pose]}" result="noise"/>` +
+    `<feColorMatrix in="noise" type="matrix" values="${matrix}" result="speckle"/>` +
+    // Clip to the silhouette. Without this the grain fills the filter region
+    // and the cat arrives in a grey box.
+    `<feComposite in="speckle" in2="SourceAlpha" operator="in" result="clipped"/>` +
+    // `in` is the top layer, `in2` the backdrop - grain over artwork.
+    `<feBlend in="clipped" in2="SourceGraphic" mode="overlay"/>` +
+    `</filter>`;
+
+  const CLOSE = '</defs>';
+  const defsEnd = svg.indexOf(CLOSE);
+  if (defsEnd === -1) {
+    throw new Error(
+      `Mascot "${pose}": no <defs> to hang the grain filter on. The artwork has ` +
+        `been re-exported without one - add the filter by hand or pass grain={0}.`
+    );
+  }
+
+  svg = svg.slice(0, defsEnd) + filter + svg.slice(defsEnd);
+
+  /*
+   * Everything after </defs> goes into one filtered group rather than the
+   * filter going on the root <svg>. On the root, the filter region is the SVG
+   * viewport, which would clip the parts of the artwork that `overflow-visible`
+   * exists to let out. On a group the region is the group's own bbox, so it
+   * tracks whatever the children actually cover, hover transforms included.
+   *
+   * The wrapper is balanced around the whole body, so it leaves the <g> counts
+   * between any two drawables untouched and the group-boundary check below
+   * still measures what it means to.
+   */
+  const bodyStart = svg.indexOf(CLOSE) + CLOSE.length;
+  const bodyEnd = svg.lastIndexOf('</svg>');
+  svg =
+    svg.slice(0, bodyStart) +
+    `<g filter="url(#grain)">` +
+    svg.slice(bodyStart, bodyEnd) +
+    `</g>` +
+    svg.slice(bodyEnd);
+}
 
 // --- namespace classes and ids so two mascots can share a page ------------
 svg = svg.replace(/\b(st\d+)\b/g, `${pose}-$1`);
@@ -201,8 +352,23 @@ const inserts: Insert[] = [];
 for (const [part, specs] of Object.entries(PARTS[pose])) {
   const ids = specs.map((sp) => sp.index).sort((a, b) => a - b);
   const contiguous = ids.every((v, k) => v === ids[0] + k);
+  const stacked = (STACKED[pose] ?? []).includes(part);
 
-  if (ids.length > 1 && contiguous) {
+  if (stacked && !contiguous) {
+    throw new Error(
+      `Mascot "${pose}": part "${part}" is marked for a stacked animation, but ` +
+        `its elements are not contiguous so they cannot share one inner group. ` +
+        `Re-order the artwork, or drop it from STACKED and find another way to ` +
+        `compose the two transforms.`
+    );
+  }
+
+  const open = stacked
+    ? `<g data-cb="${part}"><g data-cb-drift="${part}">`
+    : `<g data-cb="${part}">`;
+  const close = stacked ? `</g></g>` : `</g>`;
+
+  if (contiguous) {
     const first = spans[ids[0]];
     const last = spans[ids[ids.length - 1]];
     // Wrapping is only valid if the run does not straddle a group boundary.
@@ -215,8 +381,8 @@ for (const [part, specs] of Object.entries(PARTS[pose])) {
           `be wrapped. Re-check the part map against the artwork.`
       );
     }
-    inserts.push({ pos: first.start, text: `<g data-cb="${part}">` });
-    inserts.push({ pos: last.end, text: `</g>` });
+    inserts.push({ pos: first.start, text: open });
+    inserts.push({ pos: last.end, text: close });
   } else {
     // Non-contiguous parts get one wrapper each rather than the attribute
     // going on the element itself. A CSS transform REPLACES a baked
@@ -225,8 +391,8 @@ for (const [part, specs] of Object.entries(PARTS[pose])) {
     // band clean off the hat. Wrapping keeps the child's own transform
     // intact and animates the group above it.
     for (const id of ids) {
-      inserts.push({ pos: spans[id].start, text: `<g data-cb="${part}">` });
-      inserts.push({ pos: spans[id].end, text: `</g>` });
+      inserts.push({ pos: spans[id].start, text: open });
+      inserts.push({ pos: spans[id].end, text: close });
     }
   }
 }
@@ -254,6 +420,36 @@ svg = svg.replace(
 );
 // The <title> would otherwise be announced even on a decorative instance.
 if (!label) svg = svg.replace(/<title\b[^>]*>[\s\S]*?<\/title>/, '');
+
+/*
+ * Scene box to percentages of the mascot's own box. Both are stated in the
+ * pose's units, so this is a straight ratio with no offsets to re-tune when a
+ * placement's width changes - the scene simply scales with the cat.
+ */
+const scene = SCENERY[pose];
+let sceneSvg = '';
+let sceneStyle = '';
+if (scene) {
+  sceneSvg = fs.readFileSync(path.join(process.cwd(), 'public', 'mascot', scene.file), 'utf8');
+  const pct = (n: number) => `${(n * 100).toFixed(3)}%`;
+  sceneStyle = [
+    `left:${pct(scene.x / vw)}`,
+    `width:${pct(scene.w / vw)}`,
+    // Pinned by its bottom rather than its top, so a scene drawn to the same
+    // ground line as the artwork sits flush against the cat's feet.
+    `bottom:${pct((vh - (scene.y + scene.h)) / vh)}`,
+    `height:${pct(scene.h / vh)}`,
+  ].join(';');
+}
 ---
 
-<span class:list={['cb-mascot', POSE_CLASS[pose], className]} set:html={svg} />
+<span class:list={['cb-mascot', POSE_CLASS[pose], className]}>
+  {sceneSvg && (
+    <span
+      class:list={['cb-mascot__scene', scene?.front && 'cb-mascot__scene--front']}
+      style={sceneStyle}
+      set:html={sceneSvg}
+    />
+  )}
+  <Fragment set:html={svg} />
+</span>
