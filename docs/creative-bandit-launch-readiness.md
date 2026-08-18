@@ -527,7 +527,7 @@ Recommended additions, in priority order:
 - [x] **9.2** `/scan` added to the navbar (fifth item, mobile menu inherits it) and the footer Services column
 - [x] **9.2** Scan CTAs added to `/services/wordpress`, `/services/agent-ops`, `/services`, `/work` and `/thank-you`
 - [x] **9.2** `/thank-you` primary CTA repointed from `/blog` to `/scan` — it was sending people to the three filler posts queued for deletion in 2.1
-- [ ] **9.1** Add post-result "Email me this report" capture under `#scanResults`
+- [x] **9.1** Post-result "Email me this report" capture built under `#scanResults`, backed by Resend. See §11
 - [ ] **9.1** **Move scan rate limiting to shared state — BLOCKED, needs one command from you.** See below
 
 #### Rate limiting: blocked on provisioning
@@ -622,3 +622,100 @@ All figures pulled 2026-08-18 via the Ahrefs MCP API.
 | Backlinks | `site-explorer-backlinks-stats` | `recycleoldtech.com`, subdomains |
 
 **Caveats.** Web Analytics figures are first-party and authoritative, but begin May 2025 — there is no data for the first four months of the requested 18-month window because the tag did not exist. August 2026 is partial (1st–18th). Site Explorer traffic and keyword figures are Ahrefs *estimates* derived from a Google-centric model and, as §7.2 shows, understate this particular site badly; use them for trend and ranking counts, never as traffic. Channel visitor counts sum slightly above the unique-visitor total because one visitor can arrive through more than one channel within the window.
+
+---
+
+## 11. Email — Resend
+
+Added 2026-08-18. Two flows, one vendor, one API key, one entry in the privacy policy.
+
+**On "Loops":** it appears nowhere in this repo or any doc, and never has. The written plan was always **Resend** — `docs/creative-bandit-ai-readiness-scan.md` §2.4 lists it against "Report email", and §9.3 records it as "the default suggestion; nothing is chosen". Resend is also the only product in the Vercel Marketplace `messaging` category. Choosing it closes that open decision.
+
+Also closed: scan doc §9.4 asked "Is the scan gated on email? Current spec: yes, because the report is emailed." That is now decided the other way, matching what shipped — findings free and ungated on screen, email offered afterwards for a forwardable copy. §9.1 above has the reasoning.
+
+### What was built
+
+| Piece | File | Notes |
+|---|---|---|
+| Resend client | `src/lib/email/client.ts` | Lazy — `new Resend(undefined)` throws, and these import at build time |
+| Payload signing | `src/lib/email/signature.ts` | HMAC-SHA256 over `{url, findings}` |
+| Report template | `src/lib/email/reportTemplate.ts` | Table layout, light ground, HTML + plain-text |
+| Report endpoint | `src/pages/api/scan-report.ts` | Verifies signature before sending |
+| Signup endpoint | `src/pages/api/subscribe.ts` | Writes to a Resend Audience |
+| Signup UI | `src/components/SubscribeForm.astro` | Footer sitewide + blog empty state |
+| Report UI | `src/pages/scan.astro` | Under `#scanResults`, after findings |
+| Shared limiter | `src/lib/rateLimit.ts` | Extracted from `api/scan.ts`; all three routes share it |
+
+### Why the report is signed
+
+`/api/scan-report` takes findings from the browser and mails them from our domain to an address the browser also supplies. Unsigned, that is an **open relay with our sending reputation attached** — anyone could POST arbitrary text and have it arrive as a Creative Bandit report. A phishing kit, not a feature.
+
+Three ways to close it:
+
+- **Re-run the scan server-side.** Unspoofable, but doubles compute and third-party requests, and would collide with the per-target rate limit that just rejected a second scan of the same host within a minute.
+- **Persist the result, pass an id.** Correct, but no datastore is provisioned.
+- **Sign the payload.** Stateless, no extra fetches, no storage. Chosen.
+
+`/api/scan` now returns a `signature` alongside the result; the report endpoint recomputes it and refuses any mismatch. If `SCAN_REPORT_SECRET` is unset the endpoint returns 503 rather than sending something it cannot vouch for.
+
+### Setup — status
+
+Provisioned 2026-08-18. Resource `resend-email-purple-grass`, free plan (3,000/month, 100/day), connected to the `creative-bandit` project.
+
+| Step | State |
+|---|---|
+| Marketplace terms accepted | Done |
+| Integration installed + connected | Done — injects `RESEND_API_KEY`, `RESEND_EMAIL_DOMAIN` |
+| `SCAN_REPORT_SECRET` generated and set | Done — all three environments |
+| `RESEND_AUDIENCE_ID` set | Done — reuses the existing "General" audience |
+| `vercel env pull` | Done |
+| **Sending domain verified** | **NOT DONE — blocks all sending** |
+
+#### The one remaining step: DNS
+
+`creativebandit.studio` is registered in Resend but sits at `status=not_started` — no DNS records added. **Until this is done the API accepts sends and the mail silently bounces.** Nameservers are Google Cloud DNS (`ns-cloud-c*.googledomains.com`), not Vercel, so these have to be added there by hand:
+
+| Type | Name | Value | Priority |
+|---|---|---|---|
+| TXT | `resend._domainkey` | `p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXkOoMhMw0fxXFDjukL3VPY459S6HofyeYjtAW41L7znU8Onh0TBeene3CxJNFlQXcMydRfEHBU5i2lonY3YHphtboLB1o5Gsea572y+BBWh2rVTOTSgr8zVamsY02XAtGFnxM441+yD6rR0DXj6Ow7ZAk+gHfHn5br4+psyDBqQIDAQAB` | — |
+| MX | `send` | `feedback-smtp.us-east-1.amazonses.com` | 10 |
+| TXT | `send` | `v=spf1 include:amazonses.com ~all` | — |
+
+Then hit Verify in the Resend dashboard and send one real report to yourself before relying on it.
+
+**These records are also written up on their own in `docs/go-live-dns.md`**, alongside the Vercel domain cutover and a post-cutover checklist. The domain is staying parked until launch by choice, so that doc is the single place to look when it is time.
+
+### Environment variables
+
+| Var | Secret? | Source | Without it |
+|---|---|---|---|
+| `RESEND_API_KEY` | **Yes** | Marketplace install | Both endpoints 503 |
+| `RESEND_AUDIENCE_ID` | No | Resend dashboard | Signup 503s; report unaffected |
+| `SCAN_REPORT_SECRET` | **Yes** | Generate | Report 503s; scan and signup unaffected |
+
+None are `PUBLIC_` — unlike the Web3Forms key and the analytics site key, `RESEND_API_KEY` can send mail as our domain. That is why sending happens in API routes and never from the browser. Verified: no secret name appears anywhere in `dist/client`.
+
+**No CSP change needed.** Both endpoints are same-origin, so `connect-src 'self'` covers the browser side, and Resend is only ever called server-side.
+
+### Deliberately not done
+
+- **No lead-magnet PDF offer.** The "AI Automation Readiness Checklist" the old exit popup promised still does not exist. The signup asks for an email and says what will be sent — nothing more. Add the offer to `SubscribeForm.astro` and the delivery to `/api/subscribe` when the PDF is written.
+- **No welcome email on signup**, for the same reason: nothing to send yet.
+- **No success state without a 2xx.** The popup this replaces set `submitted` unconditionally and told people they had subscribed when the request had failed. Both new forms only report success on a real 2xx.
+
+### Verified by test
+
+- `subscribe` honeypot returns 200 without creating a contact; malformed address returns 400; a real address creates a contact (confirmed against the live API, then removed — the audience is back to 0).
+- `scan-report` rejects a forged report — findings rewritten to "Your account is suspended / Send bitcoin" against a genuine-looking body — with a 400, before any network call.
+- Signature unit tests at `src/lib/email/signature.test.ts`, 7 cases. Full suite: **143 tests, 8 files, all passing**.
+
+**A real bug was found and fixed in the process.** `verifyScan` compared the *string* length of the supplied signature against the expected one, then decoded both with `Buffer.from(sig, 'hex')`. But `Buffer.from` stops at the first non-hex character and returns a short buffer rather than throwing — so a 64-character signature made entirely of non-hex characters decoded to zero bytes, and `timingSafeEqual` threw `ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH`. Since `verifyScan` is called outside the endpoint's try block, that surfaced as a **500 instead of a clean 400**.
+
+Not a bypass — it failed closed and sent nothing — but it was a crash path reachable by anyone, and the original code comment claimed to have handled exactly this case while not actually doing so. Now shape-checked with `/^[0-9a-f]{64}$/i` before any decoding, with a regression test that sends that precise input.
+
+### Still open
+
+- The new endpoints inherit the **in-process rate limiter** (§9.2). `reportRecipient` caps one address at 2 reports/hour, which blunts inbox-bombing, but like the rest it resets on cold start. The Upstash swap now fixes all three routes at once, since they share `lib/rateLimit.ts`.
+- **`creativebandit.studio` is not attached to the Vercel project.** It resolves to `68.66.210.129`, which is not Vercel, and it appears in neither `vercel domains ls` nor the project's aliases — it is still parked, as the scanner doc noted back in July. Unrelated to email, but it is a launch blocker in its own right and worth handling in the same DNS sitting.
+
+> **Note on local testing.** Outbound fetch from the Astro dev server is blocked in this sandbox, so `subscribe` returns 502 locally with `Unable to fetch data`. The identical call succeeds from plain Node against the same key, so this is an environment artifact, not a code fault. Verify on a Vercel preview deployment rather than locally.

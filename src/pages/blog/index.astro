@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import SubscribeForm from '../../components/SubscribeForm.astro';
 /*
  * `Astro.glob()` was deprecated in v5 and removed in v7. `import.meta.glob`
  * is the Vite-native replacement; `eager` gives the modules themselves
@@ -80,6 +81,16 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
             <a href="/work" class="btn-secondary">See Our Work</a>
           </div>
         </div>
+      )}
+
+      {/* An empty shelf is the one place "tell me when there is something"
+          is the obvious next action, so the signup sits directly under it. */}
+      {posts.length === 0 && (
+        <SubscribeForm
+          class="mt-8 max-w-2xl"
+          heading="Hear About the First One"
+          blurb="We'll email when there is something worth reading. Notes on AI integration, WordPress and the automation work agencies are being asked for - never more than once a month."
+        />
       )}
 
       <!-- Blog Grid -->

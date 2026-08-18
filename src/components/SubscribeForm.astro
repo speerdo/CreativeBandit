@@ -1,0 +1,121 @@
+---
+/*
+ * List signup. Posts to /api/subscribe, which adds the address to a Resend
+ * Audience.
+ *
+ * Note what this deliberately does NOT say. The version that used to live in
+ * the exit popup promised an "AI Automation Readiness Checklist" PDF that has
+ * never existed, and showed a success message whether or not the request
+ * worked. Both are gone. This asks for an email, says plainly what will be
+ * sent and how often, and only claims success on a 2xx.
+ *
+ * When the checklist actually exists, this is the place to offer it - and
+ * /api/subscribe is the place to send it.
+ */
+export interface Props {
+  /** Section heading. */
+  heading?: string;
+  /** One line under it. */
+  blurb?: string;
+  class?: string;
+}
+
+const {
+  heading = 'Notes From Two People Who Ship This',
+  blurb = 'Occasional writing on AI integration, WordPress and the automation work agencies are being asked for. No sequence, no upsell ladder, and never more than once a month.',
+  class: className = '',
+} = Astro.props;
+---
+
+<form class:list={['crop-marks border border-paper/15 bg-base-100 p-8', className]} data-subscribe>
+  <p class="label-tech mb-3">The list</p>
+  <h2 class="mb-3 text-xl font-bold">{heading}</h2>
+  <p class="mb-6 text-sm text-paper-mute">{blurb}</p>
+
+  <div class="flex flex-col gap-4 sm:flex-row">
+    <label class="sr-only" data-subscribe-label>Your email address</label>
+    <input
+      type="email"
+      name="email"
+      required
+      placeholder="you@agency.com"
+      autocomplete="email"
+      data-subscribe-email
+      class="w-full flex-1 border border-paper/20 bg-base-200 px-4 py-3 text-paper transition-colors duration-200 focus:border-ink-acid focus:outline-none focus:ring-1 focus:ring-ink-acid"
+    />
+    <button type="submit" data-subscribe-submit class="btn-primary shrink-0">Subscribe</button>
+  </div>
+
+  {/* Honeypot. Hidden from people, irresistible to bots. Mirrors the field
+      the Web3Forms contact form already carries. */}
+  <input
+    type="checkbox"
+    name="botcheck"
+    tabindex="-1"
+    autocomplete="off"
+    aria-hidden="true"
+    class="hidden"
+    style="display:none"
+    data-subscribe-botcheck
+  />
+
+  <p class="mt-4 font-mono text-sm" role="status" aria-live="polite" data-subscribe-status></p>
+</form>
+
+<script>
+  /*
+   * Bound per-form rather than to a single id, so the component can appear
+   * more than once on a page without the second instance being inert.
+   */
+  document.querySelectorAll<HTMLFormElement>('[data-subscribe]').forEach((form) => {
+    const email = form.querySelector<HTMLInputElement>('[data-subscribe-email]');
+    const botcheck = form.querySelector<HTMLInputElement>('[data-subscribe-botcheck]');
+    const submit = form.querySelector<HTMLButtonElement>('[data-subscribe-submit]');
+    const status = form.querySelector<HTMLElement>('[data-subscribe-status]');
+    const label = form.querySelector<HTMLLabelElement>('[data-subscribe-label]');
+
+    // The label needs a real `for`, and ids have to be unique across
+    // instances, so they are generated rather than hardcoded.
+    if (email && label) {
+      const id = `subscribe-${Math.random().toString(36).slice(2, 9)}`;
+      email.id = id;
+      label.htmlFor = id;
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!email || !submit) return;
+
+      if (status) {
+        status.textContent = 'Subscribing...';
+        status.className = 'mt-4 font-mono text-sm text-paper-mute';
+      }
+      submit.disabled = true;
+
+      try {
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email.value, botcheck: botcheck?.checked }),
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error ?? 'That could not be saved.');
+
+        if (status) {
+          status.textContent = "You're on the list.";
+          status.className = 'mt-4 font-mono text-sm text-ink-acid';
+        }
+        form.reset();
+      } catch (error) {
+        if (status) {
+          status.textContent =
+            error instanceof Error ? error.message : 'That could not be saved.';
+          status.className = 'mt-4 font-mono text-sm text-ink-hot';
+        }
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  });
+</script>

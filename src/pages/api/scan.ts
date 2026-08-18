@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { runScan, UnreachableSiteError } from '../../lib/scanner/scan';
 import { BlockedUrlError } from '../../lib/scanner/safeFetch';
+import { signScan } from '../../lib/email/signature';
+import { LIMITS, exceeded, targetKey } from '../../lib/rateLimit';
 
 /*
  * The only server-rendered route on the site. Everything else stays
@@ -9,63 +11,16 @@ import { BlockedUrlError } from '../../lib/scanner/safeFetch';
 export const prerender = false;
 
 /*
- * Rate limiting. Spec §6.
+ * Rate limiting. Spec §6. Two independent limits, because they defend against
+ * different things - one person hammering us, versus the endpoint being used
+ * to point traffic at somebody else's site in volume. The second matters
+ * more: each scan is ~30 requests, and the cost lands on a third party who
+ * never opted in.
  *
- * Two independent limits, because they defend against different things:
- *
- *   per source  - one person hammering the endpoint, wasting our compute.
- *   per target  - the endpoint being used to point traffic at somebody
- *                 else's site in volume. A free unauthenticated scanner is
- *                 otherwise a small DDoS amplifier, and each scan is ~30
- *                 requests to the target. This one matters more: the cost
- *                 lands on a third party who never opted in.
- *
- * Still in-process, so it resets on cold start and each instance counts
- * separately. That is a real limitation and the durable answer is the WAF
- * (§2.4) - but per-target limiting was missing entirely, and the in-process
- * version stops the obvious abuse rather than nothing at all.
+ * The limiter itself now lives in lib/rateLimit.ts, shared with the report
+ * and subscribe routes, and carries the note about it still being
+ * in-process.
  */
-const WINDOW_MS = 60_000;
-const MAX_PER_SOURCE = 5;
-/*
- * Deliberately lower than the source limit. Several people legitimately
- * scanning different sites is normal; several scans of one site in a minute
- * is not something a real user does.
- */
-const MAX_PER_TARGET = 3;
-
-const sourceHits = new Map<string, number[]>();
-const targetHits = new Map<string, number[]>();
-
-function hit(store: Map<string, number[]>, key: string, max: number): boolean {
-  const now = Date.now();
-  const recent = (store.get(key) ?? []).filter((t) => now - t < WINDOW_MS);
-  recent.push(now);
-  store.set(key, recent);
-
-  // Opportunistic sweep so the map cannot grow without bound.
-  if (store.size > 500) {
-    for (const [k, times] of store) {
-      if (times.every((t) => now - t >= WINDOW_MS)) store.delete(k);
-    }
-  }
-
-  return recent.length > max;
-}
-
-/**
- * The registrable-ish host, so `a.example.com` and `b.example.com` share a
- * budget. Not a public-suffix implementation - the last two labels are close
- * enough to stop the obvious way of side-stepping a per-host limit.
- */
-function targetKey(rawUrl: string): string | null {
-  try {
-    const host = new URL(/^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`).hostname;
-    return host.split('.').slice(-2).join('.').toLowerCase();
-  } catch {
-    return null;
-  }
-}
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -76,7 +31,7 @@ function json(body: unknown, status = 200): Response {
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const ip = clientAddress ?? 'unknown';
-  if (hit(sourceHits, ip, MAX_PER_SOURCE)) {
+  if (exceeded(LIMITS.scanSource, ip)) {
     return json({ error: 'Too many scans from this address. Try again in a minute.' }, 429);
   }
 
@@ -96,7 +51,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
    * nothing. The limit protects a third party, not us.
    */
   const target = targetKey(payload.url);
-  if (target && hit(targetHits, target, MAX_PER_TARGET)) {
+  if (target && exceeded(LIMITS.scanTarget, target)) {
     return json(
       { error: 'That site has been scanned several times just now. Give it a minute.' },
       429
@@ -114,7 +69,14 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   try {
     const result = await runScan(payload.url);
-    return json(result);
+    /*
+     * Signed so /api/scan-report can email these findings without trusting
+     * the browser not to have rewritten them on the way back. Null when no
+     * secret is set, in which case the report endpoint refuses to send
+     * rather than sending something it cannot vouch for. See
+     * lib/email/signature.ts for why this beats re-scanning or persisting.
+     */
+    return json({ ...result, signature: signScan(result.url, result.findings) });
   } catch (error) {
     if (error instanceof BlockedUrlError || error instanceof UnreachableSiteError) {
       return json({ error: error.message }, 400);
