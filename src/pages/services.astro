@@ -27,56 +27,64 @@ const services = [
     description: 'Intelligent automation systems using OpenAI, Anthropic, and Google Gemini APIs to reduce manual work by 60-90%.',
     icon: 'ai',
     link: '#ai-integration',
-    id: 'ai-integration'
+    id: 'ai-integration',
+    stack: ['OpenAI', 'Anthropic', 'Gemini', 'Python', 'Node.js', 'Postgres']
   },
   {
     title: 'Web Development',
     description: 'Modern, performant web applications built with React, Vue.js, and TypeScript. Optimized for speed and SEO.',
     icon: 'web',
     link: '#web-development',
-    id: 'web-development'
+    id: 'web-development',
+    stack: ['React', 'Vue.js', 'TypeScript', 'Next.js', 'Nuxt', 'Astro']
   },
   {
     title: 'E-commerce Solutions',
     description: 'Custom online stores with automated affiliate marketing, SEO optimization, and payment processing.',
     icon: 'ecommerce',
     link: '#ecommerce',
-    id: 'ecommerce'
+    id: 'ecommerce',
+    stack: ['Shopify', 'WooCommerce', 'Stripe', 'Supabase', 'Vercel']
   },
   {
     title: 'Design & Motion',
     description: 'Brand and UI design plus motion design: explainer animations, product motion, and social/marketing motion. Led by Katlyn.',
     icon: 'design',
     link: '#design',
-    id: 'design'
+    id: 'design',
+    stack: ['Figma', 'After Effects', 'Illustrator', 'Lottie', 'Rive']
   },
   {
     title: 'Healthcare Technology',
     description: 'HIPAA-compliant systems for healthcare providers. Secure patient data management and compliance automation.',
     icon: 'app',
     link: '#healthcare',
-    id: 'healthcare'
+    id: 'healthcare',
+    stack: ['HIPAA controls', 'AWS', 'Postgres', 'Audit logging', 'SSO']
   },
   {
     title: 'Workflow Automation',
     description: 'Custom automation pipelines that eliminate manual tasks, reduce errors, and scale your operations.',
     icon: 'web',
     link: '#automation',
-    id: 'automation'
+    id: 'automation',
+    stack: ['Node.js', 'Python', 'Postgres', 'Webhooks', 'Cron', 'Queues']
   },
   {
     title: 'Agent Ops',
     description: 'Automated security, maintenance, and compliance monitoring for WordPress agencies and their clients. Currently onboarding pilot agencies.',
     icon: 'support',
     link: '/services/agent-ops',
-    id: 'agent-ops'
+    id: 'agent-ops',
+    stack: ['WP-CLI', 'WP Engine', 'Uptime monitoring', 'Automated backups']
   },
   {
     title: 'WordPress Development',
     description: 'Custom WordPress builds, headless setups, theme and plugin work, and managed care for agencies and business owners.',
     icon: 'support',
     link: '/services/wordpress',
-    id: 'wordpress'
+    id: 'wordpress',
+    stack: ['WordPress', 'WP-CLI', 'ACF', 'Headless WP', 'WP Engine']
   }
 ];
 
@@ -369,17 +377,48 @@ const serviceSchema = services.map((s) =>
             <a href="/contact" class="btn-primary">Discuss Your Project</a>
           </div>
           
+          {/*
+            A typographic spec plate, not a photograph. Six generic Pexels
+            stock shots used to sit here - hotlinked, unsized, and exactly the
+            "creative team collaborating" filler that ProjectCard.astro's own
+            comment explains we stopped using once the work was real.
+
+            Replacing them with the stack is a straight upgrade on three
+            counts: it is information rather than decoration, an agency
+            evaluating a subcontractor genuinely wants to know what we build
+            in, and it carries the house style through crop marks, mono labels
+            and ink accents instead of through a recoloured photo. It also
+            costs no bytes and no third-party request.
+          */}
           <div class={`${index % 2 === 0 ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}>
-            <img 
-              src={service.id === 'web-development' ? 'https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  service.id === 'design' ? 'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  service.id === 'ai-integration' ? 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  service.id === 'app-development' ? 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  service.id === 'ecommerce' ? 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  'https://images.pexels.com/photos/3182781/pexels-photo-3182781.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'}
-              alt={service.title}
-              class="w-full h-auto shadow-xl"
-            />
+            <div class="crop-marks border border-paper/15 bg-base-100 p-8 lg:p-10">
+              <div class="mb-8 flex items-start justify-between gap-6">
+                <div>
+                  <p class="label-tech mb-3">What we build it in</p>
+                  <p class="font-display text-2xl font-extrabold uppercase leading-none text-paper" style="font-stretch: 125%;">
+                    {service.title}
+                  </p>
+                </div>
+                {/* Decorative: the heading beside it already names the service. */}
+                <span
+                  class="h-2 w-16 shrink-0 self-center"
+                  class:list={[index % 3 === 0 ? 'bg-ink-hot' : index % 3 === 1 ? 'bg-ink-acid' : 'bg-ink-cold']}
+                  aria-hidden="true"
+                ></span>
+              </div>
+
+              <ul class="flex flex-wrap gap-2">
+                {service.stack.map((tool) => (
+                  <li class="border border-paper/20 px-3 py-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper-mute">
+                    {tool}
+                  </li>
+                ))}
+              </ul>
+
+              <p class="mt-8 border-t border-paper/15 pt-6 text-sm text-paper-mute">
+                Not an exhaustive list. We pick the stack around the problem and the team who has to maintain it after we hand it over.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -412,9 +451,10 @@ const serviceSchema = services.map((s) =>
     <div class="container mx-auto relative z-10">
       <div class="max-w-3xl mx-auto text-center">
         <h2 class="mb-6">Ready to <span class="plate-type">Get Started</span>?</h2>
-        <p class="text-paper-mute text-lg mb-8">Tell us about your project and we'll walk through how these services fit your goals.</p>
+        <p class="text-paper-mute text-lg mb-8">Tell us about your project and we'll walk through how these services fit your goals. Or skip the conversation entirely for now and run the free scan against a site you already manage.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Get In Touch</a>
+          <a href="/scan" class="btn-secondary">Run a Free Scan</a>
           <a href="/work" class="btn-secondary">View Our Work</a>
         </div>
       </div>

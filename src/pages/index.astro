@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/SpaceSceneHero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import TestimonialCard from '../components/TestimonialCard.astro';
 import AnimatedStats from '../components/AnimatedStats';
 import Mascot from '../components/Mascot.astro';
 import { localBusiness } from '../lib/schema';
@@ -35,7 +34,7 @@ const services = [
   },
   {
     title: 'E-commerce Solutions',
-    description: 'Custom online stores with automated affiliate marketing, SEO optimization, and payment processing achieving 4x industry conversion rates.',
+    description: 'Custom online stores with automated affiliate marketing, SEO optimization, and payment processing, built on the same pipeline that runs our own properties.',
     icon: 'ecommerce',
     link: '/services#ecommerce'
   }
@@ -61,7 +60,7 @@ const projects = [
     category: 'E-commerce / SEO',
     image: '/images/recycleoldtech_desktop.webp',
     link: 'https://recycleoldtech.com',
-    description: 'US e-waste recycling directory with an automated SEO pipeline behind an 8.08% affiliate conversion rate.'
+    description: 'US e-waste recycling directory whose automated SEO pipeline took it from zero to 85 top-ten rankings in fourteen months.'
   },
   {
     title: 'EdReports Platform Migration',
@@ -260,11 +259,11 @@ const projects = [
           <ul class="space-y-4">
             <li class="flex items-start">
               <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-paper-mute">DowntownDry: 100% accuracy venue verification using Gemini AI + Google APIs</span>
+              <span class="text-paper-mute">DowntownDry: 97% accuracy venue verification using Gemini AI + Google APIs</span>
             </li>
             <li class="flex items-start">
               <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
-              <span class="text-paper-mute">RecycleOldTech: 1,000+ monthly referrals through automated content pipeline</span>
+              <span class="text-paper-mute">RecycleOldTech: 10,000+ monthly visitors from an automated content pipeline</span>
             </li>
             <li class="flex items-start">
               <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
@@ -302,33 +301,7 @@ const projects = [
     </div>
   </section>
 
-  <!-- TODO: re-add lead-magnet checklist section once a real ConvertKit form + PDF exist -->
-
-  <!-- Testimonials Section -->
-  <section class="py-16 md:py-20 bg-base-200 relative overflow-hidden">
-    <div class="container mx-auto relative z-10">
-      <div class="max-w-3xl mb-16">
-        <p class="label-tech mb-4">What Clients Say</p>
-        <h2 class="mb-6">Trusted By <span class="plate-type">Real Clients</span></h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        {/* TODO: replace with real client quotes */}
-        <TestimonialCard
-          quote="[TODO: gather a real client quote]"
-          author="[TODO: name]"
-          position="[TODO: title]"
-          company="[TODO: company]"
-        />
-        <TestimonialCard
-          quote="[TODO: gather a real client quote]"
-          author="[TODO: name]"
-          position="[TODO: title]"
-          company="[TODO: company]"
-        />
-      </div>
-    </div>
-  </section>
+  {/* TODO: re-add lead-magnet checklist section once a real ConvertKit form + PDF exist */}
 
   <!-- Projects Section -->
   <section class="section bg-base-200">
@@ -407,7 +380,7 @@ const projects = [
 
             <div class="border-l-4 border-ink-hot pl-4">
               <h4 class="font-bold text-lg mb-2">AI Automation Expertise</h4>
-              <p class="text-paper-mute text-sm">Proven results with OpenAI, Anthropic, and Google Gemini APIs. 100% accuracy verification, 90% time savings.</p>
+              <p class="text-paper-mute text-sm">Proven results with OpenAI, Anthropic, and Google Gemini APIs. 97% accuracy verification, 90% time savings.</p>
             </div>
 
             <div class="border-l-4 border-ink-hot pl-4">

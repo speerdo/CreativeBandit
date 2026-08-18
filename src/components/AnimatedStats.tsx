@@ -9,13 +9,18 @@ interface Stat {
 
 const stats: Stat[] = [
   {
-    value: 8.08,
-    suffix: "%",
-    label: "Affiliate conversion rate, 4x the industry average",
+    // Was "8.08% affiliate conversion, 4x the industry average". That number
+    // lives in Amazon Associates and nothing we can show a reader
+    // substantiates it, so it is out until someone pulls and dates it.
+    // This one is checkable in Ahrefs: RecycleOldTech went from 0 to 85
+    // top-ten US rankings between June 2025 and August 2026.
+    value: 85,
+    suffix: "",
+    label: "Top-ten rankings earned by our own SEO pipeline in 14 months",
     color: "#FFE800",
   },
   {
-    value: 100,
+    value: 97,
     suffix: "%",
     label: "AI verification accuracy with Gemini-powered validation",
     color: "#E8451F",

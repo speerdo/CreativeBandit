@@ -20,7 +20,6 @@
 
 - [About](https://creativebandit.studio/about): who we are and how we work.
 - [Contact](https://creativebandit.studio/contact): how to start a project.
-- [Blog](https://creativebandit.studio/blog): writing on AI integration, web development, and design systems.
 
 ## Facts
 
