@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import TeamMember from '../components/TeamMember.astro';
+import Mascot from '../components/Mascot.astro';
 import { person } from '../lib/schema';
 
 const team = [
@@ -58,7 +59,10 @@ const stats = [
   { value: `${yearsExperience}+`, label: "Years Experience" },
   { value: "20+", label: "Projects Completed" },
   { value: "10+", label: "Clients Served" },
-  { value: "4x", label: "Industry Conversion Avg" }
+  // Was "4x / Industry Conversion Avg" - the affiliate-conversion claim again,
+  // which nothing we can show a reader substantiates. Replaced with the
+  // first-party traffic figure for our own properties.
+  { value: "10k+", label: "Monthly Visitors, Own Sites" }
 ];
 
 const approach = [
@@ -130,12 +134,18 @@ const teamSchema = team.map((member) =>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
           <div class="relative">
-            <div class="aspect-w-4 aspect-h-3">
-              <img
-                src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                alt="Creative team collaborating on digital innovation"
-                class="object-cover w-full h-full"
-              />
+            {/*
+              Was a Pexels stock shot captioned "creative team collaborating on
+              digital innovation" - a stock photo of strangers standing in for a
+              two-person studio, on the page whose whole job is saying who those
+              two people actually are. The mascot is commissioned work in the
+              house style, served locally, and at least belongs to us.
+
+              The real portraits are further down this page in the team cards,
+              so reusing them here would just repeat them.
+            */}
+            <div class="flex items-center justify-center bg-base-100 border border-paper/15 p-10 lg:p-16">
+              <Mascot pose="batting" class="w-full max-w-[22rem]" />
             </div>
             <div class="absolute -bottom-6 -right-6 bg-base-100 p-6 shadow-xl">
               <div class="grid grid-cols-2 gap-6">
@@ -163,10 +173,19 @@ const teamSchema = team.map((member) =>
             With 8+ years of full-stack development experience, we've built production applications for Fortune 500 companies including Eli Lilly and Salesforce, as well as mission-driven startups in healthcare and education. Our background spans pharmaceutical web applications, HIPAA-compliant healthcare systems, and SaaS platforms serving thousands of users.
           </p>
           <p class="mb-6 text-paper-mute">
-            Today, we focus on AI-powered automation systems using OpenAI, Anthropic, and Google Gemini APIs. Recent projects include AI verification systems achieving 97% accuracy, automated marketing pipelines processing 1,000+ monthly transactions, and healthcare compliance automation for Medicare billing.
+            Today, we focus on AI-powered automation systems using OpenAI, Anthropic, and Google Gemini APIs. Recent projects include AI verification systems achieving 97% accuracy, automated content and SEO pipelines, and healthcare compliance automation for Medicare billing.
           </p>
+          {/*
+            The affiliate-conversion and monthly-transaction figures that used
+            to close these two paragraphs came from Amazon Associates and an ad
+            network, and nothing we can point a reader at substantiates them.
+            They were pulled from /work in the launch pass for that reason, so
+            they cannot survive here either. Replaced with the traffic and
+            ranking numbers, which are first-party and checkable - see
+            docs/creative-bandit-launch-readiness.md §7.
+          */}
           <p class="mb-6 text-paper-mute">
-            Beyond client work, we build and operate our own web properties including DowntownDry (a nationwide alcohol-free venue directory) and RecycleOldTech.com (an electronics recycling directory with automated affiliate systems achieving 8.08% conversion, 4x industry average).
+            Beyond client work, we build and operate our own web properties: DowntownDry, a nationwide alcohol-free venue directory, and RecycleOldTech.com, an electronics recycling directory that an automated content pipeline took from zero to 85 top-ten rankings and over 10,000 visitors a month in fourteen months.
           </p>
           <div class="bg-base-200 p-6">
             <p class="text-ink-hot font-semibold mb-2">Our Focus</p>
@@ -251,7 +270,7 @@ const teamSchema = team.map((member) =>
           <div class="space-y-8">
             <div>
               <h3 class="text-xl font-bold mb-3">Proven Results</h3>
-              <p class="text-paper-mute">8.08% affiliate conversion (4x industry average), 40% page load improvement, 100% AI verification accuracy. Real metrics from real projects.</p>
+              <p class="text-paper-mute">85 top-ten rankings on a property we built and run, 40% page load improvement at EdReports, 97% AI verification accuracy at DowntownDry. Real metrics from real projects.</p>
             </div>
             <div>
               <h3 class="text-xl font-bold mb-3">Healthcare Compliance</h3>

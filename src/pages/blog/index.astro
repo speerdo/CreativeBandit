@@ -28,26 +28,62 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
 
   <section class="pb-24">
     <div class="container mx-auto">
-      <!-- Categories -->
-      <div class="flex flex-wrap gap-2 mb-12">
-        <button 
-          class="chip is-active focus:outline-none category-btn"
-          data-category="all"
-        >
-          All
-        </button>
-        {categories.map(category => (
-          <button 
-            class="chip focus:outline-none category-btn"
-            data-category={category}
+      {/*
+        The filter row is meaningless with nothing to filter, and a lone "All"
+        chip above an empty grid reads as a broken control rather than an
+        empty state. Both it and the grid stay out until there is a post.
+      */}
+      {/* Categories */}
+      {posts.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-12">
+          <button
+            class="chip is-active focus:outline-none category-btn"
+            data-category="all"
           >
-            {category}
+            All
           </button>
-        ))}
-      </div>
+          {categories.map(category => (
+            <button
+              class="chip focus:outline-none category-btn"
+              data-category={category}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/*
+        Empty state. Three filler posts dated March 2024 used to live here -
+        generic "AI is changing how we build" copy under an 8-years-Fortune-500
+        byline, which cost more credibility than an empty shelf does. They were
+        removed in the launch pass; see
+        docs/creative-bandit-launch-readiness.md §2.1.
+
+        The page and the feed stay wired up so the first real post is a
+        drop-in. /blog is excluded from the sitemap while this is the state of
+        it - our own scanner would flag an indexed page with no content, and it
+        would be right.
+      */}
+      {posts.length === 0 && (
+        <div class="crop-marks max-w-2xl border border-paper/15 bg-base-100 p-10">
+          <p class="label-tech mb-4">Nothing published yet</p>
+          <h2 class="mb-4 text-2xl font-bold">We'd Rather Post Nothing Than Post Filler</h2>
+          <p class="text-paper-mute mb-6">
+            This is where writing on AI integration, WordPress and design systems will land. There is none of it yet, and we would rather say so than pad the page out with the generic explainers every agency site already has.
+          </p>
+          <p class="text-paper-mute mb-8">
+            In the meantime, the most useful thing we have is not an article. Point the scanner at a site you manage and it will tell you something specific about it in a few seconds.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="/scan" class="btn-primary">Run a Free Scan</a>
+            <a href="/work" class="btn-secondary">See Our Work</a>
+          </div>
+        </div>
+      )}
 
       <!-- Blog Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" hidden={posts.length === 0}>
         {posts.map(post => (
           <article class="card blog-post" data-category={post.frontmatter.category}>
             <a href={post.url} class="block">
