@@ -1,0 +1,79 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { namespaceSvg, decorateSvgRoot, stripUnreferencedIds } from '../lib/svg';
+
+export interface Props {
+  /** Sizing/positioning utilities for the wrapper. */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+/*
+ * Placeholder artwork, built to be drawn over — see the header comment in the
+ * SVG for what is schematic and what is load-bearing.
+ *
+ * Inlined rather than <img> because the hover lifts a group inside the
+ * artwork, which CSS cannot reach through an <img>.
+ */
+const file = path.join(process.cwd(), 'assets-src', 'scenes', 'scene-shop.svg');
+let svg = fs.readFileSync(file, 'utf8');
+svg = namespaceSvg(svg, 'cb-shop');
+
+/*
+ * Promote the artwork's animation hooks from ids to classes.
+ *
+ * Illustrator names groups with ids, and that is what comes back from a
+ * re-export. Two things then go wrong on their own:
+ *
+ *   1. stripUnreferencedIds removes any id nothing points at via url(#) or
+ *      href - and a group that exists purely to be animated is exactly that,
+ *      so the hook is deleted on its way to the page;
+ *   2. even if it survived, an id is a single-use handle that the next export
+ *      may rename, while the stylesheet wants something stable.
+ *
+ * So each known id gets the matching class added here, and the id is then free
+ * to be stripped. Re-exporting keeps working as long as the group ids below
+ * survive - and if one does not, the build fails rather than quietly shipping
+ * a panel whose hover does nothing.
+ */
+const HOOKS: Record<string, string> = {
+  'cb-shop-arms': 'cb-shop__arms',
+  'cb-shop-orb': 'cb-shop__orb',
+  // Illustrator's own name for the cat, kept as it comes out of the file.
+  cat_bandit: 'cb-shop__cat',
+};
+
+for (const [id, cls] of Object.entries(HOOKS)) {
+  /*
+   * Two spellings to try. namespaceSvg has already run, and it prefixes every
+   * id that does not already carry the prefix - so `cb-shop-arms` comes
+   * through untouched while `cat_bandit` is now `cb-shop-cat_bandit`. Rather
+   * than encode that asymmetry in the map above, look for both.
+   */
+  const candidates = [id, `cb-shop-${id}`];
+  const tag = candidates
+    .map((name) => new RegExp(`<g([^>]*\\sid="${name}")([^>]*)>`))
+    .find((re) => re.test(svg));
+
+  if (!tag) {
+    throw new Error(
+      `ShopScene: the artwork has no <g> with id "${id}", which is what the ` +
+        `"${cls}" animation hangs off. It has been re-exported without that ` +
+        `group - restore the id, or update HOOKS in ShopScene.astro.`
+    );
+  }
+
+  svg = svg.replace(tag, (full: string) =>
+    / class="/.test(full)
+      ? full.replace(/ class="/, ` class="${cls} `)
+      : full.replace('<g', `<g class="${cls}"`)
+  );
+}
+
+svg = stripUnreferencedIds(svg);
+svg = decorateSvgRoot(svg);
+---
+
+<div class:list={['cb-shop', className]} set:html={svg} />

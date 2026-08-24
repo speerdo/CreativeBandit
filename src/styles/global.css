@@ -56,12 +56,37 @@
   --font-heading: 'Archivo', 'Archivo Expanded', system-ui, sans-serif;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, monospace;
+  /* Poster face, h1/h2 only. League Gothic is a single-weight condensed
+     grotesque — the saloon-poster half of the brief, where Archivo expanded
+     covers the technical half. Deliberately NOT --font-display: h3 and below
+     sit inside body copy, and condensed caps at that size stop being
+     readable. Self-hosted from /fonts (see the @font-face below). */
+  --font-poster: 'League Gothic', 'Archivo Narrow', system-ui, sans-serif;
 
   /* --- motion ------------------------------------------------------------ */
   /* Print misfeed: plates jolt apart, then resettle. Stepped rather than
      eased, because smooth motion here reads as a wobble instead of a
      mechanical misfeed. */
   --animate-plate-jitter: plate-jitter 320ms steps(3, end) 1;
+}
+
+/*
+ * League Gothic, self-hosted. The other three cuts (italic, condensed,
+ * condensed-italic) stay in assets-src/fonts/ unshipped — h1/h2 are the only
+ * consumers and neither needs them, so loading them would be 50 KB of dead
+ * weight on every page.
+ *
+ * Only .woff was supplied, not .woff2. At 16 KB that is not worth chasing,
+ * but if the family ever grows here, convert first.
+ */
+@font-face {
+  font-family: 'League Gothic';
+  src: url('/fonts/LeagueGothic-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  /* swap, not optional: the headline is the page's whole first impression,
+     so it is worth a reflow to actually get the poster face. */
+  font-display: swap;
 }
 
 /* Referenced by --animate-plate-jitter above. Keyframes live outside @theme;
@@ -142,12 +167,51 @@
     text-transform: uppercase;
   }
 
+  /*
+   * League Gothic takes the two loudest levels. Three things from the rule
+   * above have to be undone rather than inherited:
+   *
+   *  - font-stretch: Archivo carries a real width axis and 125% widens it.
+   *    League Gothic has no such axis, so the same declaration asks the
+   *    browser to synthesise the stretch — which on a face this condensed
+   *    reads as a smeared fake-wide, not as poster type. Back to normal.
+   *  - letter-spacing: -0.02em is tuned for expanded caps with room to give.
+   *    Condensed caps are already tight and start colliding; a little
+   *    positive tracking is what makes them legible at h1 size.
+   *  - line-height: League Gothic is a tall face with short descenders, so
+   *    0.95 clips. 1.0 sits it correctly without opening the stack up.
+   */
+  h1,
+  h2 {
+    font-family: var(--font-poster);
+    font-stretch: normal;
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+
+  /*
+   * h1 and h2 run about 10pt (13.3px at 96dpi) larger than the rest of the
+   * scale would suggest, and that is a correction rather than a preference.
+   *
+   * They are the only levels set in League Gothic, which is a condensed face:
+   * at a given font-size it occupies far less width than the Archivo used
+   * everywhere else, so it reads visually smaller than its nominal size. The
+   * bump buys back that difference and puts the two faces on the same
+   * perceived footing.
+   *
+   * Sizes are stated in rem rather than snapped to the nearest Tailwind step,
+   * because the standard scale has no rung near the top of this range - the
+   * jump from text-7xl to text-8xl is 24px, nearly twice the correction.
+   *
+   *   h1  48/60/72  ->  61/73/85
+   *   h2  30/48     ->  43/61
+   */
   h1 {
-    @apply text-5xl md:text-6xl lg:text-7xl;
+    @apply text-[3.83rem] md:text-[4.58rem] lg:text-[5.33rem];
   }
 
   h2 {
-    @apply text-3xl md:text-5xl;
+    @apply text-[2.71rem] md:text-[3.83rem];
   }
 
   h3 {
@@ -500,6 +564,7 @@
    * sticker rather than as ground.
    */
   .cb-mascot--pistols,
+  .cb-mascot--raised-arm,
   .cb-mascot--batting {
     position: relative;
     /* Keeps the negative z-index below inside this box, so the shadow cannot
@@ -508,6 +573,7 @@
   }
 
   .cb-mascot--pistols::before,
+  .cb-mascot--raised-arm::before,
   .cb-mascot--batting::before {
     content: '';
     position: absolute;
@@ -522,7 +588,10 @@
     pointer-events: none;
   }
 
-  .cb-mascot--pistols::before {
+  /* Same stance as pistols - it is the same cat with one arm up - so it
+     takes the same contact patch. */
+  .cb-mascot--pistols::before,
+  .cb-mascot--raised-arm::before {
     left: 11%;
     width: 78%;
   }
@@ -589,6 +658,27 @@
     animation: cb-tail-sway 1.15s ease-in-out infinite;
   }
 
+  /*
+   * The bandit cursor, the thing the batting cat swipes at. Attached via
+   * SCENERY in Mascot.astro.
+   *
+   * The artwork is a pixel-drawn arrow with no fills of its own, so the ink
+   * is set here — bone, which is the same weight the cat's own body carries,
+   * so it reads as part of the same drawing rather than as a UI element that
+   * wandered in.
+   */
+  .cb-mascot__scene--cursor svg path {
+    fill: var(--color-paper);
+  }
+
+  .cb-mascot__scene--cursor {
+    /* Sits back at rest so it reads as scenery, then commits on hover. */
+    opacity: 0.75;
+    transition:
+      opacity 380ms ease,
+      transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   /* --- batting: leaning in, paw coming down ---------------------------- */
   .cb-mascot--batting svg {
     transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -621,35 +711,47 @@
   }
 
   /*
-   * The saucer ducks the swipe on every pass. Same period as the arm so the
-   * two stay locked, and it peaks just after the paw does - it is reacting,
-   * not moving in step. The paw arrives from its lower left, so it breaks up
-   * and to the right and banks away.
+   * The saucer is out of the drawing: the cat swipes at the bandit cursor
+   * now, which SCENERY in Mascot.astro drops into the exact box the saucer
+   * used to occupy.
+   *
+   * Hidden rather than deleted. The artwork still contains it and PARTS still
+   * maps and paint-checks it, so the build keeps verifying those indices and
+   * bringing the saucer back is this one rule plus its two animations below.
+   * Stripping it from the part map instead would leave the elements on screen
+   * with nothing tagged to hide them.
    */
   .cb-mascot--batting [data-cb='ufo'] {
-    transform-box: view-box;
-    transform-origin: 358px 101px;
-  }
-
-  .cb-mascot--batting:hover [data-cb='ufo'] {
-    animation: cb-dodge 1.2s ease-in-out infinite;
+    display: none;
   }
 
   /*
-   * The dodge alone is locked to the arm, so the saucer ducked on the same
-   * beat every pass and read as clockwork. A second, longer wander rides on
-   * top of it: the five saucer elements are given the group's origin so they
-   * transform as one body, then drift on a path with no symmetry to it. At
-   * 2.9s against the dodge's 1.2s the two only realign every ~17s, so the
-   * flight never resolves into a loop you can count.
+   * The cursor ducks the swipe on every pass, on the same period as the arm
+   * so the two stay locked, peaking just after the paw does - it is reacting,
+   * not moving in step. A second, longer wander rides on top of it, on the
+   * inner <svg> because one element cannot carry two transforms. At 2.9s
+   * against the dodge's 1.2s the two only realign every ~17s, so the flight
+   * never resolves into a loop you can count.
+   *
+   * These use their own percentage-based keyframes rather than the saucer's
+   * cb-dodge/cb-ufo-weave. Those are written in px against the artwork's
+   * 432.8-unit viewBox, and a scene is a CSS-positioned box rendering at
+   * ~44 real px - the same numbers there would throw the cursor clean off
+   * the canvas. Percentages are relative to the cursor's own box, so they
+   * hold at any size the mascot is placed at.
    */
-  .cb-mascot--batting [data-cb-drift='ufo'] {
-    transform-box: view-box;
-    transform-origin: 358px 101px;
+  .cb-mascot--batting .cb-mascot__scene--cursor,
+  .cb-mascot--batting .cb-mascot__scene--cursor svg {
+    transform-origin: center;
   }
 
-  .cb-mascot--batting:hover [data-cb-drift='ufo'] {
-    animation: cb-ufo-weave 2.9s ease-in-out infinite;
+  .cb-mascot--batting:hover .cb-mascot__scene--cursor {
+    opacity: 1;
+    animation: cb-cursor-dodge 1.2s ease-in-out infinite;
+  }
+
+  .cb-mascot--batting:hover .cb-mascot__scene--cursor svg {
+    animation: cb-cursor-weave 2.9s ease-in-out infinite;
   }
 
   .cb-mascot--batting:hover [data-cb='spark'] {
@@ -662,13 +764,13 @@
    * artwork, which is 60.7% / 76.1% of the overlay's own box - so it flares
    * outward from the cat rather than growing from the corner of a rectangle.
    */
-  .cb-mascot--batting .cb-mascot__scene {
+  .cb-mascot--batting .cb-mascot__scene--burst {
     transform-origin: 60.7% 76.1%;
     opacity: 0.5;
     transform: scale(0.94);
   }
 
-  .cb-mascot--batting:hover .cb-mascot__scene {
+  .cb-mascot--batting:hover .cb-mascot__scene--burst {
     animation: cb-alert 1.2s ease-in-out infinite;
   }
 
@@ -854,7 +956,318 @@
   }
 }
 
-/* Out on the swipe, back on the recovery - one pass per cycle. */
+/*
+ * The high five: crouch, leap, contact, land.
+ *
+ * All four keyframe sets below share the 1.25s period and the same beat
+ * positions - crouch at 16%, peak and contact at 44%, hold to 56%, down by
+ * 78%. That shared grid is what puts both paws in the same place at the same
+ * instant; move a beat in one and the pair stops meeting.
+ */
+@keyframes cb-duo-jump {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  16% {
+    transform: translateY(7px) scaleY(0.93);
+  }
+  44% {
+    transform: translateY(-30px) scaleY(1.05);
+  }
+  56% {
+    transform: translateY(-26px) scaleY(1);
+  }
+  78% {
+    transform: translateY(4px) scaleY(0.96);
+  }
+}
+
+/*
+ * A saucer taking a hit: a hard flash, then it is gone.
+ *
+ * Deliberately does NOT animate `transform`. The script positions each craft
+ * through an inline transform, and an animation naming that property would
+ * take ownership of it for the duration - snapping the saucer to the origin
+ * at the exact moment it is struck. Opacity and filter only.
+ */
+@keyframes cb-shooter-hit {
+  0% {
+    opacity: 1;
+    filter: none;
+  }
+  30% {
+    opacity: 1;
+    filter: brightness(3.4) saturate(0.2);
+  }
+  100% {
+    opacity: 0;
+    filter: brightness(3.4) saturate(0.2);
+  }
+}
+
+/*
+ * The lean. Each cat tips toward the other about its inner boot, which is what
+ * lets the paws meet while the bodies stay 58px apart on the ground.
+ *
+ * 10deg is solved, not chosen. The raised paw sits 47.7 across and 290.2 up
+ * from that boot, so rotating by t carries it inward by
+ * 290.2*sin(t) - 47.7*(1-cos(t)) artwork units; at 10deg that is 7.42 panel
+ * units per cat, and the two paws are 14.62 apart. Two cats closing 7.42 each
+ * meet almost exactly.
+ *
+ * It is animated rather than held because the lean lifts the OUTER boot about
+ * 5% of the panel's height off the ground. Standing still that reads as a
+ * cat falling over; arriving at the top of a leap, when both cats are already
+ * airborne, it reads as leaning into the high five.
+ *
+ * Shares the jump's beat grid - crouch 16%, contact 44%, hold 56%, down 78%.
+ */
+@keyframes cb-duo-lean {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  /* Rocks fractionally away on the crouch, so the throw has somewhere to come
+     from. */
+  16% {
+    transform: rotate(-2deg);
+  }
+  44% {
+    transform: rotate(10deg);
+  }
+  56% {
+    transform: rotate(9deg);
+  }
+  78% {
+    transform: rotate(1.5deg);
+  }
+}
+
+/*
+ * The pose cross-fade. Exact complements, both stepped, so exactly one cat is
+ * ever visible - no frame shows two.
+ *
+ * The beats match the jump: the swap happens at 32%, on the way up and before
+ * contact at 44%, and hands back at 68% as the cat drops. Swapping at the
+ * apex itself would read as a glitch at the moment the eye is on the paws.
+ */
+@keyframes cb-duo-pose-low {
+  0%,
+  31.9% {
+    opacity: 1;
+  }
+  32%,
+  67.9% {
+    opacity: 0;
+  }
+  68%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes cb-duo-pose-high {
+  0%,
+  31.9% {
+    opacity: 0;
+  }
+  32%,
+  67.9% {
+    opacity: 1;
+  }
+  68%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The outer arm, counterweighting the throw. */
+@keyframes cb-duo-arm-outer {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  44% {
+    transform: rotate(24deg);
+  }
+  78% {
+    transform: rotate(6deg);
+  }
+}
+
+/* Struck on contact and gone almost immediately - a hit, not a glow. */
+@keyframes cb-duo-clap {
+  0%,
+  40% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  46% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  62% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+/*
+ * The orb drifting in the shopkeeper's hands once raised. Small and slow -
+ * it is a held object settling, not a floating one.
+ */
+@keyframes cb-shop-orb-bob {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(0, -4px) rotate(3deg);
+  }
+}
+
+/*
+ * The cursor's four-beat dart, and the paw's chase of it.
+ *
+ * FIRST PASS - deliberately fixed rather than random, so the motion can be
+ * judged on its own before randomness is layered on. The two keyframe sets
+ * share a beat grid: each position is reached at the same percentage in both,
+ * which is what lets a single animation-delay on the paw produce a clean lag
+ * instead of drift.
+ *
+ * The cursor animation is stepped (`steps(1, end)`), so it DARTS - it is at
+ * one position, then it is at the next, with nothing in between. Interpolating
+ * would read as a cursor being dragged. The paw, by contrast, is eased with
+ * overshoot, because a paw does travel.
+ *
+ * Percentages are of the panel - see .cb-swat__cursor for why the wrapper is
+ * panel-sized.
+ *
+ * The two sets are LINKED, and neither can be edited alone. With the cat
+ * cropped as .cb-swat__cat sets it, the shoulder lands at (63.5, 47) of a
+ * 100x75 panel and the paw rests 56.1deg up from it; each rotation below is
+ * the angle from that shoulder to the matching cursor stop, minus that rest
+ * angle. Move a stop and its rotation has to be re-derived or the paw swings
+ * at nothing.
+ *
+ * The stops are all up and to the RIGHT of the shoulder because that is the
+ * only arc the swiping arm can reach. Earlier positions to its left needed
+ * rotations past -75deg, which folds the arm back over the cat.
+ */
+@keyframes cb-swat-cursor {
+  0%,
+  16% {
+    transform: translate(80%, 16%);
+  }
+  24%,
+  40% {
+    transform: translate(62%, 6%);
+  }
+  48%,
+  64% {
+    transform: translate(92%, 42%);
+  }
+  72%,
+  88% {
+    transform: translate(70%, 32%);
+  }
+  100% {
+    transform: translate(80%, 16%);
+  }
+}
+
+@keyframes cb-swat-paw {
+  0%,
+  16% {
+    transform: rotate(-5deg);
+  }
+  24%,
+  40% {
+    transform: rotate(-26deg);
+  }
+  48%,
+  64% {
+    transform: rotate(22deg);
+  }
+  72%,
+  88% {
+    transform: rotate(-9deg);
+  }
+  100% {
+    transform: rotate(-5deg);
+  }
+}
+
+/*
+ * The saucer crossing the desert banner.
+ *
+ * Three beats, not a constant slide: it comes in and DECELERATES to a stop,
+ * hangs there a moment, then accelerates away. The tilt is tied to that -
+ * it banks as it pulls up to the stop and levels back to 0 as it takes off,
+ * so the rotation reads as the craft braking and then committing, rather
+ * than as a wobble it carries the whole way across.
+ *
+ * The easing is per-segment, via animation-timing-function INSIDE the
+ * keyframes: each declaration governs the segment that STARTS at that
+ * keyframe. That is the only way to decelerate into the stop and accelerate
+ * out of it in one animation - a single timing function on the shorthand
+ * would ease the whole 6.5s as one arc. The shorthand is therefore `linear`,
+ * so it does not fight the per-segment functions.
+ *
+ * The last third is the craft parked off the right edge at zero opacity. That
+ * gap is deliberate: a saucer on a continuous loop reads as a carousel,
+ * whereas a pass, a pause, then another pass reads as something that happens
+ * to fly over.
+ *
+ * px here is SVG user units - see `transform-box: view-box` on .cb-desert__ufo
+ * - so 560 crosses the 400-wide frame with room to enter and leave unseen.
+ */
+@keyframes cb-desert-flyby {
+  /* Enters fast and sheds speed all the way to the stop. */
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+    animation-timing-function: ease-out;
+  }
+  6% {
+    opacity: 1;
+  }
+  /* Arrived, banked over from braking. */
+  34% {
+    transform: translate(215px, -16px) rotate(-11deg);
+    animation-timing-function: linear;
+  }
+  /* Holds station, still tilted, drifting barely at all. */
+  50% {
+    transform: translate(232px, -19px) rotate(-11deg);
+    animation-timing-function: ease-in;
+  }
+  /* Levels off as it commits to the departure. */
+  58% {
+    transform: translate(262px, -22px) rotate(0deg);
+  }
+  72% {
+    transform: translate(560px, -30px) rotate(0deg);
+    opacity: 1;
+  }
+  78% {
+    opacity: 0;
+  }
+  100% {
+    transform: translate(560px, -30px) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+/*
+ * The batting cat's arm and paw, swinging as one limb about the shoulder.
+ * Both elements share this and the pivot set on them in the rules above.
+ */
 @keyframes cb-swipe {
   0%,
   100% {
@@ -866,9 +1279,65 @@
 }
 
 /*
- * Rides on top of cb-dodge. Uneven stops and no mirrored pair anywhere, so
- * it swerves rather than oscillates - a saucer taking evasive action, not a
- * pendulum. Longer and slower than the dodge on purpose.
+ * The cursor ducking the batting cat's paw.
+ *
+ * Percentages, not the pixels the saucer's cb-dodge uses. The saucer was
+ * five elements inside the artwork, so px there meant px in the pose's
+ * 432.8-unit viewBox. The cursor is a SCENERY overlay - a CSS box rendering
+ * around 44 real px - so the same numbers would move it more than its own
+ * width. Every value below is the saucer's original offset expressed as a
+ * fraction of the cursor's 44x53 box, which then holds at any size the
+ * mascot is placed at.
+ */
+@keyframes cb-cursor-dodge {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  42% {
+    transform: translate(36%, -25%) rotate(-12deg);
+  }
+  58% {
+    transform: translate(61%, -41%) rotate(-19deg);
+  }
+  80% {
+    transform: translate(20%, -13%) rotate(-6deg);
+  }
+}
+
+/* The longer wander riding on top of the dodge. Rides on the inner <svg>
+   because one element cannot carry two transforms. */
+@keyframes cb-cursor-weave {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  18% {
+    transform: translate(-20%, 9%) rotate(4deg);
+  }
+  37% {
+    transform: translate(14%, -15%) rotate(-3deg);
+  }
+  55% {
+    transform: translate(30%, 6%) rotate(5deg);
+  }
+  71% {
+    transform: translate(-9%, 17%) rotate(-6deg);
+  }
+  88% {
+    transform: translate(-25%, -8%) rotate(2deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/*
+ * cb-ufo-weave and cb-dodge below are the SAUCER's animations, and are
+ * currently unused: the batting cat swipes at the bandit cursor now and the
+ * saucer is hidden (see `[data-cb='ufo']` above). Kept deliberately rather
+ * than deleted - the artwork and its part map are still intact, so these two
+ * plus the two rules that referenced them are the whole cost of putting the
+ * saucer back. Delete all four together if that decision is ever made final.
  */
 @keyframes cb-ufo-weave {
   0% {
@@ -1143,6 +1612,969 @@
       );
     filter: blur(40px);
   }
+
+  /*
+   * Per-page texture. A SECOND pass over the global grain on `body::after`,
+   * not a replacement for it — the two do different jobs. The baked 128px
+   * noise tile is uniform film grain that should look identical everywhere;
+   * this is a large, characterful scan that gives each route its own surface.
+   *
+   * Which file lands here is decided in Layout.astro from the route, and
+   * arrives as --page-texture. Keeping the URL in a custom property is what
+   * lets one class serve all three without Tailwind needing to see three
+   * literal filenames.
+   *
+   * Sizing is `cover`, not `repeat`: these are 800px scans with visible
+   * structure, and tiling one puts an obvious grid across the viewport.
+   *
+   * Opacity is the number to be careful with. §8 of the visual identity doc
+   * caps grain at 0.14 for small-type legibility, and this stacks on top of
+   * the 0.12 already coming from body::after. 0.07 is what that leaves.
+   */
+  .page-texture {
+    @apply fixed top-0 left-0 w-full h-full -z-10 pointer-events-none;
+    background-image: var(--page-texture);
+    background-size: cover;
+    background-position: center;
+    mix-blend-mode: overlay;
+    opacity: 0.07;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Scan shapes — texture used as a placed element
+   * ------------------------------------------------------------------ */
+
+  /*
+   * Same family as .field-* above, and the same contract: no z-index here,
+   * because a shape is always layered against something else and the caller
+   * owns the stacking order. Size, position and rotation are the caller's
+   * too — this class only supplies the surface.
+   *
+   * The baked scans are grayscale (see scripts/bake-textures.mjs), so the
+   * ink has to come from here. `background-color` + `mask-image` rather than
+   * a tinted image: it means one asset serves every ink in the set, and it
+   * keeps the "two inks per composition" rule something the usage site
+   * states out loud instead of something baked into a file.
+   */
+  .shape-scan {
+    @apply absolute pointer-events-none;
+    background-color: var(--color-ink-cold);
+    -webkit-mask-image: var(--shape-scan);
+    mask-image: var(--shape-scan);
+    /*
+     * `cover`, not `contain`. These masks are rectangular texture fields, not
+     * cut-out silhouettes — the alpha carries scan streaks across the whole
+     * frame (see the alphaFromLuminance note in scripts/bake-textures.mjs).
+     * `contain` would letterbox the field inside whatever box the caller
+     * sets and leave a visible hard edge where the mask stops; `cover` crops
+     * it, which is what makes it read as a plate running off the page.
+     */
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    opacity: 0.5;
+  }
+
+  .shape-scan--01 {
+    --shape-scan: url('/textures/baked/shape-scan-01.webp');
+  }
+
+  .shape-scan--03 {
+    --shape-scan: url('/textures/baked/shape-scan-03.webp');
+  }
+
+  .shape-scan--hot {
+    background-color: var(--color-ink-hot);
+  }
+
+  .shape-scan--acid {
+    background-color: var(--color-ink-acid);
+  }
+
+  .shape-scan--pink {
+    background-color: var(--color-ink-pink);
+  }
+
+  /*
+   * The star-sight glyph, lifted out of the logo lockup so it can be reused
+   * as an accent. Drawn as a mask for the same reason as .shape-scan: one
+   * asset, any ink. Defaults to acid, which is where it sits in the logo.
+   */
+  .mark-star {
+    @apply inline-block pointer-events-none;
+    width: 1em;
+    height: 1em;
+    background-color: var(--color-ink-acid);
+    -webkit-mask-image: url('/marks/star-sight.svg');
+    mask-image: url('/marks/star-sight.svg');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+
+  .mark-star--hot {
+    background-color: var(--color-ink-hot);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Logo lockups
+   *
+   * Both variants arrive from Illustrator with no `fill` attributes at all,
+   * so they default to black and would render invisible on the #0B0B0C
+   * ground. The ink is applied here rather than by rewriting the files, so
+   * the masters in assets-src/marks/ stay openable and re-exportable.
+   *
+   * Targeted by element type, not by class: Logo.astro namespaces the
+   * exporter's `cls-1` per variant (it has to — nav and footer put two
+   * lockups on one page), so the class name is not stable to write rules
+   * against. The structure is: 14 <path> letterforms, 1 <polygon> star, 1
+   * <circle> ring. Identical in both files.
+   * ------------------------------------------------------------------ */
+
+  .cb-logo {
+    @apply inline-block;
+  }
+
+  .cb-logo svg {
+    @apply block h-auto w-full;
+  }
+
+  .cb-logo path {
+    fill: var(--color-paper);
+  }
+
+  /* The star-sight is the mark's one accent, per the identity doc's rule that
+     one hot ink does all the work. Acid rather than hot: at nav size the star
+     is only a few pixels across, and 15.7:1 stays visible where hot's 4.97:1
+     starts to mud out against the ground. */
+  .cb-logo polygon {
+    fill: var(--color-ink-acid);
+  }
+
+  .cb-logo circle {
+    fill: none;
+    stroke: var(--color-ink-acid);
+    /* The exporter's stroke-width is in viewBox units — 2 against a 218-unit
+       height on the horizontal lockup, 0.5 against 907 on the vertical. Scaled
+       down to nav size those land near a third of a pixel and the ring simply
+       disappears, and the two variants disagree with each other besides.
+       non-scaling-stroke pins it to a real hairline at any rendered size. */
+    vector-effect: non-scaling-stroke;
+    stroke-width: 1;
+  }
+
+  .cb-logo--horizontal {
+    /* Sized by height so it sits on the navbar's baseline grid; the lockup is
+       4.6:1 so width follows from it. */
+    width: auto;
+    height: 2.25rem;
+  }
+
+  .cb-logo--horizontal svg {
+    @apply h-full w-auto;
+  }
+
+  /*
+   * The "vertical" lockup is a stacked two-line mark, not a portrait one —
+   * 1545x907, so still landscape at 1.7:1. Sizing it by height the way the
+   * horizontal is sized would render the type far too small, so it is capped
+   * by width instead and allowed to set its own height.
+   *
+   * 6rem is a deliberate ceiling, not a preference. It renders ~56px tall,
+   * which puts the mobile header at ~88px including its py-4 — and the
+   * Navbar's fixed-header spacer is sized to match. Growing this without
+   * growing that spacer slides the top of every page under the header.
+   */
+  .cb-logo--vertical {
+    width: 6rem;
+    height: auto;
+  }
+
+  /* Nudge, not a bounce. Matches the plate-jitter the mascot head used to get
+     in this slot, so the nav keeps the same bit of life it had before. */
+  .cb-logo--link:hover .cb-logo,
+  a:hover > .cb-logo {
+    animation: var(--animate-plate-jitter);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Motion reel — /work/motion
+   * ------------------------------------------------------------------ */
+
+  /*
+   * The frame holds the clip's own aspect, set inline per project, so each
+   * block reserves its exact box before the video loads. Five different
+   * shapes across the six clips, so nothing here can assume one ratio.
+   *
+   * The vertical pieces are the reason for the height cap: at 9:16 a
+   * full-width video on a 4xl column would stand well over a screen tall.
+   * Capping the height and centring lets the portrait cuts sit at a sane size
+   * without special-casing them in the markup.
+   */
+  .cb-reel__frame {
+    @apply relative mx-auto overflow-hidden;
+    max-height: 78vh;
+    max-width: 100%;
+    width: max-content;
+    background: var(--color-base-100);
+    border: 1px solid rgb(237 232 223 / 0.15);
+  }
+
+  .cb-reel__video {
+    @apply block;
+    max-height: inherit;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+  }
+
+  /* Crop marks on the frame, the same technical furniture the rest of the
+     site uses to mark a piece of work as a plate. */
+  .cb-reel__frame::before,
+  .cb-reel__frame::after {
+    content: '';
+    @apply absolute h-3 w-3 pointer-events-none border-ink-acid/40;
+    z-index: 1;
+  }
+
+  .cb-reel__frame::before {
+    @apply top-0 left-0 border-t border-l;
+  }
+
+  .cb-reel__frame::after {
+    @apply bottom-0 right-0 border-b border-r;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Star-sight shooter — Services page
+   * ------------------------------------------------------------------ */
+
+  .cb-shooter {
+    @apply relative;
+    background: var(--color-base-100);
+    border: 1px solid rgb(237 232 223 / 0.15);
+  }
+
+  .cb-shooter__head {
+    @apply flex items-end justify-between gap-6 px-6 pt-6 pb-4;
+  }
+
+  .cb-shooter__hud {
+    @apply flex items-baseline gap-4 font-mono;
+  }
+
+  .cb-shooter__score {
+    @apply text-4xl font-bold text-ink-acid;
+    /* Tabular figures so the counter does not jitter the layout as it ticks
+       from 9 to 10. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cb-shooter__best {
+    @apply text-xs uppercase tracking-[0.12em] text-paper-mute;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
+   * The range itself. `overflow: hidden` is what lets saucers be placed
+   * outside the box and slide in - they are spawned a full craft-width off
+   * each edge so none of them appears mid-air.
+   */
+  .cb-shooter__field {
+    @apply relative overflow-hidden;
+    aspect-ratio: 16 / 9;
+    border-top: 1px solid rgb(237 232 223 / 0.12);
+    background:
+      radial-gradient(circle at 22% 28%, rgb(27 39 232 / 0.28) 0%, transparent 55%),
+      radial-gradient(circle at 78% 72%, rgb(229 25 90 / 0.2) 0%, transparent 55%),
+      var(--color-base);
+  }
+
+  /*
+   * The star-sight replaces the pointer, but only once the range is live -
+   * before that the panel has an ordinary button in it and needs an ordinary
+   * cursor. `crosshair` is the fallback for browsers that decline the SVG.
+   *
+   * 22 22 is the hotspot: the file is drawn 44px square and the sight's
+   * crossing point is its centre, so aim lands where the star does.
+   */
+  .cb-shooter.is-running .cb-shooter__field {
+    cursor: url('/marks/star-sight-acid.svg') 22 22, crosshair;
+  }
+
+  .cb-shooter__ufo {
+    @apply absolute left-0 top-0 block p-0;
+    /* Own line rather than a border: these are buttons, and the UA default
+       would otherwise draw a chrome box around every saucer. */
+    background: none;
+    border: 0;
+    line-height: 0;
+    transform: translate(-200px, -200px);
+    transition: opacity 300ms ease;
+  }
+
+  .cb-shooter__ufo svg {
+    @apply block h-auto w-full;
+    /* Flipped to face its direction of travel; the script sets the sign. */
+    transform: scaleX(var(--cb-ufo-face, -1));
+  }
+
+  .cb-shooter__ufo:focus-visible {
+    outline: 2px solid var(--color-ink-acid);
+    outline-offset: 2px;
+  }
+
+  /* The kill. Brief, and it takes the craft with it. */
+  .cb-shooter__ufo.is-hit {
+    animation: cb-shooter-hit 320ms ease-out forwards;
+    pointer-events: none;
+  }
+
+  .cb-shooter__prompt {
+    @apply absolute inset-0 flex items-center justify-center;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Duo panel — Services page, Design & Motion
+   *
+   * The mascot and its colour-inverted twin, jumping for a high five. The
+   * twin's palette swap is done at build time in DuoPanel.astro; everything
+   * here is layout and choreography.
+   * ------------------------------------------------------------------ */
+
+  .cb-duo {
+    @apply relative overflow-hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--color-base-100);
+    border: 1px solid rgb(237 232 223 / 0.15);
+  }
+
+  /* One shared ground for both cats, in place of the two desert backdrops the
+     pose would otherwise each bring. Fades out at the sides so it reads as
+     ground rather than as a bar across the panel. */
+  .cb-duo__ground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 16%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-ink-cold) 18%,
+      var(--color-ink-cold) 82%,
+      transparent 100%
+    );
+    opacity: 0.55;
+  }
+
+  /*
+   * The aspect-ratio is REQUIRED, not decorative. Both children are
+   * `position: absolute`, so without it this box has no in-flow content,
+   * collapses to zero height, and the poses - sized by `inset: 0` against it -
+   * collapse with it. The cats then render out of a zero-height box, spill
+   * below the panel and are clipped away entirely.
+   *
+   * It is the artwork's own ratio, so the box is exactly the cat.
+   *
+   * `bottom` matches .cb-duo__ground: the boots are drawn hard against the
+   * bottom of the viewBox (measured: 0.1% clear of it), so aligning the box's
+   * bottom edge with the line stands them on it.
+   */
+  .cb-duo__cat {
+    position: absolute;
+    /* Keeps the shadow's negative z-index inside this box, so it cannot slip
+       behind the panel's own background. Same reason .cb-mascot--pistols
+       isolates. */
+    isolation: isolate;
+    bottom: 16%;
+    width: 42%;
+    aspect-ratio: 281.2 / 366.7;
+  }
+
+  /*
+   * Inset from each outer edge. SMALLER moves the cats APART - `left` and
+   * `right` are insets, so adding to them walks each cat toward the middle.
+   *
+   * 3% is as far apart as they go at 42% wide: two cats take 84% of the
+   * panel, so only 16% is left to share between the two outer margins and the
+   * gap. That yields roughly a 58px gap with 17px margins on a 584px panel.
+   *
+   * This abandons the earlier solve that had the paws touching. That solve
+   * was 11%, and it could never coexist with visible daylight: the raised paw
+   * sits at 94.5% across the cat box, so paws in contact means the bodies
+   * necessarily overlap by about 11% of a cat's width. The clap burst carries
+   * the contact instead.
+   *
+   * If more separation is wanted, the cats have to get narrower - at 38% wide
+   * a 5% inset gives an 82px gap with 29px margins.
+   */
+  .cb-duo__cat--near {
+    left: 3%;
+  }
+
+  /*
+   * Mirrored, which is what makes the pair face each other. Because the whole
+   * element is flipped, this cat's `arm-right` renders on its left - toward
+   * the centre - so the same [data-cb='arm-right'] selector raises the inner
+   * paw on both cats.
+   */
+  .cb-duo__cat--far {
+    right: 3%;
+    transform: scaleX(-1);
+  }
+
+  /*
+   * The jump. Applied to `> svg` rather than the wrapper, matching how the
+   * pistols pose already drives its coil, so the ground shadow on the wrapper
+   * stays planted while the cat leaves it.
+   */
+  .cb-duo:hover .cb-mascot--pistols > svg,
+  .cb-duo:hover .cb-mascot--raised-arm > svg {
+    animation: cb-duo-jump 1.25s cubic-bezier(0.3, 0.9, 0.4, 1) infinite;
+  }
+
+  /*
+   * The inner paw, rising to meet its twin at the top of the jump.
+   *
+   * TWO copies of the arm, cross-faded. The pose draws this arm hanging down
+   * with a pistol in it; carried up to shoulder height by rotation alone the
+   * paw and its shading arrive upside down. So the low copy plays the wind-up
+   * and hands over, at the moment of the throw, to a copy turned 180deg about
+   * the same shoulder.
+   *
+   * Both share `transform-origin: 0% 0%` from the pose's own rules - the top
+   * left of the arm's fill-box, which is the shoulder. That shared anchor is
+   * the whole trick: the two copies differ only in orientation, so the joint
+   * does not move and the swap is invisible.
+   *
+   * The opacity keyframes are stepped, not eased. A cross-fade would show
+   * both arms at once through the middle of the hand-off, which reads as a
+   * ghost rather than as one limb.
+   */
+  /*
+   * Ground shadows: one per cat, planted and static.
+   *
+   * The mascot draws its own shadow on its wrapper, which sits inside
+   * .cb-duo__pose - and that element now carries both the lean and the
+   * cross-fade. So the stock shadow leaned with the cat and blinked with the
+   * pose swap, when a shadow on the ground should do neither.
+   *
+   * Moved out to .cb-duo__cat, which is the one box in this stack that never
+   * animates. Geometry copied from .cb-mascot--pistols::before so it lands in
+   * the same place under the boots.
+   */
+  .cb-duo .cb-mascot::before {
+    display: none;
+  }
+
+  .cb-duo__cat::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 11%;
+    width: 78%;
+    bottom: -3%;
+    height: 9%;
+    border-radius: 50%;
+    background: var(--color-ink-cold);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /*
+   * Tails, moved to the OUTSIDE so each stays on its own half of the panel.
+   *
+   * The artwork draws the tail on the cat's right, the same side as the
+   * raised arm. The far cat's mirror - the thing that makes the two paws meet
+   * - therefore carries its tail inward too, and at rest both tails converged
+   * into a single blob in the middle of the panel.
+   *
+   * Rotation cannot fix that; a tail cannot swing past the body. So the tail
+   * itself is mirrored across the CAT'S OWN CENTRELINE, which re-attaches it
+   * at the opposite hip. `transform-box: view-box` puts the origin in the
+   * artwork's coordinates, and 140.6 is half of the 281.2 viewBox width.
+   *
+   * The same declaration serves both cats: the near one sends its tail to
+   * screen-left, and on the far one this composes with the wrapper's mirror to
+   * send it screen-right. Each tail ends up on its own cat's outer side and
+   * stays there.
+   *
+   * The sway is stopped, not re-timed. It is a hover animation on the pistols
+   * pose, and the raised-arm pose is not rigged for it - so a swaying tail
+   * would freeze for the third of every cycle that the high pose is showing.
+   * Held still, the two poses agree.
+   */
+  .cb-duo .cb-mascot [data-cb='tail'],
+  .cb-duo:hover .cb-mascot [data-cb='tail'] {
+    animation: none;
+    transform-box: view-box;
+    transform-origin: 140.6px 0;
+    transform: scaleX(-1);
+  }
+
+  /*
+   * The pose swap.
+   *
+   * Both poses are stacked in the same box and cross-faded. The high pose is
+   * `raised-arm`, drawn in the same 281.2 x 366.7 space as `pistols`, so the
+   * two register exactly and the swap moves nothing but the arm.
+   *
+   * Stepped, not eased. Easing would show both cats at once through the
+   * hand-off, which reads as a double exposure rather than one animal moving.
+   *
+   * This replaces an earlier attempt that rotated the pistols arm into place.
+   * That could never be right: the arm is a 30-unit stroke whose bounding-box
+   * corner sits ~21 units off the real shoulder, so any large rotation
+   * unhooked it from the body. Purpose-drawn artwork has no such problem.
+   */
+  .cb-duo__pose {
+    position: absolute;
+    inset: 0;
+    /*
+     * Pivot for the lean below: the INNER boot.
+     *
+     * Measured off the artwork - the boots contact at x 22-103 and x 178-258
+     * of the 281.2 box (each renders as a heel and a toe), so the inner one
+     * centres on 218, which is 77.5% across. 100% is the ground.
+     *
+     * This box carries the cat's exact aspect ratio, so artwork coordinates
+     * map straight onto percentages of it.
+     *
+     * One value serves both cats: on the far one the wrapper's mirror turns
+     * 77.5% into 22.5% on screen, which is that cat's inner boot.
+     */
+    transform-origin: 77.5% 100%;
+  }
+
+  .cb-duo__pose--high {
+    opacity: 0;
+  }
+
+  /*
+   * Two animations per layer: the stepped cross-fade, and the lean they both
+   * share. The lean has to be on this element rather than the svg because the
+   * svg is already carrying the jump, and one element cannot hold two
+   * transforms.
+   */
+  .cb-duo:hover .cb-duo__pose--low {
+    animation:
+      cb-duo-pose-low 1.25s steps(1, end) infinite,
+      cb-duo-lean 1.25s cubic-bezier(0.3, 0.9, 0.4, 1) infinite;
+  }
+
+  .cb-duo:hover .cb-duo__pose--high {
+    animation:
+      cb-duo-pose-high 1.25s steps(1, end) infinite,
+      cb-duo-lean 1.25s cubic-bezier(0.3, 0.9, 0.4, 1) infinite;
+  }
+
+  /* The outer arm swings back for balance rather than staying pinned. */
+  .cb-duo:hover .cb-mascot--pistols [data-cb='arm-left'] {
+    animation: cb-duo-arm-outer 1.25s ease-in-out infinite;
+  }
+
+  /*
+   * The clap. A small acid burst struck where the paws meet - centred on the
+   * panel, at the height the raised paws reach.
+   */
+  .cb-duo__clap {
+    position: absolute;
+    left: 50%;
+    /*
+     * Sits on the paws at the top of the leap, not where they rest. The paw
+     * is 20.7% down the cat box, which puts it near 30% of the panel - then
+     * the jump lifts it another ~7%. The element is 12% of the panel WIDE and
+     * square, so it is 16% of the panel tall. The lean also carries the paw
+     * about 2.5% further down, so top 17% centres it on the contact point.
+     */
+    top: 17%;
+    width: 12%;
+    aspect-ratio: 1;
+    margin-left: -6%;
+    pointer-events: none;
+    opacity: 0;
+    background:
+      conic-gradient(
+        from 0deg,
+        var(--color-ink-acid) 0deg 6deg,
+        transparent 6deg 45deg,
+        var(--color-ink-acid) 45deg 51deg,
+        transparent 51deg 90deg,
+        var(--color-ink-acid) 90deg 96deg,
+        transparent 96deg 135deg,
+        var(--color-ink-acid) 135deg 141deg,
+        transparent 141deg 180deg,
+        var(--color-ink-acid) 180deg 186deg,
+        transparent 186deg 225deg,
+        var(--color-ink-acid) 225deg 231deg,
+        transparent 231deg 270deg,
+        var(--color-ink-acid) 270deg 276deg,
+        transparent 276deg 315deg,
+        var(--color-ink-acid) 315deg 321deg,
+        transparent 321deg 360deg
+      );
+    -webkit-mask-image: radial-gradient(closest-side, transparent 34%, #000 40%, #000 100%);
+    mask-image: radial-gradient(closest-side, transparent 34%, #000 40%, #000 100%);
+  }
+
+  .cb-duo:hover .cb-duo__clap {
+    animation: cb-duo-clap 1.25s ease-out infinite;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Shop scene — Services page, E-commerce
+   *
+   * PLACEHOLDER ARTWORK. The shapes in assets-src/scenes/scene-shop.svg are
+   * schematic and meant to be drawn over; the structure and this animation
+   * are the parts that are settled.
+   * ------------------------------------------------------------------ */
+
+  .cb-shop {
+    @apply block overflow-hidden;
+    /* The artwork's own ratio. It was 4/3 while the scene was a placeholder;
+       the redrawn shop is 420 x 300, and a mismatch here letterboxes it. */
+    aspect-ratio: 420 / 300;
+    border: 1px solid rgb(237 232 223 / 0.15);
+  }
+
+  .cb-shop svg {
+    @apply block h-full w-full;
+  }
+
+  /*
+   * The shopkeeper's arms coming up from under the counter.
+   *
+   * `transform-box: view-box` puts the offset in the artwork's own 400x300
+   * space, so `-53px` means 53 artwork units and holds at any rendered size.
+   *
+   * 53 is not arbitrary: it carries the orb from y 218 (just under the
+   * counter rail at 205, where the counter hides it) to y 165, which clears
+   * the rail while staying below the shopkeeper's eyes at y 148. The arms are
+   * drawn BEFORE the counter in the file, which is what makes them emerge
+   * from behind it rather than appear on top of it.
+   */
+  .cb-shop__arms {
+    transform-box: view-box;
+    transform: translate(0, 0);
+    /* Slight overshoot: hands coming up onto a counter settle, they do not
+       glide to a stop. */
+    transition: transform 520ms cubic-bezier(0.22, 1.28, 0.4, 1);
+  }
+
+  .cb-shop:hover .cb-shop__arms {
+    transform: translate(0, -53px);
+  }
+
+  /*
+   * The cat coils, the same way the pistols pose does on hover.
+   *
+   * Only the body: the artwork is one group with no named sub-parts, so the
+   * hat-drop, arm-swing and tail-sway that pose also carries have nothing to
+   * hang off here. The coil is the part that reads at this size anyway.
+   *
+   * `fill-box` puts the origin on the cat's own bounding box rather than the
+   * scene's, so 50% 100% is its feet - which sit below the frame, since the
+   * artwork is cropped at the counter.
+   *
+   * 2.7 rather than the pose's 5: that 5 is 1.36% of a 366.7-unit cat, and
+   * this one stands 198.5 units in a 420x300 frame, so the same proportion is
+   * 2.7. Reusing 5 unchanged would make the coil almost twice as deep.
+   */
+  .cb-shop__cat {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cb-shop:hover .cb-shop__cat {
+    transform: translateY(2.7px) scaleY(0.965);
+  }
+
+  /* Once up, the orb drifts — it is being held, not clamped. Runs only while
+     raised, so nothing animates in the resting state. */
+  .cb-shop__orb {
+    transform-box: view-box;
+  }
+
+  .cb-shop:hover .cb-shop__orb {
+    animation: cb-shop-orb-bob 2.6s ease-in-out 520ms infinite;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Swat panel — Services page, Web Development
+   *
+   * A cat behind glass, batting at a cursor it can never catch. Three layers,
+   * back to front: the batting mascot, a half-opacity blue screen, the cursor
+   * on top of it.
+   *
+   * FIRST PASS: the chase is a fixed four-position loop, so the motion can be
+   * judged before any randomness is added. The cursor darts to a position and
+   * holds; the paw runs the SAME timeline on a delay, so it always arrives
+   * where the cursor just was. Randomising is a follow-up.
+   * ------------------------------------------------------------------ */
+
+  .cb-swat {
+    @apply relative overflow-hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--color-base-100);
+    border: 1px solid rgb(237 232 223 / 0.15);
+  }
+
+  /*
+   * Framed as a portrait: head and shoulders, cropped at mid-torso, with the
+   * belt, legs and boots below the panel's bottom edge.
+   *
+   * The numbers are derived, not eyeballed. The artwork is 432.8 x 390 with
+   * the head spanning y 0-181 and the shoulder at y 130.
+   *
+   * The crop line - the artwork y sitting on the panel's bottom edge - is
+   * (panelH - top) / catH x 390. A wider cat crops higher; pushing it DOWN
+   * crops higher too, because the panel's bottom edge then meets the artwork
+   * nearer its top. At 166.25% with a 50px drop that lands near y 177, which
+   * is just above where the head ends at 181.
+   *
+   * The 50px offsets are px on purpose, as specified, but note they are the
+   * only fixed-size values in an otherwise proportional composition: the
+   * panel is fluid, so 50px is a larger share of a narrow one and the framing
+   * shifts with the viewport. The paw rotations below were solved against a
+   * ~584px panel, the width of this column at lg.
+   *
+   * The child Mascot must carry `w-full` for any of this to apply - see the
+   * note in SwatPanel.astro.
+   */
+  .cb-swat__cat {
+    position: absolute;
+    left: calc(-14% - 50px);
+    top: calc(-2% + 50px);
+    width: 166.25%;
+  }
+
+  /*
+   * The glass. Riso blue at half strength, which is what the brief asked for -
+   * and blue is the one ink the palette forbids for text anyway (2.3:1), so a
+   * flat plate like this is exactly what it is for.
+   *
+   * The scan lines and the inner rule are what stop it reading as a plain
+   * translucent rectangle: together they make it a screen the cat is behind.
+   */
+  .cb-swat__screen {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgb(0 0 0 / 0.16) 0px,
+        rgb(0 0 0 / 0.16) 1px,
+        transparent 1px,
+        transparent 3px
+      ),
+      var(--color-ink-cold);
+    opacity: 0.5;
+    box-shadow: inset 0 0 0 1px rgb(255 232 0 / 0.18);
+  }
+
+  /*
+   * Panel-sized, so the keyframes' percentages are percentages of the PANEL.
+   * A transform percentage resolves against the transformed element's own
+   * border box, so sizing this to the arrow would make `translate(66%)` mean
+   * two thirds of an arrow rather than two thirds of the way across.
+   */
+  .cb-swat__cursor {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .cb-swat__cursor svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 9%;
+    height: auto;
+    /* Drop shadow rather than an outline: the arrow sits on a blue plate and
+       needs to lift off it without gaining a border it does not have
+       anywhere else on the site. */
+    filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 0.45));
+  }
+
+  .cb-swat__cursor svg path {
+    fill: var(--color-paper);
+  }
+
+  .cb-swat:hover .cb-swat__cursor {
+    animation: cb-swat-cursor 5s steps(1, end) infinite;
+  }
+
+  /*
+   * The paw chases on the SAME timeline, started late.
+   *
+   * A positive animation-delay is what produces the lag: both run 5s and both
+   * step through the same four beats, so the paw is permanently one moment
+   * behind and always swings to where the cursor just was. That miss is the
+   * joke - a paw that arrived on time would catch it.
+   *
+   * These selectors are one step more specific than the mascot's own
+   * `.cb-mascot--batting:hover [data-cb=...]` rules, so inside the panel this
+   * replaces the stock 1.2s swipe rather than competing with it.
+   */
+  .cb-swat:hover .cb-mascot--batting [data-cb='arm-swipe'],
+  .cb-swat:hover .cb-mascot--batting [data-cb='paw'] {
+    animation: cb-swat-paw 5s cubic-bezier(0.34, 1.4, 0.5, 1) infinite;
+    animation-delay: 300ms;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Desert banner — About page, "Our Story"
+   *
+   * Replaces a hotlinked Pexels photo. The artwork is
+   * assets-src/scenes/scene-desert.svg; everything below is the flyby.
+   * ------------------------------------------------------------------ */
+
+  .cb-desert {
+    @apply block;
+  }
+
+  .cb-desert svg {
+    @apply block h-full w-full;
+  }
+
+  /*
+   * The saucer sits off the left edge until the section is hovered, then
+   * crosses and leaves. `transform-box: view-box` pins the transform to the
+   * artwork's 0 0 400 300 space rather than the group's own bounding box, so
+   * the px offsets in the keyframes are user units and hold at any rendered
+   * size - the same reason the mascot's arm-swipe uses it.
+   */
+  .cb-desert__ufo {
+    transform-box: view-box;
+    opacity: 0;
+  }
+
+  /*
+   * Driven from the SECTION, not from the artwork, so the whole "Our Story"
+   * block is the hover target. Hovering a 400x300 graphic to find the trigger
+   * is a worse experience than having it start when you arrive at the copy.
+   */
+  .cb-desert-host:hover .cb-desert__ufo {
+    /* linear on purpose — the per-segment easing lives in the keyframes so
+       the craft can decelerate into its stop and accelerate out of it. */
+    animation: cb-desert-flyby 6.5s linear infinite;
+  }
+
+  /* ---------------------------------------------------------------------
+   * Sticker badge
+   *
+   * The artwork is the supplied Illustrator export with its type converted to
+   * outlines, used as-is. That conversion is what makes it shippable: the ring
+   * type carries no font dependency, so nothing drifts when the badge renders
+   * somewhere the site's webfonts have not loaded.
+   *
+   * Consequence for this file: there is no type to size or track here, and
+   * nothing semantic to select. See the inking note below for how the star is
+   * picked out without touching the artwork.
+   * ------------------------------------------------------------------ */
+
+  .cb-sticker {
+    @apply relative inline-block;
+    width: 7.5rem;
+    /* Tacked on by hand, not printed square to the grid. Small angle: past
+       about 8deg it stops reading as a crooked sticker and starts reading as
+       a mistake. */
+    transform: rotate(-6deg);
+    /* The lift. Offset down-right so the light matches the rest of the page,
+       where every hard shadow falls the same way (see .btn-primary:hover). */
+    filter: drop-shadow(3px 4px 0 rgb(0 0 0 / 0.55));
+    transition:
+      transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 380ms ease;
+  }
+
+  .cb-sticker svg {
+    @apply block h-auto w-full;
+    /*
+     * The peel. One corner cut away so the badge looks lifted off the page at
+     * the bottom-right, with .cb-sticker__curl supplying the underside.
+     *
+     * A clip-path rather than an overlay, because the corner has to be
+     * genuinely absent — painting a wedge of background colour over it would
+     * break the moment the sticker sits on a textured section, which on this
+     * site is every section.
+     */
+    clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+  }
+
+  /*
+   * Inking the badge.
+   *
+   * Targeted by ELEMENT, not by class. The artwork is an Illustrator export
+   * with text converted to outlines, so every glyph is a <path> and the only
+   * class in the file is `st0` (an isolation group Illustrator emits around
+   * each run). There is nothing semantic to hook onto, and adding hooks by
+   * hand would be undone by the next re-export.
+   *
+   * What saves it: the file contains exactly ONE <polygon>, and that is the
+   * star-sight. Its ring is the path immediately following it, so the pair is
+   * addressable as `polygon` + `polygon + path` without touching the file.
+   * Everything else - the outer rule, both arcs of ring type, the year and
+   * the CB monogram - is bone.
+   */
+  .cb-sticker path {
+    fill: var(--color-paper);
+  }
+
+  /* One accent, same as the logo lockup. */
+  .cb-sticker polygon,
+  .cb-sticker polygon + path {
+    fill: var(--color-ink-acid);
+  }
+
+  /*
+   * The underside of the peeled corner: the sliver of badge that the svg's
+   * clip-path above removes, painted back in a darker shade so the corner
+   * reads as paper turned over rather than as a hole.
+   *
+   * It has to be circle-bounded, not a plain corner triangle. The badge is a
+   * disc inscribed in a square box, so the bottom-right corner of that box is
+   * empty — a triangle pinned to `right:0 bottom:0` would hang off the edge
+   * of the artwork with nothing behind it.
+   *
+   * So: a full-size element rounded to the same disc (`border-radius: 50%`),
+   * then clipped to exactly the wedge the artwork gave up. The two compose —
+   * the radius bounds the paint, the clip-path bounds the element — leaving an
+   * arc-edged sliver that lines up with the cut.
+   *
+   * The polygon is the complement of the one on `.cb-sticker svg`: the same
+   * 72% points, kept rather than dropped.
+   */
+  .cb-sticker__curl {
+    @apply absolute pointer-events-none;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(
+      315deg,
+      var(--color-paper-mute) 0%,
+      var(--color-base-100) 78%
+    );
+    clip-path: polygon(100% 72%, 100% 100%, 72% 100%);
+    opacity: 0.85;
+  }
+
+  /* Lifts a little further off the page on hover. Decorative only — the badge
+     is not a control. */
+  .cb-sticker:hover {
+    transform: rotate(-3deg) scale(1.03);
+    filter: drop-shadow(5px 7px 0 rgb(0 0 0 / 0.6));
+  }
 }
 
 /*
@@ -1171,6 +2603,74 @@
   .cb-mascot:hover [data-cb] {
     transform: none !important;
     animation: none !important;
+  }
+
+  /* The cursor is a scene, not a [data-cb] part, so the rule above does not
+     reach it — it needs naming explicitly or it keeps dodging. Both the span
+     and its inner <svg> are named: the two carry the dodge and the weave
+     separately, and stopping only one leaves it still drifting. */
+  .cb-mascot:hover .cb-mascot__scene--cursor,
+  .cb-mascot:hover .cb-mascot__scene--cursor svg {
+    transform: none !important;
+    animation: none !important;
+  }
+
+  /* Two cats jumping is pure decoration, so it simply does not happen. */
+  .cb-duo:hover .cb-mascot--pistols > svg,
+  .cb-duo:hover .cb-mascot--raised-arm > svg,
+  .cb-duo:hover .cb-mascot--pistols [data-cb='arm-left'],
+  .cb-duo:hover .cb-duo__pose--low,
+  .cb-duo:hover .cb-duo__pose--high,
+  .cb-duo:hover .cb-duo__pose,
+  .cb-duo:hover .cb-duo__clap {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .cb-duo:hover .cb-duo__clap {
+    opacity: 0 !important;
+  }
+
+  /* The arms still rise - that is the content of the interaction, not
+     decoration - but instantly, and the orb stops drifting. */
+  .cb-shop__arms,
+  .cb-shop__cat {
+    transition: none !important;
+  }
+
+  .cb-shop:hover .cb-shop__cat {
+    transform: none !important;
+  }
+
+  .cb-shop:hover .cb-shop__orb {
+    animation: none !important;
+  }
+
+  /* The chase is the whole effect and has no meaningful still frame, so the
+     cat simply stops swinging and the cursor stays put. */
+  .cb-swat:hover .cb-swat__cursor,
+  .cb-swat:hover .cb-mascot--batting [data-cb='arm-swipe'],
+  .cb-swat:hover .cb-mascot--batting [data-cb='paw'] {
+    animation: none !important;
+  }
+
+  /*
+   * The saucer's flyby is the whole point of the effect, and there is no
+   * static version of a fly-past worth showing - so it stays parked off the
+   * left edge rather than snapping to a frozen craft mid-sky.
+   */
+  .cb-desert-host:hover .cb-desert__ufo {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  /*
+   * The sticker keeps its resting tilt and shadow — those are how it is
+   * drawn, not motion. Only the hover lift is dropped, matching how the
+   * buttons above are handled.
+   */
+  .cb-sticker:hover {
+    transform: rotate(-6deg);
   }
 
   /* The streaks are a motion effect and nothing else - there is no static

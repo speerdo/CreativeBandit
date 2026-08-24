@@ -1,0 +1,35 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { namespaceSvg, decorateSvgRoot, stripUnreferencedIds } from '../lib/svg';
+
+export interface Props {
+  /** Sizing/positioning utilities for the wrapper. */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+/*
+ * Inlined, and it genuinely cannot be an <img>. The badge's ring type is real
+ * <text> set in Space Mono, and an SVG loaded through <img> is an isolated
+ * document that cannot fetch the page's webfonts — the type would silently
+ * fall back to a system mono at different widths. Inlining is also what lets
+ * the ink come from the token set; the artwork carries no fills of its own.
+ */
+const file = path.join(process.cwd(), 'assets-src', 'marks', 'cb-logo-sticker.svg');
+let svg = fs.readFileSync(file, 'utf8');
+
+// The <textPath href="#..."> guides would collide with any other inlined mark
+// carrying the same ids.
+svg = namespaceSvg(svg, 'cb-sticker');
+svg = stripUnreferencedIds(svg);
+svg = decorateSvgRoot(svg);
+---
+
+<span class:list={['cb-sticker', className]}>
+  <Fragment set:html={svg} />
+  <!-- Underside of the peeled corner. A sibling rather than part of the
+       artwork, because it belongs to the page's lighting, not the badge. -->
+  <span class="cb-sticker__curl"></span>
+</span>

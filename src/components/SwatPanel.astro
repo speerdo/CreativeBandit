@@ -1,0 +1,67 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import Mascot from './Mascot.astro';
+import { namespaceSvg, decorateSvgRoot, stripUnreferencedIds } from '../lib/svg';
+
+export interface Props {
+  /** Sizing/positioning utilities for the wrapper. */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+/*
+ * The cursor is inlined here rather than taken from the batting cat's own
+ * scenery, and the pose is asked to leave that scene out.
+ *
+ * The reason is layering. This composition puts a screen BETWEEN the cat and
+ * the cursor - the cat is behind the glass, the cursor is on it. A scene
+ * attached to the mascot renders inside the mascot's own box, so it can only
+ * ever be in front of or behind the whole cat, never separated from it by a
+ * sibling element.
+ *
+ * The alert burst is dropped too. It is drawn out from the head across a box
+ * reaching well above the artwork, and at this crop that puts most of it off
+ * the top of the panel with the remainder reading as stray marks.
+ */
+const cursorFile = path.join(process.cwd(), 'assets-src', 'marks', 'cb-cursor.svg');
+let cursorSvg = fs.readFileSync(cursorFile, 'utf8');
+cursorSvg = namespaceSvg(cursorSvg, 'cb-swat-cursor');
+cursorSvg = stripUnreferencedIds(cursorSvg);
+cursorSvg = decorateSvgRoot(cursorSvg);
+---
+
+<!--
+  Cat behind glass, swatting at a cursor it cannot reach.
+
+  Three layers, back to front: the cat, a half-opacity blue screen, and the
+  cursor sitting on top of that screen. Hovering anywhere on the panel starts
+  the chase.
+-->
+<div class:list={['cb-swat', className]}>
+  <div class="cb-swat__cat">
+    <!--
+      `block w-full` is required, not cosmetic. .cb-mascot is an inline-block
+      with no width of its own and its inner svg is width:100%, so with nothing
+      to resolve that percentage against the svg falls back to its intrinsic
+      432.8px and the sizing on .cb-swat__cat is ignored entirely. Every other
+      Mascot usage passes a width class for the same reason.
+    -->
+    <Mascot pose="batting" without={['cursor', 'burst']} class="block w-full" />
+  </div>
+
+  <!-- The glass. Between the cat and the cursor in the stack, which is the
+       whole point of the composition. -->
+  <div class="cb-swat__screen" aria-hidden="true"></div>
+
+  <!--
+    Panel-sized on purpose, with the arrow pinned to its top-left corner.
+    CSS transform percentages resolve against the element's OWN box, so a
+    panel-sized wrapper is what lets `translate(66%, 20%)` mean "two thirds
+    across the panel" instead of two thirds of a 40px arrow.
+  -->
+  <div class="cb-swat__cursor" aria-hidden="true">
+    <Fragment set:html={cursorSvg} />
+  </div>
+</div>

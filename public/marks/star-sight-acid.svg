@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 177.49 177.49" width="44" height="44">
+  <!--
+    The star-sight, inked for use as a CSS `cursor`.
+
+    A separate file from star-sight.svg because that one is consumed as a MASK
+    (.mark-star), where its colour is irrelevant and black is fine. A cursor is
+    drawn as an image, so it has to carry its own ink or it arrives invisible
+    on this site's near-black ground.
+
+    width/height are set explicitly: a cursor image with no intrinsic size is
+    ignored by some browsers, and the spec caps cursors at 128px either way.
+    The dark outline is what keeps it readable when it passes over the acid
+    and bone artwork inside the field.
+  -->
+  <g>
+    <polygon points="96.74 80.76 177.49 88.75 96.74 96.74 88.75 177.49 80.76 96.74 0 88.75 80.76 80.76 88.75 0 96.74 80.76"
+      fill="#ffe800" stroke="#0b0b0c" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="88.75" cy="88.75" r="54.78" fill="none" stroke="#0b0b0c" stroke-width="7"/>
+    <circle cx="88.75" cy="88.75" r="54.78" fill="none" stroke="#ffe800" stroke-width="3"/>
+  </g>
+</svg>

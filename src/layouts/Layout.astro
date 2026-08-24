@@ -36,6 +36,71 @@ const {
 const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).href;
 
 /*
+ * Per-page background texture. Varied across the site, but fixed for a given
+ * route rather than random per load.
+ *
+ * Random-per-load was the alternative and is worse in three ways: the layer
+ * pops in after paint, the asset can't be preloaded because nothing knows
+ * which one it will be, and no two screenshots of the same page match.
+ *
+ * Baked by scripts/bake-textures.mjs — see there for why these are WebP
+ * rather than the SVG masters.
+ */
+const TEXTURES = [
+  '/textures/baked/grain-01.webp', // even, fine-grained film grain
+  '/textures/baked/grain-02.webp', // soft blurred forms, the gentlest of the three
+  '/textures/baked/scan-02.webp', // hard glitch/scanline smear, much the loudest
+];
+
+/*
+ * The primary routes are assigned by hand rather than hashed.
+ *
+ * Hashing was the first attempt and is the wrong tool at this scale: with
+ * five pages that matter, it clustered them onto one texture and left another
+ * unused, and no amount of tuning the mix function makes "which texture does
+ * the homepage get" a decision anyone can actually make. There are few enough
+ * pages to simply choose.
+ *
+ * The choices: scan-02 is the loudest of the three, so it goes where the page
+ * is mostly big type and artwork and can carry it. The long prose pages get
+ * grain-02, the gentlest, because texture behind small copy costs legibility.
+ */
+const TEXTURE_BY_ROUTE: Record<string, string> = {
+  '/': TEXTURES[2],
+  '/about': TEXTURES[0],
+  '/services': TEXTURES[1],
+  '/work': TEXTURES[2],
+  '/contact': TEXTURES[0],
+  '/scan': TEXTURES[1],
+  '/blog': TEXTURES[0],
+  '/thank-you': TEXTURES[1],
+  // Dense legal copy — the gentlest texture, and the pages to check first if
+  // the opacity in .page-texture ever gets raised.
+  '/privacy': TEXTURES[1],
+  '/terms': TEXTURES[1],
+};
+
+/*
+ * Anything not named above — blog posts, new service pages — still gets a
+ * texture rather than falling through to none. FNV-1a over the path: the only
+ * requirement is that it is stable and that neighbouring routes don't collide,
+ * which a plain character sum would not give.
+ */
+function hashPath(value: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < value.length; i++) {
+    h ^= value.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h;
+}
+
+// Trailing slashes vary by route and would otherwise miss the map entirely.
+const routeKey = Astro.url.pathname.replace(/(.)\/$/, '$1');
+const pageTexture =
+  TEXTURE_BY_ROUTE[routeKey] ?? TEXTURES[hashPath(routeKey) % TEXTURES.length];
+
+/*
  * One ld+json block per page rather than several. A single @graph keeps @id
  * references (provider, publisher, worksFor) resolvable within the document
  * instead of dangling across separate scripts.
@@ -89,6 +154,13 @@ const jsonLd = {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="image" href="/textures/grain.png">
+    <!-- League Gothic is self-hosted and only referenced from a CSS
+         @font-face, so the browser cannot discover it until the stylesheet
+         parses. It sets every h1/h2 on the page, which makes it the one font
+         worth preloading. crossorigin is required even same-origin: fonts
+         fetch in CORS mode, and without it this downloads twice. -->
+    <link rel="preload" as="font" type="font/woff" href="/fonts/LeagueGothic-Regular.woff" crossorigin>
+    <link rel="preload" as="image" href={pageTexture}>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- JSON-LD Structured Data. Built in lib/schema.ts; page-specific entity
@@ -97,6 +169,7 @@ const jsonLd = {
   </head>
   <body class="bg-base text-paper flex flex-col min-h-screen">
     <div class="page-wash"></div>
+    <div class="page-texture" style={`--page-texture: url('${pageTexture}')`}></div>
     <Navbar />
     <main class="flex-grow">
       <slot />

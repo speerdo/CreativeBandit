@@ -1,0 +1,34 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { namespaceSvg, decorateSvgRoot, stripUnreferencedIds } from '../lib/svg';
+
+export interface Props {
+  /** Sizing/positioning utilities for the wrapper. */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+/*
+ * Inlined for the usual reason: the saucer's flyby is a CSS animation on a
+ * group inside the artwork, and CSS cannot reach into an <img>-loaded
+ * document. Read from assets-src/ so the file is not also served as a
+ * standalone download nobody requests.
+ */
+const file = path.join(process.cwd(), 'assets-src', 'scenes', 'scene-desert.svg');
+let svg = fs.readFileSync(file, 'utf8');
+
+/*
+ * The scene's own ids are already hand-prefixed (`scene-desert-*`), but it is
+ * namespaced anyway: the masks and the grain filter are referenced by
+ * url(#...), and this page could grow a second scene at any time. Cheap
+ * insurance against the failure mode where one scene's mask silently clips
+ * another's artwork.
+ */
+svg = namespaceSvg(svg, 'cb-desert');
+svg = stripUnreferencedIds(svg);
+svg = decorateSvgRoot(svg);
+---
+
+<span class:list={['cb-desert', className]} set:html={svg} />

@@ -138,16 +138,25 @@ const projects = [
     description: 'Portfolio and showcase platform with a dynamic content management system, responsive throughout and tuned for performance and SEO.',
     client: 'Viewfinder Media'
   },
-  // TODO: Katlyn's design/motion projects. Replace title/description/link/image with real work.
+  /*
+   * The motion reel. Unlike the other cards this one does not point at a
+   * client site - it links to /work/motion, which carries all six pieces.
+   *
+   * The thumbnail is composed rather than cropped: the card renders images at
+   * `h-64 object-cover object-top`, and the Design Bandit lockup is square, so
+   * dropped in raw it crops to "SIGN BAND" with the dagger cut off. The webp
+   * is that mark centred on a 3:2 ground, built from the master now in
+   * assets-src/marks/.
+   */
   {
-    title: '[TODO: Design Project 1]',
+    title: 'Kat Motion Design Projects',
     category: 'design',
-    categoryName: 'Brand / UI Design',
-    image: 'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '#',
-    // TODO: replace with real description, before/after, or video/GIF
-    description: '[TODO: what the work was and what it did for the client]',
-    client: '[TODO: client name]'
+    categoryName: 'Motion Design',
+    image: '/images/motion-reel-card.webp',
+    imageAlt: 'The Design Bandit logo mark',
+    link: '/work/motion',
+    description: 'Motion design projects from the past.',
+    client: 'Various'
   },
   {
     title: '[TODO: Design Project 2]',
@@ -216,6 +225,7 @@ const projects = [
               image={project.image}
               link={project.link}
               description={project.description}
+              imageAlt={project.imageAlt}
             />
           </div>
         ))}

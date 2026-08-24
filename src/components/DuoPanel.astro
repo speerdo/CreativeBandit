@@ -1,0 +1,83 @@
+---
+import Mascot from './Mascot.astro';
+
+export interface Props {
+  /** Sizing/positioning utilities for the wrapper. */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+/*
+ * The twin's ink set: the mascot's own palette turned inside out.
+ *
+ * Not a filter. `invert()` would take the bone body to near-black, which is
+ * the page ground - the cat would disappear - and it would drag the three
+ * brand inks to colours that are not in the palette at all. Instead the roles
+ * swap within the existing set, which keeps the twin unmistakably the same
+ * character and unmistakably on-brand:
+ *
+ *   body      bone      -> riso blue      (the hat's colour)
+ *   tail      paper-dim -> cold-lift      (the readable tint of that blue)
+ *   hat       riso blue -> bone           (swapped with the body)
+ *   bandana   hot       -> acid           (the two accents trade)
+ *   trim      acid      -> hot
+ *
+ * Near-black outlines are left alone: they read against any body colour, and
+ * they are what keeps the silhouette legible after the swap.
+ *
+ * Mascot applies these in a single pass - see the note on the prop. Sequential
+ * replacement would turn the new blue body straight back into bone.
+ */
+const INVERTED = {
+  '#ede8df': '#1b27e8',
+  '#d8d2c6': '#6e79ff',
+  '#1b27e8': '#ede8df',
+  '#e8451f': '#ffe800',
+  '#ffe800': '#e8451f',
+};
+---
+
+<!--
+  Two cats meeting for a high five.
+
+  The right-hand one is mirrored, which is what turns two copies of a
+  front-facing pose into a pair facing each other. It also means the inner arm
+  is `arm-right` on BOTH of them - the mirror puts the twin's right side
+  toward the centre - so one selector drives both paws.
+
+  Each cat's desert backdrop is dropped: two of them side by side would overlap
+  into a muddle. The panel draws one shared ground line instead.
+
+  Each cat is TWO stacked poses, cross-faded: `pistols` for the wind-up and
+  the landing, `raised-arm` at the top of the leap.
+
+  That is why there is no arm rigging here at all. The raised arm is drawn as
+  its own pose in the same 281.2 x 366.7 space, so swapping to it gives the
+  limb exactly as designed - correct shoulder, correct paw - where rotating
+  the pistols arm into place only ever approximated it.
+-->
+<div class:list={['cb-duo', className]}>
+  <div class="cb-duo__ground" aria-hidden="true"></div>
+
+  <div class="cb-duo__cat cb-duo__cat--near">
+    <div class="cb-duo__pose cb-duo__pose--low">
+      <Mascot pose="pistols" without={['land']} class="block w-full" />
+    </div>
+    <div class="cb-duo__pose cb-duo__pose--high">
+      <Mascot pose="raised-arm" class="block w-full" />
+    </div>
+  </div>
+
+  <div class="cb-duo__cat cb-duo__cat--far">
+    <div class="cb-duo__pose cb-duo__pose--low">
+      <Mascot pose="pistols" without={['land']} recolor={INVERTED} class="block w-full" />
+    </div>
+    <div class="cb-duo__pose cb-duo__pose--high">
+      <Mascot pose="raised-arm" recolor={INVERTED} class="block w-full" />
+    </div>
+  </div>
+
+  <!-- Impact mark, struck at the moment the paws meet. -->
+  <span class="cb-duo__clap" aria-hidden="true"></span>
+</div>

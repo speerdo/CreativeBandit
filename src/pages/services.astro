@@ -1,6 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ServiceCard from '../components/ServiceCard.astro';
+import Mascot from '../components/Mascot.astro';
+import SwatPanel from '../components/SwatPanel.astro';
+import ShopScene from '../components/ShopScene.astro';
+import DuoPanel from '../components/DuoPanel.astro';
+import UfoShooter from '../components/UfoShooter.astro';
 import { service } from '../lib/schema';
 
 const pricingTiers = [
@@ -81,6 +86,22 @@ const services = [
 ];
 
 // Agent Ops and WordPress each have their own dedicated page, so they're excluded from the on-page anchor sections below.
+/*
+ * Stock photography, by service id. Hoisted out of the markup, where it lived
+ * as a six-deep ternary chain inside a src attribute.
+ *
+ * This is a holding pen, not a design decision - §1 of the visual identity doc
+ * lists hotlinked Pexels images as one of the tells that make the site read as
+ * generic. Services get lifted out of here one at a time as real artwork
+ * arrives; see SERVICE_SCENE below for the ones that already have it.
+ */
+const STOCK_IMAGE: Record<string, string> = {
+  'app-development': 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+};
+
+const STOCK_FALLBACK =
+  'https://images.pexels.com/photos/3182781/pexels-photo-3182781.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
+
 const detailedServices = services.filter(service => !['agent-ops', 'wordpress'].includes(service.id));
 /*
  * One Service node per offering, built from the same list the page renders so
@@ -370,22 +391,53 @@ const serviceSchema = services.map((s) =>
           </div>
           
           <div class={`${index % 2 === 0 ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}>
-            <img 
-              src={service.id === 'web-development' ? 'https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  service.id === 'design' ? 'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  service.id === 'ai-integration' ? 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  service.id === 'app-development' ? 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  service.id === 'ecommerce' ? 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' :
-                  'https://images.pexels.com/photos/3182781/pexels-photo-3182781.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'}
-              alt={service.title}
-              class="w-full h-auto shadow-xl"
-            />
+            {service.id === 'design' ? (
+              <DuoPanel />
+            ) : service.id === 'ecommerce' ? (
+              <ShopScene />
+            ) : service.id === 'web-development' ? (
+              <SwatPanel />
+            ) : service.id === 'ai-integration' ? (
+              /*
+               * The rocket cat, the same craft and hyperdrive treatment the
+               * homepage uses. No shadow-xl frame around it: the mascot is a
+               * cut-out with its own streak field, so a drop-shadowed panel
+               * would put a rectangle where the artwork deliberately has none.
+               *
+               * The generous vertical padding is load-bearing. The hull is
+               * rotated 20deg by .cb-mascot--rocket, and the exhaust plume
+               * overflows the viewBox on purpose, so the artwork needs room
+               * above and below its own box or the plume gets cropped by the
+               * next row.
+               */
+              <div class="flex items-center justify-center py-10">
+                <Mascot pose="rocket" class="w-full max-w-[520px]" />
+              </div>
+            ) : (
+              <img
+                src={STOCK_IMAGE[service.id] ?? STOCK_FALLBACK}
+                alt={service.title}
+                class="w-full h-auto shadow-xl"
+              />
+            )}
           </div>
         </div>
       </div>
     </section>
   ))}
   
+  <!--
+    Target range. Sits between the service detail and pricing: a breather at
+    the point in the page where someone has just read six sections of prose.
+  -->
+  <section class="section">
+    <div class="container mx-auto">
+      <div class="mx-auto max-w-3xl">
+        <UfoShooter />
+      </div>
+    </div>
+  </section>
+
   <!-- Pricing Section -->
   <section id="pricing" class="section">
     <div class="container mx-auto">

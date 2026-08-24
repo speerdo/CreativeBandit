@@ -1,4 +1,6 @@
 ---
+import Logo from './Logo.astro';
+
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
@@ -12,17 +14,15 @@ const currentPath = Astro.url.pathname;
 <header class="fixed w-full top-0 z-50 transition-all duration-300 bg-base/90 backdrop-blur-md">
   <div class="container mx-auto py-4">
     <nav class="flex items-center justify-between">
-      <a href="/" class="group flex items-center gap-3" aria-label="Creative Bandit, home">
-        <img
-          src="/mascot/bandit-cat-head.svg"
-          alt=""
-          width="43"
-          height="36"
-          class="h-9 w-auto group-hover:animate-plate-jitter"
-        />
-        <span class="font-display text-xl font-extrabold uppercase tracking-tight text-paper" style="font-stretch: 125%;">
-          Creative<span class="text-ink-hot">Bandit</span>
-        </span>
+      <!--
+        Horizontal lockup on web, vertical (stacked) on mobile, per the brand
+        drop. Both are rendered and one is hidden by breakpoint rather than
+        swapped at runtime: the SVG is inlined at build time, so there is no
+        second request to save and no layout shift while a script decides.
+      -->
+      <a href="/" class="cb-logo--link flex items-center" aria-label="Creative Bandit, home">
+        <Logo variant="horizontal" class="hidden sm:inline-block" />
+        <Logo variant="vertical" class="sm:hidden" />
       </a>
       
       <!-- Desktop Nav -->
@@ -61,4 +61,10 @@ const currentPath = Astro.url.pathname;
     </div>
   </div>
 </header>
-<div class="h-16"></div> <!-- Spacer for fixed header -->
+<!--
+  Spacer for the fixed header, and it has to track the header's real height.
+  Below sm the stacked lockup is taller than the horizontal one, putting the
+  header at ~88px against ~68px above sm. A flat h-16 here let the top of
+  every mobile page sit underneath the nav.
+-->
+<div class="h-24 sm:h-16"></div>
