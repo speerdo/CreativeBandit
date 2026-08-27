@@ -1,0 +1,58 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { namespaceSvg, decorateSvgRoot, stripUnreferencedIds } from '../lib/svg';
+
+export type Variant = 'horizontal' | 'vertical';
+
+export interface Props {
+  variant: Variant;
+  /** Sizing/visibility utilities for the wrapper. */
+  class?: string;
+  /**
+   * Accessible name. Omit for the usual case, where the lockup sits inside an
+   * anchor that is already labelled — see Navbar.astro.
+   */
+  label?: string;
+}
+
+const { variant, class: className = '', label } = Astro.props;
+
+/*
+ * Spelled out rather than interpolated, for the same reason Mascot.astro
+ * spells out its pose classes: Tailwind finds classes by scanning source text
+ * for literals, so `logo--${variant}` is invisible to it and every rule below
+ * would be purged while the markup still looked correct.
+ */
+const VARIANT_CLASS: Record<Variant, string> = {
+  horizontal: 'cb-logo--horizontal',
+  vertical: 'cb-logo--vertical',
+};
+
+const FILE: Record<Variant, string> = {
+  horizontal: 'cb-logo-horizontal.svg',
+  vertical: 'cb-logo-vertical.svg',
+};
+
+/*
+ * Read from assets-src/ rather than public/. Anything under public/ is copied
+ * verbatim into dist/ and served, and these files only ever reach the browser
+ * as inlined markup — shipping them a second time as standalone downloads
+ * nobody requests is pure waste.
+ */
+const file = path.join(process.cwd(), 'assets-src', 'marks', FILE[variant]);
+let svg = fs.readFileSync(file, 'utf8');
+
+/*
+ * Both lockups came out of Illustrator using the same `cls-1` class and the
+ * same `Layer_1-2` ids, and the navbar renders one variant while the footer
+ * renders another on the same page. Without this the two documents collide.
+ */
+svg = namespaceSvg(svg, `cb-logo-${variant}`);
+// The navbar and the footer each render this component, so the same lockup
+// appears twice per page. See lib/svg.ts for why that needs handling.
+svg = stripUnreferencedIds(svg);
+svg = decorateSvgRoot(svg, label);
+---
+
+<span class:list={['cb-logo', VARIANT_CLASS[variant], className]} set:html={svg} />

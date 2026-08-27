@@ -1,6 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ServiceCard from '../components/ServiceCard.astro';
+import Mascot from '../components/Mascot.astro';
+import SwatPanel from '../components/SwatPanel.astro';
+import ShopScene from '../components/ShopScene.astro';
+import DuoPanel from '../components/DuoPanel.astro';
+import UfoShooter from '../components/UfoShooter.astro';
 import { service } from '../lib/schema';
 
 const pricingTiers = [
@@ -377,54 +382,85 @@ const serviceSchema = services.map((s) =>
             <a href="/contact" class="btn-primary">Discuss Your Project</a>
           </div>
           
-          {/*
-            A typographic spec plate, not a photograph. Six generic Pexels
-            stock shots used to sit here - hotlinked, unsized, and exactly the
-            "creative team collaborating" filler that ProjectCard.astro's own
-            comment explains we stopped using once the work was real.
-
-            Replacing them with the stack is a straight upgrade on three
-            counts: it is information rather than decoration, an agency
-            evaluating a subcontractor genuinely wants to know what we build
-            in, and it carries the house style through crop marks, mono labels
-            and ink accents instead of through a recoloured photo. It also
-            costs no bytes and no third-party request.
-          */}
           <div class={`${index % 2 === 0 ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}>
-            <div class="crop-marks border border-paper/15 bg-base-100 p-8 lg:p-10">
-              <div class="mb-8 flex items-start justify-between gap-6">
-                <div>
-                  <p class="label-tech mb-3">What we build it in</p>
-                  <p class="font-display text-2xl font-extrabold uppercase leading-none text-paper" style="font-stretch: 125%;">
-                    {service.title}
-                  </p>
-                </div>
-                {/* Decorative: the heading beside it already names the service. */}
-                <span
-                  class="h-2 w-16 shrink-0 self-center"
-                  class:list={[index % 3 === 0 ? 'bg-ink-hot' : index % 3 === 1 ? 'bg-ink-acid' : 'bg-ink-cold']}
-                  aria-hidden="true"
-                ></span>
+            {service.id === 'design' ? (
+              <DuoPanel />
+            ) : service.id === 'ecommerce' ? (
+              <ShopScene />
+            ) : service.id === 'web-development' ? (
+              <SwatPanel />
+            ) : service.id === 'ai-integration' ? (
+              /*
+               * The rocket cat, the same craft and hyperdrive treatment the
+               * homepage uses. No shadow-xl frame around it: the mascot is a
+               * cut-out with its own streak field, so a drop-shadowed panel
+               * would put a rectangle where the artwork deliberately has none.
+               *
+               * The generous vertical padding is load-bearing. The hull is
+               * rotated 20deg by .cb-mascot--rocket, and the exhaust plume
+               * overflows the viewBox on purpose, so the artwork needs room
+               * above and below its own box or the plume gets cropped by the
+               * next row.
+               */
+              <div class="flex items-center justify-center py-10">
+                <Mascot pose="rocket" class="w-full max-w-[520px]" />
               </div>
+            ) : (
+              /*
+               * Services without a bespoke scene yet (healthcare, automation)
+               * fall back to the typographic spec plate from the launch pass
+               * rather than hotlinked Pexels stock. It is information, not
+               * decoration, and it carries the house style through crop marks,
+               * mono labels and ink accents. Swap in a scene here as each is
+               * drawn.
+               */
+              <div class="crop-marks border border-paper/15 bg-base-100 p-8 lg:p-10">
+                <div class="mb-8 flex items-start justify-between gap-6">
+                  <div>
+                    <p class="label-tech mb-3">What we build it in</p>
+                    <p class="font-display text-2xl font-extrabold uppercase leading-none text-paper" style="font-stretch: 125%;">
+                      {service.title}
+                    </p>
+                  </div>
+                  {/* Decorative: the heading beside it already names the service. */}
+                  <span
+                    class="h-2 w-16 shrink-0 self-center"
+                    class:list={[index % 3 === 0 ? 'bg-ink-hot' : index % 3 === 1 ? 'bg-ink-acid' : 'bg-ink-cold']}
+                    aria-hidden="true"
+                  ></span>
+                </div>
 
-              <ul class="flex flex-wrap gap-2">
-                {service.stack.map((tool) => (
-                  <li class="border border-paper/20 px-3 py-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper-mute">
-                    {tool}
-                  </li>
-                ))}
-              </ul>
+                <ul class="flex flex-wrap gap-2">
+                  {service.stack.map((tool) => (
+                    <li class="border border-paper/20 px-3 py-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper-mute">
+                      {tool}
+                    </li>
+                  ))}
+                </ul>
 
-              <p class="mt-8 border-t border-paper/15 pt-6 text-sm text-paper-mute">
-                Not an exhaustive list. We pick the stack around the problem and the team who has to maintain it after we hand it over.
-              </p>
-            </div>
+                <p class="mt-8 border-t border-paper/15 pt-6 text-sm text-paper-mute">
+                  Not an exhaustive list. We pick the stack around the problem and the team who has to maintain it after we hand it over.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </section>
   ))}
   
+  <!--
+    Target range. Sits between the service detail and pricing: a breather at
+    the point in the page where someone has just read six sections of prose.
+  -->
+  <section class="section">
+    <div class="container mx-auto">
+      <div class="mx-auto max-w-3xl">
+        <UfoShooter />
+      </div>
+    </div>
+  </section>
+
   <!-- Pricing Section -->
   <section id="pricing" class="section">
     <div class="container mx-auto">

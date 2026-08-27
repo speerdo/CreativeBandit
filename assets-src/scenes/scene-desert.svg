@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 755.5 278.5">
+  <!-- Generator: Adobe Illustrator 30.5.1, SVG Export Plug-In . SVG Version: 2.1.4 Build 3)  -->
+  <defs>
+    <style>
+      .st0 {
+        mask: url(#mask);
+      }
+
+      .st1 {
+        fill: url(#linear-gradient1);
+      }
+
+      .st2 {
+        opacity: .5;
+      }
+
+      .st2, .st3, .st4 {
+        isolation: isolate;
+      }
+
+      .st2, .st3, .st5 {
+        fill: #1b27e8;
+      }
+
+      .st3 {
+        opacity: .3;
+      }
+
+      .st6 {
+        stroke-width: 15px;
+      }
+
+      .st6, .st7, .st8, .st9 {
+        fill: none;
+        stroke: #1b27e8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .st7 {
+        stroke-width: 14px;
+      }
+
+      .st8 {
+        stroke-width: 10px;
+      }
+
+      .st9 {
+        stroke-width: 22px;
+      }
+
+      .st10 {
+        fill: #ede8df;
+      }
+
+      .st11 {
+        fill: #ffe800;
+      }
+
+      .st4 {
+        fill: #e8451f;
+      }
+
+      .st4, .st12 {
+        opacity: .9;
+      }
+
+      .st13 {
+        fill: url(#linear-gradient);
+      }
+
+      .st14 {
+        mask: url(#mask-1);
+      }
+
+      .st15 {
+        opacity: .6;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="71.8" y1="119.5" x2="471.8" y2="119.5" gradientTransform="translate(0 237) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000"/>
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset=".9" stop-color="#fff"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <mask id="mask" x="0" y="-32.5" width="755.5" height="311" maskUnits="userSpaceOnUse">
+      <g id="scene-desert-mask-x">
+        <rect class="st13" x="71.8" y="-32.5" width="400" height="300"/>
+      </g>
+    </mask>
+    <linearGradient id="linear-gradient1" x1="271.8" y1="269.5" x2="271.8" y2="-30.5" gradientTransform="translate(0 237) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000"/>
+      <stop offset=".1" stop-color="#fff"/>
+      <stop offset=".9" stop-color="#fff"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <mask id="mask-1" x="0" y="-32.5" width="755.5" height="311" maskUnits="userSpaceOnUse">
+      <g id="scene-desert-mask-y">
+        <rect class="st1" x="71.8" y="-32.5" width="400" height="300"/>
+      </g>
+    </mask>
+  </defs>
+  <g id="Layer_1" focusable="false">
+    <g class="st0">
+      <g class="st14">
+        <g>
+          <g>
+            <circle class="st4" cx="327.4" cy="144" r="82"/>
+            <g class="st15">
+              <circle class="st11" cx="383.8" cy="25.5" r="2.1"/>
+              <circle class="st11" cx="427.8" cy="63.5" r="1.5"/>
+              <circle class="st11" cx="339.8" cy="1.5" r="1.5"/>
+            </g>
+          </g>
+          <g>
+            <ellipse class="st10" cx="30" cy="45.4" rx="10.7" ry="12.1" transform="translate(-15.4 75.3) rotate(-89.9)"/>
+            <ellipse class="st5" cx="29.9" cy="51.2" rx="8.5" ry="29.9" transform="translate(-21.3 81) rotate(-89.9)"/>
+            <circle class="st11" cx="15" cy="53.9" r="2.5"/>
+            <circle class="st11" cx="29.9" cy="54.6" r="2.5"/>
+            <circle class="st11" cx="44.9" cy="53.9" r="2.5"/>
+          </g>
+          <g>
+            <path class="st3" d="M71.8,267.5v-85.5c68.4-31.9,142.4-36.5,222.2-13.7,79.8,22.8,159.5,17.1,239.3-17.1,79.8-31.9,153.8-34.2,222.2-6.8v123.1H71.8Z"/>
+            <path class="st2" d="M71.8,267.5v-28c46.7-14.7,93.3-15.3,140-2,46.7,13.3,93.3,12.7,140-2,46.7-14.7,86.7-15.3,120-2v34H71.8Z"/>
+            <g class="st12">
+              <path class="st9" d="M175.7,267.5V92.2"/>
+              <path class="st6" d="M175.7,191h-42v-59.3"/>
+              <path class="st6" d="M175.7,156.4h42v-46.9"/>
+              <path class="st7" d="M422.7,267.5v-101.2"/>
+              <path class="st8" d="M422.7,223.1h28.4v-34.6"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

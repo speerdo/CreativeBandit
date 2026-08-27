@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+/*
+ * Motion design reel, one project per block.
+ *
+ * THE ORDER IS DELIBERATE AND IS NOT CHRONOLOGICAL. It runs 2026, 2020, 2019,
+ * 2018, then the 2021 self-directed piece last. That is Katlyn's stated
+ * preference, confirmed - it is a curated running order, not a sort. Please do
+ * not "fix" it into date order; if it ever should change, that is a decision
+ * to make deliberately rather than a bug to correct.
+ *
+ * `width`/`height` are the MASTER dimensions, read off the files rather than
+ * taken from their names - which is worth doing, because they disagree: the
+ * Last Gnome master is 1080x1350, not the 1920x1080 its siblings are. They are
+ * here so each block can reserve its exact aspect before the video loads,
+ * which is what keeps the page from reflowing as you scroll it.
+ *
+ * Five different shapes in six clips, so nothing here assumes 16:9.
+ */
+const projects = [
+  {
+    slug: 'last-gnome-location',
+    client: 'Last Gnome Location',
+    title: 'How It Works',
+    blurb:
+      'A how-to video walking through a gnome travel buddy companion app, from first scan to sharing a trip.',
+    width: 1080,
+    height: 1350,
+  },
+  {
+    slug: 'pupper-portraits',
+    client: 'Pupper Portraits',
+    title: 'How Pupper Portraits Works',
+    blurb: 'A quick how-to guide covering the service end to end, cut vertical for social.',
+    width: 1080,
+    height: 1920,
+  },
+  {
+    slug: 'swan-global-investment',
+    client: 'Swan Global Investment',
+    title: 'Investing Redefined',
+    blurb: 'A long-form investment explainer for an asset management firm.',
+    width: 1920,
+    height: 1080,
+  },
+  {
+    slug: 'everest-comms',
+    client: 'Everest Comms',
+    title: 'What We Do',
+    blurb:
+      'A fifteen-second brand awareness spot for a risk mitigation company, cut for Facebook ads.',
+    width: 1200,
+    height: 628,
+  },
+  {
+    slug: 'measure-l',
+    client: 'No on the Anaheim Job Killer Initiative',
+    title: 'Measure L',
+    blurb: 'A thirty-second explainer for a ballot awareness campaign.',
+    width: 1920,
+    height: 1080,
+  },
+  {
+    slug: 'all-knowing',
+    client: 'Freelance',
+    title: 'All-Knowing',
+    blurb: 'A short square loop, self-directed.',
+    width: 1200,
+    height: 1200,
+  },
+];
+---
+
+<Layout
+  title="Motion Design"
+  description="Motion design work by Katlyn at Creative Bandit: explainers, how-to videos, and social spots for asset management, risk, consumer apps and ballot campaigns."
+>
+  <section class="section pt-24">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <p class="label-tech mb-6">Motion</p>
+        <h1 class="mb-6">Work That <span class="plate-type">Moves</span></h1>
+        <p class="text-xl text-paper-mute">
+          Explainers, how-to videos and social spots. Concept through animation, cut to whatever
+          shape the placement needed.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-24">
+    <div class="container mx-auto">
+      <div class="mx-auto max-w-4xl space-y-24">
+        {projects.map((project, index) => (
+          <article class="cb-reel">
+            <header class="mb-6">
+              <p class="label-tech mb-3">
+                {String(index + 1).padStart(2, '0')} — {project.client}
+              </p>
+              <h2 class="mb-4">{project.title}</h2>
+              <p class="text-paper-mute max-w-2xl">{project.blurb}</p>
+            </header>
+
+            <!--
+              preload="none" is the important attribute on this page. Six clips
+              at a couple of MB each would otherwise all start downloading on
+              load; this way nothing but the poster arrives until someone
+              presses play.
+
+              width/height are the master's real pixel dimensions, so the
+              browser reserves the right box from the first paint rather than
+              reflowing the page when each video's metadata lands.
+            -->
+            <div class="cb-reel__frame" style={`aspect-ratio: ${project.width} / ${project.height}`}>
+              <video
+                class="cb-reel__video"
+                controls
+                loop
+                playsinline
+                muted
+                preload="none"
+                width={project.width}
+                height={project.height}
+                poster={`/motion/${project.slug}.jpg`}
+              >
+                <source src={`/motion/${project.slug}.mp4`} type="video/mp4" />
+                <!-- Silent motion pieces, so there is no audio track to caption.
+                     The blurb above carries the content for anyone who cannot
+                     play it. -->
+                Your browser cannot play this video.
+              </video>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-base-200">
+    <div class="container mx-auto text-center">
+      <h2 class="mb-6">Need Something <span class="plate-type">Animated</span>?</h2>
+      <p class="text-paper-mute mb-8 mx-auto max-w-2xl">
+        Explainers, product motion, social cuts. Tell us what you are working on.
+      </p>
+      <a href="/contact" class="btn-primary">Start a Project</a>
+    </div>
+  </section>
+</Layout>

@@ -28,3 +28,7 @@ pnpm-debug.log*
 .idea/
 .vercel
 .env*
+
+# raw motion masters — bake outputs live in public/motion/ and are committed.
+# Kept out of git: individual files exceed GitHub's 100MB limit.
+assets-src/motion/

@@ -1,8 +1,9 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
+import { namespaceSvg, decorateSvgRoot, stripUnreferencedIds } from '../lib/svg';
 
-export type Pose = 'sleeping' | 'pistols' | 'batting' | 'rocket';
+export type Pose = 'sleeping' | 'pistols' | 'batting' | 'rocket' | 'raised-arm';
 
 export interface Props {
   pose: Pose;
@@ -12,9 +13,35 @@ export interface Props {
   label?: string;
   /** Film-grain strength, 0-1. 0 leaves the artwork clean. */
   grain?: number;
+  /**
+   * Scenery to leave out. For compositions that supply their own version of a
+   * scene element and need it in a different layer - SwatPanel puts the cursor
+   * in FRONT of a screen the cat sits behind, which the attached scene cannot
+   * do because it renders inside the mascot's own box.
+   */
+  without?: SceneName[];
+  /**
+   * Hex-for-hex palette substitution over the artwork, for rendering the same
+   * pose in a different ink set. Keys and values are both hex literals as they
+   * appear in the file.
+   *
+   * Applied in ONE pass, which is the only way a swap works: replacing
+   * bone->blue and then blue->bone in sequence turns the freshly written blue
+   * straight back into bone. Every key must be present in the artwork or the
+   * build fails, so a re-export that renames a colour cannot silently leave a
+   * cat half-recoloured.
+   */
+  recolor?: Record<string, string>;
 }
 
-const { pose, class: className = '', label, grain = 0.32 } = Astro.props;
+const {
+  pose,
+  class: className = '',
+  label,
+  grain = 0.32,
+  without = [],
+  recolor,
+} = Astro.props;
 const grainAlpha = Math.max(0, Math.min(1, grain));
 
 /*
@@ -28,6 +55,7 @@ const POSE_CLASS: Record<Pose, string> = {
   pistols: 'cb-mascot--pistols',
   batting: 'cb-mascot--batting',
   rocket: 'cb-mascot--rocket',
+  'raised-arm': 'cb-mascot--raised-arm',
 };
 
 /*
@@ -107,6 +135,13 @@ const PARTS: Record<Pose, Record<string, PartSpec[]>> = {
     ],
     tail: [{ index: 34, paint: '#ede8df', box: [114, 96, 291, 156] }],
   },
+  /*
+   * Deliberately empty. This pose is the pistols cat with the arm already
+   * drawn raised, and it is used by cross-fading the WHOLE pose rather than
+   * by animating anything inside it - so there is nothing to rig, and nothing
+   * to keep in step with the artwork.
+   */
+  'raised-arm': {},
   rocket: {
     // The whole exhaust plume is one polygon, attached at its left edge
     // (x=848) on the craft's tail. Nothing else here moves: the hover nudge
@@ -139,14 +174,60 @@ const PARTS: Record<Pose, Record<string, PartSpec[]>> = {
  * mascot's bounds - the numbers below are read straight off the scene file's
  * viewBox and turned into percentages of the mascot underneath.
  */
-const SCENERY: Partial<
-  Record<Pose, { file: string; x: number; y: number; w: number; h: number; front?: boolean }>
-> = {
-  pistols: { file: 'scene-pistols.svg', x: -130, y: 150, w: 425, h: 217 },
+interface Scene {
+  file: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  front?: boolean;
+  /**
+   * Emits `cb-mascot__scene--<name>` so CSS can address one scene in
+   * particular. Required as soon as a pose has more than one: without it the
+   * only handle is `.cb-mascot__scene`, which hits all of them.
+   */
+  name?: SceneName;
+  /** Where the file lives. Omit for scenery, which sits in public/mascot/. */
+  dir?: 'marks';
+}
+
+type SceneName = 'land' | 'cursor' | 'burst';
+
+/*
+ * Spelled out for the same reason POSE_CLASS above is: Tailwind finds classes
+ * by scanning source text for literals, so `cb-mascot__scene--${name}` is
+ * invisible to it and the rules get purged while the markup still looks
+ * correct. Every modifier that CSS targets has to appear here as a string.
+ */
+const SCENE_CLASS: Record<SceneName, string> = {
+  land: 'cb-mascot__scene--land',
+  cursor: 'cb-mascot__scene--cursor',
+  burst: 'cb-mascot__scene--burst',
+};
+
+// A list per pose rather than a single entry: the batting cat carries both
+// its alert burst and the bandit cursor it swipes at.
+const SCENERY: Partial<Record<Pose, Scene[]>> = {
+  pistols: [{ file: 'scene-pistols.svg', x: -130, y: 150, w: 425, h: 217, name: 'land' }],
   // The burst is thrown off the cat rather than standing behind it, so this
   // one layers in front. Its strokes all sit outside the head's silhouette,
   // so nothing of the artwork is covered.
-  batting: { file: 'scene-batting.svg', x: -40, y: -90, w: 280, h: 230, front: true },
+  batting: [
+    { file: 'scene-batting.svg', x: -40, y: -90, w: 280, h: 230, front: true, name: 'burst' },
+    /*
+     * The bandit cursor, as the thing the cat is swiping at. It takes the
+     * saucer's place: the saucer is still in the artwork and still mapped
+     * under PARTS below, but is hidden in CSS — see the note on
+     * `[data-cb='ufo']` in global.css.
+     *
+     * Sized and placed to sit exactly where the saucer did, so the swipe
+     * that was tuned against it still connects: the saucer occupied roughly
+     * x 336-379 / y 61-141 of this pose's 432.8x390 box, centred on the
+     * (358, 101) its dodge pivots around. 44 wide keeps the cursor's own
+     * 56.63:68.28 proportions at 53 tall, centred on that same point.
+     */
+    { file: 'cb-cursor.svg', dir: 'marks', x: 336, y: 74, w: 44, h: 53, front: true, name: 'cursor' },
+  ],
 };
 
 const STACKED: Partial<Record<Pose, string[]>> = {
@@ -156,6 +237,32 @@ const STACKED: Partial<Record<Pose, string[]>> = {
 
 const file = path.join(process.cwd(), 'public', 'mascot', `bandit-cat-${pose}.svg`);
 let svg = fs.readFileSync(file, 'utf8');
+
+/* --- palette substitution -------------------------------------------------
+ *
+ * Done before anything else touches the markup, so the grain filter and the
+ * part map below operate on the finished artwork. Colours are matched
+ * case-insensitively because Illustrator is not consistent about hex case
+ * between the <style> block and inline fill attributes.
+ */
+if (recolor && Object.keys(recolor).length > 0) {
+  const from = Object.keys(recolor);
+  for (const hex of from) {
+    if (!new RegExp(hex, 'i').test(svg)) {
+      throw new Error(
+        `Mascot "${pose}": recolor maps ${hex}, which the artwork does not ` +
+          `contain. It has been re-exported with a different palette - check ` +
+          `the colours in the file before trusting this mapping.`
+      );
+    }
+  }
+  // One alternation, one pass. Sequential replaces would undo their own swaps.
+  const lookup = new Map(Object.entries(recolor).map(([k, v]) => [k.toLowerCase(), v]));
+  svg = svg.replace(
+    new RegExp(from.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi'),
+    (hit) => lookup.get(hit.toLowerCase()) ?? hit
+  );
+}
 
 /* --- film grain -----------------------------------------------------------
  *
@@ -189,6 +296,7 @@ const GRAIN_FREQUENCY: Record<Pose, number> = {
   sleeping: 0.35,
   pistols: 0.35,
   batting: 0.35,
+  'raised-arm': 0.35,
   rocket: 0.14,
 };
 const GRAIN_OCTAVES = 3;
@@ -197,6 +305,9 @@ const GRAIN_SEED: Record<Pose, number> = {
   sleeping: 7,
   pistols: 19,
   batting: 31,
+  // Different seed from pistols on purpose: the two are stacked and
+  // cross-faded, and identical speckle would make the swap look like a jump.
+  'raised-arm': 23,
   rocket: 47,
 };
 // Contrast around mid-gray. fractalNoise clusters tightly on 0.5 and reads as
@@ -259,16 +370,45 @@ if (grainAlpha > 0) {
     svg.slice(bodyEnd);
 }
 
-// --- namespace classes and ids so two mascots can share a page ------------
-svg = svg.replace(/\b(st\d+)\b/g, `${pose}-$1`);
-const ids = [...svg.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
-for (const id of ids) {
-  if (id.startsWith(`${pose}-`)) continue;
-  const esc = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  svg = svg.replace(new RegExp(`id="${esc}"`, 'g'), `id="${pose}-${id}"`);
-  svg = svg.replace(new RegExp(`url\\(#${esc}\\)`, 'g'), `url(#${pose}-${id})`);
-  svg = svg.replace(new RegExp(`href="#${esc}"`, 'g'), `href="#${pose}-${id}"`);
+/*
+ * Namespace prefix. Normally just the pose, which is enough to keep two
+ * DIFFERENT poses from colliding on one page.
+ *
+ * Two mascots of the SAME pose need more thought. While they are identical
+ * they can safely share a namespace: both point at the same <pattern>,
+ * <clipPath> and grain <filter>, and those are the same artwork either way.
+ * It stops being safe the moment one is recoloured - the ids still collide,
+ * so both resolve to whichever was rendered first, and a palette swap can
+ * silently fail to reach anything defined in <defs>.
+ *
+ * Folding the palette into the prefix draws the line in the right place:
+ * identical cats keep sharing, recoloured ones get their own defs.
+ */
+function paletteTag(map: Record<string, string>): string {
+  const canonical = Object.entries(map)
+    .map(([k, v]) => `${k.toLowerCase()}>${v.toLowerCase()}`)
+    .sort()
+    .join('|');
+  let h = 0x811c9dc5;
+  for (let i = 0; i < canonical.length; i++) {
+    h ^= canonical.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(36).slice(0, 6);
 }
+
+const nsPrefix =
+  recolor && Object.keys(recolor).length > 0 ? `${pose}-${paletteTag(recolor)}` : pose;
+
+// --- namespace classes and ids so two mascots can share a page ------------
+// Shared with Logo.astro, which inlines the brand lockups and hits exactly
+// the same collision. See lib/svg.ts for what goes wrong without it.
+//
+// The root <svg> is finished off further down rather than by decorateSvgRoot:
+// this component restates width/height from the viewBox, which that helper
+// strips. Only the prolog is dropped here, for the same reason it is dropped
+// everywhere else - it is invalid once inlined into HTML.
+svg = namespaceSvg(svg, nsPrefix).replace(/^\s*<\?xml[^>]*\?>\s*/, '');
 
 // --- tag animatable parts, verifying each is still what we think it is ----
 const DRAWABLE = /<(path|circle|ellipse|rect|polygon)\b[^>]*?\/?>/g;
@@ -317,12 +457,21 @@ for (const [part, specs] of Object.entries(PARTS[pose])) {
     const cls = attrs.match(/class="([^"]+)"/)?.[1] ?? '';
     const inline = attrs.match(/fill="([^"]+)"/)?.[1];
     const actual = (inline && inline !== 'none' ? inline : classPaint.get(cls)) ?? '(none)';
-    if (actual.toLowerCase() !== spec.paint.toLowerCase()) {
+    /*
+     * PARTS records the artwork's own colours, so when a palette swap has been
+     * applied the expectation has to travel through it too - otherwise every
+     * recoloured part trips this check for the one reason that is not a
+     * problem. `stroke` and any unmapped colour fall through unchanged, so the
+     * guard keeps its teeth: a genuine re-export still fails here.
+     */
+    const expected = recolor?.[spec.paint.toLowerCase()] ?? spec.paint;
+    if (actual.toLowerCase() !== expected.toLowerCase()) {
       throw new Error(
         `Mascot "${pose}": element ${spec.index} was mapped to part "${part}" ` +
-          `expecting paint ${spec.paint}, but it paints ${actual}. The artwork ` +
-          `has changed underneath the part map - re-derive it rather than ` +
-          `animating the wrong shape.`
+          `expecting paint ${expected}` +
+          (expected === spec.paint ? '' : ` (${spec.paint} after recolor)`) +
+          `, but it paints ${actual}. The artwork has changed underneath the ` +
+          `part map - re-derive it rather than animating the wrong shape.`
       );
     }
   }
@@ -426,30 +575,67 @@ if (!label) svg = svg.replace(/<title\b[^>]*>[\s\S]*?<\/title>/, '');
  * pose's units, so this is a straight ratio with no offsets to re-tune when a
  * placement's width changes - the scene simply scales with the cat.
  */
-const scene = SCENERY[pose];
-let sceneSvg = '';
-let sceneStyle = '';
-if (scene) {
-  sceneSvg = fs.readFileSync(path.join(process.cwd(), 'public', 'mascot', scene.file), 'utf8');
-  const pct = (n: number) => `${(n * 100).toFixed(3)}%`;
-  sceneStyle = [
-    `left:${pct(scene.x / vw)}`,
-    `width:${pct(scene.w / vw)}`,
-    // Pinned by its bottom rather than its top, so a scene drawn to the same
-    // ground line as the artwork sits flush against the cat's feet.
-    `bottom:${pct((vh - (scene.y + scene.h)) / vh)}`,
-    `height:${pct(scene.h / vh)}`,
-  ].join(';');
-}
+const pct = (n: number) => `${(n * 100).toFixed(3)}%`;
+
+const scenes = (SCENERY[pose] ?? [])
+  .filter((scene) => !scene.name || !without.includes(scene.name))
+  .map((scene) => {
+  // Marks live in assets-src/ because they are only ever inlined; scenery
+  // proper sits in public/mascot/ alongside the poses it belongs to.
+  const dir =
+    scene.dir === 'marks'
+      ? path.join(process.cwd(), 'assets-src', 'marks')
+      : path.join(process.cwd(), 'public', 'mascot');
+
+  /*
+   * Namespaced like the pose above. The two scene files already carry
+   * hand-written prefixes, but the marks do not — cb-cursor.svg ships
+   * Illustrator's generic `Layer_2`, which would collide the moment a second
+   * mark joins a page.
+   */
+  /*
+   * Same treatment the poses and the brand marks get. decorateSvgRoot is what
+   * drops the XML prolog and the (substantial) authoring comments in these
+   * files - scenery is inlined into the HTML of every page that renders the
+   * mascot, so without it the scene-batting rationale ships to every visitor.
+   * It also marks the scene decorative, which it always is.
+   */
+  const html = decorateSvgRoot(
+    stripUnreferencedIds(
+      namespaceSvg(
+        fs.readFileSync(path.join(dir, scene.file), 'utf8'),
+        `${nsPrefix}-scene-${scene.name ?? 'x'}`
+      )
+    )
+  );
+
+  return {
+    html,
+    front: scene.front,
+    name: scene.name,
+    style: [
+      `left:${pct(scene.x / vw)}`,
+      `width:${pct(scene.w / vw)}`,
+      // Pinned by its bottom rather than its top, so a scene drawn to the same
+      // ground line as the artwork sits flush against the cat's feet.
+      `bottom:${pct((vh - (scene.y + scene.h)) / vh)}`,
+      `height:${pct(scene.h / vh)}`,
+    ].join(';'),
+  };
+});
 ---
 
 <span class:list={['cb-mascot', POSE_CLASS[pose], className]}>
-  {sceneSvg && (
+  {scenes.map((scene) => (
     <span
-      class:list={['cb-mascot__scene', scene?.front && 'cb-mascot__scene--front']}
-      style={sceneStyle}
-      set:html={sceneSvg}
+      class:list={[
+        'cb-mascot__scene',
+        scene.front && 'cb-mascot__scene--front',
+        scene.name && SCENE_CLASS[scene.name],
+      ]}
+      style={scene.style}
+      set:html={scene.html}
     />
-  )}
+  ))}
   <Fragment set:html={svg} />
 </span>

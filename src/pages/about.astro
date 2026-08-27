@@ -1,7 +1,7 @@
 ---
+import DesertScene from '../components/DesertScene.astro';
 import Layout from '../layouts/Layout.astro';
 import TeamMember from '../components/TeamMember.astro';
-import Mascot from '../components/Mascot.astro';
 import { person } from '../lib/schema';
 
 const team = [
@@ -129,23 +129,35 @@ const teamSchema = team.map((member) =>
   </section>
   
   <!-- About Us Section -->
-  <section class="py-20">
+  <!-- `cb-desert-host` makes the whole section the hover target for the
+       saucer flyby, rather than the graphic alone. -->
+  <section class="cb-desert-host py-20">
     <div class="container mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
-          <div class="relative">
-            {/*
-              Was a Pexels stock shot captioned "creative team collaborating on
-              digital innovation" - a stock photo of strangers standing in for a
-              two-person studio, on the page whose whole job is saying who those
-              two people actually are. The mascot is commissioned work in the
-              house style, served locally, and at least belongs to us.
+          <!-- Lifted clear of the stats card below it. Only from lg up: below
+               that the grid is a single column and the scene already has the
+               full width of the page to itself. -->
+          <div class="relative lg:-mt-14">
+            <!--
+              Was a hotlinked Pexels photo - one of the stock-image tells §1 of
+              the visual identity doc names. The desert scene is the same
+              vocabulary as the pistols cat's backdrop, so the page stops
+              borrowing someone else's photograph to fill the column.
 
-              The real portraits are further down this page in the team cards,
-              so reusing them here would just repeat them.
-            */}
-            <div class="flex items-center justify-center bg-base-100 border border-paper/15 p-10 lg:p-16">
-              <Mascot pose="batting" class="w-full max-w-[22rem]" />
+              aspect-[4/3] and not `aspect-w-4 aspect-h-3`: the latter is the
+              old @tailwindcss/aspect-ratio plugin syntax, and that plugin is
+              not installed, so those two classes were doing nothing at all.
+
+              Widened past its column and bled to the LEFT, toward the page
+              edge — the identity doc's "let it break the grid" note. Left
+              rather than right because right is where the copy sits, and the
+              gap between them is the one piece of breathing room the row has.
+              body carries overflow-x-hidden, so the bleed cannot raise a
+              horizontal scrollbar.
+            -->
+            <div class="aspect-[4/3] overflow-hidden lg:-ml-[12%] lg:w-[112%]">
+              <DesertScene class="h-full w-full" />
             </div>
             <div class="absolute -bottom-6 -right-6 bg-base-100 p-6 shadow-xl">
               <div class="grid grid-cols-2 gap-6">
@@ -322,7 +334,15 @@ const teamSchema = team.map((member) =>
         </div>
       </div>
     </div>
-    <div class="absolute top-0 right-0 w-full h-full -z-10">
-    </div>
+    <!--
+      This page's one scan-shape moment. Sits in the slot an empty decorative
+      div was already holding, behind the CTA content at z-10. Hot ink here
+      rather than the cold used on the homepage: this is the closing call to
+      action, and hot is the accent every CTA on the site already carries.
+    -->
+    <div
+      class="shape-scan shape-scan--01 shape-scan--hot hidden md:block -left-16 bottom-0 h-[70%] w-[45%] -rotate-3"
+      aria-hidden="true"
+    ></div>
   </section>
 </Layout>

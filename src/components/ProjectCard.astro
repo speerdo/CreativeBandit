@@ -5,9 +5,15 @@ export interface Props {
   image: string;
   link: string;
   description?: string;
+  /**
+   * Overrides the default alt text. The default assumes the image is a site
+   * screenshot, which it is for every client card - but not for the motion
+   * reel, whose thumbnail is a logo mark.
+   */
+  imageAlt?: string;
 }
 
-const { title, category, image, link, description } = Astro.props;
+const { title, category, image, link, description, imageAlt } = Astro.props;
 
 const isExternal = link.startsWith('http');
 ---
@@ -32,7 +38,7 @@ const isExternal = link.startsWith('http');
          to be computed from. -->
     <img
       src={image}
-      alt={`${title} website screenshot`}
+      alt={imageAlt ?? `${title} website screenshot`}
       loading="lazy"
       decoding="async"
       width="1600"

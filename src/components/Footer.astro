@@ -1,5 +1,7 @@
 ---
 import Mascot from './Mascot.astro';
+import Logo from './Logo.astro';
+import Sticker from './Sticker.astro';
 import SubscribeForm from './SubscribeForm.astro';
 
 const currentYear = new Date().getFullYear();
@@ -70,12 +72,25 @@ const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path)
 
   <div class="container mx-auto pt-12 pb-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <div>
-        <a href="/" class="mb-4 inline-flex items-center gap-3" aria-label="Creative Bandit, home">
-          <img src="/mascot/bandit-cat-head.svg" alt="" width="38" height="32" class="h-8 w-auto" />
-          <span class="font-display text-lg font-extrabold uppercase tracking-tight text-paper" style="font-stretch: 125%;">
-            Creative<span class="text-ink-hot">Bandit</span>
-          </span>
+      <!--
+        `relative` so the sticker can hang off this column's top edge, and the
+        top padding is what reserves room for the part of it that lands INSIDE
+        the footer — without it the badge would sit on top of the logo.
+      -->
+      <div class="relative pt-16">
+        <!--
+          Peeled sticker, straddling the footer's top rule. -top-20 puts its
+          top 32px above that line (the column starts 48px down, from the
+          container's pt-12), so roughly a quarter of the badge overhangs into
+          the section above and the rest sits in the footer.
+
+          Left side on purpose: the sleeping mascot already occupies the
+          top-right corner above this same rule, and it takes pointer events.
+        -->
+        <Sticker class="absolute -top-20 left-0 z-10" />
+        <a href="/" class="cb-logo--link mb-4 inline-flex items-center" aria-label="Creative Bandit, home">
+          <Logo variant="horizontal" class="hidden sm:inline-block" />
+          <Logo variant="vertical" class="sm:hidden" />
         </a>
         <p class="text-paper-mute mb-4">Building intelligent systems that eliminate manual work and deliver measurable business impact.</p>
         <div class="flex space-x-4">
@@ -91,6 +106,7 @@ const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path)
             </a>
           ))}
         </div>
+
       </div>
 
       <div>
@@ -136,8 +152,12 @@ const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path)
     <div class="mt-12 border-t border-paper/15 pt-8 flex flex-col md:flex-row justify-between items-center">
       <p class="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-paper-mute">&copy; {currentYear} Creative Bandit, LLC. All rights reserved.</p>
       <div class="mt-4 md:mt-0">
-        <ul class="flex space-x-6 font-mono text-[0.7rem] uppercase tracking-[0.12em]">
+        <!-- The star-sight from the logo lockup, reused as the separator. It
+             is already an established mark on the page, so it does the job a
+             bullet or a pipe would without introducing another shape. -->
+        <ul class="flex items-center gap-6 font-mono text-[0.7rem] uppercase tracking-[0.12em]">
           <li><a href="/privacy" class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">Privacy Policy</a></li>
+          <li aria-hidden="true"><span class="mark-star text-[0.6rem] opacity-70"></span></li>
           <li><a href="/terms" class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">Terms of Service</a></li>
         </ul>
       </div>
