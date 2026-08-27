@@ -21,11 +21,12 @@ const included = [
   }
 ];
 
-// TODO: finalize pricing. Likely tiered by site count (per-site/month or agency bundle)
+// Pricing is handled per engagement during pilot onboarding. The tier table
+// is deliberately omitted until rates are finalized with the first agencies.
 const pricingTiers = [
-  { name: 'Starter', sites: 'Up to 10 sites', price: '[TODO: $/mo]' },
-  { name: 'Agency', sites: 'Up to 50 sites', price: '[TODO: $/mo]' },
-  { name: 'Scale', sites: '50+ sites', price: '[TODO: Contact for bundle pricing]' }
+  { name: 'Starter', sites: 'Up to 10 sites' },
+  { name: 'Agency', sites: 'Up to 50 sites' },
+  { name: 'Scale', sites: '50+ sites' }
 ];
 ---
 
@@ -90,17 +91,22 @@ const pricingTiers = [
       <div class="max-w-3xl mb-16">
         <p class="label-tech mb-4">Pricing</p>
         <h2 class="mb-6">Tiered by <span class="plate-type">Site Count</span></h2>
-        <p class="text-paper-mute">Pilot pricing, finalized as we onboard the first agencies. [TODO: confirm rates]</p>
+        <p class="text-paper-mute">Pilot pricing is finalized with each agency as we onboard. Tiering is by site count, not by ticket or by hour — you know what you pay every month regardless of how many issues come up.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         {pricingTiers.map(tier => (
           <div class="card text-center">
             <h3 class="text-xl font-bold mb-2">{tier.name}</h3>
-            <p class="text-paper-mute mb-4">{tier.sites}</p>
-            <p class="text-2xl font-bold plate-type">{tier.price}</p>
+            <p class="text-paper-mute">{tier.sites}</p>
           </div>
         ))}
+      </div>
+
+      <div class="max-w-2xl mx-auto text-center border border-ink-hot/20 bg-base-100 p-8">
+        <h3 class="text-xl font-bold mb-3">Pilot pricing, set with you</h3>
+        <p class="text-paper-mute mb-6">We're onboarding a small group of agencies now and finalizing rates around real workflows. Book a free audit and we'll come back with a fixed monthly price for your site count — no hourly surprises, no per-ticket billing.</p>
+        <a href="/contact" class="btn-primary">Book a Free Audit</a>
       </div>
     </div>
   </section>
@@ -110,9 +116,10 @@ const pricingTiers = [
     <div class="container mx-auto relative z-10">
       <div class="max-w-3xl mx-auto text-center">
         <h2 class="mb-6">Managing Security Across <span class="plate-type">Client Sites</span> Manually?</h2>
-        <p class="text-paper-mute text-lg mb-8">We're onboarding a small group of pilot agencies to shape Agent Ops around real workflows. Book a free audit to see where your client sites stand.</p>
+        <p class="text-paper-mute text-lg mb-8">We're onboarding a small group of pilot agencies to shape Agent Ops around real workflows. Book a free audit to see where your client sites stand &mdash; or start smaller and scan one of them yourself, right now, without talking to anyone.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Book a Free Audit</a>
+          <a href="/scan" class="btn-secondary">Scan One Site Free</a>
         </div>
       </div>
     </div>

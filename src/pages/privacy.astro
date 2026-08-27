@@ -9,7 +9,7 @@ import Layout from '../layouts/Layout.astro';
   <section class="pt-32 pb-20 bg-paper text-base-300">
     <div class="container mx-auto px-4">
       <h1 class="text-4xl md:text-5xl font-bold mb-4 font-heading text-center text-base-300">Privacy Policy</h1>
-      <p class="text-base-300/70 text-center max-w-2xl mx-auto mb-16">Last Updated: August 1, 2026</p>
+      <p class="text-base-300/70 text-center max-w-2xl mx-auto mb-16">Last Updated: August 18, 2026</p>
 
       <div class="max-w-4xl mx-auto bg-paper-dim p-8 md:p-12 border border-paper-mute text-base-300 prose prose-lg prose-headings:text-base-300">
         
@@ -31,7 +31,7 @@ import Layout from '../layouts/Layout.astro';
         <h3 class="mb-6">3. How We Collect Information</h3>
         <p class="mb-8">We collect this information:</p>
         <ul class="list-disc pl-6 mb-8 space-y-4">
-          <li><strong>Directly from you</strong> when you provide it to us (e.g., filling out a contact form, subscribing to a newsletter).</li>
+          <li><strong>Directly from you</strong> when you provide it to us, such as filling out our contact form or submitting a URL to the site scanner.</li>
           <li><strong>Automatically as you navigate through the site.</strong> Information collected automatically may include usage details, IP addresses, and information collected through cookies and other tracking technologies.</li>
         </ul>
 
@@ -39,7 +39,7 @@ import Layout from '../layouts/Layout.astro';
         <p class="mb-8">We use information that we collect about you or that you provide to us:</p>
         <ul class="list-disc pl-6 mb-8 space-y-4">
           <li>To present our Website and its contents to you.</li>
-          <li>To provide you with information, products, or services that you request from us (e.g., responding to inquiries, sending lead magnets).</li>
+          <li>To provide you with information, products, or services that you request from us, such as responding to an inquiry or returning the results of a scan you ran.</li>
           <li>To fulfill any other purpose for which you provide it.</li>
           <li>To notify you about changes to our Website or any products or services we offer or provide though it.</li>
           <li>For marketing purposes, if you have opted in to receive such communications.</li>
@@ -49,11 +49,12 @@ import Layout from '../layouts/Layout.astro';
         <p class="mb-8">We may use third-party service providers to monitor and analyze the use of our Service, to manage email communications, and to process forms.</p>
         <ul class="list-disc pl-6 mb-8 space-y-4">
           <li><strong>Web3Forms:</strong> We use Web3Forms to manage our contact form submissions. Data submitted through our forms is processed by Web3Forms in accordance with their privacy policy.</li>
-          <li><strong>Kit (formerly ConvertKit):</strong> If you subscribe to our list, we use Kit to manage that subscription and to send you email.</li>
+          <li><strong>Resend:</strong> We use Resend to send email. This covers two things. If you ask us to email you a copy of a scan report, Resend delivers that one message and we do not add you to any list. Separately, if you subscribe to our list, Resend stores your address for that purpose until you unsubscribe, and every email we send carries an unsubscribe link.</li>
           <li><strong>Vercel:</strong> Our hosting provider. Serving any page on this site involves Vercel receiving the request, including your IP address, in the ordinary course of delivering it.</li>
+          <li><strong>Vercel Web Analytics:</strong> We use Vercel Web Analytics to count visits and see which pages people find useful. It is cookieless: it sets no cookie, assigns you no persistent identifier, and does not follow you to any other site. It records the page you viewed, the referring site, and coarse details such as country, browser and device type, with your IP address anonymised rather than stored. It is served from this domain rather than a third-party host.</li>
         </ul>
         <p class="mb-8">
-          We do not currently run Google Analytics or any other third-party analytics or advertising tracker on this site.
+          We do not run Google Analytics, any advertising tracker, or any cross-site or behavioural profiling on this site. We do not sell or share what we collect. Because our analytics is cookieless and stores nothing on your device, this site sets no tracking cookies and shows you no cookie banner.
         </p>
 
         <h3 class="mb-6">6. The Free Site Scanner</h3>
@@ -64,7 +65,8 @@ import Layout from '../layouts/Layout.astro';
         <ul class="list-disc pl-6 mb-8 space-y-4">
           <li><strong>What we fetch and why.</strong> Our servers make requests to the URL you provide - the homepage, robots.txt, a sitemap, and a sample of up to about 24 pages - to detect things like crawler access, structured data, metadata quality, and feed availability. We identify ourselves with a scanner User-Agent that names this tool.</li>
           <li><strong>Crawler identification.</strong> To detect whether a site blocks AI crawlers at the network edge, a small number of those requests carry a User-Agent naming the relevant crawler alongside our own. These requests may appear in the scanned site's access logs.</li>
-          <li><strong>What we ask you for.</strong> The URL, and your confirmation that you manage the site or have permission to scan it. There is no account, and we do not ask for an email address.</li>
+          <li><strong>What we ask you for.</strong> The URL, and your confirmation that you manage the site or have permission to scan it. There is no account, and no email address is required to run a scan or to read the findings.</li>
+          <li><strong>If you ask us to email the report.</strong> Once the findings are on screen you can optionally give us an address to send a copy to. That is used for that one email and nothing else: it does not subscribe you to anything, and we do not add it to a list. The findings are passed back to our server to be mailed and are not retained afterwards.</li>
           <li><strong>What we store.</strong> Findings are generated and returned to your browser. We do not currently store scan results, submitted URLs, or the page content we fetched once the request has finished. Standard server logs may record the request in the ordinary course of running the site.</li>
           <li><strong>Third parties.</strong> Running a scan reveals the URL you tested and the time of the request to our hosting provider (Vercel), in the normal course of serving the request.</li>
           <li><strong>Rate limits.</strong> We limit how many scans can be run from a single source address, to keep the scanner free and to stop it being pointed at someone else's site in volume.</li>

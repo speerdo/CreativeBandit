@@ -1,5 +1,6 @@
 ---
 import Mascot from './Mascot.astro';
+import SubscribeForm from './SubscribeForm.astro';
 
 const currentYear = new Date().getFullYear();
 
@@ -10,6 +11,9 @@ const services = [
   { name: "E-commerce Solutions", href: "/services#ecommerce" },
   { name: "WordPress Development", href: "/services/wordpress" },
   { name: "Agent Ops", href: "/services/agent-ops" },
+  // Last, and flagged as free: it is the cheapest thing to say yes to, so it
+  // is the one worth having on every page of the site.
+  { name: "Free AI Readiness Scan", href: "/scan" },
 ];
 
 const company = [
@@ -52,7 +56,17 @@ const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path)
     />
   )}
 
-  <!-- TODO: re-add newsletter signup banner once a real ConvertKit form + lead magnet exist -->
+  {/*
+    Signup is back, now that it posts somewhere real. The banner was pulled in
+    the launch pass because the Kit form and the lead-magnet PDF behind it did
+    not exist; the form now writes to a Resend Audience, and it promises only
+    what it can deliver - no checklist, no sequence. The PDF offer can be
+    added here when the PDF is written.
+  */}
+  <div class="container mx-auto pt-12">
+    <SubscribeForm class="max-w-2xl" />
+  </div>
+
 
   <div class="container mx-auto pt-12 pb-8">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
