@@ -53,7 +53,16 @@ export default defineConfig({
     mdx(),
     react(),
     sitemap({
-      filter: (page) => !/\/(thank-you|404)\/?$/.test(page),
+      /*
+       * /thank-you and /404 are excluded permanently: neither is a page anyone
+       * should arrive at from search.
+       *
+       * /blog is excluded *conditionally* - it currently has no posts, and an
+       * indexed page with nothing on it is precisely what our own scanner
+       * reports as thin content. Delete `|blog` from this pattern the day the
+       * first post ships; the page and the feed are otherwise wired and ready.
+       */
+      filter: (page) => !/\/(thank-you|404|blog)\/?$/.test(page),
     }),
   ],
   markdown: {

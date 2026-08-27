@@ -23,12 +23,19 @@ import Layout from '../layouts/Layout.astro';
         Thanks for reaching out to Creative Bandit. We've received your inquiry and will be in touch within <span class="text-white font-semibold">24 hours</span> to schedule your consultation.
       </p>
 
+      <!--
+        The primary CTA used to point at /blog, which is three filler posts
+        pending deletion. This page is otherwise a dead end, so the wait is
+        worth spending on the one thing that produces something useful
+        without us: point the scan at a client site and have findings in hand
+        before the reply lands.
+      -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/" class="btn-secondary">
-          Return Home
+        <a href="/scan" class="btn-primary">
+          Run a Free Scan While You Wait
         </a>
-        <a href="/blog" class="btn-primary">
-          Read Our Blog
+        <a href="/work" class="btn-secondary">
+          See Our Work
         </a>
       </div>
 

@@ -1,11 +1,22 @@
 ---
 import Logo from './Logo.astro';
 
+/*
+ * The scan sits in the nav rather than replacing the "Book a Free Call" CTA,
+ * because the two asks serve different readiness stages: the scan is the
+ * no-commitment entry point the homepage calls "start here", and the call is
+ * the commitment. Before this it was reachable only from the homepage, while
+ * every other page pushed the higher-friction ask - see
+ * docs/creative-bandit-launch-readiness.md §9.2.
+ *
+ * The mobile menu renders from this same array, so it inherits automatically.
+ */
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/work", label: "Our Work" },
+  { href: "/scan", label: "Free Scan" },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -39,7 +50,17 @@ const currentPath = Astro.url.pathname;
       </div>
       
       <!-- Mobile Nav Toggle -->
-      <button id="navToggle" class="md:hidden flex items-center px-3 py-2 border rounded text-paper-mute border-paper-mute hover:text-ink-hot hover:border-ink-hot transition-colors duration-300">
+      <!-- aria-expanded is flipped by the toggle handler in Layout.astro.
+           Without it the menu opens and closes with no announcement, so a
+           screen-reader user cannot tell which state they are in. -->
+      <button
+        id="navToggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="navMenu"
+        aria-label="Menu"
+        class="md:hidden flex items-center px-3 py-2 border rounded text-paper-mute border-paper-mute hover:text-ink-hot hover:border-ink-hot transition-colors duration-300"
+      >
         <svg class="fill-current h-4 w-4" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <title>Menu</title>
           <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>

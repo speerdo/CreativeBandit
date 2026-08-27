@@ -22,10 +22,12 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
+    "@vercel/analytics": "^2.0.1",
     "astro": "^7.1.6",
     "puppeteer-core": "^25.4.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "resend": "^6.20.0",
     "tailwindcss": "^4.3.3",
     "three": "^0.185.1"
   },

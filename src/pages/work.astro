@@ -8,16 +8,33 @@ const categories = [
   { id: 'web', name: 'Web Development' },
   { id: 'wordpress', name: 'WordPress' },
   { id: 'ecommerce', name: 'E-commerce' },
-  { id: 'healthcare', name: 'Healthcare' },
-  { id: 'design', name: 'Design' },
-  { id: 'motion', name: 'Motion' }
+  { id: 'healthcare', name: 'Healthcare' }
 ];
 
+/*
+ * Every figure here is verifiable, and three of them are first-party rather
+ * than an SEO tool's estimate. That distinction matters on this particular
+ * site: Ahrefs Site Explorer estimates ~200 organic visits/month, while our
+ * own analytics records ~10,600. The gap is not an error, it is that Site
+ * Explorer models Google and 87.5% of this site's search traffic comes from
+ * Bing-family engines. See docs/creative-bandit-launch-readiness.md §7.2.
+ *
+ * The previous block led with affiliate conversion and revenue. Those numbers
+ * live in Amazon Associates and the ad network, not in anything we can point
+ * a reader at, so they are out until someone pulls and dates them.
+ *
+ * Sources, all pulled 2026-08-18:
+ *   Visitors   - Ahrefs Web Analytics, trailing 12mo avg (Aug 2025-Jul 2026)
+ *                = 127,018 visitors / 12 = 10,585. Stated as 10,000+.
+ *   Rankings   - Ahrefs Site Explorer, US, Aug 2026: 22 top-3 + 63 top 4-10.
+ *   Refdomains - Ahrefs Site Explorer, live referring domains.
+ *   AI referrals - Ahrefs Web Analytics `llm` source channel, lifetime.
+ */
 const featuredStats = [
-  { label: 'Monthly Visitors', value: '8,000+' },
-  { label: 'Monthly Ad & Affiliate Revenue', value: '$300+' },
-  { label: 'Affiliate Conversion', value: '8.08%' },
-  { label: 'Monthly Referrals', value: '1,000+' }
+  { label: 'Monthly Visitors', value: '10,000+' },
+  { label: 'Top-10 Rankings', value: '85' },
+  { label: 'Referring Domains', value: '455' },
+  { label: 'Visitors From AI Assistants', value: '690' }
 ];
 
 const projects = [
@@ -63,7 +80,7 @@ const projects = [
     categoryName: 'E-commerce / SEO',
     image: '/images/recycleoldtech_desktop.webp',
     link: 'https://recycleoldtech.com',
-    description: 'Directory of certified US electronics recycling centers, built on Astro and Supabase with an automated SEO pipeline behind an 8.08% affiliate conversion rate.',
+    description: 'Directory of certified US electronics recycling centers, built on Astro and Supabase, with an automated SEO pipeline that took it from zero to 85 top-ten rankings and 10,000+ monthly visitors.',
     client: 'Creative Bandit LLC'
   },
   {
@@ -157,31 +174,11 @@ const projects = [
     link: '/work/motion',
     description: 'Motion design projects from the past.',
     client: 'Various'
-  },
-  {
-    title: '[TODO: Design Project 2]',
-    category: 'design',
-    categoryName: 'Brand / UI Design',
-    image: 'https://images.pexels.com/photos/1779488/pexels-photo-1779488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '#',
-    // TODO: replace with real description, before/after, or video/GIF
-    description: '[TODO: what the work was and what it did for the client]',
-    client: '[TODO: client name]'
-  },
-  {
-    title: '[TODO: Motion Project 3]',
-    category: 'motion',
-    categoryName: 'Motion Design',
-    image: 'https://images.pexels.com/photos/1779489/pexels-photo-1779489.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    link: '#',
-    // TODO: replace with real description, before/after, or video/GIF
-    description: '[TODO: what the work was and what it did for the client]',
-    client: '[TODO: client name]'
   }
 ];
 ---
 
-<Layout title="Our Work" description="Production work from Creative Bandit: AI automation, full-stack builds, WordPress, and design and motion, with the measurable result for each.">
+<Layout title="Our Work" description="Production work from Creative Bandit: AI automation, full-stack builds, WordPress, and the measurable result for each.">
   <!-- Hero Section -->
   <section class="section pt-24 relative">
     <div class="container mx-auto">
@@ -189,7 +186,7 @@ const projects = [
         <p class="label-tech mb-6">Our Portfolio</p>
         <h1 class="mb-6">Real <span class="plate-type">Projects</span>, Real Results</h1>
         <p class="text-xl text-paper-mute mb-8">
-          Production applications and design/motion work showcasing AI automation, full-stack development, and measurable business outcomes across healthcare, e-commerce, fintech, and enterprise software.
+          Production applications showcasing AI automation, full-stack development, and measurable business outcomes across healthcare, e-commerce, fintech, and enterprise software.
         </p>
       </div>
     </div>
@@ -250,6 +247,8 @@ const projects = [
             alt="RecycleOldTech.com electronics recycling directory"
             loading="lazy"
             decoding="async"
+            width="1554"
+            height="1240"
             class="w-full h-auto"
           />
         </div>
@@ -258,7 +257,10 @@ const projects = [
           <p class="label-tech mb-4">Featured Project</p>
           <h3 class="text-2xl font-bold mb-3">RecycleOldTech.com</h3>
           <p class="text-paper-mute mb-6">
-            Nationwide directory of certified electronics recycling centers across all 50 states. An automated content and SEO pipeline builds and refreshes the location pages, and the monetization sits on top of it: display advertising against the organic traffic plus Amazon Associates placements converting at roughly four times the category average.
+            Nationwide directory of certified electronics recycling centers across all 50 states. An automated content and SEO pipeline builds and refreshes the location pages, taking the site from zero to 85 top-ten rankings in fourteen months. Almost none of the traffic lands on the homepage: the long tail of city and state pages carries roughly 88% of it, which is the whole point of building it programmatically.
+          </p>
+          <p class="text-paper-mute mb-6">
+            It is also the property that taught us to stop trusting a single traffic source. Ahrefs estimates the site at about 200 organic visits a month. Our own analytics records over 10,000, because 87.5% of its search traffic arrives from Bing, DuckDuckGo and Yahoo rather than Google &mdash; the same Bing index that answers through Copilot and ChatGPT.
           </p>
 
           <div class="grid grid-cols-2 gap-6 mb-8">
@@ -281,7 +283,7 @@ const projects = [
             </div>
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Key Result</h4>
-              <p>Self-sustaining ad and affiliate revenue</p>
+              <p>0 to 85 top-ten rankings in 14 months</p>
             </div>
             <div>
               <h4 class="text-sm text-paper-mute mb-1">Tech Stack</h4>
@@ -331,9 +333,10 @@ const projects = [
     <div class="container mx-auto relative z-10">
       <div class="max-w-3xl mx-auto text-center">
         <h2 class="mb-6">Ready to <span class="plate-type">Start</span> Your Project?</h2>
-        <p class="text-paper-mute text-lg mb-8">Tell us what you're working on and we'll figure out the right approach together.</p>
+        <p class="text-paper-mute text-lg mb-8">Tell us what you're working on and we'll figure out the right approach together. Or see the same kind of analysis run against a site of your own &mdash; the scan is free and takes seconds.</p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/contact" class="btn-primary">Contact Us</a>
+          <a href="/scan" class="btn-secondary">Scan a Site Free</a>
           <a href="/services" class="btn-secondary">Explore Services</a>
         </div>
       </div>

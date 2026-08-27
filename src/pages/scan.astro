@@ -88,6 +88,36 @@ const scanService = service({
           <span id="scanFooter"></span>
         </div>
 
+        <!--
+          Capture sits AFTER the findings, never before them. The scan stays
+          ungated - this page promises that in as many words - so the ask is
+          for a forwardable copy of something already on screen, not a toll
+          to see it. See docs/creative-bandit-launch-readiness.md §9.1.
+        -->
+        <form id="reportForm" class="mt-10 crop-marks border border-paper/15 bg-base-100 p-8">
+          <p class="label-tech mb-3">Take it with you</p>
+          <h2 class="mb-3 text-xl font-bold">Email yourself this report</h2>
+          <p class="text-paper-mute mb-6 text-sm">
+            The full findings, in a format you can forward to your client. One email, no list, no follow-up sequence.
+          </p>
+
+          <div class="flex flex-col gap-4 sm:flex-row">
+            <label for="reportEmail" class="sr-only">Your email address</label>
+            <input
+              type="email"
+              id="reportEmail"
+              name="email"
+              required
+              placeholder="you@agency.com"
+              autocomplete="email"
+              class="w-full flex-1 border border-paper/20 bg-base-200 px-4 py-3 text-paper transition-colors duration-200 focus:border-ink-acid focus:outline-none focus:ring-1 focus:ring-ink-acid"
+            />
+            <button type="submit" id="reportSubmit" class="btn-primary shrink-0">Send It</button>
+          </div>
+
+          <p id="reportStatus" class="mt-4 font-mono text-sm" role="status" aria-live="polite"></p>
+        </form>
+
         <div class="mt-10">
           <p class="text-paper-mute mb-6">
             Take these findings to your client and win the work yourself, or hand the build to us and put your name on it. Both outcomes are fine.
@@ -110,6 +140,13 @@ const scanService = service({
   const findingsEl = document.querySelector('#scanFindings') as HTMLElement | null;
   const domainEl = document.querySelector('#scanDomain') as HTMLElement | null;
   const footerEl = document.querySelector('#scanFooter') as HTMLElement | null;
+  const reportForm = document.querySelector('#reportForm') as HTMLFormElement | null;
+  const reportEmail = document.querySelector('#reportEmail') as HTMLInputElement | null;
+  const reportSubmit = document.querySelector('#reportSubmit') as HTMLButtonElement | null;
+  const reportStatus = document.querySelector('#reportStatus') as HTMLElement | null;
+
+  /** The scan currently on screen, including its signature. */
+  let lastResult: unknown = null;
 
   interface Finding {
     id: string;
@@ -215,6 +252,11 @@ const scanService = service({
         footerEl.textContent = parts.join(' · ');
       }
 
+      // Held for the report form, which posts them back to be verified and
+      // mailed. Kept in a closure variable rather than a data attribute so
+      // nothing has to re-serialise findings through the DOM.
+      lastResult = data;
+
       show(results, true);
     } catch (error) {
       show(status, false);
@@ -226,6 +268,54 @@ const scanService = service({
     } finally {
       submit.disabled = false;
       submit.textContent = 'Run the Scan';
+    }
+  });
+
+  reportForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!reportEmail || !reportSubmit || !lastResult) return;
+
+    if (reportStatus) {
+      reportStatus.textContent = 'Sending...';
+      reportStatus.className = 'mt-4 font-mono text-sm text-paper-mute';
+    }
+    reportSubmit.disabled = true;
+
+    try {
+      const response = await fetch('/api/scan-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: reportEmail.value,
+          result: lastResult,
+          // Round-tripped from /api/scan. The server recomputes it over the
+          // findings and refuses anything that was edited on the way here.
+          signature: (lastResult as { signature?: string }).signature,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error ?? 'The report could not be sent.');
+
+      /*
+       * Only shown on an actual 2xx. The popup this replaces set its success
+       * state unconditionally and told people they had subscribed when the
+       * request had failed - the single worst thing found in the launch
+       * audit, and not a pattern to repeat here.
+       */
+      if (reportStatus) {
+        reportStatus.textContent = 'Sent. Check your inbox.';
+        reportStatus.className = 'mt-4 font-mono text-sm text-ink-acid';
+      }
+      reportForm.reset();
+    } catch (error) {
+      if (reportStatus) {
+        reportStatus.textContent =
+          error instanceof Error ? error.message : 'The report could not be sent.';
+        reportStatus.className = 'mt-4 font-mono text-sm text-ink-hot';
+      }
+    } finally {
+      reportSubmit.disabled = false;
     }
   });
 </script>

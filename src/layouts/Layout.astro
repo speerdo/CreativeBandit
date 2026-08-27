@@ -1,7 +1,7 @@
 ---
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import ExitPopup from '../components/ExitPopup';
+import Analytics from '@vercel/analytics/astro';
 import { organization, type SchemaNode } from '../lib/schema';
 import '../styles/global.css';
 
@@ -166,27 +166,81 @@ const jsonLd = {
     <!-- JSON-LD Structured Data. Built in lib/schema.ts; page-specific entity
          nodes arrive via the `schema` prop. -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    {/*
+      Vercel Web Analytics. No site key and no account wiring: the project is
+      already on Vercel, so enabling Analytics in the dashboard is the whole
+      setup. Cookieless and IP-anonymised, so it needs no consent banner.
+
+      It also needs no CSP change, which is the reason it is a clean starting
+      point. Vercel proxies both halves through our own origin - the script is
+      served from /_vercel/insights/script.js and events POST to
+      /_vercel/insights/view - so the existing `script-src 'self'` and
+      `connect-src 'self'` already cover it. Nothing third-party is contacted
+      from the browser.
+
+      Ahrefs Web Analytics is planned post-launch and is the one that breaks
+      out an `llm` source channel (assistant referrals - see
+      docs/creative-bandit-launch-readiness.md §7.4). That one IS third-party
+      and WILL need analytics.ahrefs.com added to script-src and connect-src
+      in vercel.json. Adding it without touching the CSP fails silently in
+      production while working fine in `astro dev`, which serves no CSP.
+    */}
+    <Analytics />
   </head>
   <body class="bg-base text-paper flex flex-col min-h-screen">
+    <!--
+      First focusable thing on the page. Every page carries a fixed header
+      with five controls in it, so without this a keyboard or screen-reader
+      user tabs through the logo, four nav items and the CTA before reaching
+      any content - on all sixteen pages.
+
+      Off-screen rather than `hidden`, because a display:none element cannot
+      receive focus and the link would never appear.
+    -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink-acid focus:px-4 focus:py-3 focus:font-mono focus:text-sm focus:font-bold focus:uppercase focus:tracking-[0.12em] focus:text-base"
+    >
+      Skip to content
+    </a>
     <div class="page-wash"></div>
     <div class="page-texture" style={`--page-texture: url('${pageTexture}')`}></div>
     <Navbar />
-    <main class="flex-grow">
+    <main id="main" class="flex-grow">
       <slot />
     </main>
     <Footer />
-    <ExitPopup client:only="react" />
 
     <script>
       // Navigation mobile menu toggle
       document.addEventListener('DOMContentLoaded', () => {
         const navToggle = document.getElementById('navToggle');
         const navMenu = document.getElementById('navMenu');
-        
+
         if (navToggle && navMenu) {
+          const setOpen = (open: boolean) => {
+            navMenu.classList.toggle('hidden', !open);
+            navMenu.classList.toggle('flex', open);
+            // Keep the announced state in step with the visual one. These
+            // must not drift; the attribute is the only signal a screen
+            // reader gets, since the menu is hidden by class rather than by
+            // the hidden attribute.
+            navToggle.setAttribute('aria-expanded', String(open));
+          };
+
           navToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('hidden');
-            navMenu.classList.toggle('flex');
+            setOpen(navMenu.classList.contains('hidden'));
+          });
+
+          // Escape closes it and returns focus to the control that opened
+          // it, rather than stranding the caret inside a menu that is no
+          // longer on screen.
+          document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !navMenu.classList.contains('hidden')) {
+              setOpen(false);
+              navToggle.focus();
+            }
           });
         }
       });
