@@ -122,16 +122,22 @@ const stats = [
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
       window.matchMedia('(max-width: 1023px)').matches;
 
+    const showFallback = () => fallback?.classList.remove('lg:hidden');
+
     if (skip) {
       // No scene here, so the static mascot carries the column at every width.
-      fallback?.classList.remove('lg:hidden');
+      showFallback();
     } else {
       const observer = new IntersectionObserver(async (entries, obs) => {
         if (!entries.some((e) => e.isIntersecting)) return;
         obs.disconnect();
         try {
           const { initRocketScene } = await import('../lib/rocketScene');
-          const cleanup = initRocketScene(canvas);
+          // The craft's artwork is rasterised after the scene has started, so
+          // that step cannot throw out of this call - it reports back through
+          // the callback instead. Without it a failed craft leaves the scene
+          // running with an empty column where the rocket should be.
+          const cleanup = initRocketScene(canvas, showFallback);
           // Drop the GL context and listeners on the way out. Not when the
           // page is only being parked in the bfcache though - it can be
           // restored with this exact context, and disposing it there would
@@ -143,7 +149,7 @@ const stats = [
         } catch (error) {
           // Chunk failed to load, or no WebGL context. Bring the static
           // mascot back rather than leaving an empty column.
-          fallback?.classList.remove('lg:hidden');
+          showFallback();
           console.warn('Hero scene unavailable, showing static mascot.', error);
         }
       });

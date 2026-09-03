@@ -324,8 +324,16 @@ function plate(width: number, height: number, z: number): THREE.Mesh {
  * Rocket, nose along +X. The meshes exist immediately and turn visible as
  * their textures arrive, so initRocketScene stays synchronous and the scene
  * can start animating - the craft simply appears a frame or two in.
+ *
+ * If the artwork never makes it into textures the plates just stay invisible,
+ * which looks identical to a scene that is working, so `onError` carries that
+ * out to the caller instead of leaving it to the console.
  */
-function createRocket(): { group: THREE.Group; plume: THREE.Mesh; cockpit: THREE.Mesh } {
+function createRocket(onError: (error: unknown) => void): {
+  group: THREE.Group;
+  plume: THREE.Mesh;
+  cockpit: THREE.Mesh;
+} {
   const group = new THREE.Group();
 
   const hull = plate(ART.w * ART_TO_WORLD, ART.h * ART_TO_WORLD, 0.01);
@@ -378,6 +386,7 @@ function createRocket(): { group: THREE.Group; plume: THREE.Mesh; cockpit: THREE
       }
     } catch (error) {
       console.error('rocketScene: could not build the craft from its artwork', error);
+      onError(error);
     }
   })();
 
@@ -402,7 +411,16 @@ interface TrailSample {
   y: number;
 }
 
-export function initRocketScene(canvas: HTMLCanvasElement): () => void {
+/*
+ * `onCraftError` fires if the craft's artwork cannot be turned into textures.
+ * That resolves long after this function has returned, so a caller that only
+ * wraps the call in try/catch never hears about it and is left showing an
+ * empty column where the rocket should be.
+ */
+export function initRocketScene(
+  canvas: HTMLCanvasElement,
+  onCraftError: (error: unknown) => void = () => {}
+): () => void {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -415,7 +433,7 @@ export function initRocketScene(canvas: HTMLCanvasElement): () => void {
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  const { group: rocket, plume, cockpit } = createRocket();
+  const { group: rocket, plume, cockpit } = createRocket(onCraftError);
   // Large enough that the cockpit - and the cat in it - is legible at hero
   // size. At 2.15 the porthole is roughly 45px across on a 800px-tall canvas.
   rocket.scale.setScalar(2.15);
