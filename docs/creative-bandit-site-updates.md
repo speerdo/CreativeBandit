@@ -37,7 +37,7 @@ Add real project entries. Replace [TODO] with actual project names, descriptions
 - [ ] yieldtofreedom.com — income-investing platform, Astro 5 / Neon / Vercel / Drizzle. [TODO: description, screenshot]
 - [ ] ebikelocal.com — niche eBike shop directory, Astro SSG / Neon / Vercel, Playwright scrapers. [TODO: description, screenshot]
 - [ ] RecycleOldTech.com — electronics recycling directory, 8k+ monthly visitors. [TODO: description, screenshot]
-- [ ] [TODO: any client work that's shareable — IndiAide, Ever.Ag, etc., if permitted]
+- [ ] [TODO: any client work that's shareable, and only where written consent is on file. The AgTech consulting engagement is explicitly NOT shareable — see creative-bandit-content.md, withheld entry.]
 
 ### Katlyn's design/motion projects (new section)
 - [ ] [TODO: Project 1 — name, description, before/after or video/GIF]

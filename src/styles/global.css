@@ -1563,28 +1563,33 @@
     @apply scale-105;
   }
 
+  /*
+   * Base case is the touch/no-hover one: the card text sits BELOW the
+   * screenshot in its own opaque panel, not on top of it.
+   *
+   * This used to be a scrim-backed overlay pinned over the artwork, which
+   * failed on mobile for a reason no amount of scrim fixes: almost every
+   * screenshot here is a marketing site, so it carries its own large
+   * headline. Card type over site type reads as one garbled block at phone
+   * width. Stacking separates the two cleanly and costs only height, which
+   * is the cheap axis on a single-column layout.
+   */
   .project-card .overlay {
-    @apply absolute inset-0 bg-base/90 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6;
-  }
-
-  .project-card:hover .overlay {
-    @apply opacity-100;
+    @apply relative flex flex-col justify-end border-t border-paper/10 bg-base p-6;
   }
 
   /*
-   * Touch devices never fire hover, so the category, title and description
-   * would be unreachable. Pin them to the bottom over a scrim rather than
-   * blanking out the screenshot they sit on.
+   * Real pointers get the hover reveal back: there the screenshot is large
+   * enough to read on its own and the overlay is a deliberate interaction,
+   * not the only way to reach the text.
    */
-  @media (hover: none) {
+  @media (hover: hover) and (pointer: fine) {
     .project-card .overlay {
-      @apply opacity-100 bg-transparent;
-      background-image: linear-gradient(
-        to top,
-        rgb(11 11 12 / 0.95) 0%,
-        rgb(11 11 12 / 0.85) 42%,
-        rgb(11 11 12 / 0) 100%
-      );
+      @apply absolute inset-0 border-t-0 bg-base/90 opacity-0 transition-opacity duration-300;
+    }
+
+    .project-card:hover .overlay {
+      @apply opacity-100;
     }
   }
 

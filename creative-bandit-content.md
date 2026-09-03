@@ -165,7 +165,7 @@ Current stack is comprehensive. What to keep/highlight?
 **Your focus areas:**
 - Node.js & Express ✓ (Primary backend stack)
 - Python ✓ (Scripting, automation)
-- Xano ✓ (IndiAide backend)
+- Xano ✓ (client backend work)
 - Supabase ✓ (PostgreSQL-based projects)
 
 ### Mobile
@@ -226,11 +226,16 @@ Current fake stats:
 - Improved Core Web Vitals scores by 30%
 - Design system adoption by 15+ engineers
 
-### IndiAide RTM System
-- HIPAA-compliant Medicare billing automation
-- Reduced manual data entry for healthcare providers
-- Automated compliance reporting workflows
-- Secure patient data management
+### AgTech consulting engagement — WITHHELD, do not publish
+- Off the site entirely pending written consent from the client. Not anonymised, withheld.
+- Contract §14(F) grants no licence to the client's trademarks, trade names or logos.
+- §7(B) defines "business relationships" as Confidential Information, so even the
+  existence of the engagement is arguably covered; §7(A) requires prior written consent.
+- §14(A) assigns all work product to the client, so redacted case studies, screenshots
+  and sample prompts are also out — we would be publishing what we do not own.
+- §16(E): §7 and §14 survive termination. This does not lapse when the contract ends.
+- Path to publishing: email consent for one exact sentence, then reinstate that sentence
+  verbatim and nothing more. No logo under any circumstances.
 
 **Format as:**
 - Metric 1: 8.08% affiliate conversion rate (4x industry average)
@@ -258,13 +263,11 @@ Current fake stats:
 - **Link:** https://downtowndry.com
 - **Screenshot/Image:** Venue search interface with map view
 
-### Project 3: IndiAide RTM System
-- **Category:** Healthcare Technology / HIPAA Compliance
-- **Description:** HIPAA-compliant backend automation system for Medicare Remote Therapeutic Monitoring billing. Architected secure database schema and RESTful API endpoints automating patient data collection and compliance reporting while maintaining regulatory requirements for healthcare providers.
-- **Technologies Used:** Xano, PostgreSQL, REST APIs, HIPAA Compliance Standards, WeWeb
-- **Key Results:** HIPAA-compliant automation, Medicare billing workflow optimization, reduced manual data entry
-- **Link:** [Under NDA - Healthcare compliance project]
-- **Screenshot/Image:** Sanitized dashboard mockup (no patient data)
+### Project 3: WITHHELD — AgTech consulting engagement
+- **Status:** Not on the site. See the withheld entry above for the contract reasoning.
+- **Blocked by:** §7(A)/(B) confidentiality, §14(A) work product ownership, §14(F) no mark licence.
+- **Unblocked by:** one written consent email covering one exact sentence.
+- **Replaced on the site by:** Yield to Freedom, an owned property with no clearance risk.
 
 ### Project 4: EdReports Platform Migration
 - **Category:** Full-Stack Development / Performance Optimization
@@ -281,7 +284,7 @@ Current fake stats:
 **OPTION 1: Remove this section entirely** (most honest for solo operation)
 
 **OPTION 2: Get real testimonials**
-- Can you reach out to anyone from IndiAide, EdReports, or Eli Lilly for a LinkedIn recommendation you can adapt?
+- Can you reach out to anyone from EdReports or Eli Lilly for a LinkedIn recommendation you can adapt? (The AgTech engagement is not an option until written consent is on file.)
 - Any freelance clients who'd give a quote?
 
 **OPTION 3: Replace with "Experience Highlights"**
@@ -396,7 +399,6 @@ AI automation specialist and full-stack developer building intelligent systems t
 
 - Any other projects or achievements to include?
   **Answer:** 
-  - Workflow Automation Strategies website (optional cross-promotion)
   - Eli Lilly and Salesforce work already covered in industries section
 
 ---
@@ -406,7 +408,7 @@ AI automation specialist and full-stack developer building intelligent systems t
 Once you fill this out, Claude Code/Cursor should:
 - [x] Replace all hero text with your authentic copy
 - [x] Update stats section with real numbers
-- [x] Replace portfolio section with RecycleOldTech, DowntownDry, IndiAide
+- [x] Replace portfolio section with RecycleOldTech, DowntownDry, Yield to Freedom
 - [x] Remove or replace testimonials section
 - [x] Update footer contact info
 - [x] Update about section with real background
