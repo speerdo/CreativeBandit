@@ -32,3 +32,11 @@ pnpm-debug.log*
 # raw motion masters — bake outputs live in public/motion/ and are committed.
 # Kept out of git: individual files exceed GitHub's 100MB limit.
 assets-src/motion/
+
+# agent skills / local tooling
+.agents/
+.claude/
+skills-lock.json
+
+# any hidden dot-folders (local tool config)
+.*/
