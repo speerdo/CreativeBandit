@@ -260,7 +260,7 @@ Current fake stats:
 - **Description:** Nationwide alcohol-free venue directory featuring AI-powered verification system using Google APIs and Gemini AI. Built intelligent automation achieving 100% accuracy in venue validation while reducing manual review time by 90%. Serves users across all 50 states searching for sober-friendly bars, restaurants, and entertainment venues.
 - **Technologies Used:** Astro.js, TypeScript, Google APIs (Places, Maps, Business), Gemini AI, Supabase, Vercel
 - **Key Results:** 100% verification accuracy, 90% reduction in manual work, nationwide coverage
-- **Link:** https://downtowndry.com
+- **Link:** https://downtowndry.bar
 - **Screenshot/Image:** Venue search interface with map view
 
 ### Project 3: WITHHELD — AgTech consulting engagement
