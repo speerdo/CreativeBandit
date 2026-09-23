@@ -2,6 +2,7 @@
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import { organization, type SchemaNode } from '../lib/schema';
 import '../styles/global.css';
 
@@ -18,6 +19,12 @@ export interface Props {
   schema?: SchemaNode[];
   /** Overrides og:type, which is "website" for everything but articles. */
   ogType?: string;
+  /**
+   * Keeps a page out of search indexes. The sitemap filter alone does not do
+   * this: a page left out of the sitemap is still indexed if a crawler finds
+   * a link to it, which is how /thank-you ends up in results.
+   */
+  noindex?: boolean;
 }
 
 const {
@@ -28,7 +35,8 @@ const {
   keywords = "AI automation consultant, full-stack developer, design and motion studio, React Vue.js TypeScript, workflow automation, HIPAA compliant web development, OpenAI integration, Indianapolis developer, web development, WordPress development, WordPress maintenance, headless WordPress",
   ogImage = "/og-image.png",
   schema = [],
-  ogType = "website"
+  ogType = "website",
+  noindex = false
 } = Astro.props;
 
 // og:image must be absolute — relative paths are rejected by most social
@@ -116,7 +124,12 @@ const jsonLd = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The ICO carries an explicit size so browsers that understand SVG
+         still pick the SVG; the rest fall back to the ICO. Both bitmaps are
+         baked from favicon.svg by `npm run icons`. -->
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
     
     <!-- SEO Meta Tags -->
@@ -124,7 +137,7 @@ const jsonLd = {
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Creative Bandit" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? "noindex, follow" : "index, follow"} />
     <link rel="canonical" href={Astro.url} />
     <link rel="alternate" type="application/rss+xml" title="Creative Bandit" href="/rss.xml" />
     
@@ -187,6 +200,13 @@ const jsonLd = {
       production while working fine in `astro dev`, which serves no CSP.
     */}
     <Analytics />
+    {/*
+      Vercel Speed Insights: real-user Core Web Vitals, for the Lighthouse
+      baseline in the post-launch list. Same-origin like Analytics above
+      (/_vercel/speed-insights/), so it needs no CSP change either, and it is
+      inert until Speed Insights is enabled on the project in the dashboard.
+    */}
+    <SpeedInsights />
   </head>
   <body class="bg-base text-paper flex flex-col min-h-screen">
     <!--

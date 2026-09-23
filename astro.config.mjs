@@ -61,6 +61,8 @@ export default defineConfig({
        * indexed page with nothing on it is precisely what our own scanner
        * reports as thin content. Delete `|blog` from this pattern the day the
        * first post ships; the page and the feed are otherwise wired and ready.
+       * The page's own noindex (blog/index.astro) lifts itself when a post
+       * exists, so this filter is the only manual step.
        */
       filter: (page) => !/\/(thank-you|404|blog)\/?$/.test(page),
     }),

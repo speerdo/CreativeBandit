@@ -14,7 +14,10 @@ const posts = Object.values(
 const categories = [...new Set(posts.map(post => post.frontmatter.category))];
 ---
 
-<Layout title="Blog" description="Notes, tutorials, and updates on web development, design, and AI automation from Creative Bandit">
+<Layout
+  title="Blog"
+  noindex={posts.length === 0}
+  description="Notes, tutorials, and updates on web development, design, and AI automation from Creative Bandit">
   <section class="section pt-24 relative">
     <div class="container mx-auto">
       <div class="max-w-3xl">

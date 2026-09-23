@@ -10,7 +10,8 @@
     "astro": "astro",
     "grain": "node scripts/make-grain.mjs public/textures/grain.png",
     "textures": "node scripts/bake-textures.mjs",
-    "motion": "node scripts/bake-motion.mjs"
+    "motion": "node scripts/bake-motion.mjs",
+    "icons": "node scripts/make-icons.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.5",
@@ -23,6 +24,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "astro": "^7.1.6",
     "puppeteer-core": "^25.4.0",
     "react": "^19.2.8",
