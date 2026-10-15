@@ -13,10 +13,10 @@ import Logo from './Logo.astro';
  */
 const navItems = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
-  { href: "/work", label: "Our Work" },
-  { href: "/scan", label: "Free Scan" },
+  { href: "/about/", label: "About" },
+  { href: "/services/", label: "Services" },
+  { href: "/work/", label: "Our Work" },
+  { href: "/scan/", label: "Free Scan" },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -46,7 +46,7 @@ const currentPath = Astro.url.pathname;
             {item.label}
           </a>
         ))}
-        <a href="/contact" class="ml-4 btn-primary">Book a Free Call</a>
+        <a href="/contact/" class="ml-4 btn-primary">Book a Free Call</a>
       </div>
       
       <!-- Mobile Nav Toggle -->
@@ -78,7 +78,7 @@ const currentPath = Astro.url.pathname;
           {item.label}
         </a>
       ))}
-      <a href="/contact" class="block mt-4 text-center btn-primary">Book a Free Call</a>
+      <a href="/contact/" class="block mt-4 text-center btn-primary">Book a Free Call</a>
     </div>
   </div>
 </header>
