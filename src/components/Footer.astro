@@ -7,22 +7,22 @@ import SubscribeForm from './SubscribeForm.astro';
 const currentYear = new Date().getFullYear();
 
 const services = [
-  { name: "Web Development", href: "/services#web-development" },
-  { name: "Design & Motion", href: "/services#design" },
-  { name: "AI Integration", href: "/services#ai-integration" },
-  { name: "E-commerce Solutions", href: "/services#ecommerce" },
-  { name: "WordPress Development", href: "/services/wordpress" },
-  { name: "Agent Ops", href: "/services/agent-ops" },
+  { name: "Web Development", href: "/services/#web-development" },
+  { name: "Design & Motion", href: "/services/#design" },
+  { name: "AI Integration", href: "/services/#ai-integration" },
+  { name: "E-commerce Solutions", href: "/services/#ecommerce" },
+  { name: "WordPress Development", href: "/services/wordpress/" },
+  { name: "Agent Ops", href: "/services/agent-ops/" },
   // Last, and flagged as free: it is the cheapest thing to say yes to, so it
   // is the one worth having on every page of the site.
-  { name: "Free AI Readiness Scan", href: "/scan" },
+  { name: "Free AI Readiness Scan", href: "/scan/" },
 ];
 
 const company = [
-  { name: "About", href: "/about" },
-  { name: "Work", href: "/work" },
-  { name: "Services", href: "/services" },
-  { name: "Contact", href: "/contact" },
+  { name: "About", href: "/about/" },
+  { name: "Work", href: "/work/" },
+  { name: "Services", href: "/services/" },
+  { name: "Contact", href: "/contact/" },
 ];
 
 // Only entries with a real URL. LinkedIn previously shipped as href="#",
@@ -156,9 +156,9 @@ const showMascot = !palePages.some((path) => Astro.url.pathname.startsWith(path)
              is already an established mark on the page, so it does the job a
              bullet or a pipe would without introducing another shape. -->
         <ul class="flex items-center gap-6 font-mono text-[0.7rem] uppercase tracking-[0.12em]">
-          <li><a href="/privacy" class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">Privacy Policy</a></li>
+          <li><a href="/privacy/" class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">Privacy Policy</a></li>
           <li aria-hidden="true"><span class="mark-star text-[0.6rem] opacity-70"></span></li>
-          <li><a href="/terms" class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">Terms of Service</a></li>
+          <li><a href="/terms/" class="text-paper-mute transition-colors duration-200 hover:text-ink-acid">Terms of Service</a></li>
         </ul>
       </div>
     </div>

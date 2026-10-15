@@ -79,7 +79,7 @@ const services = [
     title: 'Agent Ops',
     description: 'Automated security, maintenance, and compliance monitoring for WordPress agencies and their clients. Currently onboarding pilot agencies.',
     icon: 'support',
-    link: '/services/agent-ops',
+    link: '/services/agent-ops/',
     id: 'agent-ops',
     stack: ['WP-CLI', 'WP Engine', 'Uptime monitoring', 'Automated backups']
   },
@@ -87,7 +87,7 @@ const services = [
     title: 'WordPress Development',
     description: 'Custom WordPress builds, headless setups, theme and plugin work, and managed care for agencies and business owners.',
     icon: 'support',
-    link: '/services/wordpress',
+    link: '/services/wordpress/',
     id: 'wordpress',
     stack: ['WordPress', 'WP-CLI', 'ACF', 'Headless WP', 'WP Engine']
   }
@@ -379,7 +379,7 @@ const serviceSchema = services.map((s) =>
               )}
             </ul>
             
-            <a href="/contact" class="btn-primary">Discuss Your Project</a>
+            <a href="/contact/" class="btn-primary">Discuss Your Project</a>
           </div>
           
           <div class={`${index % 2 === 0 ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}>
@@ -489,9 +489,9 @@ const serviceSchema = services.map((s) =>
         <h2 class="mb-6">Ready to <span class="plate-type">Get Started</span>?</h2>
         <p class="text-paper-mute text-lg mb-8">Tell us about your project and we'll walk through how these services fit your goals. Or skip the conversation entirely for now and run the free scan against a site you already manage.</p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a href="/contact" class="btn-primary">Get In Touch</a>
-          <a href="/scan" class="btn-secondary">Run a Free Scan</a>
-          <a href="/work" class="btn-secondary">View Our Work</a>
+          <a href="/contact/" class="btn-primary">Get In Touch</a>
+          <a href="/scan/" class="btn-secondary">Run a Free Scan</a>
+          <a href="/work/" class="btn-secondary">View Our Work</a>
         </div>
       </div>
     </div>

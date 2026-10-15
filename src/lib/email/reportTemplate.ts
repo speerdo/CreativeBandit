@@ -130,7 +130,7 @@ export function renderReportHtml(result: ScanResult): string {
       <tr><td style="padding:8px 28px 32px;">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0">
           <tr><td style="background:#E8451F;">
-            <a href="https://creativebandit.studio/contact"
+            <a href="https://creativebandit.studio/contact/"
                style="display:inline-block;padding:14px 24px;font-family:Menlo,Consolas,monospace;font-size:13px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#0B0B0C;text-decoration:none;">
               Talk to us about the build
             </a>
@@ -174,7 +174,7 @@ export function renderReportText(result: ScanResult): string {
     'Take this to your client and win the work yourself, or send it back to',
     'us and we will build the fixes under your name.',
     '',
-    'https://creativebandit.studio/contact',
+    'https://creativebandit.studio/contact/',
     '',
     'Creative Bandit, LLC · Indianapolis, IN'
   );

@@ -207,6 +207,13 @@ const jsonLd = {
       inert until Speed Insights is enabled on the project in the dashboard.
     */}
     <SpeedInsights />
+    {/*
+      Ahrefs Web Analytics: the third-party one the note above warned about.
+      analytics.ahrefs.com is allowed in both script-src and connect-src in
+      vercel.json; drop either and it fails silently in production only.
+      is:inline stops Astro from trying to bundle a remote script.
+    */}
+    <script is:inline src="https://analytics.ahrefs.com/analytics.js" data-key="pVPDxFaYV8DuDN0Npj/Q/Q" async></script>
   </head>
   <body class="bg-base text-paper flex flex-col min-h-screen">
     <!--
