@@ -1,0 +1,211 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { service, faqPage } from '../../lib/schema';
+
+const included = [
+  {
+    title: 'Core, theme & plugin updates',
+    description: 'Updates applied on a schedule, checked against the live site afterwards, and rolled back if something breaks.'
+  },
+  {
+    title: 'Security monitoring',
+    description: 'Security header audits, vulnerable-plugin flags, and malware and file-change checks across every client site in your portfolio.'
+  },
+  {
+    title: 'Uptime & broken-link monitoring',
+    description: 'Continuous uptime checks plus scans for broken links and mixed-content errors that quietly hurt SEO and trust.'
+  },
+  {
+    title: 'Backups',
+    description: 'Automated backups with restore tested, not assumed.'
+  },
+  {
+    title: 'Client-ready reports',
+    description: 'Weekly or monthly reports under your branding, so your client sees what you are doing for them without anyone compiling it by hand.'
+  },
+  {
+    title: 'Small edits & fixes',
+    description: 'Content changes, minor fixes, and the "can you just move this button" requests, handled by us and billed to you.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'What is white-label WordPress maintenance?',
+    answer: 'We keep your agency\'s client sites updated, secure, backed up, and monitored, and you present it to the client as your own care plan. Reports and communication carry your branding, not ours.'
+  },
+  {
+    question: 'What does WordPress security monitoring cover?',
+    answer: 'We check security headers (CSP, HSTS, X-Frame-Options), flag outdated and vulnerable plugins, and watch for unexpected file changes. Findings are summarized in a report you can send to the client.'
+  },
+  {
+    question: 'How is this different from Agent Ops?',
+    answer: 'Agent Ops is the automation layer: scheduled monitoring and reporting across your whole portfolio. White-label maintenance is the service built on it, where we also do the hands-on work of applying and verifying updates and fixing what breaks.'
+  },
+  {
+    question: 'What does WordPress maintenance for agencies cost?',
+    answer: 'Care plans start from $150 per month per site. Agent Ops pilot pricing is a fixed monthly price based on your site count, set after a free audit.'
+  },
+  {
+    question: 'Will you contact my clients?',
+    answer: 'No, unless you introduce us. You stay the single point of contact, and your clients never see our name.'
+  },
+  {
+    question: 'Can you take over sites we did not build?',
+    answer: 'Yes. We start with an audit of the current state of the site, tell you what needs fixing first, and then bring it under care.'
+  },
+  {
+    question: 'What happens if an update breaks a client site?',
+    answer: 'We check the site after each update and roll back and fix problems ourselves rather than waiting for a client to report them.'
+  }
+];
+---
+
+<Layout
+  title="White-Label WordPress Maintenance & Security Monitoring"
+  description="White-label WordPress maintenance and security monitoring for agencies: updates, backups, uptime and client-ready reports under your brand."
+  schema={[
+    service({
+      name: 'White-Label WordPress Maintenance & Security Monitoring',
+      description:
+        'White-label WordPress maintenance and security monitoring for agencies: ' +
+        'updates, backups, uptime monitoring, and client-ready reports under the agency\'s brand.',
+      url: Astro.url.href,
+      category: 'WordPress Maintenance',
+    }),
+    faqPage(faqs),
+  ]}
+>
+  <!-- Hero -->
+  <section class="section pt-24 relative">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <p class="label-tech mb-6">White-Label Care for Agencies</p>
+        <h1 class="mb-6">White-Label <span class="plate-type">WordPress Maintenance</span> &amp; Security Monitoring</h1>
+        <p class="text-xl text-paper-mute mb-8">
+          Your clients pay you for care plans. We do the work behind them: updates, backups, security monitoring, and reports, under your brand, across every site you manage.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/scan/" class="btn-primary">Scan a Client Site Free</a>
+          <a href="/services/agent-ops/" class="btn-secondary">See Agent Ops</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-ink-hot/10 to-transparent opacity-30"></div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="py-16 bg-base-200">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="label-tech mb-4">Why Agencies Outsource Maintenance</p>
+          <h2 class="mb-6">Care Plans That <span class="plate-type">Scale</span></h2>
+          <p class="text-paper-mute mb-4">
+            Maintenance is recurring revenue, and it is also the work that eats a developer's week: logging into dozens of dashboards, running updates, checking nothing broke, and compiling the report nobody asked for until a site goes down.
+          </p>
+          <p class="text-paper-mute mb-4">
+            We run it with automation first and people second. Agent Ops watches every site, and we handle the hands-on work when something needs a human.
+          </p>
+          <p class="text-paper-mute">
+            Start with the free scan on one client site to see what a security and readiness check turns up.
+          </p>
+        </div>
+
+        <div class="p-8 border border-ink-hot/20 bg-base-100">
+          <h3 class="text-xl font-bold mb-6">What You Get</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">Reports and communication under your brand, not ours</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-hot mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">Automated monitoring across the whole portfolio</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-hot mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">Updates verified after they are applied</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-cold mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">A fixed monthly price, no per-ticket billing</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">No contact with your clients unless you ask</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's included -->
+  <section class="py-16">
+    <div class="container mx-auto">
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">What's Included</p>
+        <h2 class="mb-6">Maintenance, <span class="plate-type">Covered</span></h2>
+        <p class="text-paper-mute">Everything a care plan promises your client, handled behind the scenes.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {included.map(item => (
+          <div class="card">
+            <h3 class="text-xl font-bold mb-3">{item.title}</h3>
+            <p class="text-paper-mute">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section bg-base-200">
+    <div class="container mx-auto">
+      <div class="max-w-2xl mx-auto text-center border border-ink-hot/20 bg-base-100 p-8">
+        <h3 class="text-xl font-bold mb-3">Pricing model</h3>
+        <p class="text-paper-mute mb-6">Care plans start from $150 per month per site. For portfolios, Agent Ops is priced at a fixed monthly rate for your site count, set after a free audit.</p>
+        <a href="/contact/" class="btn-primary">Book a Free Audit</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-16">
+    <div class="container mx-auto">
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">FAQ</p>
+        <h2 class="mb-6">Questions Agencies <span class="plate-type">Ask</span></h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {faqs.map(item => (
+          <div class="card">
+            <h3 class="text-xl font-bold mb-3">{item.question}</h3>
+            <p class="text-paper-mute">{item.answer}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="mb-6">See What's <span class="plate-type">Wrong</span> Before You Commit</h2>
+        <p class="text-paper-mute text-lg mb-8">Run the free scan on one client site. No signup, no sales call. If you want us to look after the whole portfolio, we will start with an audit.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/scan/" class="btn-primary">Scan a Client Site Free</a>
+          <a href="/services/white-label-wordpress-development/" class="btn-secondary">White-Label Development</a>
+          <a href="/services/agent-ops/" class="btn-secondary">See Agent Ops</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
