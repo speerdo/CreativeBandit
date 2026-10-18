@@ -112,6 +112,27 @@ export function service({ name, description, url, category }: ServiceInput): Sch
   };
 }
 
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+/**
+ * FAQPage node. The answers must match the copy rendered on the page, since
+ * markup describing text a visitor cannot see is what search engines penalise;
+ * build both from the same array, as the service pages do.
+ */
+export function faqPage(items: FaqItem[]): SchemaNode {
+  return {
+    '@type': 'FAQPage',
+    mainEntity: items.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  };
+}
+
 export interface ArticleInput {
   title: string;
   description: string;

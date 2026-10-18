@@ -1,0 +1,241 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { service, faqPage } from '../../lib/schema';
+
+const included = [
+  {
+    title: 'Custom themes & plugins',
+    description: 'Built to your client\'s brand and content model, in your repository or ours, handed over with documentation your own team can pick up.'
+  },
+  {
+    title: 'Design-to-WordPress builds',
+    description: 'Send us the Figma file or the approved comp. We build it pixel-faithful, responsive, and editable by the client without breaking the layout.'
+  },
+  {
+    title: 'Headless WordPress',
+    description: 'WordPress as the content backend with an Astro, Next.js, or Nuxt frontend, for the clients whose brief is speed, SEO, or both.'
+  },
+  {
+    title: 'Migrations & rebuilds',
+    description: 'Move a client onto WordPress or off a legacy stack, preserving content, URLs, and search rankings.'
+  },
+  {
+    title: 'WooCommerce & integrations',
+    description: 'Storefronts, payments, CRM, email, and analytics wired into WordPress, tested before your client ever sees it.'
+  },
+  {
+    title: 'Overflow & rescue work',
+    description: 'A project that is behind, a developer who disappeared, a site that broke after an update. We step in and get it to launch.'
+  }
+];
+
+const process = [
+  { step: '01', title: 'Scope', description: 'You send the brief. We come back with a written scope, price, and timeline before any work starts.' },
+  { step: '02', title: 'Build', description: 'We build in a staging environment you can open at any time, with regular check-ins in your Slack or email, not ours.' },
+  { step: '03', title: 'Handover', description: 'You review under your own name. We fix what you flag, then hand over code, credentials, and documentation.' },
+  { step: '04', title: 'Support', description: 'Optional ongoing care once the site is live, still white-label. See WordPress maintenance and security monitoring.' }
+];
+
+const faqs = [
+  {
+    question: 'What does white-label web development mean?',
+    answer: 'We build the website for your agency\'s client, and you present it as your own work. Our name does not appear on the deliverable, the staging site, the invoices to your client, or any client-facing communication unless you ask for it.'
+  },
+  {
+    question: 'Will you sign an NDA?',
+    answer: 'Yes. We will sign your NDA before we see any client information, and we do not list white-label clients in our portfolio or case studies without written permission.'
+  },
+  {
+    question: 'Do you talk to my clients directly?',
+    answer: 'Only if you want us to. By default you are the single point of contact, and we communicate through you or inside your own project channels.'
+  },
+  {
+    question: 'How is white-label WordPress development priced?',
+    answer: 'Builds and rebuilds are scoped and quoted per project in writing before work begins, so there are no hourly surprises. Ongoing care starts from $150 per month per site.'
+  },
+  {
+    question: 'How long does a WordPress build take?',
+    answer: 'It depends on scope, and we put the timeline in the written quote rather than guessing in a sales call. Tell us your client\'s deadline up front and we will say plainly whether it is realistic.'
+  },
+  {
+    question: 'Can you work inside our repository and hosting?',
+    answer: 'Yes. We work in your Git repository, on your hosting (WP Engine, Kinsta, Pantheon, and others), and with your tooling, so the client never needs to know we were involved.'
+  },
+  {
+    question: 'Who owns the code when the project is done?',
+    answer: 'You do. Code, content, and credentials transfer to you at handover.'
+  },
+  {
+    question: 'Where are you based?',
+    answer: 'We are a small studio in Indianapolis, Indiana, working with agencies across the United States.'
+  }
+];
+---
+
+<Layout
+  title="White-Label WordPress Development for Agencies"
+  description="White-label WordPress development for agencies: custom themes, headless builds, and migrations delivered under your name, with an NDA and no surprises."
+  schema={[
+    service({
+      name: 'White-Label WordPress Development',
+      description:
+        'White-label WordPress development for agencies: custom themes and plugins, ' +
+        'headless builds, migrations, and overflow work delivered under the agency\'s name.',
+      url: Astro.url.href,
+      category: 'White-Label Web Development',
+    }),
+    faqPage(faqs),
+  ]}
+>
+  <!-- Hero -->
+  <section class="section pt-24 relative">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <p class="label-tech mb-6">White-Label Development for Agencies</p>
+        <h1 class="mb-6">White-Label <span class="plate-type">WordPress</span> Development</h1>
+        <p class="text-xl text-paper-mute mb-8">
+          Your agency sells the website. We build it. A two-person Indianapolis studio that works as the quiet development team behind WordPress agencies, so you can take on more projects without hiring another developer.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/scan/" class="btn-primary">Scan a Client Site Free</a>
+          <a href="/contact/" class="btn-secondary">Talk About a Project</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-ink-hot/10 to-transparent opacity-30"></div>
+    </div>
+  </section>
+
+  <!-- Why outsource -->
+  <section class="py-16 bg-base-200">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="label-tech mb-4">Why Outsource WordPress Development</p>
+          <h2 class="mb-6">Capacity Without <span class="plate-type">Another Hire</span></h2>
+          <p class="text-paper-mute mb-4">
+            Agency work arrives in waves. A full-time developer is idle in the quiet months and overbooked in the busy ones, and a freelancer you found last week is a risk with your client's name on it.
+          </p>
+          <p class="text-paper-mute mb-4">
+            We give you a development team you can rely on: the same two people on every project, working to a written scope, invisible to your client.
+          </p>
+          <p class="text-paper-mute">
+            Not sure what state a client's site is in before you quote? Run the free scan first. It checks security headers, structured data, and the fundamentals in under a minute.
+          </p>
+        </div>
+
+        <div class="p-8 border border-ink-hot/20 bg-base-100">
+          <h3 class="text-xl font-bold mb-6">The White-Label Promise</h3>
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">Your name on everything. Ours on nothing unless you ask.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-hot mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">We sign your NDA before we see client information</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-hot mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">No contact with your client unless you introduce us</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-cold mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">Written scope, price, and timeline before work starts</span>
+            </li>
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">You own the code, content, and credentials at handover</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's included -->
+  <section class="py-16">
+    <div class="container mx-auto">
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">What We Build</p>
+        <h2 class="mb-6">The Work You <span class="plate-type">Hand Off</span></h2>
+        <p class="text-paper-mute">The WordPress work agencies most often hand to us.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {included.map(item => (
+          <div class="card">
+            <h3 class="text-xl font-bold mb-3">{item.title}</h3>
+            <p class="text-paper-mute">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section bg-base-200">
+    <div class="container mx-auto">
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">Process</p>
+        <h2 class="mb-6">How a <span class="plate-type">Project</span> Runs</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {process.map(item => (
+          <div class="card">
+            <p class="label-tech mb-3">{item.step}</p>
+            <h3 class="text-xl font-bold mb-3">{item.title}</h3>
+            <p class="text-paper-mute">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="py-16">
+    <div class="container mx-auto">
+      <div class="max-w-2xl mx-auto text-center border border-ink-hot/20 bg-base-100 p-8">
+        <h3 class="text-xl font-bold mb-3">Pricing model</h3>
+        <p class="text-paper-mute">Builds and rebuilds are scoped per project and quoted in writing up front. Ongoing care starts from $150 per month per site. No hourly billing, no surprise line items.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section bg-base-200">
+    <div class="container mx-auto">
+      <div class="max-w-3xl mb-16">
+        <p class="label-tech mb-4">FAQ</p>
+        <h2 class="mb-6">Questions Agencies <span class="plate-type">Ask</span></h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {faqs.map(item => (
+          <div class="card">
+            <h3 class="text-xl font-bold mb-3">{item.question}</h3>
+            <p class="text-paper-mute">{item.answer}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="mb-6">Try Us on <span class="plate-type">One Client Site</span></h2>
+        <p class="text-paper-mute text-lg mb-8">Point the free AI Readiness Scan at any client site and see what we find. No sales call, no signup. If the report is useful, that is how we work on a project too.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/scan/" class="btn-primary">Scan a Client Site Free</a>
+          <a href="/contact/" class="btn-secondary">Talk About a Project</a>
+          <a href="/services/white-label-wordpress-maintenance/" class="btn-secondary">White-Label Maintenance</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
