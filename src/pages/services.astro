@@ -98,11 +98,19 @@ const services = [
     link: '/services/white-label-wordpress-development/',
     id: 'white-label-wordpress-development',
     stack: ['WordPress', 'Headless WP', 'WooCommerce', 'Your Git and hosting']
+  },
+  {
+    title: 'White-Label WordPress Maintenance',
+    description: 'Updates, backups, security monitoring, and client-ready reports for the sites your agency manages, delivered under your brand.',
+    icon: 'support',
+    link: '/services/white-label-wordpress-maintenance/',
+    id: 'white-label-wordpress-maintenance',
+    stack: ['WP-CLI', 'Uptime monitoring', 'Automated backups', 'Agent Ops']
   }
 ];
 
 // Agent Ops, WordPress and white-label WordPress each have their own dedicated page, so they're excluded from the on-page anchor sections below.
-const detailedServices = services.filter(service => !['agent-ops', 'wordpress', 'white-label-wordpress-development'].includes(service.id));
+const detailedServices = services.filter(service => !['agent-ops', 'wordpress', 'white-label-wordpress-development', 'white-label-wordpress-maintenance'].includes(service.id));
 /*
  * One Service node per offering, built from the same list the page renders so
  * the two cannot drift. Service requires `provider` as well as `name` — see
