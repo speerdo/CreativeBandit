@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { SITE, ORG_ID, type SchemaNode } from '../../lib/schema';
 
 /*
  * Motion design reel, one project per block.
@@ -70,10 +71,53 @@ const projects = [
     height: 1200,
   },
 ];
+
+/*
+ * Page-level JSON-LD: an ItemList of CreativeWork, one per clip. VideoObject
+ * is deliberately not used - it requires uploadDate, and the repo has no
+ * publish dates for these pieces; inventing them would be worse than none.
+ * Only facts already on the page are used (title, blurb, poster, mp4).
+ */
+const pageUrl = `${SITE}/work/motion/`;
+const reelSchema: SchemaNode[] = [
+  {
+    '@type': 'CollectionPage',
+    '@id': `${pageUrl}#page`,
+    url: pageUrl,
+    name: 'Motion Design',
+    description:
+      'Motion design work by Katlyn at Creative Bandit: explainers, how-to videos, and social spots.',
+    publisher: { '@id': ORG_ID },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListOrder: 'https://schema.org/ItemListOrderAscending',
+      numberOfItems: projects.length,
+      itemListElement: projects.map((project, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'CreativeWork',
+          name: `${project.client}: ${project.title}`,
+          description: project.blurb,
+          image: `${SITE}/motion/${project.slug}.jpg`,
+          associatedMedia: {
+            '@type': 'MediaObject',
+            contentUrl: `${SITE}/motion/${project.slug}.mp4`,
+            encodingFormat: 'video/mp4',
+            width: project.width,
+            height: project.height,
+          },
+          creator: { '@id': ORG_ID },
+        },
+      })),
+    },
+  },
+];
 ---
 
 <Layout
   title="Motion Design"
+  schema={reelSchema}
   description="Motion design work by Katlyn at Creative Bandit: explainers, how-to videos, and social spots for asset management, risk, consumer apps and ballot campaigns."
 >
   <section class="section pt-24">

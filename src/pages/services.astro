@@ -98,11 +98,19 @@ const services = [
     link: '/services/white-label-wordpress-development/',
     id: 'white-label-wordpress-development',
     stack: ['WordPress', 'Headless WP', 'WooCommerce', 'Your Git and hosting']
+  },
+  {
+    title: 'White-Label WordPress Maintenance',
+    description: 'Updates, backups, security monitoring, and client-ready reports for the sites your agency manages, delivered under your brand.',
+    icon: 'support',
+    link: '/services/white-label-wordpress-maintenance/',
+    id: 'white-label-wordpress-maintenance',
+    stack: ['WP-CLI', 'Uptime monitoring', 'Automated backups', 'Agent Ops']
   }
 ];
 
 // Agent Ops, WordPress and white-label WordPress each have their own dedicated page, so they're excluded from the on-page anchor sections below.
-const detailedServices = services.filter(service => !['agent-ops', 'wordpress', 'white-label-wordpress-development'].includes(service.id));
+const detailedServices = services.filter(service => !['agent-ops', 'wordpress', 'white-label-wordpress-development', 'white-label-wordpress-maintenance'].includes(service.id));
 /*
  * One Service node per offering, built from the same list the page renders so
  * the two cannot drift. Service requires `provider` as well as `name` — see
@@ -182,6 +190,11 @@ const serviceSchema = services.map((s) =>
                 'Build online stores that turn browsers into buyers. From custom storefronts to inventory management and payment processing, we build e-commerce setups that grow with your business and drive sales.' :
                 'Work through the digital landscape with strategic guidance tied to your business goals. We help you find opportunities, work around obstacles, and plan a path forward.'}
             </p>
+            {service.id === 'design' && (
+              <p class="mb-6 text-paper-mute">
+                See the <a href="/work/motion/" class="text-ink-hot hover:underline">motion design reel</a> for explainers, how-to videos and social spots.
+              </p>
+            )}
             
             <h3 class="text-xl font-bold mb-4">What we offer:</h3>
             <ul class="space-y-2 mb-8">
