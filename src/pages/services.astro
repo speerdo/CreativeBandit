@@ -190,6 +190,11 @@ const serviceSchema = services.map((s) =>
                 'Build online stores that turn browsers into buyers. From custom storefronts to inventory management and payment processing, we build e-commerce setups that grow with your business and drive sales.' :
                 'Work through the digital landscape with strategic guidance tied to your business goals. We help you find opportunities, work around obstacles, and plan a path forward.'}
             </p>
+            {service.id === 'design' && (
+              <p class="mb-6 text-paper-mute">
+                See the <a href="/work/motion/" class="text-ink-hot hover:underline">motion design reel</a> for explainers, how-to videos and social spots.
+              </p>
+            )}
             
             <h3 class="text-xl font-bold mb-4">What we offer:</h3>
             <ul class="space-y-2 mb-8">
