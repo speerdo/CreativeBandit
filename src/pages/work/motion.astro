@@ -90,7 +90,7 @@ const reelSchema: SchemaNode[] = [
     publisher: { '@id': ORG_ID },
     mainEntity: {
       '@type': 'ItemList',
-      itemListOrder: 'https://schema.org/ItemListUnordered',
+      itemListOrder: 'https://schema.org/ItemListOrderAscending',
       numberOfItems: projects.length,
       itemListElement: projects.map((project, index) => ({
         '@type': 'ListItem',
@@ -100,7 +100,6 @@ const reelSchema: SchemaNode[] = [
           name: `${project.client}: ${project.title}`,
           description: project.blurb,
           image: `${SITE}/motion/${project.slug}.jpg`,
-          encodingFormat: 'video/mp4',
           associatedMedia: {
             '@type': 'MediaObject',
             contentUrl: `${SITE}/motion/${project.slug}.mp4`,
