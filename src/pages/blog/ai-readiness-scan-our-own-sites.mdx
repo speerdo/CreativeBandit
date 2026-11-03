@@ -1,0 +1,83 @@
+---
+layout: ../../layouts/BlogPost.astro
+title: "We Ran Our AI-Readiness Scanner on Our Own Sites. Here's What It Found."
+description: "We pointed our free AI-readiness scanner at the seven sites we run. One was blocking AI crawlers without us knowing, and none had an llms.txt."
+date: 2026-11-03
+category: AI Integration
+image: /og-image.png
+author: Adam Speer
+authorImage: /images/adam-speer.webp
+readingTime: 6
+---
+
+{/*
+  Source: live POST /api/scan against each site on 2026-11-03, raw JSON kept
+  out of the repo. Findings per site (tag id):
+    homewaterpure.com: llms-txt-missing, delivery-security-headers (1/5)
+    invoicefortrades.com: identity-no-org, metadata-near-duplicates (11/24),
+      llms-txt-missing, delivery-security-headers (4/5)
+    recycleoldtech.com: edge-ai-blocked (GPTBot 403 etc.), metadata-near-
+      duplicates (2/24), schema-no-entity, identity-no-org, llms-txt-missing,
+      delivery-security-headers (1/5)
+    ebikelocal.com: metadata-near-duplicates (12/24), llms-txt-missing,
+      delivery-security-headers (4/5)
+    downtowndry.bar: schema-thin-entity (1/24), metadata-near-duplicates
+      (2/24), llms-txt-missing, delivery-security-headers (4/5)
+    yieldtofreedom.com: identity-mismatch, metadata-near-duplicates (4/24),
+      llms-txt-missing, delivery-security-headers (1/5)
+    homepowerready.com: images-missing-alt (36/79), schema-no-entity,
+      metadata-near-duplicates (11/24), llms-txt-missing
+  js-content-fine on all 7. crawlers-clear on 6 of 7.
+  RecycleOldTech 403 reproduced with curl the same day: GPTBot and ClaudeBot
+  UAs get 403, a Chrome UA gets 200. Robots.txt clean. Host is Vercel.
+*/}
+
+We built a [free AI-readiness scanner](/scan/) that checks whether AI assistants like ChatGPT, Claude and Perplexity can actually reach and understand a website. Before telling anyone else what's wrong with their site, it seemed fair to run it on ours first.
+
+So I pointed it at all seven sites we build and run: [HomeWaterPure](/work/homewaterpure/), [Invoice for Trades](/work/invoice-for-trades/), [RecycleOldTech](/work/recycleoldtech/), [eBikeLocal](/work/ebikelocal/), [DowntownDry](/work/downtowndry/), [Yield to Freedom](/work/yield-to-freedom/) and [Home Power Ready](/work/home-power-ready/). These are sites we care a lot about SEO on. I expected them to come back clean.
+
+They mostly did. But not entirely, and the one real problem was on our biggest site.
+
+## Our top site was blocking AI crawlers
+
+RecycleOldTech is our highest-traffic site, and it gets real visitors from ChatGPT and Copilot. The scanner flagged it with the most serious finding it has: **AI crawlers are blocked at the CDN, not in robots.txt.**
+
+I checked by hand. A request that identifies itself as GPTBot or ClaudeBot gets a `403 Forbidden`. The exact same request with a normal browser user agent gets the page. And robots.txt is completely clean, so anyone reading it would assume everything's fine.
+
+That's why this check exists. Robots.txt is what most people look at, but it's only a request. The firewall or CDN in front of a site can refuse a crawler before robots.txt ever comes into it, and nothing on the site itself tells you that's happening. On Cloudflare it's often a single "block AI bots" toggle. Our site is on Vercel, and there's no custom firewall rule on it, so we're still tracking down exactly which setting is responsible. The other six sites, on the same host, are fine.
+
+If you take one thing from this post: **don't trust robots.txt to tell you whether AI can reach your site.** Test it.
+
+## None of us had an llms.txt
+
+Seven for seven, no `llms.txt`. It's a small markdown file at the root of a site that gives AI tools a short, clean summary and a list of the important pages.
+
+To be fair, this is the lowest-stakes finding the scanner has. Adoption is early, and no major assistant requires one. The scanner treats it as an opportunity, not a gap. But it's cheap to add, and this site has one, so it was a little embarrassing that none of our others did.
+
+## Title templates on almost every site
+
+Six of the seven sites have groups of pages that share a title pattern. Invoice for Trades has 11 of 24 sampled pages on 2 templates. eBikeLocal has 12 of 24 on 3.
+
+This is the nature of directory and programmatic sites. "Plumbing Invoice Template" and "Roofing Invoice Template" are different pages for different people. The scanner knows that and checks the descriptions too. When those are all different, it's an opportunity rather than a duplicate content problem. The real takeaway is about where the important word goes. If the part that makes the page unique is at the end of the title, a truncated search result or AI citation is the most likely to cut it off.
+
+## The rest
+
+- **Schema that doesn't describe the business.** RecycleOldTech and Home Power Ready carry structured data on their pages, but only the generic kind (website, web page, breadcrumbs). Nothing says what the business actually is or does. Invoice for Trades and RecycleOldTech also have nothing that tells an assistant who owns the site.
+- **A name mismatch.** Yield to Freedom's schema says the business is "Creative Bandit LLC", which is true, but that name isn't on the homepage. An assistant trying to answer "who runs this site" gets two different answers.
+- **Missing alt text.** 36 of 79 sampled images on Home Power Ready had no alt text.
+- **Security headers.** Six sites were missing at least one common header. That's not really an AI readiness thing, and the scanner says so, but it's worth fixing while you're in there.
+
+## What came back clean
+
+Every one of the seven sites serves its content as real HTML that you can read without JavaScript. That matters more than people think. A lot of AI crawlers don't run JavaScript, so a site that renders everything in the browser can look empty to them. All of ours are built with Astro and render on the server or at build time, so that was never a risk.
+
+Six of seven let every major AI crawler through. Most had solid structured data. None of them had a broken sitemap, a stray `noindex`, or a canonical tag pointing somewhere it shouldn't.
+
+## What we're fixing
+
+1. Tracking down the RecycleOldTech block and removing it. That one's a priority.
+2. Adding an `llms.txt` to every site.
+3. Adding business (organization) schema where it's missing, and making the names match.
+4. Alt text on Home Power Ready's product images.
+
+These are sites built by people who do this for a living, and we still had a crawler block we didn't know about. If you manage a site, or a few dozen for clients, [run the scanner](/scan/). It takes a few seconds, and you might be surprised.

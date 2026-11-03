@@ -66,11 +66,11 @@ export const caseStudies: CaseStudy[] = [
     imageWidth: 1600,
     imageHeight: 900,
     summary:
-      'A data-first guide to water softeners and filters, where every spec is sourced and dated and the sizing calculator shows its arithmetic.',
+      'A data-first guide to water softeners and filters, where every product links to the source of its specs and the sizing calculator shows its arithmetic.',
     problem:
       'Homeowners shopping for a water softener land on affiliate pages that repeat manufacturer claims and never say where a number came from. Hardness varies city by city, so a generic "best softener" list is a guess. We wanted a guide where a reader can check every figure.',
     built: [
-      'A product catalog in Postgres where each spec and price carries a source and a checked-on date.',
+      'A product catalog in Postgres where every product must carry a source URL, and every Amazon price is timestamped and hidden once it is more than a day old.',
       'City hardness pages built from each utility’s own Consumer Confidence Report, with the quoted line and URL logged for every row.',
       'A sizing calculator that runs in the browser and shows each step, from household size to grain capacity.',
       'A methodology page that says how products are chosen and how the site makes money.',
@@ -91,10 +91,10 @@ export const caseStudies: CaseStudy[] = [
       { label: 'Products in the catalog', value: '37' },
     ],
     lesson:
-      'Put the source next to the number in the database, not in a footnote. Once every value has a "checked on" date, a stale spec becomes a query you can run instead of something you hope you remember.',
+      'Put the rules in the schema, not in a doc. A source URL the database refuses to go without, and a price that hides itself after 24 hours, hold up better than any checklist.',
     metaTitle: 'HomeWaterPure case study: a sourced guide to water softeners',
     metaDescription:
-      'How we built HomeWaterPure, a softener and filter guide on Astro and Neon Postgres where every spec is sourced and dated and the calculator shows its work.',
+      'How we built HomeWaterPure, a softener and filter guide on Astro and Neon Postgres where every product cites its spec source and the calculator shows its work.',
     about: 'A data-first guide to home water softeners and filters',
   },
   {
