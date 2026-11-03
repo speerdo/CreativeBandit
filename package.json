@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "test": "vitest run",
     "astro": "astro",
     "grain": "node scripts/make-grain.mjs public/textures/grain.png",
     "textures": "node scripts/bake-textures.mjs",

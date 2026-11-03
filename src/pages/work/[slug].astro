@@ -1,0 +1,179 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { caseStudies, type CaseStudy } from '../../data/caseStudies';
+import { caseStudy, breadcrumbs, SITE } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return caseStudies.map((study) => ({
+    params: { slug: study.slug },
+    props: { study },
+  }));
+}
+
+interface Props {
+  study: CaseStudy;
+}
+
+const { study } = Astro.props;
+
+// Three other case studies, taken from the list in order after this one so the
+// same page always shows the same cards.
+const index = caseStudies.findIndex((c) => c.slug === study.slug);
+const more = [1, 2, 3].map((n) => caseStudies[(index + n) % caseStudies.length]!);
+
+const pageUrl = `${SITE}/work/${study.slug}/`;
+---
+
+<Layout
+  title={study.metaTitle}
+  description={study.metaDescription}
+  ogImage={study.image}
+  schema={[
+    caseStudy({
+      name: `${study.title} case study`,
+      description: study.metaDescription,
+      url: pageUrl,
+      image: study.image,
+      about: study.about,
+    }),
+    breadcrumbs([
+      { name: 'Home', url: `${SITE}/` },
+      { name: 'Work', url: `${SITE}/work/` },
+      { name: study.title, url: pageUrl },
+    ]),
+  ]}
+>
+  <!-- Hero -->
+  <section class="section pt-24 relative">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="label-tech mb-6">{study.categoryName}</p>
+          <h1 class="mb-6">{study.title}</h1>
+          <p class="text-xl text-paper-mute mb-8">{study.summary}</p>
+          <a href={study.url} target="_blank" rel="noopener" class="btn-primary">Visit the site</a>
+        </div>
+        <div class="crop-marks">
+          <img
+            src={study.image}
+            alt={study.imageAlt}
+            width={study.imageWidth}
+            height={study.imageHeight}
+            decoding="async"
+            class="w-full h-auto"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute top-0 right-0 w-full h-full -z-10">
+      <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-ink-hot/10 to-transparent opacity-30"></div>
+    </div>
+  </section>
+
+  <!-- The problem -->
+  <section class="py-16 bg-base-200">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <p class="label-tech mb-4">The problem</p>
+        <h2 class="mb-6">What was <span class="plate-type">wrong</span></h2>
+        <p class="text-paper-mute">{study.problem}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we built -->
+  <section class="py-16">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <p class="label-tech mb-4">What we built</p>
+        <h2 class="mb-8">What <span class="plate-type">we built</span></h2>
+        <ul class="space-y-4">
+          {study.built.map((item) => (
+            <li class="flex items-start">
+              <span class="w-2 h-2 bg-ink-acid mt-2 mr-3 flex-shrink-0"></span>
+              <span class="text-paper-mute">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section class="py-16 bg-base-200">
+    <div class="container mx-auto">
+      <p class="label-tech mb-4">Stack</p>
+      <h2 class="mb-8">What it <span class="plate-type">runs on</span></h2>
+      <ul class="flex flex-wrap gap-2">
+        {study.stack.map((item) => <li class="chip">{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Results: only when the data file has sourced numbers for this project. -->
+  {study.stats && study.stats.length > 0 && (
+    <section class="py-16">
+      <div class="container mx-auto">
+        <p class="label-tech mb-4">Results</p>
+        <h2 class="mb-8">The <span class="plate-type">numbers</span></h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {study.stats.map((stat) => (
+            <div class="border-l-2 border-ink-acid pl-4">
+              <p class="text-2xl font-bold">{stat.value}</p>
+              <h3 class="text-sm font-normal text-paper-mute">{stat.label}</h3>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Lesson -->
+  <section class="py-16 bg-base-200">
+    <div class="container mx-auto">
+      <div class="max-w-3xl">
+        <p class="label-tech mb-4">What we'd tell another builder</p>
+        <h2 class="mb-6">One <span class="plate-type">lesson</span></h2>
+        <p class="text-paper-mute">{study.lesson}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 relative overflow-hidden">
+    <div class="container mx-auto relative z-10">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="mb-6">Want something <span class="plate-type">like this</span>?</h2>
+        <p class="text-paper-mute text-lg mb-8">Tell us what you're working on and we'll figure out the right approach together.</p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/contact/" class="btn-primary">Contact us</a>
+          <a href="/work/" class="btn-secondary">Back to all work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- More work -->
+  <section class="py-16 bg-base-200">
+    <div class="container mx-auto">
+      <p class="label-tech mb-4">More work</p>
+      <h2 class="mb-8">Other <span class="plate-type">case studies</span></h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {more.map((other) => (
+          <div class="card">
+            <p class="label-tech mb-2">{other.categoryName}</p>
+            <h3 class="text-xl font-bold mb-3">{other.shortTitle}</h3>
+            <p class="text-paper-mute mb-4">{other.summary}</p>
+            <a href={`/work/${other.slug}/`} class="text-ink-hot inline-flex items-center font-medium hover:text-ink-acid transition-colors duration-300">
+              Read the case study
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -164,6 +164,50 @@ export function article({
   };
 }
 
+export interface CaseStudyInput {
+  name: string;
+  description: string;
+  url: string;
+  /** Site-relative or absolute screenshot path. */
+  image: string;
+  /** What the project is about, in a few words. */
+  about: string;
+}
+
+/**
+ * CreativeWork node for a case study page. `creator` points at the shared
+ * Organization node by @id rather than repeating it.
+ */
+export function caseStudy({ name, description, url, image, about }: CaseStudyInput): SchemaNode {
+  return {
+    '@type': 'CreativeWork',
+    name,
+    description,
+    url,
+    image: new URL(image, SITE).href,
+    creator: { '@id': ORG_ID },
+    about: { '@type': 'Thing', name: about },
+  };
+}
+
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+/** BreadcrumbList node. Positions are assigned in the order given. */
+export function breadcrumbs(items: BreadcrumbItem[]): SchemaNode {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
 export interface PersonInput {
   name: string;
   jobTitle: string;
