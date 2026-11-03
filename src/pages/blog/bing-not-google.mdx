@@ -1,0 +1,80 @@
+---
+layout: ../../layouts/BlogPost.astro
+title: "Why Most of Our Search Traffic Comes From Bing, Not Google"
+description: "83% of RecycleOldTech's search visitors and 99% of eBikeLocal's come from Bing-powered engines. Here's the data, why SEO tools miss it, and what we changed."
+date: 2026-11-03
+category: SEO
+image: /images/recycleoldtech_desktop.webp
+author: Adam Speer
+authorImage: /images/adam-speer.webp
+readingTime: 5
+---
+
+{/*
+  Sources, all first-party, pulled 2026-11-03 from Ahrefs Web Analytics
+  (source_channel = search, 2025-11-01 to 2026-11-01):
+    RecycleOldTech (project 8362376): Bing 36,185 / DuckDuckGo 22,890 /
+      Yahoo 19,101 / Google 16,169 / Ecosia 1,612 / AOL 358 / other 44.
+      Total 96,359. LLM channel: ChatGPT 278, Copilot 169, Perplexity 17,
+      Gemini 15, Claude 7.
+    eBikeLocal (project 9759549): Bing 3,470 / Yahoo 2,809 / DuckDuckGo 2,031 /
+      Ecosia 122 / Google 42 / other 9. Total 8,483.
+  Site Explorer vs first-party gap: docs/creative-bandit-launch-readiness.md §7.2
+  (Aug 2026: ~200/mo estimate vs 10,585/mo trailing-12 average).
+*/}
+
+I run a handful of directory sites, and for a long time I looked at them the way most people do: open an SEO tool, check the organic traffic estimate, feel a little bad about it. For RecycleOldTech, the tool said about 200 organic visits a month.
+
+Our own analytics said closer to 10,500.
+
+That's not a rounding error. It's a 50x gap, and once I dug into it the reason was pretty simple. Almost none of our search traffic comes from Google.
+
+## The numbers
+
+Here's the last twelve months of search visitors for two of our sites, straight from first-party analytics (November 2025 through October 2026):
+
+| Engine | RecycleOldTech | eBikeLocal |
+|---|---|---|
+| Bing | 36,185 | 3,470 |
+| DuckDuckGo | 22,890 | 2,031 |
+| Yahoo | 19,101 | 2,809 |
+| Ecosia | 1,612 | 122 |
+| AOL | 358 | 0 |
+| **Google** | **16,169** | **42** |
+
+DuckDuckGo, Yahoo and AOL all lean on Bing's index for most of their results, and Ecosia has historically done the same. Add those up and Bing-powered engines sent **83%** of RecycleOldTech's search visitors. For eBikeLocal it's **99.4%**. Google sent 42 people to eBikeLocal in a year.
+
+## Why the tools get this wrong
+
+Most SEO tools build their traffic estimates by modeling Google. They track where you rank in Google, multiply by search volume and click-through rate, and hand you a number. If Google is a small slice of your traffic, the estimate is a small slice of reality.
+
+That's fine as long as you know it. The problem is when you make decisions off the estimate. I almost wrote off RecycleOldTech as a site that "never took off" when it was actually doing over 10,000 visitors a month.
+
+So the first rule now: **install real analytics before you judge a site.** Use the third-party estimate for keyword ideas and competitor research, not for "is this working."
+
+## Why Bing likes small sites
+
+I don't have a perfect answer here, and I'd be suspicious of anyone who says they do. What I've seen across our sites:
+
+- **Bing indexes new sites faster.** Submitting a sitemap through Bing Webmaster Tools and pinging IndexNow gets pages crawled in days. Google can sit on a brand new domain for months.
+- **Long-tail directory pages do well.** A page like "electronics recycling in Fort Wayne" doesn't have much competition, and Bing seems happy to rank a focused, well-structured page for it.
+- **Google is slower to trust new domains.** eBikeLocal has been live for months, and Google has barely indexed it. That's something I'm still digging into, but it hasn't stopped the site from getting traffic.
+
+## The part that matters more than it used to
+
+Bing isn't just Bing anymore. Microsoft Copilot runs on it, and ChatGPT's search has leaned on Bing too. Over the same twelve months RecycleOldTech picked up 486 visitors directly from AI assistants: 278 from ChatGPT, 169 from Copilot, and a handful from Perplexity, Gemini and Claude.
+
+That's not a huge number yet. But it's growing, and it comes from the same index. If your site is invisible to Bing, it's probably invisible to a good chunk of AI search too.
+
+## What we do differently now
+
+Here is the checklist we use on new sites now:
+
+1. **Bing Webmaster Tools on day one**, with the sitemap submitted, same as Google Search Console.
+2. **IndexNow wired into the build** (most of our directory sites already have it), so new and changed pages get pushed to Bing (and the engines that share its index) on deploy instead of waiting for a crawl.
+3. **First-party analytics from the first commit**, so the "is this working" question has a real answer.
+4. **Robots.txt that doesn't block Bingbot or the AI crawlers** by accident. You'd be surprised how often a security plugin or CDN setting does this.
+
+If you've got a site that "doesn't get any traffic" according to an SEO tool, check your actual analytics and look at the referrers. You might be in the same spot we were. And if you want to see whether AI crawlers can even reach your site, [our free scanner](/scan/) will tell you in a few seconds.
+
+You can read more about the build behind these sites in the [RecycleOldTech](/work/recycleoldtech/) and [eBikeLocal](/work/ebikelocal/) case studies.

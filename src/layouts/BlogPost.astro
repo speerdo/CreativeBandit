@@ -37,6 +37,7 @@ const schema = [
           <span>•</span>
           <time datetime={frontmatter.date}>
             {new Date(frontmatter.date).toLocaleDateString('en-US', {
+              timeZone: 'UTC',
               year: 'numeric',
               month: 'long',
               day: 'numeric'
@@ -130,6 +131,19 @@ const schema = [
     @apply bg-base-100 rounded p-4 mb-4 overflow-x-auto;
   }
   
+  .prose table {
+    @apply w-full my-6 text-sm border-collapse;
+  }
+
+  .prose th,
+  .prose td {
+    @apply border-b border-paper/15 px-3 py-2 text-left;
+  }
+
+  .prose th {
+    @apply font-mono text-xs uppercase tracking-[0.14em] text-paper;
+  }
+
   .prose img {
     @apply my-8;
   }

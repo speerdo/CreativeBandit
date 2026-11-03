@@ -10,6 +10,7 @@ import SubscribeForm from '../../components/SubscribeForm.astro';
 const posts = Object.values(
   import.meta.glob('./*.mdx', { eager: true })
 ) as { url: string; frontmatter: Record<string, any> }[];
+posts.sort((a, b) => +new Date(b.frontmatter.date) - +new Date(a.frontmatter.date));
 
 const categories = [...new Set(posts.map(post => post.frontmatter.category))];
 ---
@@ -122,6 +123,7 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
                 </div>
                 <time datetime={post.frontmatter.date}>
                   {new Date(post.frontmatter.date).toLocaleDateString('en-US', {
+              timeZone: 'UTC',
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric'

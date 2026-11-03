@@ -1,0 +1,80 @@
+---
+layout: ../../layouts/BlogPost.astro
+title: "34 of Our 40 Spec Sources Were Dead Links: How HomeWaterPure Handles Product Data"
+description: "Building a water softener guide where every spec has a source. What broke, the schema rules that keep numbers honest, and a calculator that shows its math."
+date: 2026-11-03
+category: Web Development
+image: /images/homewaterpure_desktop.webp
+author: Adam Speer
+authorImage: /images/adam-speer.webp
+readingTime: 6
+---
+
+{/*
+  Sources: speerdo/home-water-pure origin/main as of 2026-11-03.
+    Schema: src/db/schema.ts (source_url NOT NULL, certification status enum,
+      price_history append-only from migration 0004).
+    Seed guard: scripts/seed-products.ts throws on missing source_url.
+    flowNA / flowUnpublished: commit f881f8f; 34 of 40 404s and 4 products
+      dropped: same commit.
+    13 of 15 Amazon seed prices wrong by up to 37% on 2026-08-31: commit 5a01061.
+    Frozen "last verified" dates fixed with $onUpdate: commit 48b44af.
+    "date-washing" quote: commit 3cdf464.
+    Price gate: src/lib/offers.ts displayPrice(), PRICE_FRESH_MS = 24h.
+    Calculator constants: src/lib/calc.ts (75 gal/person/day, 4 gpg per ppm
+      iron, 1.25 margin).
+    Catalogue: 37 products, 14 brands (scripts/data/products.json).
+*/}
+
+Water softener reviews are a mess. A lot of what ranks is copy-pasted spec tables with no sources, "best of" lists that change order based on who pays the most commission, and numbers that don't match the manufacturer's own site. When we built [HomeWaterPure](https://homewaterpure.com), the whole idea was to do the opposite: every spec comes from somewhere you can check.
+
+That turned out to be harder than it sounds, and the first thing that went wrong is the reason for the title.
+
+## The first link check
+
+We seeded the catalog with 40 products, each with a source URL pointing to the manufacturer's spec page. Then we wrote a link checker and ran it.
+
+34 of the 40 source URLs returned a 404.
+
+Manufacturers move pages around constantly, and a lot of the URLs we'd collected were already stale. So we went back through every product and re-sourced it against a live page. Four products had no live manufacturer source at all, and we dropped them instead of keeping numbers we couldn't back up. While re-reading the live spec tables we also found real errors: one softener was listed at the wrong grain capacity, and a flow rate was inflated.
+
+If we'd skipped the link check, all of that would have shipped.
+
+## Making the database refuse bad data
+
+After that, I didn't want "every spec has a source" to be a rule people have to remember. I wanted the database to enforce it.
+
+- **`source_url` is NOT NULL** on every product. The seed script checks for it and fails before it touches the database if anything is missing.
+- **Unknown is different from not applicable.** Some products don't have a flow rate (a shower filter, for example). Others do, but the manufacturer doesn't publish it. Those are two separate flags, so a missing number is a documented gap instead of a guess.
+- **"Certified" and "claimed" are different values.** If a manufacturer says a product is NSF certified, that's stored as a claim. It only becomes certified with a listing URL we can point to. On the site, claims and certifications look different.
+
+## Prices go stale fast
+
+Prices were the next surprise. On August 31st I compared our seeded Amazon prices against live data, and 13 of 15 were wrong, some by as much as 37%.
+
+So prices go through one function that decides what the site is allowed to show. An Amazon price only shows if it was checked in the last 24 hours. If it's older than that, the button says "see price" instead of showing a number that's probably wrong. A daily job refreshes prices and rebuilds the site.
+
+We also keep every price we observe in a separate history table that only ever gets appended to. As far as I know nobody else in this niche tracks price history, and it can't be backfilled later, so it's worth starting early.
+
+## Dates should mean something
+
+At one point we noticed every "last verified" date on the site was frozen at the day we seeded the data. The database wasn't updating the timestamp when a row changed. Easy fix, but it was a good reminder.
+
+The opposite problem is just as bad. A lot of sites bump the date on a page without changing anything so it looks fresh. That's date-washing, and it's exactly what this site exists not to do. Dates only move when the data does.
+
+## A calculator that shows its work
+
+The sizing calculator asks how many people live in the house, your water hardness, iron level, and how often you want the softener to regenerate. Then instead of just giving you a number, it shows the math:
+
+- 4 people × 75 gallons a day = 300 gallons a day
+- 300 gallons × 14 grains per gallon = 4,200 grains a day
+- × 7 days between regenerations = 29,400 grains
+- × 1.25 safety margin = 36,750 grains required
+
+That points you at a 40,000 grain system, and the calculator shows the cheapest few that fit. If you think 75 gallons a person is too high for your house, you can see exactly where it's used and adjust in your head. A black box can't give you that.
+
+## What I'd tell another builder
+
+Put your rules in the schema, not in a doc. Everything we got right on this project, we got right because the build fails when the data is wrong. Everything we got wrong at first was something we were relying on ourselves to remember.
+
+There's more on the stack and build in the [HomeWaterPure case study](/work/homewaterpure/).
