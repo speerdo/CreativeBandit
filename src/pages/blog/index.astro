@@ -1,16 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import SubscribeForm from '../../components/SubscribeForm.astro';
-/*
- * `Astro.glob()` was deprecated in v5 and removed in v7. `import.meta.glob`
- * is the Vite-native replacement; `eager` gives the modules themselves
- * rather than lazy importers, which is what the template needs to read
- * frontmatter at build time.
- */
-const posts = Object.values(
-  import.meta.glob('./*.mdx', { eager: true })
-) as { url: string; frontmatter: Record<string, any> }[];
-posts.sort((a, b) => +new Date(b.frontmatter.date) - +new Date(a.frontmatter.date));
+import { posts } from '../../lib/posts';
 
 const categories = [...new Set(posts.map(post => post.frontmatter.category))];
 ---
@@ -18,7 +9,7 @@ const categories = [...new Set(posts.map(post => post.frontmatter.category))];
 <Layout
   title="Blog"
   noindex={posts.length === 0}
-  description="Notes, tutorials, and updates on web development, design, and AI automation from Creative Bandit">
+  description="Notes from a two-person Indianapolis studio on AI readiness, SEO and web development, written from the sites we build and run ourselves.">
   <section class="section pt-24 relative">
     <div class="container mx-auto">
       <div class="max-w-3xl">

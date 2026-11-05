@@ -92,7 +92,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     lesson:
       'Put the rules in the schema, not in a doc. A source URL the database refuses to go without, and a price that hides itself after 24 hours, hold up better than any checklist.',
-    metaTitle: 'HomeWaterPure case study: a sourced guide to water softeners',
+    metaTitle: 'HomeWaterPure case study: a sourced water softener guide',
     metaDescription:
       'How we built HomeWaterPure, a softener and filter guide on Astro and Neon Postgres where every product cites its spec source and the calculator shows its work.',
     about: 'A data-first guide to home water softeners and filters',
@@ -177,7 +177,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     lesson:
       'Check your numbers in more than one tool. Ahrefs estimates this site at about 200 organic visits a month and our own analytics records over 10,000. The tool models Google, and most of this site’s search traffic comes from Bing.',
-    metaTitle: 'RecycleOldTech case study: a programmatic recycling directory',
+    metaTitle: 'RecycleOldTech case study: programmatic recycling directory',
     metaDescription:
       'How we built RecycleOldTech.com, a US electronics recycling directory on Astro and Supabase with 85 top-ten rankings and 10,000+ monthly visitors.',
     about: 'A directory of certified electronics recycling centers in the United States',
@@ -213,7 +213,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     lesson:
       'Directories are data problems first. A wrong address on a shop page costs more trust than a plain design ever will, so the audit scripts matter as much as the page templates.',
-    metaTitle: 'eBikeLocal case study: an e-bike shop directory built on data',
+    metaTitle: 'eBikeLocal case study: a data-driven e-bike shop directory',
     metaDescription:
       'How we built eBikeLocal on Astro and Neon Postgres, an e-bike shop directory that merges brand dealer locators and Google Places data to show what shops carry.',
     about: 'A directory of e-bike shops and brands across the United States',
@@ -251,7 +251,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     lesson:
       'Language models do not browse. The pipeline searches first, hands the model real snippets, and asks for a decision with evidence. Anchoring on the exact address keeps it from verifying the wrong venue.',
-    metaTitle: 'DowntownDry case study: AI verification for a venue directory',
+    metaTitle: 'DowntownDry case study: an AI-verified venue directory',
     metaDescription:
       'How we built DowntownDry, an alcohol-free venue directory whose pipeline checks each listing with Google Places, Google Search and Gemini before it goes live.',
     about: 'A directory of alcohol-free bars and venues',
@@ -291,7 +291,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     lesson:
       'A grade is only as good as the data under it. Before trusting the grader we ran a data audit: confirm every active fund has price rows, check dividend history, fix yield math, then regrade. Keep that audit script next to the grader.',
-    metaTitle: 'Yield to Freedom case study: an income ETF grading platform',
+    metaTitle: 'Yield to Freedom case study: an income ETF grader',
     metaDescription:
       'How we built Yield to Freedom on Astro and Neon Postgres, an income ETF research site that grades funds A to D from data that syncs and regrades by schedule.',
     about: 'An income ETF research and grading platform',

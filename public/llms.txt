@@ -7,27 +7,27 @@
 
 ## What we do
 
-- [Services](https://creativebandit.studio/services): the full list, with what each engagement covers.
-- [WordPress development](https://creativebandit.studio/services/wordpress): headless builds, migrations, plugin and theme work, and maintenance for agency clients.
-- [Agent Ops](https://creativebandit.studio/services/agent-ops): ongoing WordPress security, updates, and monitoring across an agency's portfolio.
-- [Blog](https://creativebandit.studio/blog): build notes from the sites we run, with first-party data on search, AI crawlers, and product data.
-- [AI readiness scan](https://creativebandit.studio/scan): a free scan reporting whether AI crawlers can reach and read a site, covering robots.txt, CDN-level blocks, structured data, and metadata.
+- [Services](https://creativebandit.studio/services/): the full list, with what each engagement covers.
+- [WordPress development](https://creativebandit.studio/services/wordpress/): headless builds, migrations, plugin and theme work, and maintenance for agency clients.
+- [Agent Ops](https://creativebandit.studio/services/agent-ops/): ongoing WordPress security, updates, and monitoring across an agency's portfolio.
+- [Blog](https://creativebandit.studio/blog/): build notes from the sites we run, with first-party data on search, AI crawlers, and product data.
+- [AI readiness scan](https://creativebandit.studio/scan/): a free scan reporting whether AI crawlers can reach and read a site, covering robots.txt, CDN-level blocks, structured data, and metadata.
 
 ## Work
 
-- [Portfolio](https://creativebandit.studio/work): production projects with the stack and the measurable result for each, across fintech, healthcare, e-commerce, and enterprise software.
-- [HomeWaterPure case study](https://creativebandit.studio/work/homewaterpure): a water softener and filter guide where every product links to the source of its specs.
-- [Invoice for Trades case study](https://creativebandit.studio/work/invoice-for-trades): a free, no-signup invoice generator with browser-side PDFs and 27 trade pages.
-- [RecycleOldTech case study](https://creativebandit.studio/work/recycleoldtech): a programmatic directory of certified electronics recyclers.
-- [eBikeLocal case study](https://creativebandit.studio/work/ebikelocal): an e-bike shop directory built from brand dealer locators and Google Places data.
-- [DowntownDry case study](https://creativebandit.studio/work/downtowndry): an alcohol-free venue directory verified by Google APIs and Gemini.
-- [Yield to Freedom case study](https://creativebandit.studio/work/yield-to-freedom): an income ETF research platform that grades funds from A to D.
-- [Home Power Ready case study](https://creativebandit.studio/work/home-power-ready): a standby generator and battery backup directory with two calculators.
+- [Portfolio](https://creativebandit.studio/work/): production projects with the stack and the measurable result for each, across fintech, healthcare, e-commerce, and enterprise software.
+- [HomeWaterPure case study](https://creativebandit.studio/work/homewaterpure/): a water softener and filter guide where every product links to the source of its specs.
+- [Invoice for Trades case study](https://creativebandit.studio/work/invoice-for-trades/): a free, no-signup invoice generator with browser-side PDFs and 27 trade pages.
+- [RecycleOldTech case study](https://creativebandit.studio/work/recycleoldtech/): a programmatic directory of certified electronics recyclers.
+- [eBikeLocal case study](https://creativebandit.studio/work/ebikelocal/): an e-bike shop directory built from brand dealer locators and Google Places data.
+- [DowntownDry case study](https://creativebandit.studio/work/downtowndry/): an alcohol-free venue directory verified by Google APIs and Gemini.
+- [Yield to Freedom case study](https://creativebandit.studio/work/yield-to-freedom/): an income ETF research platform that grades funds from A to D.
+- [Home Power Ready case study](https://creativebandit.studio/work/home-power-ready/): a standby generator and battery backup directory with two calculators.
 
 ## About
 
-- [About](https://creativebandit.studio/about): who we are and how we work.
-- [Contact](https://creativebandit.studio/contact): how to start a project.
+- [About](https://creativebandit.studio/about/): who we are and how we work.
+- [Contact](https://creativebandit.studio/contact/): how to start a project.
 
 ## Facts
 

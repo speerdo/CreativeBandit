@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { caseStudies, type CaseStudy } from '../../data/caseStudies';
 import { caseStudy, breadcrumbs, SITE } from '../../lib/schema';
+import { postsForCaseStudy } from '../../lib/posts';
 
 export function getStaticPaths() {
   return caseStudies.map((study) => ({
@@ -22,6 +23,11 @@ const index = caseStudies.findIndex((c) => c.slug === study.slug);
 const more = [1, 2, 3].map((n) => caseStudies[(index + n) % caseStudies.length]!);
 
 const pageUrl = `${SITE}/work/${study.slug}/`;
+
+// Posts that write about this project. Besides being the obvious next read,
+// these links are most of what keeps the blog from being orphaned: Ahrefs
+// found /blog and every post with no incoming internal links (2026-11-05).
+const reading = postsForCaseStudy(study.slug);
 ---
 
 <Layout
@@ -139,6 +145,30 @@ const pageUrl = `${SITE}/work/${study.slug}/`;
       </div>
     </div>
   </section>
+
+  {reading.length > 0 && (
+    <section class="py-16">
+      <div class="container mx-auto">
+        <p class="label-tech mb-4">From the blog</p>
+        <h2 class="mb-8">Further <span class="plate-type">reading</span></h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {reading.map((post) => (
+            <div class="card">
+              <p class="label-tech mb-2">{post.frontmatter.category}</p>
+              <h3 class="text-xl font-bold mb-3">{post.frontmatter.title}</h3>
+              <p class="text-paper-mute mb-4">{post.frontmatter.description}</p>
+              <a href={post.url} class="text-ink-hot inline-flex items-center font-medium hover:text-ink-acid transition-colors duration-300">
+                Read the post
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- CTA -->
   <section class="py-24 relative overflow-hidden">
