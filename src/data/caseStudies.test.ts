@@ -43,6 +43,15 @@ describe('caseStudies', () => {
     }
   });
 
+  // Search results truncate around 60 characters and Ahrefs flagged all seven
+  // at 76-79 (crawl of 2026-11-05). Layout.astro drops the brand suffix when
+  // it doesn't fit, so the bare title is what has to stay within the limit.
+  it('keeps meta titles to 60 characters or fewer', () => {
+    for (const c of caseStudies) {
+      expect(c.metaTitle.length, c.slug).toBeLessThanOrEqual(60);
+    }
+  });
+
   it('uses no em dashes or en dashes in copy', () => {
     for (const text of allCopy()) {
       expect(text).not.toMatch(new RegExp(`[${String.fromCharCode(0x2013)}${String.fromCharCode(0x2014)}]`));

@@ -44,6 +44,17 @@ const {
 const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).href;
 
 /*
+ * The brand suffix is added only when it fits. Search results cut titles off
+ * at roughly 60 characters, and Ahrefs flags anything much past that, so a
+ * long title is better shown whole than with its end replaced by
+ * "| Creative B...". Short titles keep the brand.
+ */
+const TITLE_MAX = 60;
+const BRAND_SUFFIX = ' | Creative Bandit';
+const fullTitle =
+  title.length + BRAND_SUFFIX.length <= TITLE_MAX ? `${title}${BRAND_SUFFIX}` : title;
+
+/*
  * Per-page background texture. Varied across the site, but fixed for a given
  * route rather than random per load.
  *
@@ -133,7 +144,7 @@ const jsonLd = {
     <meta name="generator" content={Astro.generator} />
     
     <!-- SEO Meta Tags -->
-    <title>{title} | Creative Bandit</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Creative Bandit" />
@@ -144,7 +155,7 @@ const jsonLd = {
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={Astro.url} />
-    <meta property="og:title" content={`${title} | Creative Bandit`} />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
@@ -154,7 +165,7 @@ const jsonLd = {
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={`${title} | Creative Bandit`} />
+    <meta property="twitter:title" content={fullTitle} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImageUrl} />
     

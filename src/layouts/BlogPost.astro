@@ -19,7 +19,7 @@ const schema = [
 ---
 
 <Layout
-  title={frontmatter.title}
+  title={frontmatter.seoTitle ?? frontmatter.title}
   description={frontmatter.description}
   schema={schema}
   ogType="article"
